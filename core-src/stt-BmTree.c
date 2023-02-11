@@ -366,26 +366,6 @@ char* BmTree_wording(BmTree* self)
 char* BmTree_print(BmTree* self, char* output)
 {
     char buffer[512];
-        
-    strcat(output, "input: ");
-    strcat(output, BmCode_wording( self->input) );
-    sprintf( buffer, ", size: %u", self->size );
-    strcat(output, buffer );
-
-    for( uint ib= 0 ; ib < self->size ; ++ib )
-    {
-        char buffer2[128]= "";
-        sprintf( buffer, "\n%u. input(%u): %s", ib, BmTree_branchVariable(self, ib),
-            BmTree_printBranch( self, ib, buffer2)
-        );
-        strcat( output, buffer );
-    }
-    return output;
-}
-
-char* BmTree_printConditions(BmTree* self, char* output)
-{
-    char buffer[512];
 
     BmCode *conditions[self->size];
     for( uint iBranch= 0; iBranch < self->size; ++iBranch )
@@ -424,6 +404,28 @@ char* BmTree_printConditions(BmTree* self, char* output)
 
     return output;
 }
+
+
+char* BmTree_printInside(BmTree* self, char* output)
+{
+    char buffer[512];
+        
+    strcat(output, "input: ");
+    strcat(output, BmCode_wording( self->input) );
+    sprintf( buffer, ", size: %u", self->size );
+    strcat(output, buffer );
+
+    for( uint ib= 0 ; ib < self->size ; ++ib )
+    {
+        char buffer2[128]= "";
+        sprintf( buffer, "\n%u. input(%u): %s", ib, BmTree_branchVariable(self, ib),
+            BmTree_printBranch( self, ib, buffer2)
+        );
+        strcat( output, buffer );
+    }
+    return output;
+}
+
 
 
 
