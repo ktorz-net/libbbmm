@@ -252,49 +252,49 @@ typedef struct {
   uint optionBound;
   uint capacity, size;
   uint** branches;
-} WdTree;
+} BmTree;
 
 /* Constructor Destructor */
-WdTree* newWdTree( BmCode* input, uint optionSize );
-WdTree* newWdTreeInputSizeAndBound( uint inputSize, uint* inputBounds, uint optionSize );
-void deleteWdTree( WdTree* self );
+BmTree* newBmTree( BmCode* input, uint optionSize );
+BmTree* newBmTreeInputSizeAndBound( uint inputSize, uint* inputBounds, uint optionSize );
+void deleteBmTree( BmTree* self );
 
-WdTree* WdTree_create( WdTree* self, uint inputSize, uint* inputBounds, uint optionSize );
-WdTree* WdTree_distroy(WdTree* self);
+BmTree* BmTree_create( BmTree* self, uint inputSize, uint* inputBounds, uint optionSize );
+BmTree* BmTree_distroy(BmTree* self);
 
 /* initialize */
-void WdTree_initializeWhith_on(WdTree* self, uint index, int defaultOption);
-void WdTree_initializeOn(WdTree* self, int defaultOption);
+void BmTree_initializeWhith_on(BmTree* self, uint index, int defaultOption);
+void BmTree_initializeOn(BmTree* self, int defaultOption);
 
 /* Construction */
-void WdTree_reziseCapacity( WdTree* self, uint newCapacity);
-void WdTree_reziseCompleteCapacity( WdTree* self);
-uint WdTree_newBranch(WdTree* self, uint iVariable, int defaultOption);
-void WdTree_branch_option_connect( WdTree* self, uint branchA, uint i, uint branchB );
-void WdTree_branch_option_output( WdTree* self, uint branchA, uint i, uint outbut );
-uint WdTree_at_set( WdTree* self, BmCode* code, uint output ); // set the ouput value of a code or a partial code (with 0), return the number of potential dead branches
-uint WdTree_at_set_fromBranch( WdTree* self, BmCode* code, uint output, uint iBranch ); // cf. WdTree_at_set, but starting from a given branch.
+void BmTree_reziseCapacity( BmTree* self, uint newCapacity);
+void BmTree_reziseCompleteCapacity( BmTree* self);
+uint BmTree_newBranch(BmTree* self, uint iVariable, int defaultOption);
+void BmTree_branch_option_connect( BmTree* self, uint branchA, uint i, uint branchB );
+void BmTree_branch_option_output( BmTree* self, uint branchA, uint i, uint outbut );
+uint BmTree_at_set( BmTree* self, BmCode* code, uint output ); // set the ouput value of a code or a partial code (with 0), return the number of potential dead branches
+uint BmTree_at_set_fromBranch( BmTree* self, BmCode* code, uint output, uint iBranch ); // cf. BmTree_at_set, but starting from a given branch.
 
 /* Cleanning */
-uint WdTree_cleanDeadBranches( WdTree* self); // Detect and remove detached branches (or WdTree_update, WdTree_regenerate : rebuild the tree without dead branches)
-uint WdTree_removeBranch(WdTree* self, uint iBranch); // Remove a branch: (must not change the order or the numerotation of the branch -> maintain a list of removed branches)
+uint BmTree_cleanDeadBranches( BmTree* self); // Detect and remove detached branches (or BmTree_update, BmTree_regenerate : rebuild the tree without dead branches)
+uint BmTree_removeBranch(BmTree* self, uint iBranch); // Remove a branch: (must not change the order or the numerotation of the branch -> maintain a list of removed branches)
 
 /* Accessor */
-uint WdTree_at( WdTree* self, BmCode* code); // Return the ouput value of a code/state.
-uint WdTree_branch_option( WdTree* self, uint iBranch, uint option );
-uint WdTree_branchVariable( WdTree* self, uint iBranch ); // Return the variable index represented by the branch.
-uint WdTree_branchSize( WdTree* self, uint branch ); // Return the number of possible output.
-uint WdTree_deepOf( WdTree* self, BmCode* code); // Return the number of branch to cross before reaching the output.
+uint BmTree_at( BmTree* self, BmCode* code); // Return the ouput value of a code/state.
+uint BmTree_branch_option( BmTree* self, uint iBranch, uint option );
+uint BmTree_branchVariable( BmTree* self, uint iBranch ); // Return the variable index represented by the branch.
+uint BmTree_branchSize( BmTree* self, uint branch ); // Return the number of possible output.
+uint BmTree_deepOf( BmTree* self, BmCode* code); // Return the number of branch to cross before reaching the output.
 
 /* Generating */
-BmBench* WdTree_asNewCollection( WdTree* self );
+BmBench* BmTree_asNewBench( BmTree* self );
 
 /* Printing */
-char* WdTree_printBranch( WdTree* self, uint iBranch, char* output );
-char* WdTree_wording(WdTree* self); // print `self` on `output`
-char* WdTree_print(WdTree* self, char* output); // print `self` at the end of `output`
+char* BmTree_printBranch( BmTree* self, uint iBranch, char* output );
+char* BmTree_wording(BmTree* self); // print `self` on `output`
+char* BmTree_print(BmTree* self, char* output); // print `self` at the end of `output`
 
-char* WdTree_printConditions(WdTree* self, char* output);
+char* BmTree_printConditions(BmTree* self, char* output);
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B e M A g e   S T R U C T U R E :  V A L U E  F U N C T I O N           *

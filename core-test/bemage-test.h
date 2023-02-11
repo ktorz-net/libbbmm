@@ -9,7 +9,7 @@
 TCase * test_case_BmCode(void);
 TCase * test_case_BmBench(void);
 TCase * test_case_BmNet(void);
-//TCase * test_case_WdTree(void);
+TCase * test_case_BmTree(void);
 //TCase * test_case_WdValueFct(void); // TODO
 
 // Wanda-prb

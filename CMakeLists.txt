@@ -36,7 +36,7 @@ set(SRC_FILES
     core-src/stt-BmCode.c
     core-src/stt-BmBench.c
     core-src/stt-BmNet.c
-#    core-src/stt-wdTree.c
+    core-src/stt-BmTree.c
 #    core-src/pbb-wdDistribution.c
 #    core-src/pbb-wdCondition.c
 #    core-src/pbb-wdTransition.c
@@ -66,7 +66,7 @@ set(TEST_SRC_FILES
     core-test/tc-stt-BmCode.c
     core-test/tc-stt-BmBench.c
     core-test/tc-stt-BmNet.c
-#    core-test/tc-stt-wdTree.c
+    core-test/tc-stt-BmTree.c
 #    core-test/tc-pbb-wdDistribution.c
 #    core-test/tc-pbb-wdCondition.c
 #    core-test/tc-pbb-wdTransition.c

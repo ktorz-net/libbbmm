@@ -10,7 +10,7 @@ Suite * wanda_stt_test_suite(void)
     suite_add_tcase( s, test_case_BmCode() );
     suite_add_tcase( s, test_case_BmBench() );
     suite_add_tcase( s, test_case_BmNet() );
-    //suite_add_tcase( s, test_case_WdTree() );
+    suite_add_tcase( s, test_case_BmTree() );
     
     return s;
 }
