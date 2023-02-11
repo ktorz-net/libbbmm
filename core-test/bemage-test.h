@@ -3,11 +3,11 @@
 
 #include <check.h>
 
-#define wt_print(str) printf("<--\n%s\n-->\n", str)
+#define tc_print(str) printf("<--\n%s\n-->\n", str)
 
 // Wanda-stt
 TCase * test_case_BmCode(void);
-//TCase * test_case_WdCollection(void);
+TCase * test_case_BmBench(void);
 //TCase * test_case_WdNet(void);
 //TCase * test_case_WdTree(void);
 //TCase * test_case_WdValueFct(void); // TODO

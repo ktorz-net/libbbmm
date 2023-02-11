@@ -1,0 +1,19 @@
+build/
+local/
+.vscode/
+c-src/.kdev4/
+c-src/c-src.kdev4
+*.changes
+*.sources
+crash.dmp
+__pycache__/
+
+# Core librairy
+libbemage.so
+
+# Test program
+test-BeMAge
+
+# Extra program
+#wanda-viewer
+

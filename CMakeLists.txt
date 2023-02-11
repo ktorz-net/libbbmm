@@ -34,7 +34,7 @@ include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/core-src)
 set(SRC_FILES
     core-src/stt-basictools.c
     core-src/stt-BmCode.c
-#    core-src/stt-wdCollection.c
+    core-src/stt-BmBench.c
 #    core-src/stt-wdNet.c
 #    core-src/stt-wdTree.c
 #    core-src/pbb-wdDistribution.c
@@ -64,7 +64,7 @@ if(TEST)
 set(CHECK_LIBS check subunit m rt pthread)
 set(TEST_SRC_FILES 
     core-test/tc-stt-BmCode.c
-#    core-test/tc-stt-wdCollection.c
+    core-test/tc-stt-BmBench.c
 #    core-test/tc-stt-wdNet.c
 #    core-test/tc-stt-wdTree.c
 #    core-test/tc-pbb-wdDistribution.c

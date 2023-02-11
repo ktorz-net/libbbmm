@@ -1,13 +1,13 @@
 # BeMAge board
 
-
 ## On the fire:
 
 - `BmModel_variable_initializeProbabilities` and `BmModel_variable_addProbabilities` based on attached prebuilt-distribution.
 	* become... `BmModel_variable_attachDistribution_if` based on `BmModel_variable_neBmistribution`.
 - Change `BmCollection` into `BmData`, use `BmData` with `BmTree` into BmFunction.
 - Create BmModel `<State, Action, Shift, transition, reward>`.
-	* BmValuesFct -> BmDescriptor Based on BmTree (similar to BmCollection functionnality).
+	* BmFunction -> BmTree selector and values[] (opt).
+	* BmPolicy -> BmTree selector and distribution (probability + value) (opt)
 - Set default node as equiprobable.
 - Test pure random variable in transition definition (shift of future with no dependancy).
 - It's time for solvers based on `<transition, reward>` (ValueIt. - PolicyIt.).
@@ -19,6 +19,8 @@
 - Clean function names + on code documentations. 
 - PyBeMAge.
 - doc + webpage
+- attach and deepDistroy everywhere.
+- `Enenced-C` : `vector` (~BmCode based on void**) ; `data` a bench of vector + type ; `ratio`
 
 ## What about ?
 

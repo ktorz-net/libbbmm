@@ -165,6 +165,54 @@ bool BmCode_isIncluding(BmCode* self, BmCode* configuration); // set the code as
 char* BmCode_wording(BmCode* self); // print `self` on `output`
 char* BmCode_print(BmCode* self, char* buffer);   // print `self` at the end of `output`
 
+
+/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *   B e M A g e   S T R U C T U R E :  B E N C H                          *
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+typedef struct {
+  uint capacity, size;
+  BmCode ** items;
+  uint * tags;
+} BmBench;
+
+/* Constructor Destructor */
+BmBench* newBmBench(uint capacity);
+void deleteBmBench(BmBench* self);
+void deleteDeepBmBench(BmBench* self);
+
+BmBench* BmBench_create(BmBench* self, uint capacity);
+BmBench* BmBench_distroy(BmBench* self);
+BmBench* BmBench_distroyDeep(BmBench* self);
+
+/* Initializer */
+
+/* Modification */
+void BmBench_resizeCapacity( BmBench* self, uint newCapacity );
+
+/* Accessor */
+uint BmBench_size(BmBench* self);
+BmCode* BmBench_at_item( BmBench* self, uint i );
+uint BmBench_at_tag( BmBench* self, uint i );
+
+/* Test */
+
+/* Construction Item */
+uint BmBench_attachItem( BmBench* self, BmCode* item );
+BmCode* BmBench_at_setTag( BmBench* self, uint i, uint tagValue );
+
+void BmBench_sortOnItem(BmBench* self);
+
+/* Printing */
+char* BmBench_print(BmBench* self, char* output); // print `self` at the end of `output`
+
+
+
+
+
+
+
+
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B e M A g e   S T R U C T U R E :  N E T W O R K                        *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
@@ -196,62 +244,6 @@ void WdNet_at_connect(WdNet* self, uint from, BmCode* targets);
 /* Printing */
 char* WdNet_wording(WdNet* self); // print `self` on `output`
 char* WdNet_print(WdNet* self, char* output); // print `self` at the end of `output`
-
-
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B e M A g e   S T R U C T U R E :  C O L L E C T I O N                    *
- * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
-
-typedef struct {
-  uint capacity, size;
-  BmCode ** items;
-  uint attributsSize, valuesSize;
-  uint ** attributs;
-  double ** values;
-//  char ** wordings;
-} WdCollection;
-
-/* Constructor Destructor */
-WdCollection* newWdCollection(uint capacity);
-WdCollection* newWdCollectionCharacterized(uint capacity, uint attributsSize, uint valuesSize);
-void deleteWdCollection(WdCollection* self);
-void deleteDeepWdCollection(WdCollection* self);
-
-WdCollection* WdCollection_create(WdCollection* self, uint capacity);
-WdCollection* WdCollection_createCharacterized(WdCollection* self, uint capacity, uint attributsSize, uint valuesSize);
-WdCollection* WdCollection_distroy(WdCollection* self);
-WdCollection* WdCollection_distroyDeep(WdCollection* self);
-
-/* Initializer */
-
-/* Modification */
-void WdCollection_resizeCapacity( WdCollection* self, uint newCapacity );
-
-/* Accessor */
-uint WdCollection_size(WdCollection* self);
-BmCode* WdCollection_at( WdCollection* self, uint i );
-
-uint WdCollection_attributsSize( WdCollection* self );
-uint WdCollection_valuesSize( WdCollection* self );
-
-uint* WdCollection_at_attributs( WdCollection* self, uint iItem );
-double* WdCollection_at_values( WdCollection* self, uint iItem );
-
-uint WdCollection_at_attribut( WdCollection* self, uint iItem, uint iAtt );
-double WdCollection_at_value( WdCollection* self, uint iItem, uint iVal );
-
-/* Test */
-
-/* Construction Item */
-uint WdCollection_attachNewItem( WdCollection* self, BmCode* item );
-
-uint WdCollection_at_attribut_set( WdCollection* self, uint iItem, uint iAtt, uint value );
-uint WdCollection_at_value_set( WdCollection* self, uint iItem, uint iVal, double value );
-
-void WdCollection_sortOnItem(WdCollection* self);
-
-/* Printing */
-char* WdCollection_print(WdCollection* self, char* output); // print `self` at the end of `output`
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
@@ -301,7 +293,7 @@ uint WdTree_branchSize( WdTree* self, uint branch ); // Return the number of pos
 uint WdTree_deepOf( WdTree* self, BmCode* code); // Return the number of branch to cross before reaching the output.
 
 /* Generating */
-WdCollection* WdTree_asNewCollection( WdTree* self );
+BmBench* WdTree_asNewCollection( WdTree* self );
 
 /* Printing */
 char* WdTree_printBranch( WdTree* self, uint iBranch, char* output );
