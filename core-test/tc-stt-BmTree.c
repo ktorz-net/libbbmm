@@ -280,6 +280,13 @@ START_TEST(test_BmTree_printConditions)
     strcpy(buffer, "");
     BmBench* collection= BmTree_asNewBench( tree );
 
+    strcpy(buffer, "");
+    BmBench_printConditions(collection, buffer);
+    ck_assert_str_eq(
+        buffer,
+        "{[0, 2, 0]:1, [1, 1, 0]:3, [2, 1, 0]:1, [0, 3, 1]:2, [0, 3, 2]:4}"
+    );
+
     BmBench_sortOnItem( collection );
     BmBench_print( collection, buffer);
     ck_assert_str_eq(
