@@ -35,7 +35,7 @@ set(SRC_FILES
     core-src/stt-basictools.c
     core-src/stt-BmCode.c
     core-src/stt-BmBench.c
-#    core-src/stt-wdNet.c
+    core-src/stt-BmNet.c
 #    core-src/stt-wdTree.c
 #    core-src/pbb-wdDistribution.c
 #    core-src/pbb-wdCondition.c
@@ -65,7 +65,7 @@ set(CHECK_LIBS check subunit m rt pthread)
 set(TEST_SRC_FILES 
     core-test/tc-stt-BmCode.c
     core-test/tc-stt-BmBench.c
-#    core-test/tc-stt-wdNet.c
+    core-test/tc-stt-BmNet.c
 #    core-test/tc-stt-wdTree.c
 #    core-test/tc-pbb-wdDistribution.c
 #    core-test/tc-pbb-wdCondition.c

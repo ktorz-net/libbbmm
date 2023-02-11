@@ -207,12 +207,6 @@ void BmBench_sortOnItem(BmBench* self);
 char* BmBench_print(BmBench* self, char* output); // print `self` at the end of `output`
 
 
-
-
-
-
-
-
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B e M A g e   S T R U C T U R E :  N E T W O R K                        *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
@@ -223,27 +217,27 @@ char* BmBench_print(BmBench* self, char* output); // print `self` at the end of 
 typedef struct {
   uint size;
   BmCode* edges;
-} WdNet;
+} BmNet;
 
 /* Constructor Destructor */
-WdNet* newWdNet(uint size);
-void deleteWdNet(WdNet* self);
+BmNet* newBmNet(uint size);
+void deleteBmNet(BmNet* self);
 
-WdNet* WdNet_create(WdNet* self, uint size); // generate
-WdNet* WdNet_distroy(WdNet* self);
+BmNet* BmNet_create(BmNet* self, uint size); // generate
+BmNet* BmNet_distroy(BmNet* self);
 
 /* Accessor */
-BmCode* WdNet_at(WdNet* self, uint i);
+BmCode* BmNet_at(BmNet* self, uint i);
 
 /* Test */
 
 /* Construction */
-void WdNet_clearAt(WdNet* self, uint node);
-void WdNet_at_connect(WdNet* self, uint from, BmCode* targets);
+void BmNet_clearAt(BmNet* self, uint node);
+void BmNet_at_connect(BmNet* self, uint from, BmCode* targets);
 
 /* Printing */
-char* WdNet_wording(WdNet* self); // print `self` on `output`
-char* WdNet_print(WdNet* self, char* output); // print `self` at the end of `output`
+char* BmNet_wording(BmNet* self); // print `self` on `output`
+char* BmNet_print(BmNet* self, char* output); // print `self` at the end of `output`
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
