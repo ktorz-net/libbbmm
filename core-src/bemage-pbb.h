@@ -1,12 +1,12 @@
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *
- *   WANDA Probability - A library in KISS philosophy of
- *                       WANDA probility and condition models
+ *   BeMAge Probability - A library in KISS philosophy of
+ *                       BeMAge probility and condition models
  *
  *   FEATURES:
- *       - WdDistribution      : Define a distribution of probabilities over configuration (codes)
- *       - WdCondition         : Define a Bayesian Node (conditional probabilities over variable affectations)
- *       - WdTransition        : Define a Dynamic Bayesian Network composed of state, action and tramsitional nodes 
+ *       - BmDistribution      : Define a distribution of probabilities over configuration (codes)
+ *       - BmCondition         : Define a Bayesian Node (conditional probabilities over variable affectations)
+ *       - BmTransition        : Define a Dynamic Bayesian Network composed of state, action and tramsitional nodes 
  * 
  *   LICENSE: MIT License
  *
@@ -32,10 +32,10 @@
  * 
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
-#ifndef WANDA_PROBABILITY_H
-#define WANDA_PROBABILITY_H
+#ifndef BEMAGE_PROBABILITY_H
+#define BEMAGE_PROBABILITY_H
 
-#include "wanda-stt.h"
+#include "bemage-stt.h"
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
@@ -48,66 +48,66 @@
 typedef struct {
   uint capacity, size;
   uint dimention;
-  WdCode** configurations;
+  BmCode** configurations;
   double* probabilities;
-} WdDistribution;
+} BmDistribution;
 
 /* Constructor Destructor */
-WdDistribution* newWdDistribution(uint dimention);
-WdDistribution* newWdDistributionAs( WdDistribution* model );
+BmDistribution* newBmDistribution(uint dimention);
+BmDistribution* newBmDistributionAs( BmDistribution* model );
 
-void deleteWdDistribution(WdDistribution* instance);
+void deleteBmDistribution(BmDistribution* instance);
 
 /* fill and empty a structure */
-WdDistribution* WdDistribution_create(WdDistribution* self, uint dimention);
-WdDistribution* WdDistribution_createAs(WdDistribution* self, WdDistribution* model);
-WdDistribution* WdDistribution_distroy(WdDistribution* self);
+BmDistribution* BmDistribution_create(BmDistribution* self, uint dimention);
+BmDistribution* BmDistribution_createAs(BmDistribution* self, BmDistribution* model);
+BmDistribution* BmDistribution_distroy(BmDistribution* self);
 
 /* Switching double beffering */
-void WdDistribution_switch(WdDistribution* self, WdDistribution* another);
+void BmDistribution_switch(BmDistribution* self, BmDistribution* another);
 
 /* Accessor */
-uint WdDistribution_dimention(WdDistribution* self);
-uint WdDistribution_size(WdDistribution* self);
-WdCode* WdDistribution_configAt(WdDistribution* self, uint i );
-uint WdDistribution_outputAt(WdDistribution* self, uint i );
-double WdDistribution_probabilityAt(WdDistribution* self, uint i );
-// double WdDistribution_probabilityOfState(WdDistribution* self, WdCode* configuration );
+uint BmDistribution_dimention(BmDistribution* self);
+uint BmDistribution_size(BmDistribution* self);
+BmCode* BmDistribution_configAt(BmDistribution* self, uint i );
+uint BmDistribution_outputAt(BmDistribution* self, uint i );
+double BmDistribution_probabilityAt(BmDistribution* self, uint i );
+// double BmDistribution_probabilityOfState(BmDistribution* self, BmCode* configuration );
 
 /* Test */
 
 /* Construction */
-void WdDistribution_initialize(WdDistribution* self, uint dimention);
-void WdDistribution_initializeAs(WdDistribution* self, WdDistribution* model);
-void WdDistribution_resizeCapacity(WdDistribution* self, uint newCapacity);
-void WdDistribution_clear(WdDistribution* self);
+void BmDistribution_initialize(BmDistribution* self, uint dimention);
+void BmDistribution_initializeAs(BmDistribution* self, BmDistribution* model);
+void BmDistribution_resizeCapacity(BmDistribution* self, uint newCapacity);
+void BmDistribution_clear(BmDistribution* self);
 
 /* Construction - configuration (Multi-dimentional element) */
-uint WdDistribution_addConfig(WdDistribution* self, WdCode* configuration, double probability);
-uint WdDistribution_setOnConfig(WdDistribution* self, WdCode* configuration);
-void WdDistribution_setConfigs(WdDistribution* self, uint size, WdCode** states, double* probas );
+uint BmDistribution_addConfig(BmDistribution* self, BmCode* configuration, double probability);
+uint BmDistribution_setOnConfig(BmDistribution* self, BmCode* configuration);
+void BmDistribution_setConfigs(BmDistribution* self, uint size, BmCode** states, double* probas );
 
 /* Construction - output (uni-dimentional element) */
-uint WdDistribution_addOutput(WdDistribution* self, uint output, double probability);
-uint WdDistribution_setOnOutput(WdDistribution* self, uint output);
+uint BmDistribution_addOutput(BmDistribution* self, uint output, double probability);
+uint BmDistribution_setOnOutput(BmDistribution* self, uint output);
 
 /* modification */
-void WdDistribution_switchPosibilities(WdDistribution* self, uint index1, uint index2);
+void BmDistribution_switchPosibilities(BmDistribution* self, uint index1, uint index2);
 
 /* Process */
-void WdDistribution_sort( WdDistribution* self );
-uint WdDistribution_mergeDoubles( WdDistribution* self );
-void WdDistribution_reduceDimentionTo( WdDistribution* self, uint newDimention, uint* mask );
+void BmDistribution_sort( BmDistribution* self );
+uint BmDistribution_mergeDoubles( BmDistribution* self );
+void BmDistribution_reduceDimentionTo( BmDistribution* self, uint newDimention, uint* mask );
 
 /* Morphing */
-//WdDistribution* WdDistribution_createReducedTo( WdDistribution* self, uint newDimention, uint* mask );
-void WdDistribution_asReductionOf( WdDistribution* self, WdDistribution* model, uint* mask ); // mask size need to be egal or greter than self dimention
+//BmDistribution* BmDistribution_createReducedTo( BmDistribution* self, uint newDimention, uint* mask );
+void BmDistribution_asReductionOf( BmDistribution* self, BmDistribution* model, uint* mask ); // mask size need to be egal or greter than self dimention
 
 /* Printing */
-void WdDistribution_puts(WdDistribution* self); // print `self` on stdout
-char* WdDistribution_wording(WdDistribution* self); // print `self` on `output`
-char* WdDistribution_print(WdDistribution* self, char* output); // print `self` at the end of `output`
-char* WdDistribution_printPosibility(WdDistribution* self, uint index, char* out); // print one posibility of distribution `self` at the end of `output`
+void BmDistribution_puts(BmDistribution* self); // print `self` on stdout
+char* BmDistribution_wording(BmDistribution* self); // print `self` on `output`
+char* BmDistribution_print(BmDistribution* self, char* output); // print `self` at the end of `output`
+char* BmDistribution_printPosibility(BmDistribution* self, uint index, char* out); // print one posibility of distribution `self` at the end of `output`
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   W A N D A   C O N D I T I O N                                         *
@@ -118,62 +118,63 @@ char* WdDistribution_printPosibility(WdDistribution* self, uint index, char* out
 
 typedef struct {
   uint outputSize;
-  WdCode* parentRanges;
-  WdTree* selector;
+  BmCode* parentRanges;
+  BmTree* selector;
   uint distribSize, distribCapacity;
-  WdDistribution* * distributions;
-} WdCondition;
+  BmDistribution* * distributions;
+} BmCondition;
 
 /* Constructor Destructor */
-WdCondition* newWdCondition(uint outputSize, WdCode* parentRanges, WdDistribution* defaultDistrib);
-WdCondition* newWdConditionBasic(uint domainSize, WdCode* parentRanges);
-WdCondition* newWdConditionUndependant(uint outputSize);
+BmCondition* newBmCondition(uint outputSize, BmCode* parentRanges, BmDistribution* defaultDistrib);
+BmCondition* newBmConditionBasic(uint domainSize, BmCode* parentRanges);
+BmCondition* newBmConditionUndependant(uint outputSize);
 
-WdCondition* WdCondition_create(WdCondition* self, uint outputSize, WdCode* parentRanges, WdDistribution* defaultDistrib);
-WdCondition* WdCondition_createBasic(WdCondition* self, uint outputSize, WdCode* parentRanges);
-WdCondition* WdCondition_createUndependant(WdCondition* self, uint outputSize);
-WdCondition* WdCondition_distroy(WdCondition* self);
+BmCondition* BmCondition_create(BmCondition* self, uint outputSize, BmCode* parentRanges, BmDistribution* defaultDistrib);
+BmCondition* BmCondition_createBasic(BmCondition* self, uint outputSize, BmCode* parentRanges);
+BmCondition* BmCondition_createUndependant(BmCondition* self, uint outputSize);
+BmCondition* BmCondition_distroy(BmCondition* self);
 
-void deleteWdCondition(WdCondition* instance);
+void deleteBmCondition(BmCondition* instance);
 
 /* initialize */
-void WdCondition_reinitialize(WdCondition* self, WdCode* parentRanges, WdDistribution* defaultDistrib);
-//void WdCondition_initializeBasic(WdCondition* self);
-//void WdCondition_initializeEquiprobable(WdCondition* self);
+void BmCondition_reinitialize(BmCondition* self, BmCode* parentRanges, BmDistribution* defaultDistrib);
+void BmCondition_reinitializeEquiprobable(BmCondition* self, BmCode* parentRanges);
+//void BmCondition_initializeBasic(BmCondition* self);
+//void BmCondition_initializeEquiprobable(BmCondition* self);
 
 /* Accessor */
-uint WdCondition_outputSize( WdCondition* self );
-WdCode* WdCondition_parentRanges( WdCondition* self );
-uint WdCondition_parentSize( WdCondition* self );
-uint WdCondition_dimention( WdCondition* self );
-WdDistribution* WdCondition_at( WdCondition* self, WdCode* configuration );
-uint WdCondition_distributionIndexAt( WdCondition* self, WdCode* configuration );
-WdDistribution* WdCondition_atKey( WdCondition* self, uint configKey );
+uint BmCondition_outputSize( BmCondition* self );
+BmCode* BmCondition_parentRanges( BmCondition* self );
+uint BmCondition_parentSize( BmCondition* self );
+uint BmCondition_dimention( BmCondition* self );
+BmDistribution* BmCondition_at( BmCondition* self, BmCode* configuration );
+uint BmCondition_distributionIndexAt( BmCondition* self, BmCode* configuration );
+BmDistribution* BmCondition_atKey( BmCondition* self, uint configKey );
 
 /* Inferring */
-WdDistribution* WdCondition_infer( WdCondition* self, WdDistribution* distribOverConfigurations );
-WdDistribution* WdCondition_newDistributionByInfering( WdCondition* self, WdDistribution* distribOverConfigurations );
-WdDistribution* WdCondition_newDistributionByInfering_mask(WdCondition* self, WdDistribution* longDistrib, WdCode* parentMask);
+BmDistribution* BmCondition_infer( BmCondition* self, BmDistribution* distribOverConfigurations );
+BmDistribution* BmCondition_newDistributionByInfering( BmCondition* self, BmDistribution* distribOverConfigurations );
+BmDistribution* BmCondition_newDistributionByInfering_mask(BmCondition* self, BmDistribution* longDistrib, BmCode* parentMask);
 
 /* Test */
 
 /* Construction*/
 /* Construction tools*/
-uint WdCondition_resizeDistributionCapacity( WdCondition* self, uint newCapacity );
-uint WdCondition_at_set( WdCondition* self, WdCode* configuration, WdDistribution* distribution );
+uint BmCondition_resizeDistributionCapacity( BmCondition* self, uint newCapacity );
+uint BmCondition_at_set( BmCondition* self, BmCode* configuration, BmDistribution* distribution );
 
-void WdCondition_at_addOutput_onProbability( WdCondition* self, WdCode* configutation, uint option, double probability );
+void BmCondition_at_addOutput_onProbability( BmCondition* self, BmCode* configutation, uint option, double probability );
 
 /* Printing */
-char* WdCondition_printCode(WdCondition* self, WdCode* code, char* output);
-char* WdCondition_print(WdCondition* self, char* output);
-char* WdCondition_printSep(WdCondition* self, char* output, char* separator);
+char* BmCondition_printCode(BmCondition* self, BmCode* code, char* output);
+char* BmCondition_print(BmCondition* self, char* output);
+char* BmCondition_printSep(BmCondition* self, char* output, char* separator);
 
-char* WdCondition_wordingExtend( WdCondition* self ); // print `self` on `output`
-char* WdCondition_printExtend(WdCondition* self, char* output); // print `self` at the end of `output`
-char* WdCondition_printExtendSep(WdCondition* self, char* output, char* separator);
+char* BmCondition_wordingExtend( BmCondition* self ); // print `self` on `output`
+char* BmCondition_printExtend(BmCondition* self, char* output); // print `self` at the end of `output`
+char* BmCondition_printExtendSep(BmCondition* self, char* output, char* separator);
 
-char* WdCondition_printIdentity( WdCondition* self, char* output ); // print `self` at the end of on `output`
+char* BmCondition_printIdentity( BmCondition* self, char* output ); // print `self` at the end of on `output`
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
  *   W A N D A   T R A N S I T I O N
@@ -184,49 +185,49 @@ char* WdCondition_printIdentity( WdCondition* self, char* output ); // print `se
 
 typedef struct {
   uint stateDimention, actionDimention, overallDimention;
-  WdNet* network;
-  WdCondition* nodes;
-  WdDistribution* transition;
-} WdTransition;
+  BmNet* network;
+  BmCondition* nodes;
+  BmDistribution* transition;
+} BmTransition;
 
 /* Constructor Destructor */
-WdTransition* newWdTransition( WdCode* state, WdCode* action );
-WdTransition* newWdTransitionWithShift( WdCode* state, WdCode* action, WdCode* shift );
-void deleteWdTransition(WdTransition* self);
+BmTransition* newBmTransition( BmCode* state, BmCode* action );
+BmTransition* newBmTransitionWithShift( BmCode* state, BmCode* action, BmCode* shift );
+void deleteBmTransition(BmTransition* self);
 
 /* fill and empty a structure */
-WdTransition* WdTransition_create(WdTransition* self, WdCode* state, WdCode* action, WdCode* shift );
-WdTransition* WdTransition_distroy(WdTransition* self);
+BmTransition* BmTransition_create(BmTransition* self, BmCode* state, BmCode* action, BmCode* shift );
+BmTransition* BmTransition_distroy(BmTransition* self);
 
 /* Accessor */
-WdDistribution* WdTransition_distribution( WdTransition* self );
+BmDistribution* BmTransition_distribution( BmTransition* self );
 
-uint WdTransition_stateDimention( WdTransition* self );
-uint WdTransition_actionDimention( WdTransition* self );
-uint WdTransition_shiftDimention( WdTransition* self );
-uint WdTransition_overallDimention( WdTransition* self );
+uint BmTransition_stateDimention( BmTransition* self );
+uint BmTransition_actionDimention( BmTransition* self );
+uint BmTransition_shiftDimention( BmTransition* self );
+uint BmTransition_overallDimention( BmTransition* self );
 
-uint WdTransition_indexOfStateVariableT0( WdTransition* self, uint iVar );
-uint WdTransition_indexOfStateVariableT1( WdTransition* self, uint iVar );
-uint WdTransition_indexOfActionVariable( WdTransition* self, uint iVar );
-uint WdTransition_indexOfShiftVariable( WdTransition* self, uint iVar );
+uint BmTransition_indexOfStateVariableT0( BmTransition* self, uint iVar );
+uint BmTransition_indexOfStateVariableT1( BmTransition* self, uint iVar );
+uint BmTransition_indexOfActionVariable( BmTransition* self, uint iVar );
+uint BmTransition_indexOfShiftVariable( BmTransition* self, uint iVar );
 
-WdCondition* WdTransition_nodeAt( WdTransition* self, uint iVar );
-uint WdTransition_sizeAt( WdTransition* self, uint iVar );
-WdCode* WdTransition_dependanciesAt( WdTransition* self, uint iVar );
+BmCondition* BmTransition_nodeAt( BmTransition* self, uint iVar );
+uint BmTransition_sizeAt( BmTransition* self, uint iVar );
+BmCode* BmTransition_dependanciesAt( BmTransition* self, uint iVar );
 
 /* Construction */
-WdTransition* WdTransition_node_initialize( WdTransition* self, uint index, uint outputSize );
-WdTransition* WdTransition_node_dependArray( WdTransition* self, uint index, uint parentSize, uint* parents );
-WdTransition* WdTransition_node_depends( WdTransition* self, uint index, uint parentSize, ... );
+BmTransition* BmTransition_node_initialize( BmTransition* self, uint index, uint outputSize );
+BmTransition* BmTransition_node_dependArray( BmTransition* self, uint index, uint parentSize, uint* parents );
+BmTransition* BmTransition_node_depends( BmTransition* self, uint index, uint parentSize, ... );
 
 /* Infering */
-WdDistribution* WdTransition_newDistributionByInfering( WdTransition* self, WdDistribution* partialDistribution );
-WdDistribution* WdTransition_inferFromState_andAction( WdTransition* self, WdCode* state, WdCode* action );
+BmDistribution* BmTransition_newDistributionByInfering( BmTransition* self, BmDistribution* partialDistribution );
+BmDistribution* BmTransition_inferFromState_andAction( BmTransition* self, BmCode* state, BmCode* action );
 
 /* Printing */
-char* WdTransition_print(WdTransition* self, char* output); // print `self` at the end of `output`
-char* WdTransition_printSignature(WdTransition* self, char* output); // print `self` at the end of `output`
-char* WdTransition_printDependency(WdTransition* self, char* output); // print `self` at the end of `output`
+char* BmTransition_print(BmTransition* self, char* output); // print `self` at the end of `output`
+char* BmTransition_printSignature(BmTransition* self, char* output); // print `self` at the end of `output`
+char* BmTransition_printDependency(BmTransition* self, char* output); // print `self` at the end of `output`
 
 #endif

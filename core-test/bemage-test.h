@@ -13,9 +13,9 @@ TCase * test_case_BmTree(void);
 //TCase * test_case_WdValueFct(void); // TODO
 
 // Wanda-prb
-//TCase * test_case_WdDistribution(void);
-//TCase * test_case_WdCondition(void);
-//TCase * test_case_WdTransition(void);
+TCase * test_case_BmDistribution(void);
+TCase * test_case_BmCondition(void);
+TCase * test_case_BmTransition(void);
 
 // Wanda-mdl
 //TCase * test_case_WdDomain(void);

@@ -4,7 +4,6 @@
 
 - `BmModel_variable_initializeProbabilities` and `BmModel_variable_addProbabilities` based on attached prebuilt-distribution.
 	* become... `BmModel_variable_attachDistribution_if` based on `BmModel_variable_neBmistribution`.
-- Change `BmCollection` into `BmData`, use `BmData` with `BmTree` into BmFunction.
 - Create BmModel `<State, Action, Shift, transition, reward>`.
 	* BmFunction -> BmTree selector and values[] (opt).
 	* BmPolicy -> BmTree selector and distribution (probability + value) (opt)
@@ -20,13 +19,12 @@
 - PyBeMAge.
 - doc + webpage
 - attach and deepDistroy everywhere.
-- `Enenced-C` : `vector` (~BmCode based on void**) ; `data` a bench of vector + type ; `ratio`
+- `Enenced-C`: `vector` (~BmCode based on void**) ; `data` a bench of vector + type ; `ratio`
 
 ## What about ?
 
 - Distribution versus Collection ?
-- BmCollection based on Bench128 (1028/128 == 1028>>7; 1028%128 == 1028&127)
-
+- BmCollection based on Bench128 (1028/128 == 1028>>7; 1028%128 == 1028&127)s
 
 ## State Of The Art: 
 

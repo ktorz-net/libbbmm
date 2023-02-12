@@ -37,9 +37,9 @@ set(SRC_FILES
     core-src/stt-BmBench.c
     core-src/stt-BmNet.c
     core-src/stt-BmTree.c
-#    core-src/pbb-wdDistribution.c
-#    core-src/pbb-wdCondition.c
-#    core-src/pbb-wdTransition.c
+    core-src/pbb-BmDistribution.c
+    core-src/pbb-BmCondition.c
+    core-src/pbb-BmTransition.c
 #    core-src/mdl-wdDomain.c
 #    core-src/mdl-wdSpace.c
 #    core-src/mdl-wdModel.c
@@ -67,9 +67,9 @@ set(TEST_SRC_FILES
     core-test/tc-stt-BmBench.c
     core-test/tc-stt-BmNet.c
     core-test/tc-stt-BmTree.c
-#    core-test/tc-pbb-wdDistribution.c
-#    core-test/tc-pbb-wdCondition.c
-#    core-test/tc-pbb-wdTransition.c
+    core-test/tc-pbb-BmDistribution.c
+    core-test/tc-pbb-BmCondition.c
+    core-test/tc-pbb-BmTransition.c
 #    core-test/tc-mld-wdDomain.c
 #    core-test/tc-mld-wdSpace.c
 #    core-test/tc-mld-wdModel.c

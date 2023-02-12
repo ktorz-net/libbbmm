@@ -19,9 +19,9 @@ Suite * wanda_prb_test_suite(void)
 {
     Suite *s= suite_create("BeMAge-probabilities");
 
-    //suite_add_tcase( s, test_case_WdDistribution() );
-    //suite_add_tcase( s, test_case_WdCondition() );
-    //suite_add_tcase( s, test_case_WdTransition() );
+    suite_add_tcase( s, test_case_BmDistribution() );
+    suite_add_tcase( s, test_case_BmCondition() );
+    suite_add_tcase( s, test_case_BmTransition() );
 
     return s;
 }
