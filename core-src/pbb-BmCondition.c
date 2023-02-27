@@ -136,7 +136,9 @@ uint BmCondition_dimention( BmCondition* self )
 
 BmDistribution* BmCondition_at( BmCondition* self, BmCode* configuration )
 {
-    return array_at(self->distributions, BmTree_at( self->selector, configuration) );
+    uint iDistrib= BmTree_at( self->selector, configuration);
+    assert( 0 < iDistrib && iDistrib <= self->distribSize );
+    return array_at(self->distributions, iDistrib );
 }
 
 uint BmCondition_distributionIndexAt( BmCondition* self, BmCode* configuration )
@@ -258,14 +260,11 @@ uint BmCondition_resizeDistributionCapacity( BmCondition* self, uint newCapacity
 
 uint BmCondition_at_set( BmCondition* self, BmCode* configuration, BmDistribution* distribution )
 {
-    // Copy the distribution:
     if( self->distribSize+1 > self->distribCapacity )
         BmCondition_resizeDistributionCapacity( self, self->distribSize+1 );
     
     self->distribSize+= 1;
     array_at_set(self->distributions, self->distribSize, newBmDistributionAs( distribution ) );
-
-    // Record it in the selector:
     BmTree_at_set(self->selector, configuration, self->distribSize);
 
     return self->distribSize;
@@ -277,11 +276,12 @@ void BmCondition_at_addOutput_onProbability( BmCondition* self, BmCode* configut
 }
 
 /* Printing */
-char* BmCondition_printCode(BmCondition* self, BmCode* code, char* output)
+char* _BmCondition_printCode_withDistribution(BmCondition* self, BmCode* code, uint iDistrib, char* output)
 {
     uint inputSize= BmCondition_dimention(self);
-    // Securitée:
-    assert( BmCode_size(code) == inputSize+1 );
+    
+    // Security:
+    assert( BmCode_size(code) == inputSize );
 
     char tmp[64];
     strcat(output, "[");
@@ -300,7 +300,8 @@ char* BmCondition_printCode(BmCondition* self, BmCode* code, char* output)
     }
 
     strcat(output, "]: " );
-    BmDistribution_print( array_at(self->distributions, BmCode_at(code, inputSize+1) ), output );
+    BmDistribution_print( array_at(self->distributions, iDistrib ), output );
+
     return output;
 }
 
@@ -318,12 +319,14 @@ char* BmCondition_printSep(BmCondition* self, char* output, char* separator)
 
     if( BmBench_size(collec) > 0 )
     {
-        BmCondition_printCode( self, BmBench_at_item( collec, 1 ), output );
+        _BmCondition_printCode_withDistribution(
+            self, BmBench_at_item( collec, 1 ), BmBench_at_tag( collec, 1 ), output );
     }    
     for( uint i = 2 ; i <= BmBench_size(collec) ; ++i )
     {
         strcat( output, separator );
-        BmCondition_printCode( self, BmBench_at_item( collec, i ), output );
+        _BmCondition_printCode_withDistribution(
+            self, BmBench_at_item( collec, i ), BmBench_at_tag( collec, i ), output );
     }
     strcat(output, "}");
     return output;

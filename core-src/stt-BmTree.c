@@ -138,17 +138,11 @@ void BmTree_branch_option_output( BmTree* self, uint iBranch, uint i, uint outpu
     self->branches[iBranch][i]= output;
 }
 
-uint BmTree_at_set( BmTree* self, BmCode* code, uint output)
-{
-    BmCode * draft= newBmCodeAs(code);
-    uint r= BmTree_at_set_fromBranch( self, draft, output, 0);
-    deleteBmCode(draft);
-    return r;
-}
-
-uint BmTree_at_set_fromBranch( BmTree* self, BmCode* code, uint output, uint iBranch)
+uint _BmTree_at_set_fromBranch( BmTree* self, BmCode* code, uint output, uint iBranch)
 {
     assert( BmCode_size(code) == BmCode_size(self->input) );
+    assert( iBranch < self->size );
+
     uint iVar= BmTree_branchVariable(self, iBranch);
 
     // Find the next significant variables (if exist)
@@ -166,7 +160,7 @@ uint BmTree_at_set_fromBranch( BmTree* self, BmCode* code, uint output, uint iBr
         {
             BmCode * codeBis= newBmCodeAs( code );
             BmCode_at_set( codeBis, iVar, option );
-            count+= BmTree_at_set_fromBranch( self, codeBis, output, iBranch );
+            count+= _BmTree_at_set_fromBranch( self, codeBis, output, iBranch );
             deleteBmCode(codeBis);
         }
         return count;
@@ -190,15 +184,33 @@ uint BmTree_at_set_fromBranch( BmTree* self, BmCode* code, uint output, uint iBr
 
             //recursive call:
             BmCode_at_set( code, iVar, 0 );// set the variable visited
-            return BmTree_at_set_fromBranch( self, code, output, newBranchId );
+            return _BmTree_at_set_fromBranch( self, code, output, newBranchId );
         }
         else
         {
             //recursive call:
             BmCode_at_set( code, iVar, 0 );// set the variable visited
-            return BmTree_at_set_fromBranch( self, code, output, branchOutput - self->optionBound );
+            return _BmTree_at_set_fromBranch( self, code, output, branchOutput - self->optionBound );
         }   
     }
+}
+
+uint BmTree_at_set( BmTree* self, BmCode* code, uint output)
+{
+    // If not initialized yet: 
+    if( self->size == 0 )
+    {
+        uint i= 1;
+        while( BmCode_at(code, i) == 0 && i <= BmCode_size(code) )
+            ++i;
+        BmTree_initializeWhith_on(self, i, 1);
+    }
+
+    // Then apply the code at output: 
+    BmCode * draft= newBmCodeAs(code);
+    uint r= _BmTree_at_set_fromBranch( self, draft, output, 0);
+    deleteBmCode(draft);
+    return r;
 }
 
 /* Cleanning */
@@ -261,7 +273,7 @@ uint BmTree_at( BmTree* self, BmCode* code)
 
     if( self->size == 0 )
     {
-        return 0;
+        return 1;
     }
     while( option >= self->optionBound && deep <= BmCode_size(self->input) )
     {
@@ -331,6 +343,7 @@ BmBench* BmTree_asNewBench( BmTree* self )
     {
         deleteBmCode( conditions[i] );
     }
+    BmBench_sortOnItem(bench);
     return bench;
 }
 

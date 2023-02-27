@@ -138,6 +138,25 @@ void BmBench_sortOnItem(BmBench* self)
     }
 }
 
+void BmBench_sortOnTag(BmBench* self)
+{
+    bool searching= true;
+    while( searching )
+    {
+        searching= false;
+        for( uint i= 2 ; i <= self->size ; ++i )
+            if( array_at(self->tags, i-1) > array_at(self->tags, i) )
+        {
+            BmCode* tmp= array_at(self->items, i);
+            uint tag= array_at(self->tags, i);
+            array_at_set( self->items, i, array_at( self->items, i-1 ) );
+            array_at_set( self->tags, i, array_at( self->tags, i-1 ) );
+            array_at_set( self->items, i-1, tmp );
+            array_at_set( self->tags, i-1, tag );
+            searching= true;
+        }
+    }
+}
 
 /* Printing */
 char* BmBench_printItem(BmBench* self, uint iItem, char* output)

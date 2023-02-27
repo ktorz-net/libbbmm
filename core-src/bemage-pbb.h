@@ -166,7 +166,7 @@ uint BmCondition_at_set( BmCondition* self, BmCode* configuration, BmDistributio
 void BmCondition_at_addOutput_onProbability( BmCondition* self, BmCode* configutation, uint option, double probability );
 
 /* Printing */
-char* BmCondition_printCode(BmCondition* self, BmCode* code, char* output);
+char* _BmCondition_printCode_withDistribution(BmCondition* self, BmCode* code, uint iDistirb, char* output);
 char* BmCondition_print(BmCondition* self, char* output);
 char* BmCondition_printSep(BmCondition* self, char* output, char* separator);
 

@@ -202,6 +202,7 @@ uint BmBench_attachItem( BmBench* self, BmCode* item );
 BmCode* BmBench_at_setTag( BmBench* self, uint i, uint tagValue );
 
 void BmBench_sortOnItem(BmBench* self);
+void BmBench_sortOnTag(BmBench* self);
 
 /* Printing */
 char* BmBench_print(BmBench* self, char* output); // print `self` at the end of `output`
@@ -273,7 +274,8 @@ uint BmTree_newBranch(BmTree* self, uint iVariable, int defaultOption);
 void BmTree_branch_option_connect( BmTree* self, uint branchA, uint i, uint branchB );
 void BmTree_branch_option_output( BmTree* self, uint branchA, uint i, uint outbut );
 uint BmTree_at_set( BmTree* self, BmCode* code, uint output ); // set the ouput value of a code or a partial code (with 0), return the number of potential dead branches
-uint BmTree_at_set_fromBranch( BmTree* self, BmCode* code, uint output, uint iBranch ); // cf. BmTree_at_set, but starting from a given branch.
+
+uint _BmTree_at_set_fromBranch( BmTree* self, BmCode* code, uint output, uint iBranch ); // cf. BmTree_at_set, but starting from a given branch.
 
 /* Cleanning */
 uint BmTree_cleanDeadBranches( BmTree* self); // Detect and remove detached branches (or BmTree_update, BmTree_regenerate : rebuild the tree without dead branches)

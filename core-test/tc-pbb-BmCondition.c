@@ -13,10 +13,20 @@ START_TEST(test_BmCondition_init)
     ck_assert_str_eq( BmCode_wording( BmCondition_parentRanges(instance1) ), "[1]");
     ck_assert_uint_eq( BmCode_size( BmCondition_parentRanges(instance1) ), 1 );
 
+    ck_assert_str_eq( BmCode_wording(instance1->parentRanges), "[1]" );
+    {
+        BmCode* config= BmCode_newBmCodeOnKey( instance1->parentRanges, 1 );
+        ck_assert_str_eq( BmCode_wording(config), "[1]" );
+    
+        ck_assert_str_eq( BmTree_wording( instance1->selector), "{}" );
+
+        BmDistribution* distrib= BmCondition_at( instance1, config );
+        deleteBmCode(config);
+
+        ck_assert_str_eq( BmDistribution_wording(distrib), "{[1]: 1.00}" );
+    }
     ck_assert_str_eq(
-        BmDistribution_wording( BmCondition_atKey(instance1, 1) ),
-        "{[1]: 1.00}"
-    );
+        BmDistribution_wording( BmCondition_atKey(instance1, 1) ), "{[1]: 1.00}" );
 
     BmCondition* instance2;
     {
@@ -56,8 +66,7 @@ START_TEST(test_BmCondition_init2)
     ck_assert_str_eq( BmCondition_printIdentity( instance, buffer ), "[3, 5]->[4]" ); 
 
     strcpy(buffer, BmTree_wording( instance->selector ));
-    ck_assert_str_eq( buffer, "input: [3, 5], size: 1\n\
-0. input(1): [leaf(1), leaf(1), leaf(1)]");
+    ck_assert_str_eq( buffer, "{}");
 
     strcpy(buffer, "");
     BmCondition_printExtendSep( instance, buffer, ",\n" );
@@ -372,7 +381,6 @@ START_TEST(test_BmCondition_print)
 
     char buffer[1024]="";
     BmCondition_print( instance, buffer );
-    
     ck_assert_str_eq( buffer,
 "[4, 5, 6]->[2]: {[1, 0, 0]: {[1]: 1.00},\n\
   [2, 0, 0]: {[1]: 1.00},\n\
