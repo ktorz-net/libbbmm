@@ -2,7 +2,7 @@
 
 ## On the fire:
 
-- `BmModel`-> Process
+- `BmModel`-> BmProcess
 - `BmModel_variable_initializeProbabilities` and `BmModel_variable_addProbabilities` based on attached prebuilt-distribution.
 	* become... `BmModel_variable_attachDistribution_if` based on `BmModel_variable_neBmistribution`.
 - Create BmModel `<State, Action, Shift, transition, reward>`.
@@ -40,7 +40,7 @@
 - manipulate rational-number ?
 - Integrate a string-stream librairie or use a BmStr structure ?
 - What about igraph toolbox ?
-- Pharo: Prepare for uiPlayer: (BeMAge-presenter Package... Paul)
+- Pharo: Prepare for uiPlayer: (BbMm-presenter Package... Paul)
 - Windaube
 
 see: on [dlib](https://github.com/davisking/dlib/blob/master/examples/bayes_net_ex.cpp), for an inspiration of how to generate a BN. 
