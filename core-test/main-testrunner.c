@@ -1,11 +1,11 @@
-#include "bemage-test.h"
+#include "bbmm-test.h"
 
 #include <stdlib.h>
 #include <stdio.h>
 
-Suite * wanda_stt_test_suite(void)
+Suite * bbmm_stt_test_suite(void)
 {
-    Suite *s= suite_create("BeMAge-structures");
+    Suite *s= suite_create("BbMm-structures");
 
     suite_add_tcase( s, test_case_BmCode() );
     suite_add_tcase( s, test_case_BmBench() );
@@ -15,9 +15,9 @@ Suite * wanda_stt_test_suite(void)
     return s;
 }
 
-Suite * wanda_prb_test_suite(void)
+Suite * bbmm_prb_test_suite(void)
 {
-    Suite *s= suite_create("BeMAge-probabilities");
+    Suite *s= suite_create("BbMm-probabilities");
 
     suite_add_tcase( s, test_case_BmDistribution() );
     suite_add_tcase( s, test_case_BmCondition() );
@@ -26,9 +26,9 @@ Suite * wanda_prb_test_suite(void)
     return s;
 }
 
-Suite * wanda_mdl_test_suite(void)
+Suite * bbmm_mdl_test_suite(void)
 {
-    Suite *s= suite_create("BeMAge-model");
+    Suite *s= suite_create("BbMm-model");
 
     //suite_add_tcase( s, test_case_WdDomain() );
     //suite_add_tcase( s, test_case_WdSpace() );
@@ -37,7 +37,7 @@ Suite * wanda_mdl_test_suite(void)
     return s;
 }
 
-Suite * wanda_slv_test_suite(void)
+Suite * bbmm_slv_test_suite(void)
 {
     Suite *s= suite_create("Wanda-solver");
 
@@ -57,25 +57,25 @@ int main(void)
 {
     int number_failed= 0;
     {
-        SRunner *sr= srunner_create( wanda_stt_test_suite() );
+        SRunner *sr= srunner_create( bbmm_stt_test_suite() );
         srunner_run_all(sr, CK_NORMAL);
         number_failed+= srunner_ntests_failed(sr);
         srunner_free(sr);
     }
     {
-        SRunner *sr= srunner_create( wanda_prb_test_suite() );
+        SRunner *sr= srunner_create( bbmm_prb_test_suite() );
         srunner_run_all(sr, CK_NORMAL);
         number_failed+= srunner_ntests_failed(sr);
         srunner_free(sr);
     }
     {
-        SRunner *sr= srunner_create( wanda_mdl_test_suite() );
+        SRunner *sr= srunner_create( bbmm_mdl_test_suite() );
         srunner_run_all(sr, CK_NORMAL);
         number_failed+= srunner_ntests_failed(sr);
         srunner_free(sr);
     }
     {
-        SRunner *sr= srunner_create( wanda_slv_test_suite() );
+        SRunner *sr= srunner_create( bbmm_slv_test_suite() );
         srunner_run_all(sr, CK_NORMAL);
         number_failed+= srunner_ntests_failed(sr);
         srunner_free(sr);

@@ -1,5 +1,5 @@
 
-#include "bemage-stt.h"
+#include "bbmm-stt.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -7,7 +7,7 @@
 #include <assert.h>
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   W A N D A   S E L E C T O R                                           *
+ *   B b M m   S E L E C T O R                                           *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *
  * BmTree is built as an array of branches.

@@ -10,6 +10,6 @@ cmake -DTEST=ON -DCMAKE_BUILD_TYPE=Debug ..
 make
 
 # Outputs
-cp libbemage.so ..
-#cp libbemage.so ../python-src/BeMAge
-cp test-BeMAge ..
+cp libbbmm.so ..
+#cp libbbmm.so ../python-src/BeMAge
+cp test-BbMm ..

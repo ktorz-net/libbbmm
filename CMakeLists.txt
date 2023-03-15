@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.00)
-project(BeMAge LANGUAGES C)
+project(BbMm LANGUAGES C)
 
 # Options:
 cmake_policy(SET CMP0064 NEW)
@@ -46,15 +46,15 @@ set(SRC_FILES
 )
 
 # Build
-add_library(bemage SHARED ${SRC_FILES})
-target_link_libraries(bemage)
+add_library(bbmm SHARED ${SRC_FILES})
+target_link_libraries(bbmm)
 
 # Install
-install(TARGETS bemage LIBRARY DESTINATION lib)
-install(FILES bemage-stt.h DESTINATION include)
-install(FILES bemage-pbb.h DESTINATION include)
-install(FILES bemage-mdl.h DESTINATION include)
-install(FILES bemage-slv.h DESTINATION include)
+install(TARGETS bbmm LIBRARY DESTINATION lib)
+install(FILES bbmm-stt.h DESTINATION include)
+install(FILES bbmm-pbb.h DESTINATION include)
+install(FILES bbmm-mdl.h DESTINATION include)
+install(FILES bbmm-slv.h DESTINATION include)
 
 #-----------#
 ## T E S T ##
@@ -77,7 +77,7 @@ set(TEST_SRC_FILES
     core-test/main-testrunner.c
 )
 
-add_executable(test-BeMAge ${TEST_SRC_FILES})
-target_link_libraries(test-BeMAge bemage ${CHECK_LIBS})
+add_executable(test-BbMm ${TEST_SRC_FILES})
+target_link_libraries(test-BbMm bbmm ${CHECK_LIBS})
 
 endif()

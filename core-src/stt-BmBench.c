@@ -1,5 +1,5 @@
 
-#include "bemage-stt.h"
+#include "bbmm-stt.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -7,7 +7,7 @@
 #include <assert.h>
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
- *   B e M A g e   S T R U C T U R E :  B E N C H
+ *   B b M m   S T R U C T U R E :  B E N C H
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 

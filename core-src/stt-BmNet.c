@@ -1,4 +1,4 @@
-#include "bemage-stt.h"
+#include "bbmm-stt.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -6,7 +6,7 @@
 #include <assert.h>
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
- *   W A N D A   S T R U C T U R E :  N E T W O R K
+ *   B b M m  S T R U C T U R E :  N E T W O R K
  *
  * Define a Simple Network 
  * 

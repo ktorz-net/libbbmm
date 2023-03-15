@@ -1,4 +1,4 @@
-#include "bemage-pbb.h"
+#include "bbmm-pbb.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -6,7 +6,7 @@
 #include <assert.h>
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
- *   W A N D A   T R A N S I T I O N
+ *   B b M m   T R A N S I T I O N
  *
  * Define a Bayesian Network composed of state, action and tramsitional nodes 
  * 

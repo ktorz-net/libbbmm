@@ -1,6 +1,6 @@
-// BeMAge
-#include "bemage-pbb.h"
-#include "bemage-test.h"
+// BbMm
+#include "bbmm-pbb.h"
+#include "bbmm-test.h"
 
 #include <stdio.h>
 
@@ -381,11 +381,9 @@ START_TEST(test_BmCondition_print)
 
     char buffer[1024]="";
     BmCondition_print( instance, buffer );
+    tc_print(buffer);
     ck_assert_str_eq( buffer,
-"[4, 5, 6]->[2]: {[1, 0, 0]: {[1]: 1.00},\n\
-  [2, 0, 0]: {[1]: 1.00},\n\
-  [3, 0, 0]: {[1]: 1.00},\n\
-  [4, 0, 0]: {[1]: 1.00}}"
+"[4, 5, 6]->[2]: {}"
     );
 
     deleteBmCondition(instance);

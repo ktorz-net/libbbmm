@@ -32,10 +32,10 @@
  * 
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
-#ifndef BEMAGE_PROBABILITY_H
-#define BEMAGE_PROBABILITY_H
+#ifndef BBMM_PROBABILITY_H
+#define BBMM_PROBABILITY_H
 
-#include "bemage-stt.h"
+#include "bbmm-stt.h"
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *

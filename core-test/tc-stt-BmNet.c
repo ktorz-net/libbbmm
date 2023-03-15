@@ -1,6 +1,6 @@
-// BeMAge
-#include "bemage-stt.h"
-#include "bemage-test.h"
+// BbMm
+#include "bbmm-stt.h"
+#include "bbmm-test.h"
 
 #include <stdio.h>
 

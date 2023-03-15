@@ -1,12 +1,20 @@
-BeMAge - a librayry for Bayesian-based Markovian Agents
+BeMAge - a librayry for Bayesian-based Markovian Models
 ======================================================================
 
-![](./resources/logo-BeMAge-128.png)
+![](./resources/logo-BbMm-128.png)
 
 
 Wanda, aims to become a multi-language library to create deliberative agent based on Decision Making under Uncertainty (mainly Markov Decision Process with transition based on Bayesian Network model).
 
 Wanda is an experimental toolbox, it comes with no more guaranty than the devotion of the developers.
+
+
+## Concurency:
+
+**BeMAge** is not what you looking for ? Try those solutions:
+
+- [gobnilp](https://www.cs.york.ac.uk/aig/sw/gobnilp/)
+
 
 ## Installation
 

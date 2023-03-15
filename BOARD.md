@@ -2,6 +2,7 @@
 
 ## On the fire:
 
+- `BmModel`-> Process
 - `BmModel_variable_initializeProbabilities` and `BmModel_variable_addProbabilities` based on attached prebuilt-distribution.
 	* become... `BmModel_variable_attachDistribution_if` based on `BmModel_variable_neBmistribution`.
 - Create BmModel `<State, Action, Shift, transition, reward>`.
