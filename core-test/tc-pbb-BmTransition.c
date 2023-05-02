@@ -104,13 +104,7 @@ void test_initializeNode6(BmTransition * trans)
 
     BmDistribution_addOutput( distrib, 1, 0.5 );
     BmDistribution_addOutput( distrib, 2, 0.5 );
-
-    {
-        BmCode* code= newBmCode(1);
-        BmCode_at_set(code, 1, 1);
-        BmCondition_reinitialize( dep, code, distrib );
-        deleteBmCode(code);
-    }
+    BmCondition_reinitializeDefaultDistrib( dep, distrib );
 
     BmDistribution_initialize(distrib, 1);
     BmDistribution_addOutput( distrib, 1, 0.9 );
@@ -132,13 +126,7 @@ void test_initializeNode7(BmTransition * trans)
 
     BmDistribution_addOutput( distrib, 2, 0.6 );
     BmDistribution_addOutput( distrib, 1, 0.4 );
-
-    {
-        BmCode* code= newBmCode(1);
-        BmCode_at_set(code, 1, 1);
-        BmCondition_reinitialize( dep, code, distrib );
-        deleteBmCode(code);
-    }
+    BmCondition_reinitializeDefaultDistrib( dep, distrib );
 
     BmDistribution_initialize(distrib, 1);
     BmDistribution_addOutput( distrib, 1, 0.8 );
@@ -160,13 +148,7 @@ void test_initializeNode8(BmTransition * trans)
 
     BmDistribution_addOutput( distrib, 1, 0.7 );
     BmDistribution_addOutput( distrib, 2, 0.3 );
-
-    {
-        BmCode* code= newBmCode(1);
-        BmCode_at_set(code, 1, 1);
-        BmCondition_reinitialize( dep, code, distrib );
-        deleteBmCode(code);
-    }
+    BmCondition_reinitializeDefaultDistrib( dep, distrib );
     
     deleteBmDistribution(distrib);
 }

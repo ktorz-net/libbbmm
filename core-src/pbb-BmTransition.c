@@ -166,7 +166,8 @@ BmTransition* BmTransition_node_dependArray( BmTransition* self, uint index, uin
     }
 
     BmDistribution* distrib= newBmDistribution( 1 );
-    BmCondition_reinitializeEquiprobable( array_on(self->nodes, index), parentRanges );
+    BmCondition* cond= array_on(self->nodes, index);
+    BmCondition_initializeEquiprobable( cond, cond->outputSize , parentRanges );
     deleteBmDistribution(distrib);
     deleteBmCode(dependancy);
     return self;

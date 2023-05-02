@@ -135,13 +135,15 @@ BmCondition* BmCondition_distroy(BmCondition* self);
 
 void deleteBmCondition(BmCondition* instance);
 
-/* initialize */
-void BmCondition_reinitialize(BmCondition* self, BmCode* parentRanges, BmDistribution* defaultDistrib);
-void BmCondition_reinitializeEquiprobable(BmCondition* self, BmCode* parentRanges);
-//void BmCondition_initializeBasic(BmCondition* self);
-//void BmCondition_initializeEquiprobable(BmCondition* self);
-
+/* instance basics */
 void BmCondition_switch(BmCondition* self, BmCondition* doppelganger);
+
+/* initialize */
+void BmCondition_initialize( BmCondition* self, uint outputSize, BmCode* parentRanges, BmDistribution* defaultDistrib );
+void BmCondition_initializeEquiprobable( BmCondition* self, uint outputSize, BmCode* parentRanges );
+
+void BmCondition_reinitializeDefaultDistrib( BmCondition* self, BmDistribution* defaultDistrib );
+void BmCondition_reinitializeEquiprobable( BmCondition* self );
 
 /* Accessor */
 uint BmCondition_outputSize( BmCondition* self );

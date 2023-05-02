@@ -84,38 +84,7 @@ BmCondition* BmCondition_distroy(BmCondition* self)
     return self;
 }
 
-/* initialize */
-void BmCondition_reinitialize(BmCondition* self, BmCode* parentRanges, BmDistribution* defaultDistrib)
-{
-    BmCondition* newSelf= newBmCondition( self->outputSize, parentRanges, defaultDistrib );
-    BmCondition_switch( self, newSelf );
-    deleteBmCondition(newSelf);
-
-    //uint domSize= self->outputSize;
-    //BmCode *copyParents= newBmCodeAs(parentRanges);
-    //BmDistribution *copyDistrib= newBmDistributionAs(defaultDistrib);
-
-    //BmCondition_distroy( self );
-    //BmCondition_create( self, domSize, copyParents, copyDistrib );
-    //deleteBmCode( copyParents );
-}
-
-
-void BmCondition_reinitializeEquiprobable(BmCondition* self, BmCode* parentRanges)
-{
-    BmDistribution* distrib= newBmDistribution(1);
-    BmCode* code= newBmCode(1);
-    double proba= 1.0/self->outputSize;
-    for( uint i = 1 ; i <= self->outputSize ; ++i  )
-    {
-        BmCode_at_set(code, 1, i);
-        BmDistribution_addConfig(distrib, code, proba );
-    }
-    BmCondition_reinitialize( self, parentRanges, distrib );
-    deleteBmDistribution(distrib);
-    deleteBmCode(code);
-}
-
+/* instance basics */
 void BmCondition_switch(BmCondition* self, BmCondition* doppelganger)
 {
     // local copy:
@@ -141,6 +110,41 @@ void BmCondition_switch(BmCondition* self, BmCondition* doppelganger)
     doppelganger->distribSize= distribSize;
     doppelganger->distribCapacity= distribCapacity;
     doppelganger->distributions= distributions;
+}
+
+/* initialize */
+void BmCondition_initialize(BmCondition* self, uint outputSize, BmCode* parentRanges, BmDistribution* defaultDistrib)
+{
+    BmCondition* newSelf= newBmCondition( outputSize, parentRanges, defaultDistrib );
+    BmCondition_switch( self, newSelf );
+    deleteBmCondition(newSelf);
+}
+
+void BmCondition_initializeEquiprobable( BmCondition* self, uint outputSize, BmCode* parentRanges )
+{
+    BmDistribution* distrib= newBmDistribution(1);
+    BmCode* code= newBmCode(1);
+    double proba= 1.0/outputSize;
+    for( uint i = 1 ; i <= outputSize ; ++i  )
+    {
+        BmCode_at_set(code, 1, i);
+        BmDistribution_addConfig(distrib, code, proba );
+    }
+    BmCondition_initialize( self, outputSize, parentRanges, distrib );
+    deleteBmDistribution(distrib);
+    deleteBmCode(code);
+}
+
+void BmCondition_reinitializeDefaultDistrib(BmCondition* self, BmDistribution* defaultDistrib)
+{
+    BmCondition* newSelf= newBmCondition( self->outputSize, self->parentRanges, defaultDistrib );
+    BmCondition_switch( self, newSelf );
+    deleteBmCondition(newSelf);
+}
+
+void BmCondition_reinitializeEquiprobable( BmCondition* self )
+{
+    BmCondition_initializeEquiprobable( self, self->outputSize, self->parentRanges );
 }
 
 /* Accessor */
@@ -290,6 +294,7 @@ uint BmCondition_resizeDistributionCapacity( BmCondition* self, uint newCapacity
 
 uint BmCondition_at_set( BmCondition* self, BmCode* configuration, BmDistribution* distribution )
 {
+    assert( BmCondition_dimention(self) == BmCode_size(configuration) );
     if( self->distribSize+1 > self->distribCapacity )
         BmCondition_resizeDistributionCapacity( self, self->distribSize+1 );
     

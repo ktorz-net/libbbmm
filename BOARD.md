@@ -3,6 +3,7 @@
 ## On the fire:
 
 - Bugs on BbMm Probabilities
+- Create `newDistritutionEquiprobable`, test it and add it in `BmCondition_initializeEquiprobable`
 - Reactivate bbmm-models
 	* `BmModel`-> BmProcess  (`<State, Action, Shift, transition, reward>`)
 	* BmFunction -> BmTree selector and values[] (opt).
@@ -27,6 +28,7 @@
 
 ## What about ?
 
+- Probabitilities as ratio (Rational Number).
 - Distribution versus Collection ?
 - BmCollection based on Bench128 (1028/128 == 1028>>7; 1028%128 == 1028&127)s
 

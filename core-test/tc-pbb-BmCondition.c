@@ -91,6 +91,98 @@ START_TEST(test_BmCondition_init2)
 }
 END_TEST
 
+
+START_TEST(test_BmCondition_switch)
+{
+    char buffer[1024];
+    BmCode* parents= newBmCode(2, 3, 5);
+    BmCondition* instance= newBmConditionBasic( 4, parents );
+
+    ck_assert_uint_eq( instance->outputSize, 4 );
+    ck_assert_uint_eq( BmCondition_dimention( instance ), 2 );
+    ck_assert_uint_eq( BmCondition_parentSize(instance), 3*5 );
+    
+    strcpy(buffer, "");
+    ck_assert_str_eq( BmCondition_printIdentity( instance, buffer ), "[3, 5]->[4]" ); 
+
+    strcpy(buffer, BmTree_wording( instance->selector ));
+    ck_assert_str_eq( buffer, "{}");
+
+    strcpy(buffer, "");
+    BmCondition_printExtendSep( instance, buffer, ",\n" );
+    ck_assert_str_eq( buffer, "[3, 5]->[4]: {[1, 1]: {[1]: 1.00},\n\
+[2, 1]: {[1]: 1.00},\n\
+[3, 1]: {[1]: 1.00},\n\
+[1, 2]: {[1]: 1.00},\n\
+[2, 2]: {[1]: 1.00},\n\
+[3, 2]: {[1]: 1.00},\n\
+[1, 3]: {[1]: 1.00},\n\
+[2, 3]: {[1]: 1.00},\n\
+[3, 3]: {[1]: 1.00},\n\
+[1, 4]: {[1]: 1.00},\n\
+[2, 4]: {[1]: 1.00},\n\
+[3, 4]: {[1]: 1.00},\n\
+[1, 5]: {[1]: 1.00},\n\
+[2, 5]: {[1]: 1.00},\n\
+[3, 5]: {[1]: 1.00}}" );
+
+    BmCode_at_set( parents, 2, 2 );
+    BmCondition* doobleganger= newBmConditionBasic( 3, parents );
+
+    strcpy(buffer, "");
+    BmCondition_printExtendSep( doobleganger, buffer, ",\n" );
+
+    ck_assert_str_eq( buffer, "[3, 2]->[3]: {[1, 1]: {[1]: 1.00},\n\
+[2, 1]: {[1]: 1.00},\n\
+[3, 1]: {[1]: 1.00},\n\
+[1, 2]: {[1]: 1.00},\n\
+[2, 2]: {[1]: 1.00},\n\
+[3, 2]: {[1]: 1.00}}" );
+
+    BmCondition_switch(instance, doobleganger);
+
+    strcpy(buffer, "");
+    BmCondition_printExtendSep( doobleganger, buffer, ",\n" );
+    ck_assert_str_eq( buffer, "[3, 5]->[4]: {[1, 1]: {[1]: 1.00},\n\
+[2, 1]: {[1]: 1.00},\n\
+[3, 1]: {[1]: 1.00},\n\
+[1, 2]: {[1]: 1.00},\n\
+[2, 2]: {[1]: 1.00},\n\
+[3, 2]: {[1]: 1.00},\n\
+[1, 3]: {[1]: 1.00},\n\
+[2, 3]: {[1]: 1.00},\n\
+[3, 3]: {[1]: 1.00},\n\
+[1, 4]: {[1]: 1.00},\n\
+[2, 4]: {[1]: 1.00},\n\
+[3, 4]: {[1]: 1.00},\n\
+[1, 5]: {[1]: 1.00},\n\
+[2, 5]: {[1]: 1.00},\n\
+[3, 5]: {[1]: 1.00}}" );
+
+    strcpy(buffer, "");
+    BmCondition_printExtendSep( instance, buffer, ",\n" );
+
+    ck_assert_str_eq( buffer, "[3, 2]->[3]: {[1, 1]: {[1]: 1.00},\n\
+[2, 1]: {[1]: 1.00},\n\
+[3, 1]: {[1]: 1.00},\n\
+[1, 2]: {[1]: 1.00},\n\
+[2, 2]: {[1]: 1.00},\n\
+[3, 2]: {[1]: 1.00}}" );
+
+    BmDistribution* distrib= newBmDistribution(1);
+
+    BmDistribution_addOutput( distrib, 2, 0.6 );
+    BmDistribution_addOutput( distrib, 1, 0.4 );
+
+    BmCondition_reinitializeDefaultDistrib( instance, distrib );
+
+    deleteBmDistribution(distrib);
+    deleteBmCode(parents);
+    deleteBmCondition(instance);
+    deleteBmCondition(doobleganger);
+}
+END_TEST
+
 START_TEST(test_BmCondition_manipulate)
 {
 
@@ -150,13 +242,7 @@ START_TEST(test_BmCondition_manipulate)
 
     ck_assert_uint_eq( d->size, 2 );
     ck_assert_str_eq( BmDistribution_wording( d ), "{[1]: 0.80 ; [2]: 0.20}" );
-
-    {
-        BmCode* code= newBmCode(1);
-        BmCode_at_set(code, 1, 1);
-        BmCondition_reinitialize( instance, code, d );
-        deleteBmCode(code);
-    }
+    BmCondition_reinitializeDefaultDistrib( instance, d );
 
     for( uint i= 1; i <= BmCondition_dimention( instance ) ; ++i )
         ck_assert_str_eq( BmDistribution_wording( BmCondition_atKey(instance, i) ), "{[1]: 0.80 ; [2]: 0.20}" );
@@ -169,7 +255,7 @@ END_TEST
 
 START_TEST(test_BmCondition_manipulate2)
 {
-    BmCode* config= newBmCode(2,  2, 5 );
+    BmCode* config= newBmCode(2, 2, 5 );
     BmCondition* instance;
     {
         BmCode* parentRanges= newBmCode(2, 3, 5);
@@ -178,17 +264,15 @@ START_TEST(test_BmCondition_manipulate2)
         double probas[2]  = { 0.8, 0.2 };
         
         ck_assert(1);
-
-        instance= newBmConditionBasic( 4, parentRanges );
-
         BmDistribution_setConfigs(distrib, 2, myStates, probas );
+
+        ck_assert(1);
+        instance= newBmCondition(
+            4, // output size
+            parentRanges,
+            distrib
+        );
         
-        {
-            BmCode* code= newBmCode(1);
-            BmCode_at_set(code, 1, 1);
-            BmCondition_reinitialize( instance, code, distrib );
-            deleteBmCode(code);
-        }
         BmDistribution_clear(distrib);
     
         ck_assert(1);
@@ -390,7 +474,7 @@ START_TEST(test_BmCondition_print)
 
     char buffer[1024]="";
     BmCondition_print( instance, buffer );
-    tc_print(buffer);
+    
     ck_assert_str_eq( buffer,
 "[4, 5, 6]->[2]: {}"
     );
@@ -410,6 +494,7 @@ TCase * test_case_BmCondition(void)
 
     tcase_add_test(tc, test_BmCondition_init);
     tcase_add_test(tc, test_BmCondition_init2);
+    tcase_add_test(tc, test_BmCondition_switch);
     tcase_add_test(tc, test_BmCondition_manipulate);
     tcase_add_test(tc, test_BmCondition_manipulate2);
     tcase_add_test(tc, test_BmCondition_print);
