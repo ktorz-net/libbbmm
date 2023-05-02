@@ -176,6 +176,8 @@ START_TEST(test_BmCondition_manipulate2)
         BmDistribution* distrib= newBmDistribution(1);
         BmCode* myStates[2] = { newBmCode(1, 1), newBmCode(1, 3) };
         double probas[2]  = { 0.8, 0.2 };
+        
+        ck_assert(1);
 
         instance= newBmConditionBasic( 4, parentRanges );
 
@@ -188,18 +190,25 @@ START_TEST(test_BmCondition_manipulate2)
             deleteBmCode(code);
         }
         BmDistribution_clear(distrib);
-
+    
+        ck_assert(1);
         BmCode_at_set( myStates[0], 1, 2 );
         double probas1[1] = { 1.0 };
+
+        ck_assert(1);
         BmDistribution_setConfigs(distrib, 1, myStates, probas1 );
 
+        ck_assert(1);
         BmCondition_at_set( instance, config, distrib );
 
+        ck_assert(1);
         deleteBmDistribution( distrib );
         deleteBmCode( parentRanges );
         for( uint i=0 ; i < 2 ; ++i )
             deleteBmCode( myStates[i] );
     }
+
+    ck_assert(1);
 
     uint configId= BmCode_keyOf( instance->parentRanges, config );
     uint parentSize=  BmCondition_parentSize(instance);

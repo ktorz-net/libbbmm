@@ -30,7 +30,7 @@ Suite * bbmm_mdl_test_suite(void)
 {
     Suite *s= suite_create("BbMm-model");
 
-    //suite_add_tcase( s, test_case_WdDomain() );
+    suite_add_tcase( s, test_case_BmDomain() );
     //suite_add_tcase( s, test_case_WdSpace() );
     //suite_add_tcase( s, test_case_WdModel() );
 

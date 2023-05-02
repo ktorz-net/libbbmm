@@ -70,9 +70,9 @@ set(TEST_SRC_FILES
     core-test/tc-pbb-BmDistribution.c
     core-test/tc-pbb-BmCondition.c
     core-test/tc-pbb-BmTransition.c
-#    core-test/tc-mld-wdDomain.c
-#    core-test/tc-mld-wdSpace.c
-#    core-test/tc-mld-wdModel.c
+    core-test/tc-mld-BmDomain.c
+#    core-test/tc-mld-BmSpace.c
+#    core-test/tc-mld-BmProcess.c
 #    core-test/tc-cofeeRobot.c
     core-test/main-testrunner.c
 )

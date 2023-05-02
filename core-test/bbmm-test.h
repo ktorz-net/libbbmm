@@ -18,7 +18,7 @@ TCase * test_case_BmCondition(void);
 TCase * test_case_BmTransition(void);
 
 // Wanda-mdl
-//TCase * test_case_WdDomain(void);
+TCase * test_case_BmDomain(void);
 //TCase * test_case_WdSpace(void);
 //TCase * test_case_WdModel(void);
 

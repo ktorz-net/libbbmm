@@ -9,10 +9,10 @@ crash.dmp
 __pycache__/
 
 # Core librairy
-libbemage.so
+libbbmm.so
 
 # Test program
-test-BeMAge
+test-BbMm
 
 # Extra program
 #wanda-viewer

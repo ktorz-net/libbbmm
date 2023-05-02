@@ -1,0 +1,26 @@
+variables état... 				3 5 18
+variables actions...				4 9
+substate(active bit) subaction matrix		3 1 m (4 x 3x5 x 3x5 values)
+substate(active bit) subaction sparce		3 2 s (9 x 3x5 lines of n x 2+1 values : 2 3 0.5 1 1 0.3 )
+substate(active bit) subaction poisson		3 1 p (9 lines of : 3x5 x 2 values )
+
+mdp:
+variables état... 				3 5 18
+variables actions...				4 9
+transitions poisson:
+3x5x18 x 4x9 lines of 3 values
+transitions sparce:
+3x5x18 x 4x9 lines of n x 3+1 values
+transitions matrix:
+3x5x18 x 4x9 x 3x5x18 values
+rewards matrix:
+3x5x18 x 4x9 values
+
+yaml:
+-----
+states: [2, 4, 5]
+actions: [4, 2]
+transitions:
+  poisson/sparce/matrix: [...]
+rewards:
+  matrix: [...]

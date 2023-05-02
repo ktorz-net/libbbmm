@@ -87,13 +87,17 @@ BmCondition* BmCondition_distroy(BmCondition* self)
 /* initialize */
 void BmCondition_reinitialize(BmCondition* self, BmCode* parentRanges, BmDistribution* defaultDistrib)
 {
-    uint domSize= self->outputSize;
-    BmCode *copyParents= newBmCodeAs(parentRanges);
-    BmDistribution *copyDistrib= newBmDistributionAs(defaultDistrib);
+    BmCondition* newSelf= newBmCondition( self->outputSize, parentRanges, defaultDistrib );
+    BmCondition_switch( self, newSelf );
+    deleteBmCondition(newSelf);
 
-    BmCondition_distroy( self );
-    BmCondition_create( self, domSize, copyParents, copyDistrib );
-    deleteBmCode( parentRanges );
+    //uint domSize= self->outputSize;
+    //BmCode *copyParents= newBmCodeAs(parentRanges);
+    //BmDistribution *copyDistrib= newBmDistributionAs(defaultDistrib);
+
+    //BmCondition_distroy( self );
+    //BmCondition_create( self, domSize, copyParents, copyDistrib );
+    //deleteBmCode( copyParents );
 }
 
 
@@ -112,6 +116,32 @@ void BmCondition_reinitializeEquiprobable(BmCondition* self, BmCode* parentRange
     deleteBmCode(code);
 }
 
+void BmCondition_switch(BmCondition* self, BmCondition* doppelganger)
+{
+    // local copy:
+    uint outputSize= self->outputSize;
+    BmCode* parentRanges= self->parentRanges;
+    BmTree* selector= self->selector;
+    uint distribSize= self->distribSize;
+    uint distribCapacity= self->distribCapacity;
+    BmDistribution* * distributions= self->distributions;
+
+    // self as doppelganger:
+    self->outputSize= doppelganger->outputSize;
+    self->parentRanges= doppelganger->parentRanges;
+    self->selector= doppelganger->selector;
+    self->distribSize= doppelganger->distribSize;
+    self->distribCapacity= doppelganger->distribCapacity;
+    self->distributions= doppelganger->distributions;
+
+    // doppelganger as self:
+    doppelganger->outputSize= outputSize;
+    doppelganger->parentRanges= parentRanges;
+    doppelganger->selector= selector;
+    doppelganger->distribSize= distribSize;
+    doppelganger->distribCapacity= distribCapacity;
+    doppelganger->distributions= distributions;
+}
 
 /* Accessor */
 uint BmCondition_outputSize( BmCondition* self )

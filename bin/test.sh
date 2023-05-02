@@ -1,10 +1,10 @@
 #!/bin/bash
-rm ./test-BbMmm
+rm ./test-BbMm
 ./bin/build.sh
 
 # Test
 echo "
-  T E S T   B a y e s i a n B a s e d - M a r k o v M o d e l s   C O R E
+  T E S T   B B - M M   C O R E   L I B
   ------------------------------------------------------------------------"
 ./test-BbMm
 

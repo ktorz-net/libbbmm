@@ -1,11 +1,11 @@
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *
- *   WANDA Model - A library in KISS philosophy for decision model under-uncertainty
+ *   BbMm Model - A library in KISS philosophy for decision model under-uncertainty
  *
  *   FEATURES:
- *       - WdDomain       : Definie e finit set of possible values (words, integer-interval, cluster-means, .... )
- *       - WdSpace        : a vector of variable in a collection of domains
- *       - WdModel        : <S, A, t, r>
+ *       - BmDomain       : Definie e finit set of possible values (words, integer-interval, cluster-means, .... )
+ *       - BmSpace        : a vector of variable in a collection of domains
+ *       - BmModel        : <S, A, t, r>
  * 
  *   LICENSE: MIT License
  *
@@ -34,8 +34,8 @@
 #ifndef WANDA_MODEL_H
 #define WANDA_MODEL_H
 
-#include "wanda-stt.h"
-#include "wanda-pbb.h"
+#include "bbmm-stt.h"
+#include "bbmm-pbb.h"
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   W A N D A   D O M A I N                                               *
@@ -44,82 +44,82 @@
   Represent a variation domain of finit discrete variables
 */
 
-enum WdDomainType{
-  WdDomainType_UNDEF= 0,
-  WdDomainType_BASIC,
-  WdDomainType_RANGE,
-  WdDomainType_MEANS,
-  WdDomainType_WORDS
-}; //, WdDomainType_means};
+enum BmDomainType{
+  BmDomainType_UNDEF= 0,
+  BmDomainType_BASIC,
+  BmDomainType_RANGE,
+  BmDomainType_MEANS,
+  BmDomainType_WORDS
+}; //, BmDomainType_means};
 
-typedef struct WdDomainStruct {
+typedef struct BmDomainStruct {
   char* name;
   uint type, size;
   void* dsc;
-  char* (*str_fct)(struct WdDomainStruct *, uint);
-  double (*value_fct)(struct WdDomainStruct *, uint);
-} WdDomain;
+  char* (*str_fct)(struct BmDomainStruct *, uint);
+  double (*value_fct)(struct BmDomainStruct *, uint);
+} BmDomain;
 
 /* Constructor Destructor */
-WdDomain* newWdDomainBasic( char* name, uint size );   // Create a new instance of WdDomain of size `size`
-WdDomain* newWdDomainRange( char* name, double from, double to, double by );   // Create a new instance of WdDomain of size `size`
-WdDomain* newWdDomainWordsArray( char* name, uint size, char ** worldsArray );  // Create a new instance of WdDomain of size
-WdDomain* newWdDomainWords( char* name, uint size, ... );
-WdDomain* newWdDomainMeans( char* name, uint size, double* worlds );
-WdDomain* newWdDomainAs( WdDomain* model );
+BmDomain* newBmDomainBasic( char* name, uint size );   // Create a new instance of BmDomain of size `size`
+BmDomain* newBmDomainRange( char* name, double from, double to, double by );   // Create a new instance of BmDomain of size `size`
+BmDomain* newBmDomainWordsArray( char* name, uint size, char ** worldsArray );  // Create a new instance of BmDomain of size
+BmDomain* newBmDomainWords( char* name, uint size, ... );
+BmDomain* newBmDomainMeans( char* name, uint size, double* worlds );
+BmDomain* newBmDomainAs( BmDomain* model );
 
-//WdDomain* newWdDomainMeans(uint size, float * means); // Create a new instance of WdDomain of size
-void deleteWdDomain(WdDomain* self); // Delete an instance of WdDomain
+//BmDomain* newBmDomainMeans(uint size, float * means); // Create a new instance of BmDomain of size
+void deleteBmDomain(BmDomain* self); // Delete an instance of BmDomain
 
 /* fill and empty a structure */
-WdDomain* WdDomain_createBasic( WdDomain* self, char* name, uint size );
-WdDomain* WdDomain_createRange( WdDomain* self, char* name, double from, double to, double by );
-WdDomain* WdDomain_createWords( WdDomain* self, char* name, uint size, char ** worlds );
-WdDomain* WdDomain_createMeans( WdDomain* self, char* name, uint size, double* means );
-WdDomain* WdDomain_createAs( WdDomain* self, WdDomain* model );
-WdDomain* WdDomain_distroy( WdDomain* self );
+BmDomain* BmDomain_createBasic( BmDomain* self, char* name, uint size );
+BmDomain* BmDomain_createRange( BmDomain* self, char* name, double from, double to, double by );
+BmDomain* BmDomain_createWords( BmDomain* self, char* name, uint size, char ** worlds );
+BmDomain* BmDomain_createMeans( BmDomain* self, char* name, uint size, double* means );
+BmDomain* BmDomain_createAs( BmDomain* self, BmDomain* model );
+BmDomain* BmDomain_distroy( BmDomain* self );
 
 /* Accessor */
-char* WdDomain_name(WdDomain* self);
-uint WdDomain_size(WdDomain* self); // return the size of the wanda domain
-double WdDomain_valueAt(WdDomain* self, uint index);
-double WdDomainBasic_valueAt(struct WdDomainStruct* self, uint index);
+char* BmDomain_name(BmDomain* self);
+uint BmDomain_size(BmDomain* self); // return the size of the wanda domain
+double BmDomain_valueAt(BmDomain* self, uint index);
+double BmDomainBasic_valueAt(struct BmDomainStruct* self, uint index);
 
-double WdDomainRange_valueAt(struct WdDomainStruct* self, uint index);
-double WdDomainMeans_valueAt(struct WdDomainStruct* elf, uint index);
+double BmDomainRange_valueAt(struct BmDomainStruct* self, uint index);
+double BmDomainMeans_valueAt(struct BmDomainStruct* elf, uint index);
 
-/* Accessor - WdDomainRange */
-double WdDomainRange_from(WdDomain* self); // return the size of the wanda domain
-double WdDomainRange_to(WdDomain* self); // return the size of the wanda domain
-double WdDomainRange_by(WdDomain* self); // return the size of the wanda domain
+/* Accessor - BmDomainRange */
+double BmDomainRange_from(BmDomain* self); // return the size of the wanda domain
+double BmDomainRange_to(BmDomain* self); // return the size of the wanda domain
+double BmDomainRange_by(BmDomain* self); // return the size of the wanda domain
 
-/* Accessor - WdDomainWords */
+/* Accessor - BmDomainWords */
 
 /* Engine */
-uint WdDomain_searchStr( WdDomain* self, char* ref );
-//uint WdDomain_searchValue( WdDomain* self, double ref );
+uint BmDomain_searchStr( BmDomain* self, char* ref );
+//uint BmDomain_searchValue( BmDomain* self, double ref );
 
 /* Printing */
-char* WdDomain_strAt(WdDomain* self, uint index); // return the str at a given `index`
-char* WdDomain_strAt_fromValue(struct WdDomainStruct* self, uint index); // print `self` at the end of `output`
-char* WdDomainWords_strAt(struct WdDomainStruct* self, uint index); // print `self` at the end of `output`
+char* BmDomain_strAt(BmDomain* self, uint index); // return the str at a given `index`
+char* BmDomain_strAt_fromValue(struct BmDomainStruct* self, uint index); // print `self` at the end of `output`
+char* BmDomainWords_strAt(struct BmDomainStruct* self, uint index); // print `self` at the end of `output`
 
 /* Test */
-bool WdDomain_isType(WdDomain* self, enum WdDomainType type); // "return true if state is in the state space"
+bool BmDomain_isType(BmDomain* self, enum BmDomainType type); // "return true if state is in the state space"
 
 /* Search */
-//uint WdDomain_classOf(WdDomain* self, char * item); // return the first index of an 'item' in the WdDomain (and size if not included)
-//uint WdDomain_indexOf(WdDomain* self, char * item); // return the first index of an 'item' in the WdDomain (and size if not included)
-//bool WdDomain_isIncluded(WdDomain* self, char * item); // Test if an item is in the domain
+//uint BmDomain_classOf(BmDomain* self, char * item); // return the first index of an 'item' in the BmDomain (and size if not included)
+//uint BmDomain_indexOf(BmDomain* self, char * item); // return the first index of an 'item' in the BmDomain (and size if not included)
+//bool BmDomain_isIncluded(BmDomain* self, char * item); // Test if an item is in the domain
 
 /* DomainStr */
-//void WdDomain_at_copyItem(WdDomain* self, uint index, char * item); //copy a new `word` at a given `index`
-//void WdDomain_copyAll(WdDomain* self, char ** domain ); //copy the overall string value
+//void BmDomain_at_copyItem(BmDomain* self, uint index, char * item); //copy a new `word` at a given `index`
+//void BmDomain_copyAll(BmDomain* self, char ** domain ); //copy the overall string value
 
 /* Printing */
-//int WdDomain_strLen(WdDomain* self); // the minimal required buffer size to print the WdDomain `self`
-char* WdDomain_wording(WdDomain* self); // print `self` on `output`
-char* WdDomain_print(WdDomain* self, char* output); // print `self` at the end of `output`
+//int BmDomain_strLen(BmDomain* self); // the minimal required buffer size to print the BmDomain `self`
+char* BmDomain_wording(BmDomain* self); // print `self` on `output`
+char* BmDomain_print(BmDomain* self, char* output); // print `self` at the end of `output`
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   W A N D A   S P A C E                                                 *
@@ -132,56 +132,56 @@ char* WdDomain_print(WdDomain* self, char* output); // print `self` at the end o
 typedef struct {
   uint dimention;
   char** varNames;
-  WdDomain** varDomains;
-} WdSpace;
+  BmDomain** varDomains;
+} BmSpace;
 
 /* Constructor Destructor */
-WdSpace* newWdSpaceBasic(); // Create a new empty WdSpace
-WdSpace* newWdSpace( uint dim, char ** variableNames, WdDomain ** variableDomains ); // Create a new instance of WdSpace of `dim` dimentions
-WdSpace* newWdSpaceEmpty( uint dim ); // Create a new instance of WdSpace of `dim` dimentions
-void deleteWdSpace(WdSpace* self); // Delete an instance of WdSpace
-void deleteDeepWdSpace(WdSpace* self);
+BmSpace* newBmSpaceBasic(); // Create a new empty BmSpace
+BmSpace* newBmSpace( uint dim, char ** variableNames, BmDomain ** variableDomains ); // Create a new instance of BmSpace of `dim` dimentions
+BmSpace* newBmSpaceEmpty( uint dim ); // Create a new instance of BmSpace of `dim` dimentions
+void deleteBmSpace(BmSpace* self); // Delete an instance of BmSpace
+void deleteDeepBmSpace(BmSpace* self);
 
 /* fill and empty a structure */
-WdSpace* WdSpace_create( WdSpace* self, uint dim, char ** variableNames, WdDomain ** variableDomains ); // Create a WdSpace
-WdSpace* WdSpace_createEmpty( WdSpace* self, uint dim ); // Create a WdSpace
+BmSpace* BmSpace_create( BmSpace* self, uint dim, char ** variableNames, BmDomain ** variableDomains ); // Create a BmSpace
+BmSpace* BmSpace_createEmpty( BmSpace* self, uint dim ); // Create a BmSpace
 
-WdSpace* WdSpace_distroy( WdSpace* self ); // Distroy a WdSpace
-WdSpace* WdSpace_distroyDeep( WdSpace* self ); // Distroy a WdSpace and all its domains
+BmSpace* BmSpace_distroy( BmSpace* self ); // Distroy a BmSpace
+BmSpace* BmSpace_distroyDeep( BmSpace* self ); // Distroy a BmSpace and all its domains
 
 /* Attach elements */
-WdSpace* WdSpace_attachVariable( WdSpace* self, uint i, char* name, WdDomain* domain );
+BmSpace* BmSpace_attachVariable( BmSpace* self, uint i, char* name, BmDomain* domain );
 
 /* Test */
-uint WdSpace_isValid(WdSpace* self);
+uint BmSpace_isValid(BmSpace* self);
 
 /* Accessor */
-uint WdSpace_dimention(WdSpace* self);             // "return the dimention of space (ie. the number of discrete variables composing the space)"
-char* WdSpace_variable_name( WdSpace* self, int i );
-WdDomain * WdSpace_variable_domain( WdSpace* self, int i ); // return the i-th domain (i in [1, WdSpace_dimention])
-uint WdSpace_variable_domainSize(WdSpace* self, int i);    // "return the number of states (and stateId)"
-ulong WdSpace_size(WdSpace* self);                 // "return the number of states (and stateId)"
-WdCode* WdSpace_key_toNewCode(WdSpace* self, ulong key);
+uint BmSpace_dimention(BmSpace* self);             // "return the dimention of space (ie. the number of discrete variables composing the space)"
+char* BmSpace_variable_name( BmSpace* self, int i );
+BmDomain * BmSpace_variable_domain( BmSpace* self, int i ); // return the i-th domain (i in [1, BmSpace_dimention])
+uint BmSpace_variable_domainSize(BmSpace* self, int i);    // "return the number of states (and stateId)"
+ulong BmSpace_size(BmSpace* self);                 // "return the number of states (and stateId)"
+BmCode* BmSpace_key_toNewCode(BmSpace* self, ulong key);
 
 /* Search */
-uint WdSpace_variableName_index(WdSpace* self, char* name);
+uint BmSpace_variableName_index(BmSpace* self, char* name);
 
 /* Generators */
-uint WdSpace_feedWithDomains( WdSpace* self, WdDomain** domainsBuffer, uint nboDomainsInBuffer ); // Generate the list of different domains; domainsBuffer should be of size WdSpace_dimention(self), the maximun number of different domains. return the number of different domains
+uint BmSpace_feedWithDomains( BmSpace* self, BmDomain** domainsBuffer, uint nboDomainsInBuffer ); // Generate the list of different domains; domainsBuffer should be of size BmSpace_dimention(self), the maximun number of different domains. return the number of different domains
 
 /* Code Manipulation */
-WdCode* WdSpace_asNewWdCode( WdSpace* self );// Generate the code form Space domains size
+BmCode* BmSpace_asNewBmCode( BmSpace* self );// Generate the code form Space domains size
 
 /* Code State */
-char* WdSpace_printVariable_at( WdSpace* self, uint iVar, uint iVal, char* buffer );
-char* WdSpace_code_wording( WdSpace* self, WdCode* code );
-char* WdSpace_code_print( WdSpace* self, WdCode* code, char* output );
+char* BmSpace_printVariable_at( BmSpace* self, uint iVar, uint iVal, char* buffer );
+char* BmSpace_code_wording( BmSpace* self, BmCode* code );
+char* BmSpace_code_print( BmSpace* self, BmCode* code, char* output );
 
-char* WdSpace_key_wording( WdSpace* self, ulong key );
-char* WdSpace_key_print( WdSpace* self, ulong key, char* output );
+char* BmSpace_key_wording( BmSpace* self, ulong key );
+char* BmSpace_key_print( BmSpace* self, ulong key, char* output );
 
 /* Printing */
-char* WdSpace_print(WdSpace* self, char* output);
+char* BmSpace_print(BmSpace* self, char* output);
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
@@ -201,64 +201,64 @@ char*  WdProbability_wording(double p); // Print probability on buffer and retur
 */
 
 typedef struct {
-  WdSpace *state, *action, *shift;
-  WdTransition *transition;
+  BmSpace *state, *action, *shift;
+  BmTransition *transition;
   //WdValueFct *reward;
   char** futureName;
-} WdModel;
+} BmProcess;
 
 /* Constructor Destructor */
-WdModel* newWdModelEmpty( uint dimState, uint dimAction, uint dimShift );
-WdModel* newWdModel( uint dimState, WdDomain ** stateDoms, uint dimAction, WdDomain ** actionDoms, uint dimShift, WdDomain ** shiftDomains );
+BmProcess* newBmProcessEmpty( uint dimState, uint dimAction, uint dimShift );
+BmProcess* newBmProcess( uint dimState, BmDomain ** stateDoms, uint dimAction, BmDomain ** actionDoms, uint dimShift, BmDomain ** shiftDomains );
 
-void deleteWdModel(WdModel* self); // Delete an instance of WdModel
-void deleteDeepWdModel(WdModel* self);
+void deleteBmProcess(BmProcess* self); // Delete an instance of BmProcess
+void deleteDeepBmProcess(BmProcess* self);
 
 /* fill and empty a structure */
-WdModel* WdModel_createEmpty( WdModel* self, uint dimState, uint dimAction, uint dimShift );
-WdModel* WdModel_create( WdModel* self, uint dimState, WdDomain ** stateDoms, uint dimAction, WdDomain ** actionDoms, uint dimShift, WdDomain ** shiftDomains );
+BmProcess* BmProcess_createEmpty( BmProcess* self, uint dimState, uint dimAction, uint dimShift );
+BmProcess* BmProcess_create( BmProcess* self, uint dimState, BmDomain ** stateDoms, uint dimAction, BmDomain ** actionDoms, uint dimShift, BmDomain ** shiftDomains );
 
-WdModel* WdModel_deepDistroy( WdModel* self );
-WdModel* WdModel_distroy( WdModel* self );
+BmProcess* BmProcess_deepDistroy( BmProcess* self );
+BmProcess* BmProcess_distroy( BmProcess* self );
 
 /* Initialize variable */
-uint WdModel_attachStateVariable( WdModel* self, char * name, WdDomain* domain );
-uint WdModel_attachActionVariable( WdModel* self, char * name, WdDomain* domain );
-uint WdModel_attachShiftVariable( WdModel* self, char * name, WdDomain* domain );
+uint BmProcess_attachStateVariable( BmProcess* self, char * name, BmDomain* domain );
+uint BmProcess_attachActionVariable( BmProcess* self, char * name, BmDomain* domain );
+uint BmProcess_attachShiftVariable( BmProcess* self, char * name, BmDomain* domain );
 
-WdCode* WdModel_variable_dependOnArray( WdModel* self, char * varName, uint parentSize, char ** parentNames );
-WdCode* WdModel_variable_dependOn( WdModel* self, char * varName, uint parentSize, ... );
+BmCode* BmProcess_variable_dependOnArray( BmProcess* self, char * varName, uint parentSize, char ** parentNames );
+BmCode* BmProcess_variable_dependOn( BmProcess* self, char * varName, uint parentSize, ... );
 
 /* Initialize transition probability */
-WdModel* WdModel_variable_initializeProbabilities( WdModel* self, char * varName, char* parent, uint numberOfOutputs, ... );
-WdModel* WdModel_variable_addProbabilities( WdModel* self, char * varName, uint numberOfParents, ... );
+BmProcess* BmProcess_variable_initializeProbabilities( BmProcess* self, char * varName, char* parent, uint numberOfOutputs, ... );
+BmProcess* BmProcess_variable_addProbabilities( BmProcess* self, char * varName, uint numberOfParents, ... );
 
 /* Test */
-uint WdModel_isValid(WdModel* self);
+uint BmProcess_isValid(BmProcess* self);
 
 /* Update */
 
 /* Accessor */
-WdSpace* WdModel_stateSpace(WdModel* self);
-WdSpace* WdModel_actionSpace(WdModel* self);
-WdSpace* WdModel_shiftSpace(WdModel* self);
-WdTransition* WdModel_transition(WdModel* self);
-//WdValueFct* WdModel_reward(WdModel* self);
+BmSpace* BmProcess_stateSpace(BmProcess* self);
+BmSpace* BmProcess_actionSpace(BmProcess* self);
+BmSpace* BmProcess_shiftSpace(BmProcess* self);
+BmTransition* BmProcess_transition(BmProcess* self);
+//WdValueFct* BmProcess_reward(BmProcess* self);
 
-uint WdModel_variable_nodeId(WdModel* self, char * varName);
-char* WdModel_nodeId_variableName(WdModel* self, uint id);
+uint BmProcess_variable_nodeId(BmProcess* self, char * varName);
+char* BmProcess_nodeId_variableName(BmProcess* self, uint id);
 
-uint WdModel_nodeId_parentSize(WdModel* self, uint id);
-uint WdModel_nodeId_parentId(WdModel* self, uint id, char* parent);
-WdDomain* WdModel_nodeId_domain(WdModel* self, uint id);
+uint BmProcess_nodeId_parentSize(BmProcess* self, uint id);
+uint BmProcess_nodeId_parentId(BmProcess* self, uint id, char* parent);
+BmDomain* BmProcess_nodeId_domain(BmProcess* self, uint id);
 
 /* Generators */
-uint WdModel_feedWithDomains( WdModel* self, WdDomain** domainsBuffer, uint nboDomainsInBuffer ); // Generate the list of different domains; domainsBuffer should be of size WdSpace_dimention(self), the maximun number of different domains. return the number of different domains
+uint BmProcess_feedWithDomains( BmProcess* self, BmDomain** domainsBuffer, uint nboDomainsInBuffer ); // Generate the list of different domains; domainsBuffer should be of size BmSpace_dimention(self), the maximun number of different domains. return the number of different domains
 
 /* State */
 
 /* Printing */
-char* WdModel_printNetwork( WdModel* self, char* output );
-char* WdModel_printVariable( WdModel* self, char* varName, char* output );
+char* BmProcess_printNetwork( BmProcess* self, char* output );
+char* BmProcess_printVariable( BmProcess* self, char* varName, char* output );
 
 #endif // WANDA_MODEL_H

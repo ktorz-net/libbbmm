@@ -2,12 +2,15 @@
 
 ## On the fire:
 
-- `BmModel`-> BmProcess
-- `BmModel_variable_initializeProbabilities` and `BmModel_variable_addProbabilities` based on attached prebuilt-distribution.
-	* become... `BmModel_variable_attachDistribution_if` based on `BmModel_variable_neBmistribution`.
-- Create BmModel `<State, Action, Shift, transition, reward>`.
+- Bugs on BbMm Probabilities
+- Reactivate bbmm-models
+	* `BmModel`-> BmProcess  (`<State, Action, Shift, transition, reward>`)
 	* BmFunction -> BmTree selector and values[] (opt).
 	* BmPolicy -> BmTree selector and distribution (probability + value) (opt)
+- Réactivate Python Wrap (pyBbMm)
+
+- `BmModel_variable_initializeProbabilities` and `BmModel_variable_addProbabilities` based on attached prebuilt-distribution.
+	* become... `BmModel_variable_attachDistribution_if` based on `BmModel_variable_neBmistribution`.
 - Set default node as equiprobable.
 - Test pure random variable in transition definition (shift of future with no dependancy).
 - It's time for solvers based on `<transition, reward>` (ValueIt. - PolicyIt.).
@@ -17,9 +20,9 @@
 - remove BmCollection.
 - BmTree initialized empty (default 0), easely resizable (bench128).
 - Clean function names + on code documentations. 
-- PyBeMAge.
+- PyBbMm.
 - doc + webpage
-- attach and deepDistroy everywhere.
+- `attach` and `deepDistroy` everywhere/ `switch` everythings - (Edit a Dev. Phylosophie)
 - `Enenced-C`: `vector` (~BmCode based on void**) ; `data` a bench of vector + type ; `ratio`
 
 ## What about ?

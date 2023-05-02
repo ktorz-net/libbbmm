@@ -1,8 +1,7 @@
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *
- *   BeMAge Probability - A library in KISS philosophy of
- *                       BeMAge probility and condition models
- *
+ *   BbMm Probability - A library in KISS philosophy of *Bayesian-based Markov-models* probability manipulation.
+ * 
  *   FEATURES:
  *       - BmDistribution      : Define a distribution of probabilities over configuration (codes)
  *       - BmCondition         : Define a Bayesian Node (conditional probabilities over variable affectations)
@@ -141,6 +140,8 @@ void BmCondition_reinitialize(BmCondition* self, BmCode* parentRanges, BmDistrib
 void BmCondition_reinitializeEquiprobable(BmCondition* self, BmCode* parentRanges);
 //void BmCondition_initializeBasic(BmCondition* self);
 //void BmCondition_initializeEquiprobable(BmCondition* self);
+
+void BmCondition_switch(BmCondition* self, BmCondition* doppelganger);
 
 /* Accessor */
 uint BmCondition_outputSize( BmCondition* self );

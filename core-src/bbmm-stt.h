@@ -1,7 +1,6 @@
-
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *
- *   BeMAge Structures - A library in KISS philosophy of
+ *   BbMm Structures - A library in KISS philosophy of
  *                      data structures useful for BeMAge project
  *
  *   FEATURES:
