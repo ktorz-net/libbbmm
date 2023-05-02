@@ -40,9 +40,9 @@ set(SRC_FILES
     core-src/pbb-BmDistribution.c
     core-src/pbb-BmCondition.c
     core-src/pbb-BmTransition.c
-#    core-src/mdl-wdDomain.c
-#    core-src/mdl-wdSpace.c
-#    core-src/mdl-wdModel.c
+    core-src/mdl-BmDomain.c
+    core-src/mdl-BmSpace.c
+    core-src/mdl-BmSystem.c
 )
 
 # Build
@@ -71,8 +71,8 @@ set(TEST_SRC_FILES
     core-test/tc-pbb-BmCondition.c
     core-test/tc-pbb-BmTransition.c
     core-test/tc-mld-BmDomain.c
-#    core-test/tc-mld-BmSpace.c
-#    core-test/tc-mld-BmProcess.c
+    core-test/tc-mld-BmSpace.c
+    core-test/tc-mld-BmSystem.c
 #    core-test/tc-cofeeRobot.c
     core-test/main-testrunner.c
 )

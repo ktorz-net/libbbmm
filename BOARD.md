@@ -2,19 +2,19 @@
 
 ## On the fire:
 
-- Bugs on BbMm Probabilities
+- reset the BmSystem BmSystem_printVariable,  and tests
 - Create `newDistritutionEquiprobable`, test it and add it in `BmCondition_initializeEquiprobable`
 - Reactivate bbmm-models
-	* `BmModel`-> BmProcess  (`<State, Action, Shift, transition, reward>`)
-	* BmFunction -> BmTree selector and values[] (opt).
-	* BmPolicy -> BmTree selector and distribution (probability + value) (opt)
+	* `BmModel`-> BmSystem  (`<State, Action, Shift, transition, reward>`)
+	* `BmFunction` -> BmTree selector and values[] (opt). (Reward)
+	* `BmSystem_variable_initializeProbabilities` and `BmSystem_variable_addProbabilities` based on attached prebuilt-distribution. become... `BmSystem_variable_attachDistribution_if` based on `BmSystem_variable_neBmistribution`.
+- Réactivate cofeeRobot exemple
 - Réactivate Python Wrap (pyBbMm)
 
-- `BmModel_variable_initializeProbabilities` and `BmModel_variable_addProbabilities` based on attached prebuilt-distribution.
-	* become... `BmModel_variable_attachDistribution_if` based on `BmModel_variable_neBmistribution`.
 - Set default node as equiprobable.
 - Test pure random variable in transition definition (shift of future with no dependancy).
 - It's time for solvers based on `<transition, reward>` (ValueIt. - PolicyIt.).
+	* `BmPolicy` -> BmTree selector and distribution (probability + value) (opt)
 - Test memory leaks (Valgrin ?).
 - Add tests intenssivelly (BmDistribution,....).
 - Add testing functions (isValid....).

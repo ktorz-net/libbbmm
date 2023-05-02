@@ -7,7 +7,6 @@
 
 START_TEST(test_BmDomainBasic_init)
 {
-/*
     BmDomain * dom= newBmDomainBasic("Dom", 6);
     
     ck_assert_str_eq( dom->name, "Dom" );
@@ -30,13 +29,11 @@ START_TEST(test_BmDomainBasic_init)
 
     deleteBmDomain(dom);
     deleteBmDomain(dom2);
-*/
 }
 END_TEST
 
 START_TEST(test_BmDomainRange_init)
 {
-/*
     BmDomain * dom1= newBmDomainRange("Dom", 1, 3, 1);
     
     ck_assert_uint_eq( dom1->size, 3 );
@@ -82,13 +79,11 @@ START_TEST(test_BmDomainRange_init)
     deleteBmDomain(dom1);
     deleteBmDomain(dom2);
     deleteBmDomain(dom3);
-*/
 }
 END_TEST
 
 START_TEST(test_BmDomainWords_init)
 {
-/*
     char* words[4]= { "Abricot", "Bleuet", "Cerise", "Datte" };
     BmDomain * dom1= newBmDomainWordsArray("Dom", 4, words);
     
@@ -112,13 +107,11 @@ START_TEST(test_BmDomainWords_init)
 
     deleteBmDomain(dom1);
     deleteBmDomain(dom2);
-*/
 }
 END_TEST
 
 START_TEST(test_BmDomain_print)
 {
-/*
     BmDomain * domRange= newBmDomainRange("Range", 3, -12, -3);
 
     ck_assert_str_eq( BmDomain_wording(domRange), "Range[3, 0, -3, -6, -9, -12]" );
@@ -135,13 +128,11 @@ START_TEST(test_BmDomain_print)
     deleteBmDomain(domWords);
     deleteBmDomain(domRange);
     deleteBmDomain(dom2);
-*/
 }
 END_TEST
 
 START_TEST(test_BmDomainMeans_init)
 {
-/*
     double means[6]= { -3.7, 0.5, 1.6, 2.0, 4.6, 12.37 };
     BmDomain * dom= newBmDomainMeans("Dom", 6, means);
     
@@ -163,14 +154,12 @@ START_TEST(test_BmDomainMeans_init)
     
     deleteBmDomain(dom);
     deleteBmDomain(dom2);
-*/
 }
 END_TEST
 
 
 START_TEST(test_BmDomain_values)
 {
-/*
     double means[4]= { -3.7, 0.5, 2.0, 12.37 };
     BmDomain * dom= newBmDomainMeans("Dom", 4, means);
 
@@ -200,13 +189,11 @@ START_TEST(test_BmDomain_values)
     ck_assert_double_eq( BmDomain_valueAt(dom, 4), 4.0 );
 
     deleteBmDomain(dom);
-*/
 }
 END_TEST
 
 START_TEST(test_BmDomainRange_double)
 {
-/*
     BmDomain * dom= newBmDomainRange( "Dom", 2.1, 3.4, 0.4 );
 
     ck_assert_uint_eq( dom->size, 4 );
@@ -223,7 +210,6 @@ START_TEST(test_BmDomainRange_double)
 
 
     deleteBmDomain(dom);
-*/
 }
 END_TEST
 

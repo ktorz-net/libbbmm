@@ -205,60 +205,60 @@ typedef struct {
   BmTransition *transition;
   //WdValueFct *reward;
   char** futureName;
-} BmProcess;
+} BmSystem;
 
 /* Constructor Destructor */
-BmProcess* newBmProcessEmpty( uint dimState, uint dimAction, uint dimShift );
-BmProcess* newBmProcess( uint dimState, BmDomain ** stateDoms, uint dimAction, BmDomain ** actionDoms, uint dimShift, BmDomain ** shiftDomains );
+BmSystem* newBmSystemEmpty( uint dimState, uint dimAction, uint dimShift );
+BmSystem* newBmSystem( uint dimState, BmDomain ** stateDoms, uint dimAction, BmDomain ** actionDoms, uint dimShift, BmDomain ** shiftDomains );
 
-void deleteBmProcess(BmProcess* self); // Delete an instance of BmProcess
-void deleteDeepBmProcess(BmProcess* self);
+void deleteBmSystem(BmSystem* self); // Delete an instance of BmSystem
+void deleteDeepBmSystem(BmSystem* self);
 
 /* fill and empty a structure */
-BmProcess* BmProcess_createEmpty( BmProcess* self, uint dimState, uint dimAction, uint dimShift );
-BmProcess* BmProcess_create( BmProcess* self, uint dimState, BmDomain ** stateDoms, uint dimAction, BmDomain ** actionDoms, uint dimShift, BmDomain ** shiftDomains );
+BmSystem* BmSystem_createEmpty( BmSystem* self, uint dimState, uint dimAction, uint dimShift );
+BmSystem* BmSystem_create( BmSystem* self, uint dimState, BmDomain ** stateDoms, uint dimAction, BmDomain ** actionDoms, uint dimShift, BmDomain ** shiftDomains );
 
-BmProcess* BmProcess_deepDistroy( BmProcess* self );
-BmProcess* BmProcess_distroy( BmProcess* self );
+BmSystem* BmSystem_deepDistroy( BmSystem* self );
+BmSystem* BmSystem_distroy( BmSystem* self );
 
 /* Initialize variable */
-uint BmProcess_attachStateVariable( BmProcess* self, char * name, BmDomain* domain );
-uint BmProcess_attachActionVariable( BmProcess* self, char * name, BmDomain* domain );
-uint BmProcess_attachShiftVariable( BmProcess* self, char * name, BmDomain* domain );
+uint BmSystem_attachStateVariable( BmSystem* self, char * name, BmDomain* domain );
+uint BmSystem_attachActionVariable( BmSystem* self, char * name, BmDomain* domain );
+uint BmSystem_attachShiftVariable( BmSystem* self, char * name, BmDomain* domain );
 
-BmCode* BmProcess_variable_dependOnArray( BmProcess* self, char * varName, uint parentSize, char ** parentNames );
-BmCode* BmProcess_variable_dependOn( BmProcess* self, char * varName, uint parentSize, ... );
+BmCode* BmSystem_variable_dependOnArray( BmSystem* self, char * varName, uint parentSize, char ** parentNames );
+BmCode* BmSystem_variable_dependOn( BmSystem* self, char * varName, uint parentSize, ... );
 
 /* Initialize transition probability */
-BmProcess* BmProcess_variable_initializeProbabilities( BmProcess* self, char * varName, char* parent, uint numberOfOutputs, ... );
-BmProcess* BmProcess_variable_addProbabilities( BmProcess* self, char * varName, uint numberOfParents, ... );
+BmSystem* BmSystem_variable_initializeProbabilities( BmSystem* self, char * varName, char* parent, uint numberOfOutputs, ... );
+BmSystem* BmSystem_variable_addProbabilities( BmSystem* self, char * varName, uint numberOfParents, ... );
 
 /* Test */
-uint BmProcess_isValid(BmProcess* self);
+uint BmSystem_isValid(BmSystem* self);
 
 /* Update */
 
 /* Accessor */
-BmSpace* BmProcess_stateSpace(BmProcess* self);
-BmSpace* BmProcess_actionSpace(BmProcess* self);
-BmSpace* BmProcess_shiftSpace(BmProcess* self);
-BmTransition* BmProcess_transition(BmProcess* self);
-//WdValueFct* BmProcess_reward(BmProcess* self);
+BmSpace* BmSystem_stateSpace(BmSystem* self);
+BmSpace* BmSystem_actionSpace(BmSystem* self);
+BmSpace* BmSystem_shiftSpace(BmSystem* self);
+BmTransition* BmSystem_transition(BmSystem* self);
+//WdValueFct* BmSystem_reward(BmSystem* self);
 
-uint BmProcess_variable_nodeId(BmProcess* self, char * varName);
-char* BmProcess_nodeId_variableName(BmProcess* self, uint id);
+uint BmSystem_variable_nodeId(BmSystem* self, char * varName);
+char* BmSystem_nodeId_variableName(BmSystem* self, uint id);
 
-uint BmProcess_nodeId_parentSize(BmProcess* self, uint id);
-uint BmProcess_nodeId_parentId(BmProcess* self, uint id, char* parent);
-BmDomain* BmProcess_nodeId_domain(BmProcess* self, uint id);
+uint BmSystem_nodeId_parentSize(BmSystem* self, uint id);
+uint BmSystem_nodeId_parentId(BmSystem* self, uint id, char* parent);
+BmDomain* BmSystem_nodeId_domain(BmSystem* self, uint id);
 
 /* Generators */
-uint BmProcess_feedWithDomains( BmProcess* self, BmDomain** domainsBuffer, uint nboDomainsInBuffer ); // Generate the list of different domains; domainsBuffer should be of size BmSpace_dimention(self), the maximun number of different domains. return the number of different domains
+uint BmSystem_feedWithDomains( BmSystem* self, BmDomain** domainsBuffer, uint nboDomainsInBuffer ); // Generate the list of different domains; domainsBuffer should be of size BmSpace_dimention(self), the maximun number of different domains. return the number of different domains
 
 /* State */
 
 /* Printing */
-char* BmProcess_printNetwork( BmProcess* self, char* output );
-char* BmProcess_printVariable( BmProcess* self, char* varName, char* output );
+char* BmSystem_printNetwork( BmSystem* self, char* output );
+char* BmSystem_printVariable( BmSystem* self, char* varName, char* output );
 
 #endif // WANDA_MODEL_H
