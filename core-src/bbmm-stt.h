@@ -191,13 +191,14 @@ void BmBench_resizeCapacity( BmBench* self, uint newCapacity );
 
 /* Accessor */
 uint BmBench_size(BmBench* self);
-BmCode* BmBench_at_item( BmBench* self, uint i );
-uint BmBench_at_tag( BmBench* self, uint i );
+BmCode* BmBench_at( BmBench* self, uint i );
+uint BmBench_tagAt( BmBench* self, uint i );
 
 /* Test */
 
 /* Construction Item */
 uint BmBench_attachItem( BmBench* self, BmCode* item );
+uint BmBench_attachTaggedItem( BmBench* self, BmCode* item, uint tag );
 BmCode* BmBench_at_setTag( BmBench* self, uint i, uint tagValue );
 
 void BmBench_sortOnItem(BmBench* self);

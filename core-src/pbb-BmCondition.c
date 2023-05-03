@@ -352,16 +352,21 @@ char* BmCondition_printSep(BmCondition* self, char* output, char* separator)
 
     BmBench* collec = BmTree_asNewBench( self->selector );
 
-    if( BmBench_size(collec) > 0 )
+    if( BmBench_size(collec) == 0 )
     {
-        _BmCondition_printCode_withDistribution(
-            self, BmBench_at_item( collec, 1 ), BmBench_at_tag( collec, 1 ), output );
-    }    
+        BmBench_attachTaggedItem(collec, newBmCodeBasic( BmCondition_dimention(self), 0), 1 );
+    }
+
+    // First or unique one: 
+    _BmCondition_printCode_withDistribution(
+        self, BmBench_at( collec, 1 ), BmBench_tagAt( collec, 1 ), output );
+
+    // All the others: 
     for( uint i = 2 ; i <= BmBench_size(collec) ; ++i )
     {
         strcat( output, separator );
         _BmCondition_printCode_withDistribution(
-            self, BmBench_at_item( collec, i ), BmBench_at_tag( collec, i ), output );
+            self, BmBench_at( collec, i ), BmBench_tagAt( collec, i ), output );
     }
     strcat(output, "}");
     return output;

@@ -230,8 +230,10 @@ BmCode* BmSystem_variable_dependOnArray( BmSystem* self, char * varName, uint pa
 BmCode* BmSystem_variable_dependOn( BmSystem* self, char * varName, uint parentSize, ... );
 
 /* Initialize transition probability */
-BmSystem* BmSystem_variable_initializeProbabilities( BmSystem* self, char * varName, char* parent, uint numberOfOutputs, ... );
+BmSystem* BmSystem_variable_initializeProbabilities( BmSystem* self, char* parent, uint numberOfOutputs, ... );
 BmSystem* BmSystem_variable_addProbabilities( BmSystem* self, char * varName, uint numberOfParents, ... );
+
+BmDistribution* BmSystem_nodeId_newBmDistribution(BmSystem* self, uint id, uint numberOfOutputs, char** outputs, double* probabilities );
 
 /* Test */
 uint BmSystem_isValid(BmSystem* self);
@@ -245,6 +247,7 @@ BmSpace* BmSystem_shiftSpace(BmSystem* self);
 BmTransition* BmSystem_transition(BmSystem* self);
 //WdValueFct* BmSystem_reward(BmSystem* self);
 
+BmCondition* BmSystem_variable(BmSystem* self, char * varName);
 uint BmSystem_variable_nodeId(BmSystem* self, char * varName);
 char* BmSystem_nodeId_variableName(BmSystem* self, uint id);
 

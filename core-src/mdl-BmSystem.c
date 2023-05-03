@@ -262,12 +262,10 @@ BmDistribution* BmSystem_nodeId_newBmDistribution(BmSystem* self, uint id, uint 
     return distrib;
 }
 
-BmSystem* BmSystem_variable_initializeProbabilities( BmSystem* self, char * varName, char* parent, uint numberOfOutputs, ... )
+BmSystem* BmSystem_variable_initializeProbabilities( BmSystem* self, char * varName, uint numberOfOutputs, ... )
 {
-/*
     // Get variable and parent Id
     uint id= BmSystem_variable_nodeId(self, varName);
-    uint parentId= BmSystem_nodeId_parentId(self, id, parent);
 
     char* outputs[numberOfOutputs];
     double probabilities[numberOfOutputs];
@@ -285,9 +283,9 @@ BmSystem* BmSystem_variable_initializeProbabilities( BmSystem* self, char * varN
     // Initialize condition BmDistribution
     BmDistribution* distrib= BmSystem_nodeId_newBmDistribution(self, id, numberOfOutputs, outputs, probabilities );
     BmCondition* c= BmTransition_nodeAt( self->transition, id );
-    BmCondition_initialize( c, c->outputSize, parentIds, distrib );
+    BmCondition_initialize( c, c->outputSize, c->parentRanges, distrib );
     deleteBmDistribution( distrib );
-*/
+
     return self;
 }
 
@@ -366,6 +364,13 @@ BmSpace* BmSystem_shiftSpace(BmSystem* self)
 BmTransition* BmSystem_transition(BmSystem* self)
 {
     return self->transition;
+}
+
+
+BmCondition* BmSystem_variable(BmSystem* self, char * varName)
+{
+    uint varId= BmSystem_variable_nodeId(self, varName);
+    return BmTransition_nodeAt( BmSystem_transition(self), varId );
 }
 
 uint BmSystem_variable_nodeId(BmSystem* self, char * varName)
@@ -539,7 +544,7 @@ char* _BmCondition_printCode_inDomain(BmCondition* cdt, BmCode* code, BmDomain**
 {
     uint inputSize= BmCondition_dimention(cdt);
     // Security:
-    assert( BmCode_size(code) == inputSize+1 );
+    assert( BmCode_size(code) == inputSize );
 
     strcat(output, "[");
     for( uint i= 1 ; i <= inputSize ; ++i)
@@ -552,14 +557,12 @@ char* _BmCondition_printCode_inDomain(BmCondition* cdt, BmCode* code, BmDomain**
     }
     output[strlen(output)-2]= '\0'; 
     strcat(output, "]: " );
-    BmDistribution_print( array_at(cdt->distributions, BmCode_at(code, inputSize+1) ), output );
     return output;
 }
 
 char* BmSystem_printVariable( BmSystem* self, char* varName, char* output )
 {
     uint nodeId= BmSystem_variable_nodeId(self, varName);
-    //BmCondition* cdt= BmTransition_nodeAt( self->transition, nodeId );
     
     // get parents' spaces
     BmCode* parents= BmTransition_dependanciesAt( self->transition, nodeId);
@@ -571,20 +574,25 @@ char* BmSystem_printVariable( BmSystem* self, char* varName, char* output )
     
     BmSystem_nodeId_printIdentity(self, nodeId, output);
     strcat(output, ": {");
-/*
-    WdCollection* collec = WdTree_asNewCollection( cdt->selector );
 
-    if( WdCollection_size(collec) > 0 )
+    BmCondition* cdt= BmTransition_nodeAt( self->transition, nodeId );
+    BmBench* collec = BmTree_asNewBench( cdt->selector );
+
+    if( BmBench_size(collec) == 0 )
     {
-        _BmCondition_printCode_inDomain(cdt, WdCollection_at( collec, 1 ), pDom, output );
-    }    
-    for( uint i = 2 ; i <= WdCollection_size(collec) ; ++i )
+        BmBench_attachTaggedItem(collec, newBmCodeBasic( BmCondition_dimention(cdt), 0), 1 );
+    }
+    
+    _BmCondition_printCode_inDomain(cdt, BmBench_at( collec, 1 ), pDom, output );
+    BmDistribution_print( array_at(cdt->distributions, BmBench_tagAt(collec, 1) ), output );
+    for( uint i = 2 ; i <= BmBench_size(collec) ; ++i )
     {
         strcat( output, ",\n  " );
-        _BmCondition_printCode_inDomain(cdt, WdCollection_at( collec, i ), pDom, output );
+        _BmCondition_printCode_inDomain(cdt, BmBench_at( collec, i ), pDom, output );
+        BmDistribution_print( array_at(cdt->distributions, BmBench_tagAt(collec, i) ), output );
     }
-    */
 
     strcat(output, "}");
+    deleteBmBench(collec);
     return output;
 }

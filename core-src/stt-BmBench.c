@@ -87,12 +87,12 @@ uint BmBench_size(BmBench* self)
     return self->size;
 }
 
-BmCode* BmBench_at_item( BmBench* self, uint i )
+BmCode* BmBench_at( BmBench* self, uint i )
 {
     return array_at( self->items, i );
 }
 
-uint BmBench_at_tag( BmBench* self, uint i )
+uint BmBench_tagAt( BmBench* self, uint i )
 {
     return array_at( self->tags, i );
 }
@@ -103,12 +103,18 @@ uint BmBench_at_tag( BmBench* self, uint i )
 /* Construction Item */
 uint BmBench_attachItem( BmBench* self, BmCode* item )
 {
+    return BmBench_attachTaggedItem( self, item, 0 );
+    return self->size;
+}
+
+uint BmBench_attachTaggedItem( BmBench* self, BmCode* item, uint tag )
+{
     if( self->capacity == self->size )
         BmBench_resizeCapacity( self, self->capacity+1+(self->capacity/2) );
  
     self->size+= 1;
     array_at_set( self->items, self->size, item );
-    array_at_set( self->tags, self->size, 0 );
+    array_at_set( self->tags, self->size, tag );
     return self->size;
 }
 
@@ -162,11 +168,11 @@ void BmBench_sortOnTag(BmBench* self)
 char* BmBench_printItem(BmBench* self, uint iItem, char* output)
 {
     BmCode_print( array_at(self->items, iItem), output);
-    if( BmBench_at_tag(self, iItem) == 0 )
+    if( BmBench_tagAt(self, iItem) == 0 )
         return output;
     strcat(output, ":");
     char buffer[16]= "";
-    sprintf( buffer, "%u", BmBench_at_tag(self, iItem) );
+    sprintf( buffer, "%u", BmBench_tagAt(self, iItem) );
     strcat( output, buffer );
     return output;
 }

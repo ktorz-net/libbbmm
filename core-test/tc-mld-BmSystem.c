@@ -175,8 +175,6 @@ END_TEST
 
 START_TEST(test_BmSystem_initTransition)
 {
-    uint go= 1;
-    ck_assert(go);
     char buffer[1024]= "";
 
     BmSystem *model= newBmSystemEmpty( 1, 1, 0 );
@@ -218,27 +216,16 @@ START_TEST(test_BmSystem_initTransition)
 
     strcpy(buffer, "");
     BmCondition_print( BmTransition_nodeAt( model->transition, BmSystem_variable_nodeId(model,  "D'") ), buffer );
-    tc_print( buffer );
     ck_assert_str_eq(
         buffer,
-        "[6, 2]->[6]: {[1, 0]: {[1]: 1.00},\n\
-  [2, 0]: {[1]: 1.00},\n\
-  [3, 0]: {[1]: 1.00},\n\
-  [4, 0]: {[1]: 1.00},\n\
-  [5, 0]: {[1]: 1.00},\n\
-  [6, 0]: {[1]: 1.00}}"
+        "[6, 2]->[6]: {[0, 0]: {[1]: 0.16 ; [2]: 0.16 ; [3]: 0.16 ; [4]: 0.16 ; [5]: 0.16 ; [6]: 0.16}}"
     );
 
     strcpy(buffer, "");
     BmSystem_printVariable( model, "D'", buffer );
     ck_assert_str_eq(
         buffer,
-        "D'.6(D.6, A.2): {[1, -]: {[1]: 1.00},\n\
-  [2, -]: {[1]: 1.00},\n\
-  [3, -]: {[1]: 1.00},\n\
-  [4, -]: {[1]: 1.00},\n\
-  [5, -]: {[1]: 1.00},\n\
-  [6, -]: {[1]: 1.00}}"
+        "D'.6(D.6, A.2): {[-, -]: {[1]: 0.16 ; [2]: 0.16 ; [3]: 0.16 ; [4]: 0.16 ; [5]: 0.16 ; [6]: 0.16}}"
     );
 
     /* Transition:
@@ -252,37 +239,87 @@ START_TEST(test_BmSystem_initTransition)
     *  "Score", 6 : 1: 1/10, 6: 9/10
     */
 
-    ck_assert(go);
+    ck_assert_uint_eq(BmSystem_variable_nodeId(model,  "D'"), 3);
+    {
+        char* outputs[4]= {"1", "2", "3", "5"};
+        double probabilities[4]= {0.3, 0.1, 0.3, 0.3 };
+        BmDistribution* distrib= BmSystem_nodeId_newBmDistribution( model, 3, 4, outputs, probabilities );
 
-    BmSystem_variable_initializeProbabilities( model, "D'", "A", 6,
-        "1", 0.333, "2", 0.333, "3", 0.333, "4", 0.333, "5", 0.333, "6", 0.334 );
+        strcpy(buffer, "");
+        BmDistribution_print( distrib, buffer );
+        ck_assert_str_eq(
+            buffer,
+            "{[1]: 0.30 ; [2]: 0.10 ; [3]: 0.30 ; [5]: 0.30}"
+        );
+
+        // Initialize condition BmDistribution
+        BmCondition* cond= BmTransition_nodeAt( model->transition, 3 );
+
+        strcpy(buffer, "");
+        BmCondition_print( cond, buffer );
+        ck_assert_str_eq(
+            buffer,
+            "[6, 2]->[6]: {[0, 0]: {[1]: 0.16 ; [2]: 0.16 ; [3]: 0.16 ; [4]: 0.16 ; [5]: 0.16 ; [6]: 0.16}}"
+        );
+
+        BmCondition_initialize( cond, cond->outputSize, cond->parentRanges, distrib );
+
+        strcpy(buffer, "");
+        BmCondition_print( cond, buffer );
+        ck_assert_str_eq(
+            buffer,
+            "[6, 2]->[6]: {[0, 0]: {[1]: 0.30 ; [2]: 0.10 ; [3]: 0.30 ; [5]: 0.30}}"
+        );
+
+        deleteBmDistribution(distrib);
+    }
+
+    BmSystem_variable_initializeProbabilities( model, "D'", 4,
+        "1", 0.4, "2", 0.2, "3", 0.2, "5", 0.2
+    );
     
     strcpy(buffer, "");
-    BmSystem_printVariable( model, "D'", buffer );
-    //wt_print( buffer );
+    BmCondition_print( BmTransition_nodeAt( model->transition, BmSystem_variable_nodeId(model,  "D'") ), buffer );
     ck_assert_str_eq(
         buffer,
-        "D'.6(D.6, A.2): {[-, Roll]: {[1]: 0.33 ; [2]: 0.33 ; [3]: 0.33 ; [4]: 0.33 ; [5]: 0.33 ; [6]: 0.33},\n\
-  [-, Score]: {[1]: 0.33 ; [2]: 0.33 ; [3]: 0.33 ; [4]: 0.33 ; [5]: 0.33 ; [6]: 0.33}}"
+        "[6, 2]->[6]: {[0, 0]: {[1]: 0.40 ; [2]: 0.20 ; [3]: 0.20 ; [5]: 0.20}}"
     );
 
-    ck_assert(go);
+    strcpy(buffer, "");
+    BmSystem_printVariable( model, "D'", buffer );
+    ck_assert_str_eq(
+        buffer,
+        "D'.6(D.6, A.2): {[-, -]: {[1]: 0.40 ; [2]: 0.20 ; [3]: 0.20 ; [5]: 0.20}}"
+    );
+
     BmSystem_variable_addProbabilities( model, "D'", 2, "A", "Score", "D", "1", 1, "1", 1.0 );
 
     strcpy(buffer, "");
-    BmSystem_printVariable( model, "D'", buffer );
-    //wt_print( buffer );
+    BmTree_printInside( BmSystem_variable( model, "D'")->selector, buffer );
+    //tc_print( buffer ); ToDo: Respect the BmSystem_variable_addProbabilities order...
+    //ck_assert_str_eq(
+    //    buffer, "input: [6, 2], size: 2
+//0. input(2): [leaf(1), branch(1)]
+//1. input(1): [leaf(2), leaf(1), leaf(1), leaf(1), leaf(1), leaf(1)]);
     ck_assert_str_eq(
-        buffer, "D'.6(D.6, A.2): {[-, Roll]: {[1]: 0.33 ; [2]: 0.33 ; [3]: 0.33 ; [4]: 0.33 ; [5]: 0.33 ; [6]: 0.33},\n\
-  [1, Score]: {[1]: 1.00},\n\
-  [2, Score]: {[1]: 0.33 ; [2]: 0.33 ; [3]: 0.33 ; [4]: 0.33 ; [5]: 0.33 ; [6]: 0.33},\n\
-  [3, Score]: {[1]: 0.33 ; [2]: 0.33 ; [3]: 0.33 ; [4]: 0.33 ; [5]: 0.33 ; [6]: 0.33},\n\
-  [4, Score]: {[1]: 0.33 ; [2]: 0.33 ; [3]: 0.33 ; [4]: 0.33 ; [5]: 0.33 ; [6]: 0.33},\n\
-  [5, Score]: {[1]: 0.33 ; [2]: 0.33 ; [3]: 0.33 ; [4]: 0.33 ; [5]: 0.33 ; [6]: 0.33},\n\
-  [6, Score]: {[1]: 0.33 ; [2]: 0.33 ; [3]: 0.33 ; [4]: 0.33 ; [5]: 0.33 ; [6]: 0.33}}"
+        buffer, "input: [6, 2], size: 2\n\
+0. input(1): [branch(1), leaf(1), leaf(1), leaf(1), leaf(1), leaf(1)]\n\
+1. input(2): [leaf(1), leaf(2)]"
     );
 
-    ck_assert(go);
+
+    strcpy(buffer, "");
+    BmSystem_printVariable( model, "D'", buffer );
+    ck_assert_str_eq(
+        buffer, "D'.6(D.6, A.2): {[1, Roll]: {[1]: 0.40 ; [2]: 0.20 ; [3]: 0.20 ; [5]: 0.20},\n\
+  [1, Score]: {[1]: 1.00},\n\
+  [2, -]: {[1]: 0.40 ; [2]: 0.20 ; [3]: 0.20 ; [5]: 0.20},\n\
+  [3, -]: {[1]: 0.40 ; [2]: 0.20 ; [3]: 0.20 ; [5]: 0.20},\n\
+  [4, -]: {[1]: 0.40 ; [2]: 0.20 ; [3]: 0.20 ; [5]: 0.20},\n\
+  [5, -]: {[1]: 0.40 ; [2]: 0.20 ; [3]: 0.20 ; [5]: 0.20},\n\
+  [6, -]: {[1]: 0.40 ; [2]: 0.20 ; [3]: 0.20 ; [5]: 0.20}}"
+    );
+
     BmSystem_variable_addProbabilities( model, "D'", 2, "A", "Score", "D", "2", 2, "1", 0.1, "2", 0.9 ); 
     BmSystem_variable_addProbabilities( model, "D'", 2, "A", "Score", "D", "3", 2, "1", 0.1, "3", 0.9 );
     BmSystem_variable_addProbabilities( model, "D'", 2, "A", "Score", "D", "4", 2, "1", 0.1, "4", 0.9 );
@@ -291,15 +328,19 @@ START_TEST(test_BmSystem_initTransition)
 
     strcpy(buffer, "");
     BmSystem_printVariable( model, "D'", buffer );
-    //wt_print( buffer );
     ck_assert_str_eq(
         buffer,
-        "D'.6(D.6, A.2): {[-, Roll]: {[1]: 0.33 ; [2]: 0.33 ; [3]: 0.33 ; [4]: 0.33 ; [5]: 0.33 ; [6]: 0.33},\n\
+        "D'.6(D.6, A.2): {[1, Roll]: {[1]: 0.40 ; [2]: 0.20 ; [3]: 0.20 ; [5]: 0.20},\n\
   [1, Score]: {[1]: 1.00},\n\
+  [2, Roll]: {[1]: 0.40 ; [2]: 0.20 ; [3]: 0.20 ; [5]: 0.20},\n\
   [2, Score]: {[1]: 0.10 ; [2]: 0.90},\n\
+  [3, Roll]: {[1]: 0.40 ; [2]: 0.20 ; [3]: 0.20 ; [5]: 0.20},\n\
   [3, Score]: {[1]: 0.10 ; [3]: 0.90},\n\
+  [4, Roll]: {[1]: 0.40 ; [2]: 0.20 ; [3]: 0.20 ; [5]: 0.20},\n\
   [4, Score]: {[1]: 0.10 ; [4]: 0.90},\n\
+  [5, Roll]: {[1]: 0.40 ; [2]: 0.20 ; [3]: 0.20 ; [5]: 0.20},\n\
   [5, Score]: {[1]: 0.10 ; [5]: 0.90},\n\
+  [6, Roll]: {[1]: 0.40 ; [2]: 0.20 ; [3]: 0.20 ; [5]: 0.20},\n\
   [6, Score]: {[1]: 0.10 ; [6]: 0.90}}"
     );
 
@@ -309,20 +350,25 @@ START_TEST(test_BmSystem_initTransition)
 
     strcpy(buffer, "");
     BmCondition_print( BmTransition_nodeAt(model->transition, 1), buffer );
-    ck_assert_str_eq( buffer, "[1]->[6]: {[1]: {[1]: 1.00}}" );
+    ck_assert_str_eq( buffer, "[1]->[6]: {[0]: {[1]: 1.00}}" );
 
     strcpy(buffer, "");
     BmCondition_print( BmTransition_nodeAt(model->transition, 2), buffer );
-    ck_assert_str_eq( buffer, "[1]->[2]: {[1]: {[1]: 1.00}}" );
+    ck_assert_str_eq( buffer, "[1]->[2]: {[0]: {[1]: 1.00}}" );
 
     strcpy(buffer, "");
     BmCondition_print( BmTransition_nodeAt(model->transition, 3), buffer );
-    ck_assert_str_eq( buffer, "[6, 2]->[6]: {[0, 1]: {[1]: 0.33 ; [2]: 0.33 ; [3]: 0.33 ; [4]: 0.33 ; [5]: 0.33 ; [6]: 0.33},\n\
+    ck_assert_str_eq( buffer, "[6, 2]->[6]: {[1, 1]: {[1]: 0.40 ; [2]: 0.20 ; [3]: 0.20 ; [5]: 0.20},\n\
   [1, 2]: {[1]: 1.00},\n\
+  [2, 1]: {[1]: 0.40 ; [2]: 0.20 ; [3]: 0.20 ; [5]: 0.20},\n\
   [2, 2]: {[1]: 0.10 ; [2]: 0.90},\n\
+  [3, 1]: {[1]: 0.40 ; [2]: 0.20 ; [3]: 0.20 ; [5]: 0.20},\n\
   [3, 2]: {[1]: 0.10 ; [3]: 0.90},\n\
+  [4, 1]: {[1]: 0.40 ; [2]: 0.20 ; [3]: 0.20 ; [5]: 0.20},\n\
   [4, 2]: {[1]: 0.10 ; [4]: 0.90},\n\
+  [5, 1]: {[1]: 0.40 ; [2]: 0.20 ; [3]: 0.20 ; [5]: 0.20},\n\
   [5, 2]: {[1]: 0.10 ; [5]: 0.90},\n\
+  [6, 1]: {[1]: 0.40 ; [2]: 0.20 ; [3]: 0.20 ; [5]: 0.20},\n\
   [6, 2]: {[1]: 0.10 ; [6]: 0.90}}" );
 
     deleteDeepBmSystem(model);
@@ -343,7 +389,7 @@ START_TEST(test_BmSystem_playTransition)
     // Set dependancy:
     BmSystem_variable_dependOn( model, "D'", 2, "D", "A" );
 
-    BmSystem_variable_initializeProbabilities( model, "D'", "A", 6, "1", 0.333, "2", 0.333, "3", 0.333, "4", 0.333, "5", 0.333, "6", 0.334 );
+    BmSystem_variable_initializeProbabilities( model, "D'", 6, "1", 0.333, "2", 0.333, "3", 0.333, "4", 0.333, "5", 0.333, "6", 0.334 );
     BmSystem_variable_addProbabilities( model, "D'", 2, "A", "Score", "D", "1", 1, "1", 1.0 );
     BmSystem_variable_addProbabilities( model, "D'", 2, "A", "Score", "D", "2", 2, "1", 0.1, "2", 0.9 );
     BmSystem_variable_addProbabilities( model, "D'", 2, "A", "Score", "D", "3", 2, "1", 0.1, "3", 0.9 );

@@ -91,6 +91,57 @@ START_TEST(test_BmCondition_init2)
 }
 END_TEST
 
+START_TEST(test_BmCondition_defaultDistrib)
+{
+    char buffer[1014]= "";
+
+    // Initialize BmDistribution
+    BmDistribution* distrib= newBmDistribution(1);
+    BmDistribution_resizeCapacity( distrib, 4);
+    BmDistribution_addOutput( distrib, 1, 0.3 );
+    BmDistribution_addOutput( distrib, 2, 0.1 );
+    BmDistribution_addOutput( distrib, 3, 0.3 );
+    BmDistribution_addOutput( distrib, 5, 0.3 );
+
+    strcpy(buffer, "");
+    BmDistribution_print( distrib, buffer );
+    ck_assert_str_eq(
+    buffer,
+    "{[1]: 0.30 ; [2]: 0.10 ; [3]: 0.30 ; [5]: 0.30}"
+    );
+
+    // Initialize BmCondition
+    BmCode* parents= newBmCode(2, 6, 2);
+    BmCondition* cond= newBmCondition(6, parents, distrib);
+    
+    strcpy(buffer, "");
+    BmDistribution_print( BmCondition_at(cond, parents), buffer );
+    ck_assert_str_eq(
+    buffer,
+    "{[1]: 0.30 ; [2]: 0.10 ; [3]: 0.30 ; [5]: 0.30}"
+    );
+
+    BmCode_at_set(parents, 1, 3);
+    BmCode_at_set(parents, 2, 1);
+
+    strcpy(buffer, "");
+    BmDistribution_print( BmCondition_at(cond, parents), buffer );
+    ck_assert_str_eq(
+    buffer,
+    "{[1]: 0.30 ; [2]: 0.10 ; [3]: 0.30 ; [5]: 0.30}"
+    );
+
+    strcpy(buffer, "");
+    BmCondition_print( cond, buffer );
+    ck_assert_str_eq(
+    buffer,
+    "[6, 2]->[6]: {[0, 0]: {[1]: 0.30 ; [2]: 0.10 ; [3]: 0.30 ; [5]: 0.30}}"
+    );
+
+    deleteBmDistribution(distrib);
+    deleteBmCode(parents);
+    deleteBmCondition(cond);
+}
 
 START_TEST(test_BmCondition_switch)
 {
@@ -476,7 +527,7 @@ START_TEST(test_BmCondition_print)
     BmCondition_print( instance, buffer );
     
     ck_assert_str_eq( buffer,
-"[4, 5, 6]->[2]: {}"
+"[4, 5, 6]->[2]: {[0, 0, 0]: {[1]: 1.00}}"
     );
 
     deleteBmCondition(instance);
@@ -494,6 +545,7 @@ TCase * test_case_BmCondition(void)
 
     tcase_add_test(tc, test_BmCondition_init);
     tcase_add_test(tc, test_BmCondition_init2);
+    tcase_add_test(tc, test_BmCondition_defaultDistrib);
     tcase_add_test(tc, test_BmCondition_switch);
     tcase_add_test(tc, test_BmCondition_manipulate);
     tcase_add_test(tc, test_BmCondition_manipulate2);

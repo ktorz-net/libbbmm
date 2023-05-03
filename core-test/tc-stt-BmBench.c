@@ -109,9 +109,9 @@ START_TEST(test_BmBench_tags)
     BmBench_print(collec, buffer);
     ck_assert_str_eq( buffer, "{[42], [69, 103], [3], [69, 56]}" );
 
-    ck_assert_uint_eq( BmBench_at_tag( collec, 2 ), 0 );
+    ck_assert_uint_eq( BmBench_tagAt( collec, 2 ), 0 );
     BmBench_at_setTag( collec, 2, 1 );
-    ck_assert_uint_eq( BmBench_at_tag( collec, 2 ), 1 );
+    ck_assert_uint_eq( BmBench_tagAt( collec, 2 ), 1 );
 
     strcpy( buffer, "" );
     BmBench_print(collec, buffer);
