@@ -193,6 +193,9 @@ uint BmBench_tagAt( BmBench* self, uint i );
 uint BmBench_attachLast( BmBench* self, BmCode* item );
 BmCode* BmBench_detachLast( BmBench* self );
 
+uint BmBench_attachFirst( BmBench* self, BmCode* item );
+BmCode* BmBench_detachFirst( BmBench* self );
+
 BmCode* BmBench_at_tag( BmBench* self, uint i, uint tagValue );
 
 void BmBench_sortOnItem( BmBench* self);

@@ -2,7 +2,6 @@
 
 ## On the fire:
 
-- BmBench handdle AttachFirst and AttachLast (detachFirst / detachLast).
 - Clean function names. `attach`/`detach` everywhere/ `switch` everythings
 - Create `newDistritutionEquiprobable`, test it and add it in `BmCondition_initializeEquiprobable`
 - Reactivate bbmm-models
@@ -33,6 +32,8 @@
 - Use igraph toolbox
 - Pharo: Prepare for uiPlayer: (BbMm-presenter Package... Paul)
 - Windaube ?
+- Optimazing BmBench buffer with ratio attributs (count the numbers of attachLast versus size ).
+
 
 ## State Of The Art: 
 

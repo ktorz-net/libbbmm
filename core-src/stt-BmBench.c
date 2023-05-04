@@ -117,6 +117,28 @@ BmCode* BmBench_detachLast( BmBench* self )
     return array_at( self->items, id );
 }
 
+uint BmBench_attachFirst( BmBench* self, BmCode* item )
+{
+    if( self->start == 0 )
+    {
+        BmBench_resizeCapacity( self, (self->size*2)+2);
+    }
+    array_at_set( self->items, self->start, item );
+    array_at_set( self->tags, self->start, 0 );
+    self->start= self->start-1;
+    self->size+= 1;
+    return self->start+1;
+}
+
+BmCode* BmBench_detachFirst( BmBench* self )
+{
+    assert( self->size > 0 );
+    uint id= self->start+1;
+    self->size-= 1;
+    self->start+=1;
+    return array_at( self->items, id );
+}
+
 BmCode* BmBench_at_tag( BmBench* self, uint i, uint tagValue )
 {
     array_at_set( self->tags, self->start+i, tagValue );
