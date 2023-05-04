@@ -1,6 +1,6 @@
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *
- *   BbMm Model - A library in KISS philosophy for decision model under-uncertainty
+ *   BbMm Model - A library in KISS philosophy for *Bayesian-based Markov-models* creation and manipulation.
  *
  *   FEATURES:
  *       - BmDomain       : Definie e finit set of possible values (words, integer-interval, cluster-means, .... )

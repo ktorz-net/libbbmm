@@ -68,7 +68,7 @@ BmCondition* BmCondition_createBasic(BmCondition* self, uint outputSize, BmCode*
 
 BmCondition* BmCondition_createUndependant(BmCondition* self, uint outputSize)
 {
-    BmCode* parentRanges = newBmCode(1, 1);
+    BmCode* parentRanges = newBmCode_all(1, 1);
     BmCondition_createBasic( self, outputSize, parentRanges );
     deleteBmCode( parentRanges );
     return self;
@@ -123,7 +123,7 @@ void BmCondition_initialize(BmCondition* self, uint outputSize, BmCode* parentRa
 void BmCondition_initializeEquiprobable( BmCondition* self, uint outputSize, BmCode* parentRanges )
 {
     BmDistribution* distrib= newBmDistribution(1);
-    BmCode* code= newBmCode(1);
+    BmCode* code= newBmCode_all(1, 0);
     double proba= 1.0/outputSize;
     for( uint i = 1 ; i <= outputSize ; ++i  )
     {
@@ -201,7 +201,7 @@ BmDistribution* BmCondition_newDistributionByInfering(BmCondition* self, BmDistr
 {
     assert( BmCondition_dimention(self) == distribOverConfigurations->dimention );
     uint dim= distribOverConfigurations->dimention;
-    BmCode* mask= newBmCodeBasic( dim, 0 );
+    BmCode* mask= newBmCodeBasic( dim );
 
     for( uint i= 1 ; i <= dim ; ++i )
         BmCode_at_set( mask, i, i );
@@ -224,10 +224,10 @@ BmDistribution * BmCondition_newDistributionByInfering_mask(BmCondition* self, B
     // foreach configuration in the distribution:
     uint numberOfCondition= BmDistribution_size(longDistrib);
     uint dim= BmCondition_dimention(self);
-    BmCode* parentConf= newBmCodeBasic( dim, 0 );
+    BmCode* parentConf= newBmCodeBasic( dim );
     for( uint iCondition= 0 ; iCondition < numberOfCondition ; ++iCondition )
     {
-        BmCode* newConfig= newBmCodeBasic( BmCode_size(longDistrib->configurations[iCondition])+1, 0 );
+        BmCode* newConfig= newBmCode_all( BmCode_size(longDistrib->configurations[iCondition])+1, 0 );
         BmCode_copyNumbers( newConfig, longDistrib->configurations[iCondition] );
         double probability= longDistrib->probabilities[iCondition];
 
@@ -354,7 +354,8 @@ char* BmCondition_printSep(BmCondition* self, char* output, char* separator)
 
     if( BmBench_size(collec) == 0 )
     {
-        BmBench_attachTaggedItem(collec, newBmCodeBasic( BmCondition_dimention(self), 0), 1 );
+        uint iItem= BmBench_attachLast(collec, newBmCode_all( BmCondition_dimention(self), 0));
+        BmBench_at_tag(collec, iItem, 1 );
     }
 
     // First or unique one: 

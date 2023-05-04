@@ -11,7 +11,7 @@ START_TEST(test_BmDistribution_init)
     ck_assert_uint_eq( BmDistribution_dimention(distrib), 3 );
     ck_assert_uint_eq( BmDistribution_size(distrib), 0 );
 
-    BmCode * config= newBmCode(3,  1, 1, 4 );
+    BmCode * config= newBmCode_list(3, 1, 1, 4 );
 
     BmDistribution_addConfig( distrib, config, 0.4 );
     ck_assert_uint_eq( BmDistribution_size(distrib), 1 );
@@ -39,9 +39,9 @@ START_TEST(test_BmDistribution_manipulation)
     BmDistribution * instance= newBmDistribution(4);
     BmDistribution_resizeCapacity(instance, 8);
 
-    BmCode* state1= newBmCode(4, 1, 2, 1, 9);
-    BmCode* state2= newBmCode(4, 2, 1, 4, 4);
-    BmCode* state3= newBmCode(4, 2, 1, 4, 8);
+    BmCode* state1= newBmCode_list(4, 1, 2, 1, 9);
+    BmCode* state2= newBmCode_list(4, 2, 1, 4, 4);
+    BmCode* state3= newBmCode_list(4, 2, 1, 4, 8);
 
     BmDistribution_addConfig(instance, state1, 0.2);
     BmDistribution_addConfig(instance, state2, 0.7);
@@ -75,7 +75,7 @@ START_TEST(test_BmDistribution_copy)
     BmDistribution * model= newBmDistribution(4);
 
 
-    BmCode* state[3]= { newBmCode(4, 1, 2, 1, 9), newBmCode(4, 2, 1, 4, 4), newBmCode(4, 2, 1, 4, 8) };
+    BmCode* state[3]= { newBmCode_list(4, 1, 2, 1, 9), newBmCode_list(4, 2, 1, 4, 4), newBmCode_list(4, 2, 1, 4, 8) };
     double proba[3]= {0.2, 0.7, 0.1};
 
     BmDistribution_addConfig(model, state[0], proba[0]);
@@ -109,9 +109,9 @@ START_TEST(test_BmDistribution_print)
 {
     BmDistribution * instance= newBmDistribution(4);
 
-    BmCode* state1= newBmCode(4, 1, 2, 1, 9);
-    BmCode* state2= newBmCode(4, 2, 1, 4, 4);
-    BmCode* state3= newBmCode(4, 2, 1, 4, 8);
+    BmCode* state1= newBmCode_list(4, 1, 2, 1, 9);
+    BmCode* state2= newBmCode_list(4, 2, 1, 4, 4);
+    BmCode* state3= newBmCode_list(4, 2, 1, 4, 8);
 
     char buffer[256];
 
@@ -142,14 +142,14 @@ START_TEST(test_BmDistribution_process)
 
     BmCode* states[8]=
     {
-        newBmCode(4, 1, 2, 1, 3),
-        newBmCode(4, 2, 1, 4, 4),
-        newBmCode(4, 3, 1, 4, 2),
-        newBmCode(4, 2, 3, 4, 2),
-        newBmCode(4, 1, 2, 1, 3),
-        newBmCode(4, 4, 1, 4, 4),
-        newBmCode(4, 2, 1, 3, 2),
-        newBmCode(4, 2, 1, 4, 2),
+        newBmCode_list(4, 1, 2, 1, 3),
+        newBmCode_list(4, 2, 1, 4, 4),
+        newBmCode_list(4, 3, 1, 4, 2),
+        newBmCode_list(4, 2, 3, 4, 2),
+        newBmCode_list(4, 1, 2, 1, 3),
+        newBmCode_list(4, 4, 1, 4, 4),
+        newBmCode_list(4, 2, 1, 3, 2),
+        newBmCode_list(4, 2, 1, 4, 2),
     };
     double probas[8]= {0.2, 0.1, 0.05, 0.15, 0.3, 0.02, 0.05, 0.13};
 

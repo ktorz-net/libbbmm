@@ -30,7 +30,7 @@ START_TEST(test_BmCondition_init)
 
     BmCondition* instance2;
     {
-        BmCode* parentRanges = newBmCode(3, 4, 5, 6);
+        BmCode* parentRanges = newBmCode_list(3, 4, 5, 6);
         instance2= newBmConditionBasic( 2, parentRanges );
         deleteBmCode(parentRanges);
     }
@@ -55,7 +55,7 @@ END_TEST
 START_TEST(test_BmCondition_init2)
 {
     char buffer[1024];
-    BmCode* parents= newBmCode(2, 3, 5);
+    BmCode* parents= newBmCode_list(2, 3, 5);
     BmCondition* instance= newBmConditionBasic( 4, parents );
 
     ck_assert_uint_eq( instance->outputSize, 4 );
@@ -111,7 +111,7 @@ START_TEST(test_BmCondition_defaultDistrib)
     );
 
     // Initialize BmCondition
-    BmCode* parents= newBmCode(2, 6, 2);
+    BmCode* parents= newBmCode_list(2, 6, 2);
     BmCondition* cond= newBmCondition(6, parents, distrib);
     
     strcpy(buffer, "");
@@ -146,7 +146,7 @@ START_TEST(test_BmCondition_defaultDistrib)
 START_TEST(test_BmCondition_switch)
 {
     char buffer[1024];
-    BmCode* parents= newBmCode(2, 3, 5);
+    BmCode* parents= newBmCode_list(2, 3, 5);
     BmCondition* instance= newBmConditionBasic( 4, parents );
 
     ck_assert_uint_eq( instance->outputSize, 4 );
@@ -239,7 +239,7 @@ START_TEST(test_BmCondition_manipulate)
 
     BmCondition* instance;
     {
-        BmCode* parentRanges= newBmCode(3, 4, 5, 6);
+        BmCode* parentRanges= newBmCode_list(3, 4, 5, 6);
         instance= newBmConditionBasic( 2, parentRanges);
         deleteBmCode( parentRanges );
     }
@@ -250,7 +250,7 @@ START_TEST(test_BmCondition_manipulate)
     for( uint i= 1; i <= size ; ++i )
         ck_assert_str_eq( BmDistribution_wording( BmCondition_atKey(instance, i) ), "{[1]: 1.00}" );
 
-    BmCode* config= newBmCode(3, 1, 2, 2);
+    BmCode* config= newBmCode_list(3, 1, 2, 2);
 
     BmDistribution_addOutput( d, 2, 0.6 );
     BmDistribution_addOutput( d, 1, 0.4 );
@@ -306,12 +306,12 @@ END_TEST
 
 START_TEST(test_BmCondition_manipulate2)
 {
-    BmCode* config= newBmCode(2, 2, 5 );
+    BmCode* config= newBmCode_list(2, 2, 5 );
     BmCondition* instance;
     {
-        BmCode* parentRanges= newBmCode(2, 3, 5);
+        BmCode* parentRanges= newBmCode_list(2, 3, 5);
         BmDistribution* distrib= newBmDistribution(1);
-        BmCode* myStates[2] = { newBmCode(1, 1), newBmCode(1, 3) };
+        BmCode* myStates[2] = { newBmCode_list(1, 1), newBmCode_list(1, 3) };
         double probas[2]  = { 0.8, 0.2 };
         
         ck_assert(1);
@@ -395,7 +395,7 @@ START_TEST(test_BmCondition_print)
 {
     BmCondition* instance;
     {
-        BmCode* parentRanges= newBmCode(3, 4, 5, 6);
+        BmCode* parentRanges= newBmCode_list(3, 4, 5, 6);
         instance= newBmConditionBasic( 2, parentRanges );
         deleteBmCode(parentRanges);
     }

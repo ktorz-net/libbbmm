@@ -16,7 +16,7 @@
 /* Constructor Destructor */
 BmTransition* newBmTransition( BmCode* state, BmCode* action )
 {
-    BmCode* shift= newBmCodeBasic(0, 0);
+    BmCode* shift= newBmCodeBasic(0);
     BmTransition* trans= BmTransition_create( newEmpty(BmTransition), state, action, shift );
     deleteBmCode(shift);
     return trans;
@@ -155,10 +155,10 @@ BmTransition* BmTransition_node_initialize( BmTransition* self, uint index, uint
 
 BmTransition* BmTransition_node_dependArray( BmTransition* self, uint index, uint parentSize, uint* parents )
 {
-    BmCode* dependancy= newBmCodeArray(parentSize, parents);
+    BmCode* dependancy= newBmCode_numbers(parentSize, parents);
     BmNet_at_connect( self->network, index, dependancy );
 
-    BmCode* parentRanges= newBmCodeBasic( BmCode_size(dependancy), 0 );
+    BmCode* parentRanges= newBmCodeBasic( BmCode_size(dependancy) );
     for( uint i= 1 ; i <= BmCode_size(dependancy) ; ++i )
     {
         BmCondition* parentNode= array_on(self->nodes, BmCode_at(dependancy, i) );
@@ -225,7 +225,7 @@ BmDistribution* BmTransition_newDistributionByInfering( BmTransition * self, BmD
 BmDistribution* BmTransition_inferFromState_andAction( BmTransition * self, BmCode* state, BmCode* action )
 {
     // Set initial configuration :
-    BmCode* startConf= newBmCodeBasic( BmCode_size(state) +  BmCode_size(action), 0 );
+    BmCode* startConf= newBmCodeBasic( BmCode_size(state) +  BmCode_size(action) );
 
     for( uint i=1 ; i <= BmCode_size(state) ; ++i )
         BmCode_at_set( startConf, i, BmCode_at(state, i) );

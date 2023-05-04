@@ -1,8 +1,7 @@
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *
- *   WANDA Solver - A library in KISS philosophy of
- *                  the solver developped on top of WANDA models
+ *   BbMm Solver - A library in KISS philosophy for *Bayesian-based Markov-models* solvers.
  *
  *   FEATURES:
  *       - WdValueIteration or WdSolver     : ...

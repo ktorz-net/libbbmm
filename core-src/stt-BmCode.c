@@ -6,48 +6,44 @@
 #include <assert.h>
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B e M A g e   S T R U C T U R E :  C O D E                            *
+ *   B b M m   S T R U C T U R E :  C O D E                            *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 /* Constructor Destructor */
-//BmCode* newBasicBmCode()
-//{
-//    return newBmCode(1);
-//}
-//
-//BmCode* newBmCode(uint size)
-//{
-//    return BmCode_createBasic( newEmpty(BmCode), size, 0 );
-//}
-
-BmCode* newBmCodeBasic(uint size, uint defaultValue)
+BmCode* newBmCodeBasic(uint size)
 {
-    return BmCode_createBasic( newEmpty(BmCode), size, defaultValue );
+    return BmCode_createBasic( newEmpty(BmCode), size );
 }
 
-BmCode* newBmCodeArray(uint size, uint* numbers)
+BmCode* newBmCode_numbers( uint size, uint* numbers )
 {
-    return BmCode_createArray( newEmpty(BmCode), size, numbers );
+    return BmCode_create_numbers( newEmpty(BmCode), size, numbers );
 }
 
-BmCode* newBmCodeAs(BmCode* model)
+BmCode* newBmCode_all(uint size, uint defaultValue)
+{
+    return BmCode_create_all( newEmpty(BmCode), size, defaultValue );
+}
+
+BmCode* newBmCodeAs( BmCode* model )
 {
     return BmCode_createAs( newEmpty(BmCode), model );
 }
 
-BmCode* newBmCode(uint size, ...)
+BmCode* newBmCode_list(uint size, uint number1, ... )
 {
     uint numbers[size];
     // Build words array from args
     va_list ap;
-    va_start(ap, size); 
-    for ( uint i = 0 ; i < size ; ++i )
+    numbers[0]= number1;
+    va_start(ap, number1); 
+    for ( uint i = 1 ; i < size ; ++i )
     {
         numbers[i]= va_arg(ap, uint);
     }
     va_end(ap);
     // Create the instance
-    return BmCode_createArray( newEmpty(BmCode), size, numbers );
+    return BmCode_create_numbers( newEmpty(BmCode), size, numbers );
 }
 
 void deleteBmCode(BmCode* instance)
@@ -56,38 +52,26 @@ void deleteBmCode(BmCode* instance)
     delEmpty(instance);
 }
 
-/* Arrayed */
-BmCode* newArrayOfBmCode(uint arraySize, uint codeSize)
-{
-    BmCode* array= newEmptyArray(BmCode, arraySize);
-    for( uint i= 0 ; i < arraySize ; ++i )
-        BmCode_createBasic( array+i, codeSize, 0 );
-    return array;
-};
-
-void deleteArrayOfBmCode(BmCode* array, uint arraySize)
-{
-    for( uint i= 0 ; i < arraySize ; ++i )
-        BmCode_distroy( array+i );
-    delEmptyArray(array);
-}
-
 /* Protected - to use with precaution */
-BmCode* BmCode_createBasic(BmCode* self, uint size, uint defaultValue)
+BmCode* BmCode_createBasic( BmCode* self, uint size )
 {
     self->dsc = malloc( sizeof(uint)*(size+1) );
     self->dsc[0]= size;
-    for( uint i= 1 ; i <= size ; ++i )
-        BmCode_at_set(self, i, defaultValue);
     return self;
 }
 
-BmCode* BmCode_createArray(BmCode* self, uint size, uint* numbers)
+BmCode* BmCode_create_numbers( BmCode* self, uint size, uint* numbers )
 {
-    self->dsc = malloc( sizeof(uint)*(size+1) );
-    self->dsc[0]= size;
+    BmCode_createBasic(self, size);
     for( uint i= 1 ; i <= size ; ++i )
-        BmCode_at_set(self, i, numbers[i-1]);
+        BmCode_at_set( self, i, numbers[i-1] );
+    return self;
+}
+
+BmCode* BmCode_create_all( BmCode* self, uint size, uint defaultValue )
+{
+    BmCode_createBasic(self, size);
+    BmCode_setAll(self, defaultValue);
     return self;
 }
 
@@ -108,67 +92,28 @@ BmCode* BmCode_distroy(BmCode* self)
 }
 
 /* Initializer */
-BmCode* WdCore_initializeBasic(BmCode* self, uint newSize)
+BmCode* BmCode_initializeBasic( BmCode* self, uint newSize )
 {
     BmCode_distroy(self);
-    return BmCode_createBasic( self, newSize, 0 );
+    return BmCode_createBasic( self, newSize );
 }
 
-BmCode* WdCore_initializeHomogene(BmCode* self, uint newSize, uint defaultRange)
-{
-    BmCode_distroy(self);
-    return BmCode_createBasic( self, newSize, defaultRange );
-}
-
-BmCode* BmCode_initializeArray(BmCode* self, uint newSize, uint* numbers )
-{
-    BmCode_distroy(self);
-    return BmCode_createArray( self, newSize, numbers );
-    return self;
-}
-
-BmCode* BmCode_initialize(BmCode* self, uint newSize, ...)
+BmCode* BmCode_initialize_list( BmCode* self, uint newSize, uint number1, ... )
 {
     uint numbers[newSize];
     // Build words array from args
+    // Build words array from args
     va_list ap;
-    va_start(ap, newSize); 
-    for ( uint i = 0 ; i < newSize ; ++i )
+    numbers[0]= number1;
+    va_start(ap, number1); 
+    for ( uint i = 1 ; i < newSize ; ++i )
     {
         numbers[i]= va_arg(ap, uint);
     }
     va_end(ap);
     // initialize the instance
-    return BmCode_initializeArray(self, newSize, numbers);
-}
-
-BmCode* BmCode_initialize1(BmCode* self, uint v1)
-{
-    uint numbers[1]= {v1};
-    BmCode_initializeArray(self, 1, numbers);
-    return self;
-}
-
-BmCode* BmCode_initialize2(BmCode* self, uint v1, uint v2)
-{
-    uint numbers[2]= {v1, v2};
-    BmCode_initializeArray(self, 2, numbers);
-    return self;
-}
-
-
-BmCode* BmCode_initialize3(BmCode* self, uint v1, uint v2, uint v3)
-{
-    uint numbers[3]= {v1, v2, v3};
-    BmCode_initializeArray(self, 3, numbers);
-    return self;
-}
-
-BmCode* BmCode_initialize4(BmCode* self, uint v1, uint v2, uint v3, uint v4)
-{
-    uint numbers[4]= {v1, v2, v3, v4};
-    BmCode_initializeArray(self, 4, numbers);
-    return self;
+    BmCode_initializeBasic(self, newSize );
+    return BmCode_create_numbers(self, newSize, numbers);
 }
 
 BmCode* BmCode_copy(BmCode* self, BmCode* model)
@@ -421,14 +366,14 @@ BmCode* BmCode_setCodeLast(BmCode* ranges, BmCode* code)
 
 BmCode* BmCode_newBmCodeOnKey(BmCode* ranges, ulong key)
 {
-    BmCode * code= newBmCodeBasic( BmCode_size(ranges), 0 );
+    BmCode * code= newBmCodeBasic( BmCode_size(ranges) );
     BmCode_setCode_onKey( ranges, code, key );
     return code;
 }
 
 BmCode* BmCode_newBmCodeFirst(BmCode* ranges)
 {
-    return newBmCodeBasic( BmCode_size(ranges), 1 );
+    return newBmCode_all( BmCode_size(ranges), 1 );
 }
 
 BmCode* BmCode_newBmCodeLast(BmCode* ranges)

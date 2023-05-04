@@ -202,7 +202,7 @@ void BmDistribution_setConfigs(BmDistribution *self, uint size, BmCode** configu
 
 uint BmDistribution_addOutput(BmDistribution *self, uint output, double probability)
 {
-    BmCode* config= newBmCode(1, output );
+    BmCode* config= newBmCode_all( 1, output );
     uint r= BmDistribution_addConfig(self, config, probability);
     deleteBmCode( config );
     return r;
@@ -210,7 +210,7 @@ uint BmDistribution_addOutput(BmDistribution *self, uint output, double probabil
 
 uint BmDistribution_setOnOutput(BmDistribution *self, uint output)
 {
-    BmCode* config= newBmCode(1, output );
+    BmCode* config= newBmCode_all(1, output );
     uint r= BmDistribution_setOnConfig(self, config);
     deleteBmCode( config );
     return r;
@@ -289,7 +289,7 @@ void BmDistribution_reduceDimentionTo(BmDistribution *self, uint newDimention, u
 /* Morphing */
 void BmDistribution_asReductionOf( BmDistribution *self, BmDistribution *model, uint * mask )
 {
-    BmCode* state= newBmCodeBasic( self->dimention, 0 );
+    BmCode* state= newBmCode_all( self->dimention, 0 );
     for( uint iPosibility = 0; iPosibility < model->size ; ++iPosibility  )
     {
         for( uint i= 0 ; i < self->dimention ; ++i )

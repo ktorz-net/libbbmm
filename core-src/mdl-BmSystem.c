@@ -46,9 +46,9 @@ BmSystem* BmSystem_createEmpty( BmSystem* self, uint dimState, uint dimAction, u
     self->action= newBmSpaceEmpty( dimAction );
     self->shift= newBmSpaceEmpty( dimShift );
 
-    BmCode* stateCode= newBmCodeBasic(dimState, 1);
-    BmCode* actionCode= newBmCodeBasic(dimAction, 1);
-    BmCode* shiftCode= newBmCodeBasic(dimShift, 1);
+    BmCode* stateCode= newBmCode_all(dimState, 1);
+    BmCode* actionCode= newBmCode_all(dimAction, 1);
+    BmCode* shiftCode= newBmCode_all(dimShift, 1);
 
     self->transition= newBmTransitionWithShift( stateCode, actionCode, shiftCode );
     //WdValueFct *reward;
@@ -296,7 +296,7 @@ BmSystem* BmSystem_variable_addProbabilities( BmSystem* self, char * varName, ui
 
     // Generate parent state:
     BmCondition* condition= BmTransition_nodeAt( self->transition, id );
-    BmCode* config= newBmCodeBasic( BmCondition_dimention(condition), 0);
+    BmCode* config= newBmCode_all( BmCondition_dimention(condition), 0);
 
     // Read the list of parents and associate state
     va_list ap;
@@ -580,7 +580,8 @@ char* BmSystem_printVariable( BmSystem* self, char* varName, char* output )
 
     if( BmBench_size(collec) == 0 )
     {
-        BmBench_attachTaggedItem(collec, newBmCodeBasic( BmCondition_dimention(cdt), 0), 1 );
+        uint iItem= BmBench_attachLast(collec, newBmCode_all( BmCondition_dimention(cdt), 0));
+        BmBench_at_tag( collec, iItem, 1 );
     }
     
     _BmCondition_printCode_inDomain(cdt, BmBench_at( collec, 1 ), pDom, output );

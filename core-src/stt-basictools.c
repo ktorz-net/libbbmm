@@ -1,7 +1,7 @@
 #include "bbmm-stt.h"
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B e M A g e   S T R U C T U R E :  B A S I C   T O O L S              *
+ *   B b M m   S T R U C T U R E :  B A S I C   T O O L S              *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 #include <stdlib.h>

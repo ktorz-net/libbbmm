@@ -70,13 +70,13 @@ BmSpace* BmSpace_createEmpty( BmSpace* self, uint dim )
 
 BmSpace* BmSpace_distroy( BmSpace* self )
 {
-    delEmptyArray( self->varDomains );
+    deleteEmptyArray( self->varDomains );
     for( uint i = 0; i < self->dimention ; ++i )
     {
         if(  self->varNames[i] != NULL )
             free( self->varNames[i] );
     }
-    delEmptyArray( self->varNames );
+    deleteEmptyArray( self->varNames );
     return self;
 }
 
@@ -190,7 +190,7 @@ uint BmSpace_feedWithDomains( BmSpace* self, BmDomain** domainsBuffer, uint nboD
 BmCode* BmSpace_asNewBmCode( BmSpace* self )
 {
     uint dim= BmSpace_dimention(self);
-    BmCode* code= newBmCodeBasic( dim, 0 );
+    BmCode* code= newBmCodeBasic( dim );
     for( uint i= 1 ; i <= dim ; ++i )
     {
         BmCode_at_set( code, i, BmSpace_variable_domainSize(self, i) );

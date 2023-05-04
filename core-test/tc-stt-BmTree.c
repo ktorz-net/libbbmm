@@ -7,7 +7,7 @@
 
 START_TEST(test_BmTree_init)
 {
-    BmCode* domains= newBmCode(3, 2, 3, 2);
+    BmCode* domains= newBmCode_list(3, 2, 3, 2);
     BmTree* tree= newBmTree( domains, 4);
     deleteBmCode( domains );
 
@@ -17,12 +17,12 @@ START_TEST(test_BmTree_init)
     ck_assert_uint_eq( tree->optionBound, (uint)5 );
     
     {
-        BmCode* config= newBmCode(3, 1, 1, 1);
+        BmCode* config= newBmCode_list(3, 1, 1, 1);
         ck_assert_uint_eq( BmTree_at( tree, config), (uint)1 );
 
-        BmCode_initialize( config, 3, 2, 3, 2);
+        BmCode_initialize_list( config, 3, 2, 3, 2);
         ck_assert_uint_eq( BmTree_at( tree, config), (uint)1 );
-        BmCode_initialize( config, 3, 1, 2, 2);
+        BmCode_initialize_list( config, 3, 1, 2, 2);
         ck_assert_uint_eq( BmTree_at( tree, config), (uint)1 );
 
         deleteBmCode(config);
@@ -31,7 +31,7 @@ START_TEST(test_BmTree_init)
     //for( uint i = 1 ; i <= 2 ; ++i )
     //    ck_assert_uint_eq( tree->branches[0][i], (uint)0 );
 
-    BmCode* st= newBmCodeBasic(3, 0);
+    BmCode* st= newBmCodeBasic(3);
     BmCode_setCodeFirst(tree->input, st);
     while( BmCode_isIncluding(tree->input, st) )
     {
@@ -47,7 +47,7 @@ END_TEST
 
 START_TEST(test_BmTree_treeConstruction)
 {
-    BmCode* domains= BmCode_initialize( newBmCodeBasic(3, 0), 3, 2, 3, 2);
+    BmCode* domains= BmCode_initialize_list( newBmCodeBasic(3), 3, 2, 3, 2);
     BmTree* tree= newBmTree( domains, 4);
     deleteBmCode( domains );
     
@@ -105,7 +105,7 @@ END_TEST
 
 START_TEST(test_BmTree_optionSelection)
 {
-    BmCode* domains= BmCode_initialize( newBmCodeBasic(3, 0), 3, 2, 3, 2);
+    BmCode* domains= BmCode_initialize_list( newBmCodeBasic(3), 3, 2, 3, 2);
     BmTree* tree= newBmTree( domains, 4);
     deleteBmCode( domains );
 
@@ -144,16 +144,16 @@ START_TEST(test_BmTree_optionSelection)
 2. input(3): [leaf(2), leaf(4)]\n\
 3. input(3): [leaf(1), leaf(3)]" );
 
-    BmCode* st= newBmCode(3, 2, 1, 1);
+    BmCode* st= newBmCode_list(3, 2, 1, 1);
     ck_assert_uint_eq( BmTree_at(tree, st), (uint)1 );
     
-    BmCode_initialize(st, 3, 1, 1, 1);
+    BmCode_initialize_list(st, 3, 1, 1, 1);
     ck_assert_uint_eq( BmTree_at(tree, st), (uint)3 );
     
-    BmCode_initialize(st, 3, 1, 2, 2);
+    BmCode_initialize_list(st, 3, 1, 2, 2);
     ck_assert_uint_eq( BmTree_at(tree, st), (uint)1 );
     
-    BmCode_initialize(st, 3, 1, 3, 2);
+    BmCode_initialize_list(st, 3, 1, 3, 2);
     ck_assert_uint_eq( BmTree_at(tree, st), (uint)4 );
 
     deleteBmCode( st );
@@ -163,7 +163,7 @@ END_TEST
 
 START_TEST(test_BmTree_constructionFromExemple)
 {
-    BmCode* domains= BmCode_initialize( newBmCodeBasic(3, 0), 3, 2, 3, 2);
+    BmCode* domains= BmCode_initialize_list( newBmCodeBasic(3), 3, 2, 3, 2);
     BmTree* tree= newBmTree( domains, 4);
     deleteBmCode( domains );
 
@@ -203,7 +203,7 @@ START_TEST(test_BmTree_constructionFromExemple)
      *     -3-  -1-        
      */
 
-    BmCode *code= newBmCode(3,  0, 1, 1 );
+    BmCode *code= newBmCode_list(3,  0, 1, 1 );
     BmTree_at_set( tree, code, 3 );
 
     strcpy(buffer, "");
@@ -230,7 +230,7 @@ START_TEST(test_BmTree_constructionFromExemple)
      * 
      */
 
-    BmCode_initialize( code, 3, 2, 0, 2 );
+    BmCode_initialize_list( code, 3, 2, 0, 2 );
     uint deadBranches= BmTree_at_set( tree, code, 4 );
 
     ck_assert_uint_eq( deadBranches, 0 );
@@ -254,7 +254,7 @@ END_TEST
 
 START_TEST(test_BmTree_fromExempleFromScratch)
 {
-    BmCode* domains= BmCode_initialize( newBmCodeBasic(3, 0), 3, 2, 3, 2);
+    BmCode* domains= BmCode_initialize_list( newBmCodeBasic(3), 3, 2, 3, 2);
     BmTree* tree= newBmTree( domains, 4);
     deleteBmCode( domains );
 
@@ -265,7 +265,7 @@ START_TEST(test_BmTree_fromExempleFromScratch)
         BmTree_printInside(tree, buffer),
         "input: [2, 3, 2], size: 0" );
     
-    BmCode *code= newBmCode(3,  0, 1, 1 );
+    BmCode *code= newBmCode_list(3,  0, 1, 1 );
     BmTree_at_set( tree, code, 3 );
 
     strcpy(buffer, "");
@@ -283,7 +283,7 @@ END_TEST
 
 START_TEST(test_BmTree_print)
 {
-    BmCode* domains= BmCode_initialize( newBmCodeBasic(3, 0), 3, 2, 3, 2);
+    BmCode* domains= BmCode_initialize_list( newBmCodeBasic(3), 3, 2, 3, 2);
     BmTree* tree= newBmTree( domains, 4);
     deleteBmCode( domains );
     
@@ -349,7 +349,7 @@ START_TEST(test_BmTree_print)
     );
 
     strcpy(buffer, "");
-    BmCode* code= newBmCode(3, 0, 3, 1);
+    BmCode* code= newBmCode_list(3, 0, 3, 1);
     ck_assert_uint_eq( BmTree_at( tree, code ), 2 ); 
 
     deleteBmTree( tree );

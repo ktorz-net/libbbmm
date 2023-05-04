@@ -6,7 +6,7 @@
 
 START_TEST(test_BmCode_init)
 {
-    BmCode* code= newBmCodeBasic(3, 0);
+    BmCode* code= newBmCode_all(3, 0);
     
     ck_assert_uint_eq( BmCode_size(code), 3);
     ck_assert_uint_eq( BmCode_at(code, 1), 0 );
@@ -19,9 +19,8 @@ END_TEST
 
 START_TEST(test_BmCode_init2)
 {
-    BmCode* code= newBmCodeBasic(0, 0);
     uint numbers[11]= {2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2};
-    BmCode_initializeArray(code, 11, numbers);
+    BmCode* code= newBmCode_numbers(11, numbers);
 
     ck_assert_uint_eq( BmCode_size(code), 11);
     ck_assert_uint_eq( BmCode_at(code, 1),  2 );
@@ -41,23 +40,19 @@ START_TEST(test_BmCode_init2)
         "[2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2]"
     );
     
-    BmCode* codeYes= newBmCodeBasic(0, 0);
-    uint numbers1[11]= {2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2};
-    BmCode_initializeArray(codeYes, 11, numbers1);
+    uint numbersYes[11]= {2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2};
+    BmCode* codeYes= newBmCode_numbers(11, numbersYes);
 
     ck_assert( BmCode_size(code) == BmCode_size(codeYes) );
     ck_assert( BmCode_isEqualTo(code, codeYes) );
 
-    BmCode* codeNo1= newBmCodeBasic(0, 0);
-    uint numbers2[11]= {2, 3, 4, 5, 3, 7, 8, 9, 0, 1, 2};
-    BmCode_initializeArray(codeNo1, 11, numbers2);
+    uint numbers1[11]= {2, 3, 4, 5, 3, 7, 8, 9, 0, 1, 2};
+    BmCode* codeNo1= newBmCode_numbers(11, numbers1);;
     ck_assert( !BmCode_isEqualTo(code, codeNo1) );
 
-    BmCode* codeNo2= newBmCodeBasic(0, 0);
-    uint numbers3[10]= {2, 3, 4, 5, 6, 7, 8, 9, 0, 1};
-    BmCode_initializeArray(codeNo2, 11, numbers3);
+    uint numbers2[10]= {2, 3, 4, 5, 6, 7, 8, 9, 0, 1};
+    BmCode* codeNo2= newBmCode_numbers(10, numbers2);
     ck_assert( !BmCode_isEqualTo(code, codeNo2) );
-
 
     deleteBmCode(code);
 }
@@ -66,8 +61,8 @@ END_TEST
 START_TEST(test_BmCode_keys)
 {
     uint numbers[8]= {4, 4, 4, 4, 6, 6, 6, 6};
-    BmCode* domain= newBmCodeArray(8, numbers);
-    BmCode* code= newBmCodeBasic(8, 0);
+    BmCode* domain= newBmCode_numbers(8, numbers);
+    BmCode* code= newBmCode_all(8, 0);
     
     ck_assert_str_eq(
         BmCode_wording(code),
@@ -77,7 +72,7 @@ START_TEST(test_BmCode_keys)
     ck_assert_uint_eq( (uint)BmCode_product(domain), 4*4*4*4*6*6*6*6 );
     ck_assert_uint_eq( (uint)BmCode_keyOf(domain, code), 0 );
 
-    BmCode_initializeArray( code, BmCode_size(domain), BmCode_numbers(domain) );
+    BmCode_copy( code, domain );
     ck_assert_uint_eq( (uint)BmCode_keyOf(domain, code), (4*4*4*4*6*6*6*6) );
 
     // neutral code
@@ -101,11 +96,11 @@ START_TEST(test_BmCode_keys)
     );
     
     uint numbers1[8]= {2, 4, 2, 3, 3, 6, 1, 3};
-    BmCode_initializeArray(code, 8, numbers1);
+    BmCode_initializeBasic(code, 8);
+    BmCode_setNumbers(code, numbers1);
     ck_assert_uint_eq( (uint)BmCode_keyOf(domain, code), 118942 );
     
-    uint numbers2[8]= {3, 4, 4, 1, 2, 5, 6, 4};
-    BmCode_initializeArray(code, 8, numbers2);
+    BmCode_initialize_list(code, 8, 3, 4, 4, 1, 2, 5, 6, 4);
     ck_assert_uint_eq( (uint)BmCode_keyOf(domain, code), 218431 );
 
     deleteBmCode(code);
@@ -116,8 +111,8 @@ END_TEST
 
 START_TEST(test_BmCode_iterate)
 {
-    BmCode* domain= BmCode_initialize( newBmCodeBasic(0, 0), 3, 2, 4, 3 );
-    BmCode* code= newBmCodeBasic(3, 0);
+    BmCode* domain= BmCode_initialize_list( newBmCodeBasic(0), 3, 2, 4, 3 );
+    BmCode* code= newBmCode_all(3, 0);
     
     ck_assert_str_eq(
         BmCode_wording(code),
@@ -145,7 +140,7 @@ START_TEST(test_BmCode_iterate)
     BmCode_nextCode(domain, code);
     ck_assert( !BmCode_isIncluding(domain, code) );
     
-    BmCode_initialize(code, 3, 1, 2, 3);
+    BmCode_initialize_list(code, 3, 1, 2, 3);
     ck_assert_str_eq(
         BmCode_wording(code),
         "[1, 2, 3]"
@@ -185,9 +180,9 @@ END_TEST
 
 START_TEST(test_BmCode_test)
 {
-    BmCode* c1= newBmCode(3, 2, 2 ,3);
-    BmCode* c1Bis= newBmCode(3, 2, 2 ,3);
-    BmCode* c2= newBmCode(3, 1, 2 ,4);
+    BmCode* c1= newBmCode_list(3, 2, 2 ,3);
+    BmCode* c1Bis= newBmCode_list(3, 2, 2 ,3);
+    BmCode* c2= newBmCode_list(3, 1, 2 ,4);
 
     ck_assert( BmCode_isEqualTo( c1, c1Bis ) );
     ck_assert( !BmCode_isEqualTo( c1, c2 ) );

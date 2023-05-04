@@ -27,14 +27,22 @@ void deleteBmNet(BmNet * self)
 /* Protected - to use with precaution */
 BmNet* BmNet_create(BmNet* self, uint size)
 {
-    self->edges= newArrayOfBmCode(size, 0);
+    self->edges= newEmptyArray( BmCode, size );
+    for( uint i = 1 ; i <= size ; ++i )
+    {
+        BmCode_createBasic( array_on( self->edges, i ), 0 );
+    }
     self->size= size;
     return self;
 }
 
 BmNet* BmNet_distroy(BmNet* self)
 {
-    deleteArrayOfBmCode( self->edges, self->size );
+    for( uint i = 1 ; i <= self->size; ++i )
+    {
+        BmCode_distroy( array_on( self->edges, i ) );
+    }
+    deleteEmptyArray(self->edges);
     return self;
 }
 
@@ -49,7 +57,8 @@ BmCode* BmNet_at(BmNet* self, uint i)
 /* Modification */
 void BmNet_clearAt(BmNet* self, uint iNode)
 {
-    BmCode_initializeArray( array_on(self->edges, iNode), 0, NULL);
+    BmCode* c= array_on(self->edges, iNode);
+    BmCode_initializeBasic( c, 0 );
 }
 
 void BmNet_at_connect(BmNet* self, uint from, BmCode* targets)

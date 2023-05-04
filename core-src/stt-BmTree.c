@@ -45,8 +45,7 @@ void BmTree_delete(BmTree* self)
 /* Protected - to use with precaution */
 BmTree* BmTree_create( BmTree* self, uint inputSize, uint* inputBounds, uint optionSize )
 {
-    self->input= newBmCodeBasic( inputSize, 0 );
-    BmCode_setNumbers(self->input, inputBounds);
+    self->input= newBmCode_numbers( inputSize, inputBounds );
     self->optionBound= optionSize+1;
     self->capacity= 1;
     self->branches= malloc( sizeof(int*) * self->capacity );
@@ -317,7 +316,7 @@ BmBench* BmTree_asNewBench( BmTree* self )
     uint codeSize= BmCode_size(self->input);
     for( uint iBranch= 0; iBranch < self->size; ++iBranch )
     {
-        conditions[iBranch]= newBmCodeBasic( codeSize, 0);
+        conditions[iBranch]= newBmCode_all( codeSize, 0);
     }
 
     for( uint iBranch= 0 ; iBranch < self->size ; ++iBranch )
@@ -329,7 +328,8 @@ BmBench* BmTree_asNewBench( BmTree* self )
             if( self->branches[iBranch][i] < self->optionBound )
             {
                 BmCode_at_set( conditions[iBranch], branVar, i );
-                BmBench_attachTaggedItem( bench, newBmCodeAs( conditions[iBranch] ), self->branches[iBranch][i] );
+                uint iItem= BmBench_attachLast( bench, newBmCodeAs( conditions[iBranch] ) );
+                BmBench_at_tag( bench, iItem, self->branches[iBranch][i] );
             }
             else
             {
@@ -382,7 +382,7 @@ char* BmTree_print(BmTree* self, char* output)
     BmCode *conditions[self->size];
     for( uint iBranch= 0; iBranch < self->size; ++iBranch )
     {
-        conditions[iBranch]= newBmCodeBasic( BmCode_size(self->input), 0);
+        conditions[iBranch]= newBmCode_all( BmCode_size(self->input), 0 );
     }
 
     strcat(output, "{");

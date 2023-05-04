@@ -8,8 +8,8 @@ START_TEST(test_BmTransition_init)
 {
     BmTransition* trans;
     {
-        BmCode* state= newBmCode(2,  2, 4 );
-        BmCode* action= newBmCode(1,  8 );
+        BmCode* state= newBmCode_list(2,  2, 4 );
+        BmCode* action= newBmCode_list(1,  8 );
 
         trans= newBmTransition( state, action );
 
@@ -50,9 +50,9 @@ BmTransition* test_newBmTransitionExemple()
      * 
      */
     
-    BmCode* state= newBmCodeBasic( 2, 2 );
-    BmCode* action= newBmCode(3, 2, 4, 2 );
-    BmCode* shift= newBmCodeBasic( 1, 2 );
+    BmCode* state= newBmCode_all( 2, 2 );
+    BmCode* action= newBmCode_list(3, 2, 4, 2 );
+    BmCode* shift= newBmCode_all( 1, 2 );
 
     BmTransition*  trans= newBmTransitionWithShift( state, action, shift );
 
@@ -110,7 +110,7 @@ void test_initializeNode6(BmTransition * trans)
     BmDistribution_addOutput( distrib, 1, 0.9 );
     BmDistribution_addOutput( distrib, 2, 0.1 );
 
-    BmCode* inputCondition= newBmCode(2, 1, 1);
+    BmCode* inputCondition= newBmCode_list(2, 1, 1);
     BmCondition_at_set(dep, inputCondition, distrib);
     
     deleteBmCode(inputCondition);
@@ -132,7 +132,7 @@ void test_initializeNode7(BmTransition * trans)
     BmDistribution_addOutput( distrib, 1, 0.8 );
     BmDistribution_addOutput( distrib, 2, 0.2 );
 
-    BmCode* inputCondition= newBmCode(3, 1, 2, 2);
+    BmCode* inputCondition= newBmCode_list(3, 1, 2, 2);
     BmCondition_at_set(dep, inputCondition, distrib);
     
     deleteBmCode(inputCondition);
@@ -162,12 +162,12 @@ START_TEST(test_BmTransition_infering)
 
     ck_assert_str_eq( BmNet_wording( trans->network ), "1[], 2[], 3[], 4[], 5[], 6[1, 3], 7[1, 4, 5], 8[2, 6]" );
 
-    BmCode* state= newBmCode(2, 1, 2);
-    BmCode* action= newBmCode(3, 2, 1, 2);
+    BmCode* state= newBmCode_list(2, 1, 2);
+    BmCode* action= newBmCode_list(3, 2, 1, 2);
     BmDistribution* overallDistrib;
     {
         // Set initial configuration :
-        BmCode* startConf= newBmCodeBasic( BmCode_size(state) +  BmCode_size(action), 0 );
+        BmCode* startConf= newBmCodeBasic( BmCode_size(state) +  BmCode_size(action) );
 
         for( uint i=1 ; i <= BmCode_size(state) ; ++i )
             BmCode_at_set( startConf, i, BmCode_at(state, i) );

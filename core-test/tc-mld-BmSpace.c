@@ -12,21 +12,6 @@ START_TEST(test_BmSpace_initEmpty)
     ck_assert_uint_eq( BmSpace_dimention(space), 0);
     ck_assert_uint_eq( (uint)(BmSpace_size(space)), 1 );
 
-    /*
-    uint iVar= BmSpace_attachVariable(space, "X", newBmDomainWords("Bool", 2, "True", "False") );
-    uint iVar= BmSpace_attachVariable(space, "X", newBmDomainWords("Bool", 2, "True", "False") );
-    ck_assert_uint_eq( iVar, 1 );
-    ck_assert_uint_eq( BmSpace_dimention(space), 1 );
-    ck_assert_uint_eq( (uint)(BmSpace_size(space)), 2 );
-    */
-    /*
-    ck_assert_uint_eq( BmSpace_domain_size( space, 1 ), 1 );
-    ck_assert_uint_eq( BmSpace_domain_size( space, 2 ), 1 );
-    ck_assert_uint_eq( BmSpace_domain_size( space, 3 ), 1 );
-    ck_assert_uint_eq( BmSpace_domain_size( space, 4 ), 1 );
-    ck_assert_uint_eq( BmSpace_size(space), 1);
-    */
-
     deleteBmSpace(space);
 }
 END_TEST
@@ -166,9 +151,6 @@ START_TEST(test_BmSpace_code)
 }
 END_TEST
 
-
-
-
 START_TEST(test_BmSpace_state)
 {
     BmDomain* dom1= newBmDomainRange( "Range", 3, 9, 3);
@@ -182,7 +164,7 @@ START_TEST(test_BmSpace_state)
     BmSpace* space= newBmSpace( 5, varNames, spaceDom );
 
     uint numbers[5]= {1, 1, 4, 5, 2};
-    BmCode* code= newBmCodeArray(5, numbers);
+    BmCode* code= newBmCode_numbers(5, numbers);
 
     ck_assert_str_eq( BmDomain_strAt( BmSpace_variable_domain( space, 1), BmCode_at(code, 1) ), "3" );
     ck_assert_str_eq( BmDomain_strAt( BmSpace_variable_domain( space, 2), BmCode_at(code, 2) ), "True" );

@@ -2,11 +2,13 @@
 
 ## On the fire:
 
+- BmBench handdle AttachFirst and AttachLast (detachFirst / detachLast).
+- Clean function names. `attach`/`detach` everywhere/ `switch` everythings
 - Create `newDistritutionEquiprobable`, test it and add it in `BmCondition_initializeEquiprobable`
 - Reactivate bbmm-models
 	* Reward: `BmFunction` -> BmTree selector and values[] (opt) (Reward)
 	* `BmSystem_variable_initializeProbabilities` and `BmSystem_variable_addProbabilities` based on attached prebuilt-distribution. become... `BmSystem_variable_attachDistribution_if` based on `BmSystem_variable_neBmistribution`.
-- Clean function names. 
+
 - Réactivate cofeeRobot exemple
 - Réactivate Python Wrap (pyBbMm) with cofeeRobot
 - Respect the BmSystem_variable_addProbabilities order, (and adapt BmTree accordingly) (cf. _ToDo:_ tag in `tc-mld-BmSystem.c`)
@@ -20,8 +22,8 @@
 - Add tests intenssivelly (BmDistribution,....).
 - Add testing functions (isValid....).
 - BmTree easely resizable (bench128).
-- In code documentation (doc + webbook)
-- `attach` and `deepDistroy` everywhere/ `switch` everythings - (Edit a Dev. Phylosophie)
+- In code documentation (code to markdon documentation) + Dev. Phylosophie
+
 
 ## What about ?
 
