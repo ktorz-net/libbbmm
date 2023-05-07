@@ -40,6 +40,7 @@ set(SRC_FILES
     core-src/pbb-BmDistribution.c
     core-src/pbb-BmCondition.c
     core-src/pbb-BmTransition.c
+    core-src/pbb-BmValue.c
     core-src/mdl-BmDomain.c
     core-src/mdl-BmSpace.c
     core-src/mdl-BmSystem.c
@@ -70,6 +71,7 @@ set(TEST_SRC_FILES
     core-test/tc-pbb-BmDistribution.c
     core-test/tc-pbb-BmCondition.c
     core-test/tc-pbb-BmTransition.c
+    core-test/tc-pbb-BmValue.c
     core-test/tc-mld-BmDomain.c
     core-test/tc-mld-BmSpace.c
     core-test/tc-mld-BmSystem.c

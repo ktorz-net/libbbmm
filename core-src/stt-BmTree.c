@@ -18,7 +18,7 @@
 
 /* Private Methods */
 
-uint _BmTree_code_readOrder_set_fromBranch( BmTree* self, BmCode* code, BmCode* codeOrder, uint output, uint iBranch ); // cf. BmTree_code_set, but starting from a given branch.
+uint _BmTree_at_readOrder_set_fromBranch( BmTree* self, BmCode* code, BmCode* codeOrder, uint output, uint iBranch ); // cf. BmTree_at_set, but starting from a given branch.
 
 
 /* Constructor Destructor */
@@ -142,7 +142,7 @@ void BmTree_branch_option_output( BmTree* self, uint iBranch, uint i, uint outpu
     self->branches[iBranch][i]= output;
 }
 
-uint _BmTree_code_readOrder_set_fromBranch( BmTree* self, BmCode* code, BmCode* codeOrder, uint output, uint iBranch )
+uint _BmTree_at_readOrder_set_fromBranch( BmTree* self, BmCode* code, BmCode* codeOrder, uint output, uint iBranch )
 {
     assert( BmCode_size(code) == BmCode_size(self->input) );
     assert( iBranch < self->size );
@@ -167,7 +167,7 @@ uint _BmTree_code_readOrder_set_fromBranch( BmTree* self, BmCode* code, BmCode* 
         {
             BmCode * codeBis= newBmCodeAs( code );
             BmCode_at_set( codeBis, iVar, option );
-            count+= _BmTree_code_readOrder_set_fromBranch( self, codeBis, codeOrder, output, iBranch );
+            count+= _BmTree_at_readOrder_set_fromBranch( self, codeBis, codeOrder, output, iBranch );
             deleteBmCode(codeBis);
         }
         return count;
@@ -191,18 +191,18 @@ uint _BmTree_code_readOrder_set_fromBranch( BmTree* self, BmCode* code, BmCode* 
 
             //recursive call:
             BmCode_at_set( code, iVar, 0 );// set the variable visited
-            return _BmTree_code_readOrder_set_fromBranch( self, code, codeOrder, output, newBranchId );
+            return _BmTree_at_readOrder_set_fromBranch( self, code, codeOrder, output, newBranchId );
         }
         else
         {
             //recursive call:
             BmCode_at_set( code, iVar, 0 );// set the variable visited
-            return _BmTree_code_readOrder_set_fromBranch( self, code, codeOrder, output, branchOutput - self->optionBound );
+            return _BmTree_at_readOrder_set_fromBranch( self, code, codeOrder, output, branchOutput - self->optionBound );
         }   
     }
 }
 
-uint BmTree_code_set( BmTree* self, BmCode* code, uint output)
+uint BmTree_at_set( BmTree* self, BmCode* code, uint output)
 {
     // Generate a basic code order:
     uint iOrder= 1;
@@ -215,10 +215,10 @@ uint BmTree_code_set( BmTree* self, BmCode* code, uint output)
             ++iOrder;
         }
     }
-    return BmTree_code_readOrder_set( self, code, order, output );
+    return BmTree_at_readOrder_set( self, code, order, output );
 }
 
-uint BmTree_code_readOrder_set( BmTree* self, BmCode* code, BmCode* codeOrder, uint output )
+uint BmTree_at_readOrder_set( BmTree* self, BmCode* code, BmCode* codeOrder, uint output )
 {
     // If not initialized yet: 
     if( self->size == 0 )
@@ -228,7 +228,7 @@ uint BmTree_code_readOrder_set( BmTree* self, BmCode* code, BmCode* codeOrder, u
 
     // Then apply the code at output: 
     BmCode * draft= newBmCodeAs(code);
-    uint r= _BmTree_code_readOrder_set_fromBranch( self, draft, codeOrder, output, 0);
+    uint r= _BmTree_at_readOrder_set_fromBranch( self, draft, codeOrder, output, 0);
     deleteBmCode(draft);
     return r;
 }
@@ -286,7 +286,7 @@ uint BmTree_branchSize( BmTree* self, uint branch )
     return count; //So, return the number of possible output on the branch...
 }
 
-uint BmTree_code( BmTree* self, BmCode* code)
+uint BmTree_at( BmTree* self, BmCode* code)
 {
     uint option= self->optionBound;// i.e. branch = 0
     uint deep= 1;

@@ -16,6 +16,7 @@ TCase * test_case_BmTree(void);
 TCase * test_case_BmDistribution(void);
 TCase * test_case_BmCondition(void);
 TCase * test_case_BmTransition(void);
+TCase * test_case_BmValue(void);
 
 // Wanda-mdl
 TCase * test_case_BmDomain(void);
