@@ -6,7 +6,7 @@
  * 
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
-#include "bbmm-mdl.h"
+#include "bbmm-models.h"
 
 #include <stdlib.h>
 #include <string.h>

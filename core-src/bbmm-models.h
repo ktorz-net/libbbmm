@@ -34,8 +34,8 @@
 #ifndef WANDA_MODEL_H
 #define WANDA_MODEL_H
 
-#include "bbmm-stt.h"
-#include "bbmm-pbb.h"
+#include "bbmm-structures.h"
+#include "bbmm-probabilities.h"
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   W A N D A   D O M A I N                                               *

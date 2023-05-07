@@ -34,7 +34,7 @@
 #ifndef BBMM_PROBABILITY_H
 #define BBMM_PROBABILITY_H
 
-#include "bbmm-stt.h"
+#include "bbmm-structures.h"
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *

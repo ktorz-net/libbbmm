@@ -1,5 +1,5 @@
 // BbMm
-#include "bbmm-pbb.h"
+#include "bbmm-probabilities.h"
 #include "bbmm-test.h"
 
 #include <stdio.h>

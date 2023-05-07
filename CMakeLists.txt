@@ -37,10 +37,10 @@ set(SRC_FILES
     core-src/stt-BmBench.c
     core-src/stt-BmNet.c
     core-src/stt-BmTree.c
+    core-src/stt-BmValue.c
     core-src/pbb-BmDistribution.c
     core-src/pbb-BmCondition.c
     core-src/pbb-BmTransition.c
-    core-src/pbb-BmValue.c
     core-src/mdl-BmDomain.c
     core-src/mdl-BmSpace.c
     core-src/mdl-BmSystem.c
@@ -52,10 +52,10 @@ target_link_libraries(bbmm)
 
 # Install
 install(TARGETS bbmm LIBRARY DESTINATION lib)
-install(FILES bbmm-stt.h DESTINATION include)
-install(FILES bbmm-pbb.h DESTINATION include)
-install(FILES bbmm-mdl.h DESTINATION include)
-install(FILES bbmm-slv.h DESTINATION include)
+install(FILES bbmm-structures.h DESTINATION include)
+install(FILES bbmm-probabilities.h DESTINATION include)
+install(FILES bbmm-models.h DESTINATION include)
+install(FILES bbmm-solvers.h DESTINATION include)
 
 #-----------#
 ## T E S T ##
@@ -68,10 +68,10 @@ set(TEST_SRC_FILES
     core-test/tc-stt-BmBench.c
     core-test/tc-stt-BmNet.c
     core-test/tc-stt-BmTree.c
+    core-test/tc-stt-BmValue.c
     core-test/tc-pbb-BmDistribution.c
     core-test/tc-pbb-BmCondition.c
     core-test/tc-pbb-BmTransition.c
-    core-test/tc-pbb-BmValue.c
     core-test/tc-mld-BmDomain.c
     core-test/tc-mld-BmSpace.c
     core-test/tc-mld-BmSystem.c

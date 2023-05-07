@@ -1,4 +1,4 @@
-#include "bbmm-stt.h"
+#include "bbmm-structures.h"
 
 #include <stdlib.h>
 #include <string.h>

@@ -1,4 +1,4 @@
-#include "bbmm-pbb.h"
+#include "bbmm-probabilities.h"
 
 #include <stdlib.h>
 #include <string.h>

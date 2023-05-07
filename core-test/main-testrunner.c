@@ -11,6 +11,7 @@ Suite * bbmm_stt_test_suite(void)
     suite_add_tcase( s, test_case_BmBench() );
     suite_add_tcase( s, test_case_BmNet() );
     suite_add_tcase( s, test_case_BmTree() );
+    suite_add_tcase( s, test_case_BmValue() );
     
     return s;
 }
@@ -22,7 +23,6 @@ Suite * bbmm_prb_test_suite(void)
     suite_add_tcase( s, test_case_BmDistribution() );
     suite_add_tcase( s, test_case_BmCondition() );
     suite_add_tcase( s, test_case_BmTransition() );
-    suite_add_tcase( s, test_case_BmValue() );
 
     return s;
 }

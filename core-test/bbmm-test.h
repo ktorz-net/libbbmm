@@ -5,25 +5,26 @@
 
 #define tc_print(str) printf("<--\n%s\n-->\n", str)
 
-// Wanda-stt
+// BbMm structures 
 TCase * test_case_BmCode(void);
 TCase * test_case_BmBench(void);
 TCase * test_case_BmNet(void);
 TCase * test_case_BmTree(void);
-//TCase * test_case_WdValueFct(void); // TODO
+TCase * test_case_BmValue(void);
 
-// Wanda-prb
+// BbMm Probabilities
 TCase * test_case_BmDistribution(void);
 TCase * test_case_BmCondition(void);
 TCase * test_case_BmTransition(void);
-TCase * test_case_BmValue(void);
 
-// Wanda-mdl
+// BbMm Models
 TCase * test_case_BmDomain(void);
 TCase * test_case_BmSpace(void);
 TCase * test_case_BmSystem(void);
 
-// Wanda-slv
+// BbMm Solver
+
+
 
 // Examples
 //TCase * test_case_cofeeRobot(void);
