@@ -295,46 +295,6 @@ char* BmTree_print( BmTree* self, char* output);
 
 char* BmTree_printInside( BmTree* self, char* output); // print `self` at the end of `output`
 
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   S T R U C T U R E :  V A L U E  F U N C T I O N           *
- * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
-/*
-  Define a Value function ( Code -> Value ) 
-*/
-
-typedef struct {
-  BmTree* selector;
-  double* options;
-} BmValue;
-
-/* Constructor Destructor */
-BmValue* newBmValueBasic( BmCode* input, uint optionSize );
-//BmValue* newBmValue_options( BmCode* input, uint optionSize, double* options );
-void deleteBmValue( BmValue* self );
-
-BmValue* BmValue_createBasic( BmValue* self, BmCode* input, uint optionSize );
-//BmValue* BmValue_create_options( BmValue* self, uint optionSize, double options );
-BmValue* BmValue_distroy( BmValue* self);
-
-/* initialize */
-//BmValue* BmValue_initializeBasic( BmValue* self, BmCode* input, uint optionSize );
-//BmValue* BmValue_initialize_options( BmValue* self, BmCode* input, uint optionSize, double options );
-
-/* Construction */
-BmValue* BmValue_optionId_set(BmValue* self, uint iOption, double value);
-//void BmValue_at_setOptionId( BmValue* self, BmCode* code);
-
-/* Cleanning */
-
-/* Accessor */
-uint BmValue_dimention( BmValue* self );
-uint BmValue_optionSize( BmValue* self );
-double BmValue_optionId(  BmValue* self, uint iOption );
-
-//double BmValue_at( BmTree* self, BmCode* code); // Return the option value of a code.
-
-/* Printing */
-//char* BmValue_print( BmTree* self, char* output);
 
 
 #endif

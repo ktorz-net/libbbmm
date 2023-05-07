@@ -11,7 +11,15 @@ Suite * bbmm_stt_test_suite(void)
     suite_add_tcase( s, test_case_BmBench() );
     suite_add_tcase( s, test_case_BmNet() );
     suite_add_tcase( s, test_case_BmTree() );
-    suite_add_tcase( s, test_case_BmValue() );
+    
+    return s;
+}
+
+Suite * bbmm_val_test_suite(void)
+{
+    Suite *s= suite_create("BbMm-values");
+
+    suite_add_tcase( s, test_case_BmCriteria() );
     
     return s;
 }
@@ -59,6 +67,12 @@ int main(void)
     int number_failed= 0;
     {
         SRunner *sr= srunner_create( bbmm_stt_test_suite() );
+        srunner_run_all(sr, CK_NORMAL);
+        number_failed+= srunner_ntests_failed(sr);
+        srunner_free(sr);
+    }
+    {
+        SRunner *sr= srunner_create( bbmm_val_test_suite() );
         srunner_run_all(sr, CK_NORMAL);
         number_failed+= srunner_ntests_failed(sr);
         srunner_free(sr);

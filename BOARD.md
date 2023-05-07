@@ -2,7 +2,7 @@
 
 ## On the fire:
 
-- BmSystem - Reward: `BmValue`
+- BmSystem - Reward: `BmCriteria`
 - Réactivate cofeeRobot exemple
 - Réactivate Python Wrap (pyBbMm) with cofeeRobot
 - Multi-Robot version -> Article for EUMAS.

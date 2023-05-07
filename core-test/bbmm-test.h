@@ -10,7 +10,9 @@ TCase * test_case_BmCode(void);
 TCase * test_case_BmBench(void);
 TCase * test_case_BmNet(void);
 TCase * test_case_BmTree(void);
-TCase * test_case_BmValue(void);
+
+// BbMm values 
+TCase * test_case_BmCriteria(void);
 
 // BbMm Probabilities
 TCase * test_case_BmDistribution(void);
