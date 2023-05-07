@@ -270,16 +270,16 @@ void BmTree_reziseCompleteCapacity( BmTree* self);
 uint BmTree_newBranch( BmTree* self, uint iVariable, int defaultOption);
 void BmTree_branch_option_connect( BmTree* self, uint branchA, uint i, uint branchB );
 void BmTree_branch_option_output( BmTree* self, uint branchA, uint i, uint outbut );
-uint BmTree_at_set( BmTree* self, BmCode* code, uint output ); // set the ouput value of a code or a partial code (with 0), return the number of potential dead branches
 
-uint _BmTree_at_set_fromBranch( BmTree* self, BmCode* code, uint output, uint iBranch ); // cf. BmTree_at_set, but starting from a given branch.
+uint BmTree_code_set( BmTree* self, BmCode* code, uint output ); // set the ouput value of a code or a partial code (with 0), return the number of potential dead branches
+uint BmTree_code_readOrder_set( BmTree* self, BmCode* code, BmCode* codeOrder, uint output );
 
 /* Cleanning */
 uint BmTree_cleanDeadBranches( BmTree* self); // Detect and remove detached branches (or BmTree_update, BmTree_regenerate : rebuild the tree without dead branches)
 uint BmTree_removeBranch( BmTree* self, uint iBranch); // Remove a branch: (must not change the order or the numerotation of the branch -> maintain a list of removed branches)
 
 /* Accessor */
-uint BmTree_at( BmTree* self, BmCode* code); // Return the ouput value of a code/state.
+uint BmTree_code( BmTree* self, BmCode* code); // Return the ouput value of a code/state.
 uint BmTree_branch_option( BmTree* self, uint iBranch, uint option );
 uint BmTree_branchVariable( BmTree* self, uint iBranch ); // Return the variable index represented by the branch.
 uint BmTree_branchSize( BmTree* self, uint branch ); // Return the number of possible output.
@@ -301,5 +301,13 @@ char* BmTree_printInside( BmTree* self, char* output); // print `self` at the en
 /*
   Set an output value to each configuration in given ranges ( BmCode -> value).
 */
+
+typedef struct {
+  uint valuesSize;
+  double* values;
+  BmTree* selector;
+} BmValue;
+
+
 
 #endif

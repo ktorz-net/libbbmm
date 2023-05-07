@@ -2,13 +2,11 @@
 
 ## On the fire:
 
-- Clean function names. `attach`/`detach` everywhere/ `switch` everythings
-- Create `newDistritutionEquiprobable`, test it and add it in `BmCondition_initializeEquiprobable`
 - Reactivate bbmm-models
 	* Reward: `BmFunction` -> BmTree selector and values[] (opt) (Reward)
 	* `BmSystem_variable_initializeProbabilities` and `BmSystem_variable_addProbabilities` based on attached prebuilt-distribution. become... `BmSystem_variable_attachDistribution_if` based on `BmSystem_variable_neBmistribution`.
 
-- Réactivate cofeeRobot exemple
+- Réactivate cofeeRobot exemple -> Multi-Robot version -> Article for EUMAS.
 - Réactivate Python Wrap (pyBbMm) with cofeeRobot
 - Respect the BmSystem_variable_addProbabilities order, (and adapt BmTree accordingly) (cf. _ToDo:_ tag in `tc-mld-BmSystem.c`)
 - Factorized printing of `BmSystem_printVariable`.
@@ -22,7 +20,7 @@
 - Add testing functions (isValid....).
 - BmTree easely resizable (bench128).
 - In code documentation (code to markdon documentation) + Dev. Phylosophie
-
+- Complete BmTree functionnalities (auto-optimisation...).
 
 ## What about ?
 
@@ -33,6 +31,7 @@
 - Pharo: Prepare for uiPlayer: (BbMm-presenter Package... Paul)
 - Windaube ?
 - Optimazing BmBench buffer with ratio attributs (count the numbers of attachLast versus size ).
+- Create `newDistritutionEquiprobable`, test it and add it in `BmCondition_initializeEquiprobable`
 
 
 ## State Of The Art: 

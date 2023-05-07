@@ -170,14 +170,14 @@ uint BmCondition_dimention( BmCondition* self )
 
 BmDistribution* BmCondition_at( BmCondition* self, BmCode* configuration )
 {
-    uint iDistrib= BmTree_at( self->selector, configuration);
+    uint iDistrib= BmTree_code( self->selector, configuration);
     assert( 0 < iDistrib && iDistrib <= self->distribSize );
     return array_at(self->distributions, iDistrib );
 }
 
 uint BmCondition_distributionIndexAt( BmCondition* self, BmCode* configuration )
 {
-    return BmTree_at( self->selector, configuration);
+    return BmTree_code( self->selector, configuration);
 }
 
 BmDistribution * BmCondition_atKey( BmCondition* self, uint configKey )
@@ -300,7 +300,21 @@ uint BmCondition_at_set( BmCondition* self, BmCode* configuration, BmDistributio
     
     self->distribSize+= 1;
     array_at_set(self->distributions, self->distribSize, newBmDistributionAs( distribution ) );
-    BmTree_at_set(self->selector, configuration, self->distribSize);
+    BmTree_code_set(self->selector, configuration, self->distribSize);
+
+    return self->distribSize;
+}
+
+uint BmCondition_at_readOrder_set( BmCondition* self, BmCode* configuration, BmCode* configOrder, BmDistribution* distribution )
+{
+    assert( BmCondition_dimention(self) == BmCode_size(configuration) );
+    if( self->distribSize+1 > self->distribCapacity )
+        BmCondition_resizeDistributionCapacity( self, self->distribSize+1 );
+    
+    self->distribSize+= 1;
+    array_at_set(self->distributions, self->distribSize, newBmDistributionAs( distribution ) );
+    BmTree_code_readOrder_set(self->selector, configuration, configOrder, self->distribSize);
+    BmTree_code_set(self->selector, configuration, self->distribSize);
 
     return self->distribSize;
 }

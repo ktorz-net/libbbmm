@@ -16,6 +16,11 @@
  * - nextBranchId= branch[i] - (self->optionSize+1) else
  */
 
+/* Private Methods */
+
+uint _BmTree_code_readOrder_set_fromBranch( BmTree* self, BmCode* code, BmCode* codeOrder, uint output, uint iBranch ); // cf. BmTree_code_set, but starting from a given branch.
+
+
 /* Constructor Destructor */
 
 BmTree* newBmTree( BmCode* input, uint optionSize )
@@ -137,19 +142,22 @@ void BmTree_branch_option_output( BmTree* self, uint iBranch, uint i, uint outpu
     self->branches[iBranch][i]= output;
 }
 
-uint _BmTree_at_set_fromBranch( BmTree* self, BmCode* code, uint output, uint iBranch)
+uint _BmTree_code_readOrder_set_fromBranch( BmTree* self, BmCode* code, BmCode* codeOrder, uint output, uint iBranch )
 {
     assert( BmCode_size(code) == BmCode_size(self->input) );
     assert( iBranch < self->size );
-
+    
     uint iVar= BmTree_branchVariable(self, iBranch);
 
     // Find the next significant variables (if exist)
     uint nextVariable= 0;
-    for( uint i = 1 ; nextVariable == 0 && i <= BmCode_size(code) ; ++i )
-        if( i != iVar && BmCode_at(code, i) != 0 )
-            nextVariable= i;
-    
+    for( uint i = 1 ; nextVariable == 0 && i <= BmCode_size(codeOrder) ; ++i )
+    {
+        uint iCode= BmCode_at( codeOrder, i);
+        if( iCode != 0 && iCode != iVar && BmCode_at(code, iCode) != 0 )
+            nextVariable= iCode;
+    }
+
     if( BmCode_at( code, iVar) == 0 )// the ouput do not depend on this variable
     {
         assert( nextVariable != 0 ); // It must have another variable.
@@ -159,7 +167,7 @@ uint _BmTree_at_set_fromBranch( BmTree* self, BmCode* code, uint output, uint iB
         {
             BmCode * codeBis= newBmCodeAs( code );
             BmCode_at_set( codeBis, iVar, option );
-            count+= _BmTree_at_set_fromBranch( self, codeBis, output, iBranch );
+            count+= _BmTree_code_readOrder_set_fromBranch( self, codeBis, codeOrder, output, iBranch );
             deleteBmCode(codeBis);
         }
         return count;
@@ -183,31 +191,44 @@ uint _BmTree_at_set_fromBranch( BmTree* self, BmCode* code, uint output, uint iB
 
             //recursive call:
             BmCode_at_set( code, iVar, 0 );// set the variable visited
-            return _BmTree_at_set_fromBranch( self, code, output, newBranchId );
+            return _BmTree_code_readOrder_set_fromBranch( self, code, codeOrder, output, newBranchId );
         }
         else
         {
             //recursive call:
             BmCode_at_set( code, iVar, 0 );// set the variable visited
-            return _BmTree_at_set_fromBranch( self, code, output, branchOutput - self->optionBound );
+            return _BmTree_code_readOrder_set_fromBranch( self, code, codeOrder, output, branchOutput - self->optionBound );
         }   
     }
 }
 
-uint BmTree_at_set( BmTree* self, BmCode* code, uint output)
+uint BmTree_code_set( BmTree* self, BmCode* code, uint output)
+{
+    // Generate a basic code order:
+    uint iOrder= 1;
+    BmCode* order= newBmCode_all( BmCode_size(code), 0 );
+    for( uint i= 1 ; i <= BmCode_size( code ) ; ++i  )
+    {
+        if( BmCode_at(code, i) > 0 )
+        {
+            BmCode_at_set(order, iOrder, i);
+            ++iOrder;
+        }
+    }
+    return BmTree_code_readOrder_set( self, code, order, output );
+}
+
+uint BmTree_code_readOrder_set( BmTree* self, BmCode* code, BmCode* codeOrder, uint output )
 {
     // If not initialized yet: 
     if( self->size == 0 )
     {
-        uint i= 1;
-        while( BmCode_at(code, i) == 0 && i <= BmCode_size(code) )
-            ++i;
-        BmTree_initializeWhith_on(self, i, 1);
+        BmTree_initializeWhith_on(self, BmCode_at( codeOrder, 1 ), 1);
     }
 
     // Then apply the code at output: 
     BmCode * draft= newBmCodeAs(code);
-    uint r= _BmTree_at_set_fromBranch( self, draft, output, 0);
+    uint r= _BmTree_code_readOrder_set_fromBranch( self, draft, codeOrder, output, 0);
     deleteBmCode(draft);
     return r;
 }
@@ -265,7 +286,7 @@ uint BmTree_branchSize( BmTree* self, uint branch )
     return count; //So, return the number of possible output on the branch...
 }
 
-uint BmTree_at( BmTree* self, BmCode* code)
+uint BmTree_code( BmTree* self, BmCode* code)
 {
     uint option= self->optionBound;// i.e. branch = 0
     uint deep= 1;

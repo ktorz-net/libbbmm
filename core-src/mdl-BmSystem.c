@@ -297,6 +297,7 @@ BmSystem* BmSystem_variable_addProbabilities( BmSystem* self, char * varName, ui
     // Generate parent state:
     BmCondition* condition= BmTransition_nodeAt( self->transition, id );
     BmCode* config= newBmCode_all( BmCondition_dimention(condition), 0);
+    BmCode* configOrder= newBmCode_all( BmCondition_dimention(condition), 0);
 
     // Read the list of parents and associate state
     va_list ap;
@@ -309,6 +310,7 @@ BmSystem* BmSystem_variable_addProbabilities( BmSystem* self, char * varName, ui
         uint iState= BmDomain_searchStr( BmSystem_nodeId_domain(self, parentId), state );
 
         BmCode_at_set( config, parentId, iState );
+        BmCode_at_set( configOrder, i, parentId );
     }
 
     // Read the list of outputs and associate probabilities
@@ -325,10 +327,11 @@ BmSystem* BmSystem_variable_addProbabilities( BmSystem* self, char * varName, ui
 
     // Add condition BmDistribution
     BmDistribution* distrib= BmSystem_nodeId_newBmDistribution(self, id, numberOfOutputs, outputs, probabilities );
-    BmCondition_at_set( BmTransition_nodeAt( self->transition, id ), config, distrib );
+    BmCondition_at_readOrder_set( BmTransition_nodeAt( self->transition, id ), config, configOrder, distrib );
 
     deleteBmDistribution( distrib );
     deleteBmCode(config);
+    deleteBmCode(configOrder);
     return self;
 }
 

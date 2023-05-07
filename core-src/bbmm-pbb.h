@@ -52,7 +52,7 @@ typedef struct {
 } BmDistribution;
 
 /* Constructor Destructor */
-BmDistribution* newBmDistribution(uint dimention);
+BmDistribution* newBmDistribution( uint dimention );
 BmDistribution* newBmDistributionAs( BmDistribution* model );
 
 void deleteBmDistribution(BmDistribution* instance);
@@ -164,7 +164,9 @@ BmDistribution* BmCondition_newDistributionByInfering_mask(BmCondition* self, Bm
 /* Construction*/
 /* Construction tools*/
 uint BmCondition_resizeDistributionCapacity( BmCondition* self, uint newCapacity );
+
 uint BmCondition_at_set( BmCondition* self, BmCode* configuration, BmDistribution* distribution );
+uint BmCondition_at_readOrder_set( BmCondition* self, BmCode* configuration, BmCode* configOrder, BmDistribution* distribution );
 
 void BmCondition_at_addOutput_onProbability( BmCondition* self, BmCode* configutation, uint option, double probability );
 
