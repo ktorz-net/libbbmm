@@ -6,7 +6,7 @@
 #include <assert.h>
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
- *   B b M m   V A L U E
+ *   B b M m   C R I T E R I A
  *
  * Define a Value function ( Code -> Value ) Based on tree selector
  * 
@@ -18,7 +18,10 @@ BmCriteria* newBmCriteriaBasic( BmCode* input, uint optionSize )
     return BmCriteria_createBasic( newEmpty(BmCriteria), input, optionSize );
 }
 
-//BmCriteria* newBmCriteria_options( BmCode* input, uint optionSize, double* options );
+BmCriteria* newBmCriteria_options( BmCode* input, uint optionSize, double* options )
+{
+    return BmCriteria_create_options( newEmpty(BmCriteria), input, optionSize, options );
+}
 
 void deleteBmCriteria( BmCriteria* self )
 {
@@ -33,7 +36,15 @@ BmCriteria* BmCriteria_createBasic( BmCriteria* self, BmCode* input, uint option
     return self;
 }
 
-//BmCriteria* BmCriteria_create_options( BmCriteria* self, uint optionSize, double options );
+BmCriteria* BmCriteria_create_options( BmCriteria* self, BmCode* input, uint optionSize, double* options )
+{
+    BmCriteria_createBasic(self, input, optionSize);
+    for( uint i=0 ; i < optionSize ; ++i )
+    {
+        array_at_set( self->options, i+1, options[i] );
+    }
+    return self;
+}
 
 BmCriteria* BmCriteria_distroy( BmCriteria* self)
 {
@@ -47,6 +58,11 @@ BmCriteria* BmCriteria_optionId_set(BmCriteria* self, uint iOption, double value
 {
     array_at_set( self->options, iOption, value );
     return self;
+}
+
+uint BmCriteria_at_setOptionId( BmCriteria* self, BmCode* code, uint iOption)
+{
+    return BmTree_at_set( self->selector, code, iOption );
 }
 
 /* Accessor */

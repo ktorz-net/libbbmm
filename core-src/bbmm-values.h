@@ -37,16 +37,15 @@
 #include "bbmm-structures.h"
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   V A L U E :  M A T R I C E
+ *   B b M m   V A L U E  S :  M A T R I C E
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 /*
  
 */
 
 
-
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   V A L U E :  C R I T E R I A
+ *   B b M m   V A L U E S :  C R I T E R I A
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 /*
   Define a Value function ( Code -> Value ) 
@@ -59,11 +58,11 @@ typedef struct {
 
 /* Constructor Destructor */
 BmCriteria* newBmCriteriaBasic( BmCode* input, uint optionSize );
-//BmCriteria* newBmCriteria_options( BmCode* input, uint optionSize, double* options );
+BmCriteria* newBmCriteria_options( BmCode* input, uint optionSize, double* options );
 void deleteBmCriteria( BmCriteria* self );
 
 BmCriteria* BmCriteria_createBasic( BmCriteria* self, BmCode* input, uint optionSize );
-//BmCriteria* BmCriteria_create_options( BmCriteria* self, uint optionSize, double options );
+BmCriteria* BmCriteria_create_options( BmCriteria* self, BmCode* input, uint optionSize, double* options );
 BmCriteria* BmCriteria_distroy( BmCriteria* self);
 
 /* initialize */
@@ -72,7 +71,7 @@ BmCriteria* BmCriteria_distroy( BmCriteria* self);
 
 /* Construction */
 BmCriteria* BmCriteria_optionId_set(BmCriteria* self, uint iOption, double value);
-//void BmCriteria_at_setOptionId( BmCriteria* self, BmCode* code);
+uint BmCriteria_at_setOptionId( BmCriteria* self, BmCode* code, uint iOption);
 
 /* Cleanning */
 
@@ -88,7 +87,7 @@ double BmCriteria_at( BmCriteria* self, BmCode* code); // Return the option valu
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   V A L U E :  R E W A R D
+ *   B b M m   V A L U E S :  
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 /*
  

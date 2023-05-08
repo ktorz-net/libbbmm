@@ -1,8 +1,9 @@
 # BeMAge board
 
+
 ## On the fire:
 
-- BmSystem - Reward: `BmCriteria`
+- BmSystem - Reward: `BmCriteria` and BmValueFct () (from_and_)
 - Réactivate cofeeRobot exemple
 - Réactivate Python Wrap (pyBbMm) with cofeeRobot
 - Multi-Robot version -> Article for EUMAS.
@@ -33,6 +34,7 @@
 - Optimazing BmBench buffer with ratio attributs (count the numbers of attachLast versus size ).
 - Create `newDistritutionEquiprobable`, test it and add it in `BmCondition_initializeEquiprobable`
 - `BmSystem_variable_initializeProbabilities` and `BmSystem_variable_addProbabilities` based on attached prebuilt-distribution. become... `BmSystem_variable_attachDistribution_if` based on `BmSystem_variable_neBmistribution`.
+- Moving BbMm Models as a `cpp-src` moduls ?
 
 
 ## State Of The Art: 
