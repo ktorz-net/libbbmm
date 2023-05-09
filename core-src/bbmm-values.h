@@ -73,6 +73,9 @@ BmCriteria* BmCriteria_distroy( BmCriteria* self);
 BmCriteria* BmCriteria_optionId_set(BmCriteria* self, uint iOption, double value);
 uint BmCriteria_at_setOptionId( BmCriteria* self, BmCode* code, uint iOption);
 
+BmCriteria* BmCriteria_setList(BmCriteria* self, uint number, ... );
+
+
 /* Cleanning */
 
 /* Accessor */
@@ -83,7 +86,7 @@ double BmCriteria_optionId(  BmCriteria* self, uint iOption );
 double BmCriteria_at( BmCriteria* self, BmCode* code); // Return the option value of a code.
 
 /* Printing */
-//char* BmCriteria_print( BmTree* self, char* output);
+char* BmCriteria_print( BmCriteria* self, char* output);
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *

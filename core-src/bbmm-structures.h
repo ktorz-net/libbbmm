@@ -291,6 +291,10 @@ BmBench* BmTree_asNewBench( BmTree* self );
 /* Printing */
 char* BmTree_printBranch( BmTree* self, uint iBranch, char* output );
 char* BmTree_wording( BmTree* self); // print `self` on `output`
+
+char* BmTree_print( BmTree* self, char* output);
+char* BmTree_print_sep( BmTree* self, char* output, char* separator );
+char* BmTree_print_sep_options( BmTree* self, char* output, char* separator, char** optionStrs );
 char* BmTree_print( BmTree* self, char* output);
 
 char* BmTree_printInside( BmTree* self, char* output); // print `self` at the end of `output`

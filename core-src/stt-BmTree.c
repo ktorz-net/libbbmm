@@ -398,6 +398,31 @@ char* BmTree_wording(BmTree* self)
 
 char* BmTree_print(BmTree* self, char* output)
 {
+    return BmTree_print_sep( self, output, ", " );
+}
+
+char* BmTree_print_sep( BmTree* self, char* output, char* separator )
+{
+    // prepare options
+    char** optionsStr= newEmptyArray( char*, self->optionBound );
+    for( uint i= 1 ; i <= self->optionBound ; ++i )
+    {
+        array_at_set( optionsStr, i, newEmptyArray( char*, 32 ); )
+        sprintf( array_at( optionsStr, i ), "%u", i );
+    }
+
+    // print
+    BmTree_print_sep_options(self, output, separator, optionsStr);
+    
+    // clear
+    for( uint i= 1 ; i <= self->optionBound ; ++i )
+        deleteEmptyArray( array_at(optionsStr, i) );
+    deleteEmptyArray( optionsStr );
+    return output;
+}
+
+char* BmTree_print_sep_options( BmTree* self, char* output, char* separator, char** optionStrs )
+{
     char buffer[512];
 
     BmCode *conditions[self->size];
@@ -417,9 +442,9 @@ char* BmTree_print(BmTree* self, char* output)
             if( self->branches[iBranch][i] < self->optionBound )
             {
                 BmCode_at_set( conditions[iBranch], branVar, i );
-                sprintf( buffer, "%s%s:%u", sep, BmCode_wording(conditions[iBranch]), self->branches[iBranch][i] );
+                sprintf( buffer, "%s%s:%s", sep, BmCode_wording(conditions[iBranch]), array_at( optionStrs, self->branches[iBranch][i] ) );
                 strcat(output, buffer);
-                strcpy(sep, ", ");
+                strcpy(sep, separator);
             }
             else
             {

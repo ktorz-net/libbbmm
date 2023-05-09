@@ -65,6 +65,27 @@ uint BmCriteria_at_setOptionId( BmCriteria* self, BmCode* code, uint iOption)
     return BmTree_at_set( self->selector, code, iOption );
 }
 
+
+BmCriteria* BmCriteria_setList(BmCriteria* self, uint number, ... )
+{
+    BmCode* code= newBmCodeBasic( BmCriteria_dimention(self) );
+    // Build number code -> iOption tuples 
+    va_list ap;
+    va_start(ap, number); 
+    for ( uint i = 0 ; i < number ; ++i )
+    {
+        for ( uint iVar = 1 ; iVar <= BmCode_size(code) ; ++iVar )
+        {
+            BmCode_at_set(code, iVar, va_arg(ap, uint ) );
+        }
+        BmCriteria_at_setOptionId( self, code, va_arg(ap, uint ) );
+    }
+    va_end(ap);
+    // clean:
+    deleteBmCode( code );
+    return self;
+}
+
 /* Accessor */
 uint BmCriteria_dimention( BmCriteria* self )
 {
@@ -85,4 +106,28 @@ double BmCriteria_at( BmCriteria* self, BmCode* code)
 {
     uint iOption= BmTree_at( self->selector, code );
     return BmCriteria_optionId(self, iOption);
+}
+
+
+/* Printing */
+char* BmCriteria_print( BmCriteria* self, char* output)
+{
+    // prepare options
+    uint optionsSize= BmCriteria_optionSize(self);
+    char** optionsStr= newEmptyArray( char*, optionsSize );
+    for( uint i= 1 ; i <= optionsSize ; ++i )
+    {
+        array_at_set( optionsStr, i, newEmptyArray( char*, 32 ); )
+        sprintf( array_at( optionsStr, i ), "%f", array_at(self->options, i) );
+    }
+
+    // print
+    BmTree_print_sep_options( self->selector, output, ",\n", optionsStr );
+    
+    // clear
+    for( uint i= 1 ; i <= optionsSize ; ++i )
+        deleteEmptyArray( array_at(optionsStr, i) );
+    deleteEmptyArray( optionsStr );
+
+    return output;
 }
