@@ -106,7 +106,7 @@ typedef struct {
   BmCode* variable;
   BmCriteria ** criteria;
   BmCode ** masks;
-  double * factors;
+  double * weights;
 } BmValueFct;
 
 /* Constructor Destructor */

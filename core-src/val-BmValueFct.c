@@ -24,7 +24,6 @@ void deleteBmValueFct( BmValueFct* self )
     free( self );
 }
 
-
 BmValueFct* BmValueFct_createBasic( BmValueFct* self, BmCode* stateSpace, BmCode* actionSpace)
 {
     self->stateDimention= BmCode_size(stateSpace);
@@ -40,14 +39,35 @@ BmValueFct* BmValueFct_createBasic( BmValueFct* self, BmCode* stateSpace, BmCode
         BmCode_at_set( self->variable, self->stateDimention+i, BmCode_at( actionSpace, i ) );
     }
 
-    //critNumber;
-    //BmCriteria ** criteria;
-    //BmCode ** masks;
-    //double * factors;
+    double outputs[1]= {0.0};
+    self->criteria= newEmptyArray( BmCriteria*, 1);
+    self->masks= newEmptyArray( BmCode*, 1);
+    
+    array_at_set(self->criteria, 1, newBmCriteria_options( self->variable, 1, outputs) );
+    BmCode* mask= newBmCodeBasic( self->stateDimention+self->actionDimention );
+    for( uint i= 1 ; i <= self->stateDimention+self->actionDimention ; ++i )
+        BmCode_at_set( mask, i , i );
+    array_at_set(self->masks, 1, mask );
+
+    self->weights= newEmptyArray( double, 1 );
+    array_at_set( self->weights, 1, 1.0 );
+
+    self->critNumber= 1;
     return self;
 }
+
 BmValueFct* BmValueFct_distroy( BmValueFct* self)
 {
+    for( uint i = 1 ; i < self->critNumber ; ++i )
+    {
+        deleteBmCriteria( array_at( self->criteria, i ) );
+        deleteBmCode( array_at( self->masks, i ) );
+    }
+
+    deleteEmptyArray( self->criteria );
+    deleteEmptyArray( self->masks );
+    deleteEmptyArray( self->weights );
+
     deleteBmCode( self->variable );
     return self;
 }
