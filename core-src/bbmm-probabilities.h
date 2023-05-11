@@ -38,7 +38,7 @@
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   W A N D A   D I S T R I B U T I O N                                   *
+ *   B b M m   D I S T R I B U T I O N                                   *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 /*
   Define a distribution of probabilities over configuration (codes)
@@ -109,7 +109,7 @@ char* BmDistribution_print(BmDistribution* self, char* output); // print `self` 
 char* BmDistribution_printPosibility(BmDistribution* self, uint index, char* out); // print one posibility of distribution `self` at the end of `output`
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   W A N D A   C O N D I T I O N                                         *
+ *   B b M m   C O N D I T I O N                                         *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 /*
   Define a Bayesian Node (conditional probabilities over variable affectations) 
@@ -182,7 +182,7 @@ char* BmCondition_printExtendSep(BmCondition* self, char* output, char* separato
 char* BmCondition_printIdentity( BmCondition* self, char* output ); // print `self` at the end of on `output`
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
- *   W A N D A   T R A N S I T I O N
+ *   B b M m   T R A N S I T I O N
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 /*
   Define a Bayesian Network composed of state, action and tramsitional nodes 

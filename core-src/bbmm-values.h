@@ -43,6 +43,11 @@
  
 */
 
+typedef struct {
+  BmCode* stateSpace, actionSpace;
+  double ** values;
+} BmMatrice;
+
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   V A L U E S :  C R I T E R I A
@@ -90,11 +95,37 @@ char* BmCriteria_print( BmCriteria* self, char* output);
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   V A L U E S :  
+ *   B b M m   V A L U E S F C T :  
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 /*
- 
+  Define a multi critera Value function from state and action space
 */
+
+typedef struct {
+  uint stateDimention, actionDimention, critNumber;
+  BmCode* variable;
+  BmCriteria ** criteria;
+  BmCode ** masks;
+  double * factors;
+} BmValueFct;
+
+/* Constructor Destructor */
+BmValueFct* newBmValueFctBasic( BmCode* stateSpace, BmCode* actionSpace);
+void deleteBmValueFct( BmValueFct* self );
+
+BmValueFct* BmValueFct_createBasic( BmValueFct* self, BmCode* stateSpace, BmCode* actionSpace);
+BmValueFct* BmValueFct_distroy( BmValueFct* self);
+
+/* initialize */
+
+/* Construction */
+
+
+/* Cleanning */
+
+/* Accessor */
+
+/* Printing */
 
 
 #endif

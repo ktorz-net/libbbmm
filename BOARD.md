@@ -3,7 +3,7 @@
 
 ## On the fire:
 
-- BmSystem - Reward: `BmCriteria` and BmValueFct () (from_and_)
+- BmSystem - Reward: `BmCriteria` and `BmValueFct` () (from_and_)
 - Réactivate cofeeRobot exemple
 - Réactivate Python Wrap (pyBbMm) with cofeeRobot
 - Multi-Robot version -> Article for EUMAS.

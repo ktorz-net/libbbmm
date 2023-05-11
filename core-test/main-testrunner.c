@@ -19,7 +19,9 @@ Suite * bbmm_val_test_suite(void)
 {
     Suite *s= suite_create("BbMm-values");
 
+    suite_add_tcase( s, test_case_BmMatrice() );
     suite_add_tcase( s, test_case_BmCriteria() );
+    suite_add_tcase( s, test_case_BmValueFct() );
     
     return s;
 }
