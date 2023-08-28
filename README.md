@@ -17,7 +17,8 @@ Wanda is an experimental toolbox, it comes with no more guaranty than the devoti
 - SaLinA : <https://arxiv.org/pdf/2110.07910.pdf> - <https://github.com/facebookresearch/salina>
 - MDPToolBox :
 - [gobnilp](https://www.cs.york.ac.uk/aig/sw/gobnilp) : Inference of the Bayesian Network from data
-
+- [torchhd](https://github.com/hyperdimensional-computing/torchhd) : Python lib for Hyperdimensional Computing (or Vector Symbolic Architectures) Artticle: https://jmlr.org/papers/v24/23-0300.html
+- [farama](https://farama.org/) : à fouiller.
 
 ## Installation
 
