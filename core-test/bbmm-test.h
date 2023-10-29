@@ -14,7 +14,7 @@ TCase * test_case_BmTree(void);
 // BbMm values 
 TCase * test_case_BmMatrice(void);
 TCase * test_case_BmCriteria(void);
-TCase * test_case_BmValueFct(void);
+TCase * test_case_BmEval(void);
 
 // BbMm Probabilities
 TCase * test_case_BmDistribution(void);

@@ -39,7 +39,7 @@ set(SRC_FILES
     core-src/stt-BmTree.c
     core-src/val-BmMatrice.c
     core-src/val-BmCriteria.c
-    core-src/val-BmValueFct.c
+    core-src/val-BmEval.c
     core-src/pbb-BmDistribution.c
     core-src/pbb-BmCondition.c
     core-src/pbb-BmTransition.c
@@ -73,7 +73,7 @@ set(TEST_SRC_FILES
     core-test/tc-stt-BmTree.c
     core-test/tc-val-BmMatrice.c
     core-test/tc-val-BmCriteria.c
-    core-test/tc-val-BmValueFct.c
+    core-test/tc-val-BmEval.c
     core-test/tc-pbb-BmDistribution.c
     core-test/tc-pbb-BmCondition.c
     core-test/tc-pbb-BmTransition.c

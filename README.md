@@ -7,8 +7,7 @@ BbMm - a librayry for Bayesian-based Markov-models
 BbMm, aims to become a multi-language library to create deliberative agent based on Decision Making under Uncertainty.
 The implemented approach for that relies on Markov Decision Process with transition based on Bayesian Network model.
 
-Wanda is an experimental toolbox, it comes with no more guaranty than the devotion of the developers.
-
+BbMm is an experimental toolbox, it comes with no more guaranty than the devotion of the developers.
 
 ## Concurency:
 
@@ -16,7 +15,7 @@ Wanda is an experimental toolbox, it comes with no more guaranty than the devoti
 
 - SaLinA : <https://arxiv.org/pdf/2110.07910.pdf> - <https://github.com/facebookresearch/salina>
 - MDPToolBox :
-- [gobnilp](https://www.cs.york.ac.uk/aig/sw/gobnilp) : Inference of the Bayesian Network from data
+- [gobnilp](https://www.cs.york.ac.uk/aig/sw/gobnilp) : Bayesian Network learning using Integer Linear Programming
 - [torchhd](https://github.com/hyperdimensional-computing/torchhd) : Python lib for Hyperdimensional Computing (or Vector Symbolic Architectures) Artticle: https://jmlr.org/papers/v24/23-0300.html
 - [farama](https://farama.org/) : à fouiller.
 

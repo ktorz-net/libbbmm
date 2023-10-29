@@ -40,20 +40,18 @@
  *   B b M m   V A L U E  S :  M A T R I C E
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 /*
- 
-*/
 
 typedef struct {
   BmCode* stateSpace, actionSpace;
   double ** values;
 } BmMatrice;
-
+*/
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   V A L U E S :  C R I T E R I A
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 /*
-  Define a Value function ( Code -> Value ) 
+  Define a Simple Value function ( Code -> Value )
 */
 
 typedef struct {
@@ -95,26 +93,33 @@ char* BmCriteria_print( BmCriteria* self, char* output);
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   V A L U E S F C T :  
+ *   B b M m   V A L U E  S :  E V A L  
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 /*
-  Define a multi critera Value function from state and action space
+  Define a multi-critera Value function
+  ( code -> value vector dot weight -> value )
 */
 
 typedef struct {
-  uint stateDimention, actionDimention, critNumber;
   BmCode* variable;
+  uint critNumber;
   BmCriteria ** criteria;
   BmCode ** masks;
   double * weights;
-} BmValueFct;
+} BmEval ;
 
 /* Constructor Destructor */
-BmValueFct* newBmValueFctBasic( BmCode* stateSpace, BmCode* actionSpace);
-void deleteBmValueFct( BmValueFct* self );
+BmEval* newBmEvalBasic( uint codeDimention, uint defaultCodeSize );
+BmEval* newBmEvalSpace( BmCode* codeSpace );
+BmEval* newBmEvalStateAction( BmCode* stateSpace, BmCode* actionSpace);
+BmEval* newBmEvalStateActionState( BmCode* stateSpace, BmCode* actionSpace);
+void deleteBmEval( BmEval* self );
 
-BmValueFct* BmValueFct_createBasic( BmValueFct* self, BmCode* stateSpace, BmCode* actionSpace);
-BmValueFct* BmValueFct_distroy( BmValueFct* self);
+BmEval* BmEval_createBasic( BmEval* self, uint codeDimention, uint defaultCodeSize );
+BmEval* BmEval_createSpace( BmEval* self, BmCode* codeSpace );
+BmEval* BmEval_createStateAction( BmEval* self, BmCode* stateSpace, BmCode* actionSpace);
+BmEval* BmEval_createStateActionState( BmEval* self, BmCode* stateSpace, BmCode* actionSpace);
+BmEval* BmEval_distroy( BmEval* self);
 
 /* initialize */
 
@@ -123,9 +128,12 @@ BmValueFct* BmValueFct_distroy( BmValueFct* self);
 
 /* Cleanning */
 
+
 /* Accessor */
 
+
 /* Printing */
+
 
 
 #endif
