@@ -73,7 +73,9 @@ BmEval* BmEval_createStateAction( BmEval* self, BmCode* stateSpace, BmCode* acti
 {
     uint stateDimention= BmCode_size(stateSpace);
     uint actionDimention= BmCode_size(actionSpace);
-    self->variable= newBmCodeBasic( stateDimention+actionDimention );
+    BmEval_createBasic( self, stateDimention+actionDimention, 2);
+
+    self->variable= newBmCodeBasic( BmCode_size( self->variable )  );
     for( uint i= 1 ; i <= stateDimention ; ++i )
     {
         BmCode_at_set( self->variable, i, BmCode_at( stateSpace, i ) );
@@ -83,21 +85,6 @@ BmEval* BmEval_createStateAction( BmEval* self, BmCode* stateSpace, BmCode* acti
     {
         BmCode_at_set( self->variable, stateDimention+i, BmCode_at( actionSpace, i ) );
     }
-
-    double outputs[1]= {0.0};
-    self->criteria= newEmptyArray( BmCriteria*, 1);
-    self->masks= newEmptyArray( BmCode*, 1);
-    
-    array_at_set(self->criteria, 1, newBmCriteria_options( self->variable, 1, outputs) );
-    BmCode* mask= newBmCodeBasic( BmCode_size( self->variable ) );
-    for( uint i= 1 ; i <= BmCode_size( self->variable ) ; ++i )
-        BmCode_at_set( mask, i , i );
-    array_at_set(self->masks, 1, mask );
-
-    self->weights= newEmptyArray( double, 1 );
-    array_at_set( self->weights, 1, 1.0 );
-
-    self->critNumber= 1;
     return self;
 }
 

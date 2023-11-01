@@ -40,7 +40,7 @@ BmTransition* test_newBmTransitionExemple()
 {
     /* test bayesian network (with 8 nodes):
      * 
-     *         3(2) 4(2) 5(2)
+     *         3(2) 4(4) 5(2)
      *         |     \    \
      * 1(2) ---+--------------> 7
      *   \     |
