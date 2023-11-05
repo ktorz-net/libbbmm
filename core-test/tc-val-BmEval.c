@@ -6,17 +6,17 @@
 
 START_TEST(test_BmEval_init)
 {
-    BmEval* eval= newBmEvalBasic( 3, 2 );
+    BmEval* eval= newBmEvalBasic( 3 );
 
     char buffer[1024]= "";
 
-    BmCode_print( eval->variable, buffer );
+    BmCode_print( eval->variables, buffer );
     ck_assert_str_eq( buffer, "[2, 2, 2]" );
 
-    ck_assert_uint_eq( eval->critNumber, 1 );
+    ck_assert_uint_eq( BmEval_gaugeSize(eval), 1 );
 
     strcpy( buffer, "" );
-    BmCriteria_print( array_at(eval->criteria, 1), buffer );
+    BmGauge_print( array_at(eval->gauges, 1), buffer );
     ck_assert_str_eq( buffer, "{}" );
 
     strcpy( buffer, "" );
@@ -30,18 +30,17 @@ START_TEST(test_BmEval_init)
 
 START_TEST(test_BmEval_initSpace)
 {
-    BmCode * space= newBmCode_list(5, 2, 4, 6, 3, 5);
-    BmEval* eval= newBmEvalSpace( space );
+    BmEval* eval= newBmEvalWith( newBmCode_list(5, 2, 4, 6, 3, 5), 1 );
 
     char buffer[1024]= "";
 
-    BmCode_print( eval->variable, buffer );
+    BmCode_print( eval->variables, buffer );
     ck_assert_str_eq( buffer, "[2, 4, 6, 3, 5]" );
 
-    ck_assert_uint_eq( eval->critNumber, 1 );
+    ck_assert_uint_eq( BmEval_gaugeSize(eval), 1 );
 
     strcpy( buffer, "" );
-    BmCriteria_print( array_at(eval->criteria, 1), buffer );
+    BmGauge_print( array_at(eval->gauges, 1), buffer );
     ck_assert_str_eq( buffer, "{}" );
 
     strcpy( buffer, "" );
@@ -50,7 +49,6 @@ START_TEST(test_BmEval_initSpace)
 
     ck_assert_double_eq( array_at(eval->weights, 1), 1.0 );
 
-    deleteBmCode(space);
     deleteBmEval(eval);
 }
 
@@ -58,17 +56,18 @@ START_TEST(test_BmEval_initStateAction)
 {
     BmCode * stateSpace= newBmCode_list(3, 2, 4, 6);
     BmCode * actionSpace= newBmCode_list(2, 3, 5);
-    BmEval* eval1= newBmEvalStateAction( stateSpace, actionSpace );
+    BmEval* eval1= newBmEvalWith( 
+        newBmCodeMergeList( 2, stateSpace, actionSpace ), 1 );
 
     char buffer[1024]= "";
 
-    BmCode_print( eval1->variable, buffer );
+    BmCode_print( eval1->variables, buffer );
     ck_assert_str_eq( buffer, "[2, 4, 6, 3, 5]" );
 
-    ck_assert_uint_eq( eval1->critNumber, 1 );
+    ck_assert_uint_eq( BmEval_gaugeSize(eval1), 1 );
 
     strcpy( buffer, "" );
-    BmCriteria_print( array_at(eval1->criteria, 1), buffer );
+    BmGauge_print( array_at(eval1->gauges, 1), buffer );
     ck_assert_str_eq( buffer, "{}" );
 
     strcpy( buffer, "" );
@@ -77,10 +76,11 @@ START_TEST(test_BmEval_initStateAction)
 
     ck_assert_double_eq( array_at(eval1->weights, 1), 1.0 );
 
-    BmEval* eval2= newBmEvalStateActionState( stateSpace, actionSpace );
+    BmEval* eval2= newBmEvalWith( 
+        newBmCodeMergeList( 3, stateSpace, actionSpace, stateSpace ), 1 );
 
     strcpy( buffer, "" );
-    BmCode_print( eval2->variable, buffer );
+    BmCode_print( eval2->variables, buffer );
     ck_assert_str_eq( buffer, "[2, 4, 6, 3, 5, 2, 4, 6]" );
 
     deleteBmCode(stateSpace);
@@ -90,10 +90,85 @@ START_TEST(test_BmEval_initStateAction)
 }
 END_TEST
 
-START_TEST(test_BmEval_construction)
+START_TEST(test_BmEval_construction01)
 {
+/* Test a multi-variate value function:
+ * 1.0*(1, 2) + 1.1*(3) + 1.2*(2, 4)
+ */
+    BmEval* eval= newBmEvalBasic( 4 );
+    BmCode_at_set( eval->variables, 1, 2 );
+    BmCode_at_set( eval->variables, 2, 2 );
+    BmCode_at_set( eval->variables, 3, 3 );
+    BmCode_at_set( eval->variables, 4, 4 );
+
+    ck_assert_uint_eq( BmEval_dimention( eval ), 4 );
+
+    char buffer[1024];
+    strcpy( buffer, "" );
+    BmCode_print( eval->variables, buffer );
+    ck_assert_str_eq( buffer, "[2, 2, 3, 4]" );
+
+    ck_assert_uint_eq( BmEval_gaugeSize( eval ), 1 );
+
+    // 3 Gauges
+    BmEval_initializeGauges( eval, 3 );
+
+    ck_assert_uint_eq( BmEval_gaugeSize( eval ), 3 );
+
+    strcpy( buffer, "" );
+    BmCode_print( array_at( eval->masks, 1), buffer );
+    ck_assert_str_eq( buffer, "[1, 2, 3, 4]" );
+
+    strcpy( buffer, "" );
+    BmCode_print( array_at( eval->masks, 2), buffer );
+    ck_assert_str_eq( buffer, "[1, 2, 3, 4]" );
+
+    strcpy( buffer, "" );
+    BmCode_print( array_at( eval->masks, 3), buffer );
+    ck_assert_str_eq( buffer, "[1, 2, 3, 4]" );
+
+    BmEval_gaugeAt_initList( eval, 1, 2, 1, 2 );
+
+    strcpy( buffer, "" );
+    BmCode_print( array_at( eval->masks, 1), buffer );
+    ck_assert_str_eq( buffer, "[1, 2]" );
+
+    BmEval_gaugeAt_initList( eval, 2, 1, 3 );
+    BmEval_gaugeAt_initList( eval, 3, 2, 2, 4 );
+
+    strcpy( buffer, "" );
+    BmCode_print( array_at( eval->masks, 2), buffer );
+    ck_assert_str_eq( buffer, "[3]" );
+
+    strcpy( buffer, "" );
+    BmCode_print( array_at( eval->masks, 3), buffer );
+    ck_assert_str_eq( buffer, "[2, 4]" );
+
+    ck_assert_uint_eq( BmEval_gaugeSize( eval ), 3 );
+
+    // 3 weights: 
+
+    ck_assert_double_eq_tol( BmEval_weightAt( eval, 1 ), 1.0, 0.00001 );
+    ck_assert_double_eq_tol( BmEval_weightAt( eval, 2 ), 1.0, 0.00001 );
+    ck_assert_double_eq_tol( BmEval_weightAt( eval, 3 ), 1.0, 0.00001 );
+
+    BmEval_weightAt_set( eval, 1 , 1.0 );
+    BmEval_weightAt_set( eval, 2 , 2.0 );
+    BmEval_weightAt_set( eval, 3 , 3.0 );
+
+    ck_assert_double_eq_tol( BmEval_weightAt( eval, 1 ), 1.0, 0.00001 );
+    ck_assert_double_eq_tol( BmEval_weightAt( eval, 2 ), 2.0, 0.00001 );
+    ck_assert_double_eq_tol( BmEval_weightAt( eval, 3 ), 3.0, 0.00001 );
+
+    deleteBmEval( eval );
 }
 END_TEST
+
+START_TEST(test_BmEval_construction02)
+{
+    BmCode* variable= newBmCode_list(4, 2, 2, 3, 4);
+    BmEval* eval= newBmEvalBasic( 4 );
+}
 
 START_TEST(test_BmEval_print)
 {
@@ -112,7 +187,8 @@ TCase * test_case_BmEval(void)
     tcase_add_test(tc, test_BmEval_init);
     tcase_add_test(tc, test_BmEval_initSpace);
     tcase_add_test(tc, test_BmEval_initStateAction);
-    tcase_add_test(tc, test_BmEval_construction);
+    tcase_add_test(tc, test_BmEval_construction01);
+    tcase_add_test(tc, test_BmEval_construction02);
     tcase_add_test(tc, test_BmEval_print);
     
     return tc;

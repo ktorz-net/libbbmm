@@ -11,26 +11,28 @@
  *  Define a multi critera Value function from state and action space
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
+/* Private Function : */
+BmEval* _BmEval_gaugesCreate( BmEval* self, uint gaugeSize );
+BmEval* _BmEval_gaugesDistroy( BmEval* self );
+
 /* Constructor Destructor */
-BmEval* newBmEvalBasic( uint codeDimention, uint defaultCodeSize )
+BmEval* newBmEvalBasic( uint codeDimention )
 {
-    return BmEval_createBasic( newEmpty(BmEval), codeDimention, defaultCodeSize );
+    return newBmEvalWith( newBmCode_all( codeDimention, 2 ), 1 );
 }
 
-BmEval* newBmEvalSpace( BmCode* codeSpace )
+BmEval* newBmEvalWith( BmCode* newVariables, uint numberOfGauges )
 {
-    return BmEval_createSpace( newEmpty(BmEval), codeSpace );
+    return BmEval_createWith( newEmpty(BmEval), newVariables, numberOfGauges );
 }
 
-BmEval* newBmEvalStateAction( BmCode* stateSpace, BmCode* actionSpace)
+BmEval* BmEval_createWith( BmEval* self, BmCode* newVariables, uint numberOfGauges )
 {
-    return BmEval_createStateAction( newEmpty(BmEval), stateSpace, actionSpace );
+    self->variables= newVariables;
+    _BmEval_gaugesCreate( self, numberOfGauges );
+    return self;
 }
 
-BmEval* newBmEvalStateActionState( BmCode* stateSpace, BmCode* actionSpace)
-{
-    return BmEval_createStateActionState( newEmpty(BmEval), stateSpace, actionSpace );
-}
 
 void deleteBmEval( BmEval* self )
 {
@@ -38,102 +40,116 @@ void deleteBmEval( BmEval* self )
     free( self );
 }
 
-BmEval* BmEval_createBasic( BmEval* self, uint variableDim, uint defaultVarSize )
+BmEval* BmEval_distroy( BmEval* self )
 {
-    self->variable= newBmCode_all( variableDim, defaultVarSize );
+    _BmEval_gaugesDistroy(self);
+    deleteBmCode( self->variables );
+    return self;
+}
 
+/* Constructor Destructor: Private */
+BmEval* _BmEval_gaugesCreate( BmEval* self, uint gaugeSize )
+{
     double outputs[1]= {0.0};
-    self->criteria= newEmptyArray( BmCriteria*, 1);
-    self->masks= newEmptyArray( BmCode*, 1);
-    
-    array_at_set(self->criteria, 1, newBmCriteria_options( self->variable, 1, outputs) );
-    BmCode* mask= newBmCodeBasic( BmCode_size( self->variable ) );
-    for( uint i= 1 ; i <= BmCode_size( self->variable ) ; ++i )
+    self->gauges= newEmptyArray( BmGauge*, gaugeSize );
+    self->masks= newEmptyArray( BmCode*, gaugeSize );
+    self->weights= newEmptyArray( double, gaugeSize );
+
+    BmCode* mask= newBmCodeBasic( BmCode_size( self->variables ) );
+    for( uint i= 1 ; i <= BmCode_size( self->variables ) ; ++i )
         BmCode_at_set( mask, i , i );
-    array_at_set(self->masks, 1, mask );
-
-    self->weights= newEmptyArray( double, 1 );
-    array_at_set( self->weights, 1, 1.0 );
-
-    self->critNumber= 1;
-    return self;
-}
-
-BmEval* BmEval_createSpace( BmEval* self, BmCode* codeSpace )
-{
-    BmEval_createBasic( self, BmCode_size( codeSpace ), 2 );
-    for( uint i= 1 ; i <= BmCode_size( codeSpace ) ; ++i )
+        
+    for( uint i= 1 ; i <= gaugeSize ; ++i )
     {
-        BmCode_at_set( self->variable, i, BmCode_at( codeSpace, i ) );
-    }
-    return self;
-}
-
-BmEval* BmEval_createStateAction( BmEval* self, BmCode* stateSpace, BmCode* actionSpace)
-{
-    uint stateDimention= BmCode_size(stateSpace);
-    uint actionDimention= BmCode_size(actionSpace);
-    BmEval_createBasic( self, stateDimention+actionDimention, 2);
-
-    self->variable= newBmCodeBasic( BmCode_size( self->variable )  );
-    for( uint i= 1 ; i <= stateDimention ; ++i )
-    {
-        BmCode_at_set( self->variable, i, BmCode_at( stateSpace, i ) );
-    }
-
-    for( uint i= 1 ; i <= actionDimention ; ++i )
-    {
-        BmCode_at_set( self->variable, stateDimention+i, BmCode_at( actionSpace, i ) );
-    }
-    return self;
-}
-
-BmEval* BmEval_createStateActionState( BmEval* self, BmCode* stateSpace, BmCode* actionSpace)
-{
-    uint stateDimention= BmCode_size(stateSpace);
-    uint actionDimention= BmCode_size(actionSpace);
-    BmEval_createBasic( self, stateDimention*2+actionDimention, 2);
-
-    self->variable= newBmCodeBasic( BmCode_size( self->variable )  );
-    for( uint i= 1 ; i <= stateDimention ; ++i )
-    {
-        BmCode_at_set( self->variable, i, BmCode_at( stateSpace, i ) );
-        BmCode_at_set(
-            self->variable, stateDimention+actionDimention+i,
-            BmCode_at( stateSpace, i )
+        array_at_set(
+            self->gauges, i,
+            newBmGauge_options( self->variables, 1, outputs)
         );
+        array_at_set( self->masks, i, newBmCodeAs( mask ) );
+        array_at_set( self->weights, i, 1.0 );
     }
-
-    for( uint i= 1 ; i <= actionDimention ; ++i )
-    {
-        BmCode_at_set( self->variable, stateDimention+i, BmCode_at( actionSpace, i ) );
-    }
+    
+    deleteBmCode( mask );
+    self->gaugeSize= gaugeSize;
     return self;
 }
 
-BmEval* BmEval_distroy( BmEval* self)
+BmEval* _BmEval_gaugesDistroy( BmEval* self )
 {
-    for( uint i = 1 ; i < self->critNumber ; ++i )
+    for( uint i = 1 ; i < self->gaugeSize ; ++i )
     {
-        deleteBmCriteria( array_at( self->criteria, i ) );
+        deleteBmGauge( array_at( self->gauges, i ) );
         deleteBmCode( array_at( self->masks, i ) );
     }
 
-    deleteEmptyArray( self->criteria );
+    deleteEmptyArray( self->gauges );
     deleteEmptyArray( self->masks );
     deleteEmptyArray( self->weights );
 
-    deleteBmCode( self->variable );
     return self;
 }
 
-/* initialize */
-
 /* Construction */
+BmEval* BmEval_initializeGauges( BmEval* self, uint gaugeSize )
+{
+    _BmEval_gaugesDistroy( self );
+    _BmEval_gaugesCreate( self, gaugeSize );
+    return self;
+}
 
+BmEval* BmEval_gaugeAt_initList( BmEval* self, uint gaugeId, uint varSize, uint var1, ... )
+{
+    uint variables[varSize];
+
+    // Build variable array from args
+    va_list ap;
+    variables[0]= var1;
+    va_start(ap, var1); 
+    for ( uint i = 1 ; i < varSize ; ++i )
+    {
+        variables[i]= va_arg(ap, uint);
+    }
+    va_end(ap);
+
+    BmCode* dependencies= newBmCodeBasic(varSize);
+    for( uint i= 1 ; i <= varSize ; ++i )
+        BmCode_at_set( dependencies, i, BmCode_at( self->variables, variables[i-1] ) );
+
+    // initialize gauge:
+    BmGauge_distroy( array_at( self->gauges, gaugeId ) );
+    BmGauge_createBasic( 
+        array_at( self->gauges, gaugeId ),
+        dependencies, 1 );
+    
+    BmCode_distroy( array_at( self->masks, gaugeId ) );
+    BmCode_create_numbers( array_at( self->masks, gaugeId ), varSize, variables );
+
+    deleteBmCode( dependencies );
+    return self;
+}
+
+BmEval* BmEval_weightAt_set( BmEval* self, uint gaugeId, double weight )
+{
+    array_at_set( self->weights, gaugeId, weight );
+    return self;
+}
 
 /* Cleanning */
 
 /* Accessor */
+uint BmEval_dimention( BmEval* self )
+{
+    return BmCode_size( self->variables );
+}
+
+uint BmEval_gaugeSize( BmEval* self )
+{
+    return self->gaugeSize;
+}
+
+double BmEval_weightAt( BmEval* self, uint gaugeId)
+{
+    return array_at( self->weights, gaugeId );
+}
 
 /* Printing */

@@ -12,8 +12,8 @@ TCase * test_case_BmNet(void);
 TCase * test_case_BmTree(void);
 
 // BbMm values 
-TCase * test_case_BmMatrice(void);
-TCase * test_case_BmCriteria(void);
+TCase * test_case_BmVector(void);
+TCase * test_case_BmGauge(void);
 TCase * test_case_BmEval(void);
 
 // BbMm Probabilities

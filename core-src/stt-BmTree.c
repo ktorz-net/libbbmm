@@ -22,15 +22,21 @@ uint _BmTree_at_readOrder_set_fromBranch( BmTree* self, BmCode* code, BmCode* co
 
 
 /* Constructor Destructor */
+BmTree* newBmTreeBasic( uint inputSize, uint optionSize )
+{
+    return BmTree_createWhith( newEmpty(BmTree),
+            newBmCode_all(inputSize, 2), optionSize );
+}
+
+BmTree* newBmTreeWith( BmCode* input, uint optionSize )
+{
+    return BmTree_createWhith( newEmpty(BmTree), input, optionSize );
+}
 
 BmTree* newBmTree( BmCode* input, uint optionSize )
 {
-    return BmTree_create( newEmpty(BmTree), BmCode_size(input), BmCode_numbers(input), optionSize );
-}
-
-BmTree* newBmTreeInputSizeAndBound( uint inputSize, uint* inputBounds, uint optionSize )
-{
-    return BmTree_create( newEmpty(BmTree), inputSize, inputBounds, optionSize );
+    return BmTree_createWhith( newEmpty(BmTree),
+            newBmCodeAs(input), optionSize );
 }
 
 void deleteBmTree(BmTree* self)
@@ -48,9 +54,9 @@ void BmTree_delete(BmTree* self)
 }
 
 /* Protected - to use with precaution */
-BmTree* BmTree_create( BmTree* self, uint inputSize, uint* inputBounds, uint optionSize )
+BmTree* BmTree_createWhith( BmTree* self, BmCode* newInput, uint optionSize )
 {
-    self->input= newBmCode_numbers( inputSize, inputBounds );
+    self->input= newInput;
     self->optionBound= optionSize+1;
     self->capacity= 1;
     self->branches= malloc( sizeof(int*) * self->capacity );

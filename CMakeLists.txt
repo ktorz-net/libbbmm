@@ -37,8 +37,8 @@ set(SRC_FILES
     core-src/stt-BmBench.c
     core-src/stt-BmNet.c
     core-src/stt-BmTree.c
-    core-src/val-BmMatrice.c
-    core-src/val-BmCriteria.c
+    core-src/val-BmVector.c
+    core-src/val-BmGauge.c
     core-src/val-BmEval.c
     core-src/pbb-BmDistribution.c
     core-src/pbb-BmCondition.c
@@ -71,8 +71,8 @@ set(TEST_SRC_FILES
     core-test/tc-stt-BmBench.c
     core-test/tc-stt-BmNet.c
     core-test/tc-stt-BmTree.c
-    core-test/tc-val-BmMatrice.c
-    core-test/tc-val-BmCriteria.c
+    core-test/tc-val-BmVector.c
+    core-test/tc-val-BmGauge.c
     core-test/tc-val-BmEval.c
     core-test/tc-pbb-BmDistribution.c
     core-test/tc-pbb-BmCondition.c

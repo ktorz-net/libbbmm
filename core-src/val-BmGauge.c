@@ -13,32 +13,32 @@
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 /* Constructor Destructor */
-BmCriteria* newBmCriteriaBasic( BmCode* input, uint optionSize )
+BmGauge* newBmGaugeBasic( BmCode* input, uint optionSize )
 {
-    return BmCriteria_createBasic( newEmpty(BmCriteria), input, optionSize );
+    return BmGauge_createBasic( newEmpty(BmGauge), input, optionSize );
 }
 
-BmCriteria* newBmCriteria_options( BmCode* input, uint optionSize, double* options )
+BmGauge* newBmGauge_options( BmCode* input, uint optionSize, double* options )
 {
-    return BmCriteria_create_options( newEmpty(BmCriteria), input, optionSize, options );
+    return BmGauge_create_options( newEmpty(BmGauge), input, optionSize, options );
 }
 
-void deleteBmCriteria( BmCriteria* self )
+void deleteBmGauge( BmGauge* self )
 {
-    BmCriteria_distroy(self);
+    BmGauge_distroy(self);
     free(self);
 }
 
-BmCriteria* BmCriteria_createBasic( BmCriteria* self, BmCode* input, uint optionSize )
+BmGauge* BmGauge_createBasic( BmGauge* self, BmCode* input, uint optionSize )
 {
     self->selector= newBmTree( input, optionSize );
     self->options= newEmptyArray(double, optionSize);
     return self;
 }
 
-BmCriteria* BmCriteria_create_options( BmCriteria* self, BmCode* input, uint optionSize, double* options )
+BmGauge* BmGauge_create_options( BmGauge* self, BmCode* input, uint optionSize, double* options )
 {
-    BmCriteria_createBasic(self, input, optionSize);
+    BmGauge_createBasic(self, input, optionSize);
     for( uint i=0 ; i < optionSize ; ++i )
     {
         array_at_set( self->options, i+1, options[i] );
@@ -46,7 +46,7 @@ BmCriteria* BmCriteria_create_options( BmCriteria* self, BmCode* input, uint opt
     return self;
 }
 
-BmCriteria* BmCriteria_distroy( BmCriteria* self)
+BmGauge* BmGauge_distroy( BmGauge* self)
 {
     deleteEmptyArray( self->options );
     deleteBmTree( self->selector );
@@ -54,21 +54,21 @@ BmCriteria* BmCriteria_distroy( BmCriteria* self)
 }
 
 /* Construction */
-BmCriteria* BmCriteria_optionId_set(BmCriteria* self, uint iOption, double value)
+BmGauge* BmGauge_optionId_set(BmGauge* self, uint iOption, double value)
 {
     array_at_set( self->options, iOption, value );
     return self;
 }
 
-uint BmCriteria_at_setOptionId( BmCriteria* self, BmCode* code, uint iOption)
+uint BmGauge_at_setOptionId( BmGauge* self, BmCode* code, uint iOption)
 {
     return BmTree_at_set( self->selector, code, iOption );
 }
 
 
-BmCriteria* BmCriteria_setList(BmCriteria* self, uint number, ... )
+BmGauge* BmGauge_setList(BmGauge* self, uint number, ... )
 {
-    BmCode* code= newBmCodeBasic( BmCriteria_dimention(self) );
+    BmCode* code= newBmCodeBasic( BmGauge_dimention(self) );
     // Build number code -> iOption tuples 
     va_list ap;
     va_start(ap, number); 
@@ -78,7 +78,7 @@ BmCriteria* BmCriteria_setList(BmCriteria* self, uint number, ... )
         {
             BmCode_at_set(code, iVar, va_arg(ap, uint ) );
         }
-        BmCriteria_at_setOptionId( self, code, va_arg(ap, uint ) );
+        BmGauge_at_setOptionId( self, code, va_arg(ap, uint ) );
     }
     va_end(ap);
     // clean:
@@ -87,33 +87,33 @@ BmCriteria* BmCriteria_setList(BmCriteria* self, uint number, ... )
 }
 
 /* Accessor */
-uint BmCriteria_dimention( BmCriteria* self )
+uint BmGauge_dimention( BmGauge* self )
 {
     return BmCode_size( self->selector->input );
 }
 
-uint BmCriteria_optionSize( BmCriteria* self )
+uint BmGauge_optionSize( BmGauge* self )
 {
     return self->selector->optionBound-1;
 }
 
-double BmCriteria_optionId(  BmCriteria* self, uint iOption )
+double BmGauge_optionId(  BmGauge* self, uint iOption )
 {
     return array_at( self->options, iOption );
 }
 
-double BmCriteria_at( BmCriteria* self, BmCode* code)
+double BmGauge_at( BmGauge* self, BmCode* code)
 {
     uint iOption= BmTree_at( self->selector, code );
-    return BmCriteria_optionId(self, iOption);
+    return BmGauge_optionId(self, iOption);
 }
 
 
 /* Printing */
-char* BmCriteria_print( BmCriteria* self, char* output)
+char* BmGauge_print( BmGauge* self, char* output)
 {
     // prepare options
-    uint optionsSize= BmCriteria_optionSize(self);
+    uint optionsSize= BmGauge_optionSize(self);
     char** optionsStr= newEmptyArray( char*, optionsSize );
     for( uint i= 1 ; i <= optionsSize ; ++i )
     {

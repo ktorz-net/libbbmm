@@ -3,9 +3,9 @@
  *   BbMm Evaluation - A library in KISS philosophy of *Bayesian-based Markov-models* values manipulation.
  * 
  *   FEATURES:
- *       - BmMatrice         : Define a 'BmBench' of values. 
- *       - BmCriteria        : Define a distribution of values over configuration (codes)
- *       - BmReward          : Define a composed value function over an state and action space. 
+ *       - BmVector       : a fixed size collection of values. 
+ *       - BmGauge        : a distribution of values over configuration (codes)
+ *       - BmEval         : a composed value function over an state and action space. 
  * 
  *   LICENSE: MIT License
  *
@@ -37,18 +37,18 @@
 #include "bbmm-structures.h"
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   V A L U E  S :  M A T R I C E
+ *   B b M m   V A L U E  S :  V E C T O R 
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 /*
 
 typedef struct {
   BmCode* stateSpace, actionSpace;
   double ** values;
-} BmMatrice;
+} BmVector;
 */
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   V A L U E S :  C R I T E R I A
+ *   B b M m   V A L U E S :  G A U G E
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 /*
   Define a Simple Value function ( Code -> Value )
@@ -57,39 +57,41 @@ typedef struct {
 typedef struct {
   BmTree* selector;
   double* options;
-} BmCriteria;
+} BmGauge;
 
 /* Constructor Destructor */
-BmCriteria* newBmCriteriaBasic( BmCode* input, uint optionSize );
-BmCriteria* newBmCriteria_options( BmCode* input, uint optionSize, double* options );
-void deleteBmCriteria( BmCriteria* self );
+BmGauge* newBmGaugeBasic( BmCode* input, uint optionSize );
+// ToDo: BmGauge* newNmGaugeWith( BmTree* newSelector, BmVector* newOptions );
 
-BmCriteria* BmCriteria_createBasic( BmCriteria* self, BmCode* input, uint optionSize );
-BmCriteria* BmCriteria_create_options( BmCriteria* self, BmCode* input, uint optionSize, double* options );
-BmCriteria* BmCriteria_distroy( BmCriteria* self);
+BmGauge* newBmGauge_options( BmCode* input, uint optionSize, double* options );
+
+void deleteBmGauge( BmGauge* self );
+
+BmGauge* BmGauge_createBasic( BmGauge* self, BmCode* input, uint optionSize );
+BmGauge* BmGauge_create_options( BmGauge* self, BmCode* input, uint optionSize, double* options );
+BmGauge* BmGauge_distroy( BmGauge* self );
 
 /* initialize */
-//BmCriteria* BmCriteria_initializeBasic( BmCriteria* self, BmCode* input, uint optionSize );
-//BmCriteria* BmCriteria_initialize_options( BmCriteria* self, BmCode* input, uint optionSize, double options );
+//BmGauge* BmGauge_initializeBasic( BmGauge* self, BmCode* input, uint optionSize );
+//BmGauge* BmGauge_initialize_options( BmGauge* self, BmCode* input, uint optionSize, double options );
 
 /* Construction */
-BmCriteria* BmCriteria_optionId_set(BmCriteria* self, uint iOption, double value);
-uint BmCriteria_at_setOptionId( BmCriteria* self, BmCode* code, uint iOption);
+BmGauge* BmGauge_optionId_set(BmGauge* self, uint iOption, double value);
+uint BmGauge_at_setOptionId( BmGauge* self, BmCode* code, uint iOption);
 
-BmCriteria* BmCriteria_setList(BmCriteria* self, uint number, ... );
-
+BmGauge* BmGauge_setList(BmGauge* self, uint number, ... );
 
 /* Cleanning */
 
 /* Accessor */
-uint BmCriteria_dimention( BmCriteria* self );
-uint BmCriteria_optionSize( BmCriteria* self );
-double BmCriteria_optionId(  BmCriteria* self, uint iOption );
+uint BmGauge_dimention( BmGauge* self );
+uint BmGauge_optionSize( BmGauge* self );
+double BmGauge_optionId(  BmGauge* self, uint iOption );
 
-double BmCriteria_at( BmCriteria* self, BmCode* code); // Return the option value of a code.
+double BmGauge_at( BmGauge* self, BmCode* code); // Return the option value of a code.
 
 /* Printing */
-char* BmCriteria_print( BmCriteria* self, char* output);
+char* BmGauge_print( BmGauge* self, char* output);
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
@@ -101,36 +103,35 @@ char* BmCriteria_print( BmCriteria* self, char* output);
 */
 
 typedef struct {
-  BmCode* variable;
-  uint critNumber;
-  BmCriteria ** criteria;
+  BmCode* variables;
+  uint gaugeSize;
+  BmGauge ** gauges;
   BmCode ** masks;
   double * weights;
 } BmEval ;
 
 /* Constructor Destructor */
-BmEval* newBmEvalBasic( uint codeDimention, uint defaultCodeSize );
-BmEval* newBmEvalSpace( BmCode* codeSpace );
-BmEval* newBmEvalStateAction( BmCode* stateSpace, BmCode* actionSpace);
-BmEval* newBmEvalStateActionState( BmCode* stateSpace, BmCode* actionSpace);
-void deleteBmEval( BmEval* self );
+BmEval* newBmEvalBasic( uint codeDimention );
+BmEval* newBmEvalWith( BmCode* newVariables, uint numberOfGauges );
 
-BmEval* BmEval_createBasic( BmEval* self, uint codeDimention, uint defaultCodeSize );
-BmEval* BmEval_createSpace( BmEval* self, BmCode* codeSpace );
-BmEval* BmEval_createStateAction( BmEval* self, BmCode* stateSpace, BmCode* actionSpace);
-BmEval* BmEval_createStateActionState( BmEval* self, BmCode* stateSpace, BmCode* actionSpace);
+BmEval* BmEval_createWith( BmEval* self, BmCode* newVariables, uint numberOfGauges );
+
+void deleteBmEval( BmEval* self );
 BmEval* BmEval_distroy( BmEval* self);
 
-/* initialize */
-
 /* Construction */
-
+BmEval* BmEval_initializeGauges( BmEval* self, uint gaugeSize );
+BmEval* BmEval_gaugeAt_initList( BmEval* self, uint gaugeId, uint varSize, uint var1, ... );
+BmEval* BmEval_weightAt_set( BmEval* self, uint gaugeId, double weight );
 
 /* Cleanning */
 
 
 /* Accessor */
+uint BmEval_dimention( BmEval* self ); // dimention of input code.
+uint BmEval_gaugeSize( BmEval* self ); // number of gauges.
 
+double BmEval_weightAt( BmEval* self, uint gaugeId);
 
 /* Printing */
 

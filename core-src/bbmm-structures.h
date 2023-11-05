@@ -3,12 +3,10 @@
  *   BbMm Structures - A library in KISS philosophy for *Bayesian-based Markov-models* data structures.
  * 
  *   FEATURES:
- *       - BmCode        : a fixed size list of unsigned integers
+ *       - BmCode        : a fixed size list of digit (unsigned integers)
  *       - BmBench       : a dynamic-size collection of BmCode
  *       - BmNet         : a network based on unsigned integers
  *       - BmTree        : a decision tree based BmCode ( BmCode -> uint)
- *       - BmData        : A decision tree based BmCode ( BmCode -> double)
- *       - BmFunction    : A decision tree based BmCode ( BmCode -> double)
  *
  *   LICENSE: MIT License
  *
@@ -93,12 +91,16 @@ BmCode* newBmCode_numbers( uint size, uint* numbers );
 BmCode* newBmCode_all(uint size, uint defaultValue);
 BmCode* newBmCodeAs( BmCode* model );
 
-BmCode* newBmCode_list(uint size, uint number1, ... );
+BmCode* newBmCode_list( uint size, uint number1, ... );
+
+BmCode* newBmCodeMergeList( uint numberOfCodes, BmCode* code1, ... );
 
 BmCode* BmCode_create_numbers( BmCode* self, uint size, uint* numbers );
 BmCode* BmCode_createBasic( BmCode* self, uint size );
 BmCode* BmCode_create_all( BmCode* self, uint size, uint defaultValue );
 BmCode* BmCode_createAs( BmCode* self, BmCode* model );
+
+BmCode* BmCode_createMerge( BmCode* self, uint numberOfCodes, BmCode ** codes );
 
 /* Destructor */
 void deleteBmCode( BmCode* instance);
@@ -253,11 +255,13 @@ typedef struct {
 } BmTree;
 
 /* Constructor Destructor */
+BmTree* newBmTreeBasic( uint inputSize, uint optionSize );
+BmTree* newBmTreeWith( BmCode* newInput, uint optionSize );
 BmTree* newBmTree( BmCode* input, uint optionSize );
-BmTree* newBmTreeInputSizeAndBound( uint inputSize, uint* inputBounds, uint optionSize );
+
 void deleteBmTree( BmTree* self );
 
-BmTree* BmTree_create( BmTree* self, uint inputSize, uint* inputBounds, uint optionSize );
+BmTree* BmTree_createWhith( BmTree* self, BmCode* input, uint optionSize );
 BmTree* BmTree_distroy( BmTree* self);
 
 /* initialize */

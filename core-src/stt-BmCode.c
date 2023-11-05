@@ -46,6 +46,27 @@ BmCode* newBmCode_list(uint size, uint number1, ... )
     return BmCode_create_numbers( newEmpty(BmCode), size, numbers );
 }
 
+
+BmCode* newBmCodeMergeList( uint numberOfCodes, BmCode* code1, ... )
+{
+    BmCode* codes[numberOfCodes];
+
+    // Build words array from args
+    va_list ap;
+    codes[0]= code1;
+    va_start(ap, code1); 
+    for ( uint i = 1 ; i < numberOfCodes ; ++i )
+    {
+        codes[i]= va_arg(ap, BmCode*);
+    }
+    va_end(ap);
+
+    // Create the instance
+    return BmCode_createMerge(
+        newEmpty(BmCode), numberOfCodes, codes );
+}
+
+
 void deleteBmCode(BmCode* instance)
 {
     BmCode_distroy(instance);
@@ -82,6 +103,33 @@ BmCode* BmCode_createAs(BmCode* self, BmCode* model)
     self->dsc[0]= size;
     for( uint i= 1 ; i <= size ; ++i )
         BmCode_at_set(self, i, BmCode_at(model, i));
+    return self;
+}
+
+
+BmCode* BmCode_createMerge( BmCode* self, uint numberOfCodes, BmCode ** codes )
+{
+    // Final size:
+    uint size= 0;
+    for( uint iCode= 1 ; iCode <= numberOfCodes ; ++iCode )
+        size+= BmCode_size( array_at(codes, iCode) );
+    
+    // Build the strucutre:
+    self->dsc = malloc( sizeof(uint)*(size+1) );
+    self->dsc[0]= size;
+
+    // Fill with values:
+    uint i= 1;
+    for( uint iCode= 1 ; iCode <= numberOfCodes ; ++iCode )
+    {
+        BmCode* code= array_at( codes, iCode );
+        size= BmCode_size( array_at(codes, iCode) );
+        for( uint iVal= 1 ; iVal <= size ; ++iVal )
+        {
+            BmCode_at_set( self, i, BmCode_at(code, iVal ) );
+            ++i;
+        }
+    }
     return self;
 }
 

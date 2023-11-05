@@ -4,17 +4,17 @@
 
 #include <stdio.h>
 
-START_TEST(test_BmMatrice_init)
+START_TEST(test_BmVector_init)
 {
 }
 END_TEST
 
-START_TEST(test_BmMatrice_construction)
+START_TEST(test_BmVector_construction)
 {
 }
 END_TEST
 
-START_TEST(test_BmMatrice_print)
+START_TEST(test_BmVector_print)
 {
 }
 END_TEST
@@ -23,14 +23,14 @@ END_TEST
  *       Test case scenario
  ***********************************************************************************/
 
-TCase * test_case_BmMatrice(void)
+TCase * test_case_BmVector(void)
 {
     /* WdDomain test case */
     TCase *tc= tcase_create("BmCondition");
 
-    tcase_add_test(tc, test_BmMatrice_init);
-    tcase_add_test(tc, test_BmMatrice_construction);
-    tcase_add_test(tc, test_BmMatrice_print);
+    tcase_add_test(tc, test_BmVector_init);
+    tcase_add_test(tc, test_BmVector_construction);
+    tcase_add_test(tc, test_BmVector_print);
     
     return tc;
 }

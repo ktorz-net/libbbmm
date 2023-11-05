@@ -45,9 +45,7 @@ BmCondition* BmCondition_create( BmCondition* self, uint outputSize, BmCode * pa
     self->outputSize= outputSize;
 
     self->parentRanges= newBmCodeAs( parentsRanges );
-    self->selector= newBmTreeInputSizeAndBound( 
-        BmCode_size(parentsRanges), BmCode_numbers(parentsRanges),
-        BmCode_product( self->parentRanges ) );
+    self->selector= newBmTree( parentsRanges,  BmCode_product( self->parentRanges ) );
     
     self->distribCapacity= 1;
     self->distributions= malloc( sizeof(BmDistribution*) * self->distribCapacity );
