@@ -155,6 +155,9 @@ BmCode* BmCode_nextCode( BmCode* self, BmCode* configuration ); // set the code 
 BmCode* BmCode_previousCode( BmCode* self, BmCode* configuration ); // set the code as a key value in given ranges
 bool BmCode_isIncluding( BmCode* self, BmCode* configuration ); // set the code as a key value in given ranges
 
+/* mask */
+BmCode* BmCode_newBmCodeMask(BmCode* self, BmCode* mask);
+
 /* Printing */
 char* BmCode_wording( BmCode* self); // print `self` on `output`
 char* BmCode_print( BmCode* self, char* buffer);   // print `self` at the end of `output`

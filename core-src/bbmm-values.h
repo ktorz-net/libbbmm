@@ -111,7 +111,7 @@ typedef struct {
 } BmEval ;
 
 /* Constructor Destructor */
-BmEval* newBmEvalBasic( uint codeDimention );
+BmEval* newBmEvalBasic( uint codeDimention, uint numberOfGauges );
 BmEval* newBmEvalWith( BmCode* newVariables, uint numberOfGauges );
 
 BmEval* BmEval_createWith( BmEval* self, BmCode* newVariables, uint numberOfGauges );
@@ -121,7 +121,8 @@ BmEval* BmEval_distroy( BmEval* self);
 
 /* Construction */
 BmEval* BmEval_initializeGauges( BmEval* self, uint gaugeSize );
-BmEval* BmEval_gaugeAt_initList( BmEval* self, uint gaugeId, uint varSize, uint var1, ... );
+//BmEval* BmEval_gaugeAt_initializeWith( BmEval* self, uint gaugeId, BmCode* newMask, BmVector* newOptions )
+BmEval* BmEval_gaugeAt_initList( BmEval* self, uint gaugeId, uint optionSize, uint varSize, uint var1, ... );
 BmEval* BmEval_weightAt_set( BmEval* self, uint gaugeId, double weight );
 
 /* Cleanning */
@@ -130,8 +131,12 @@ BmEval* BmEval_weightAt_set( BmEval* self, uint gaugeId, double weight );
 /* Accessor */
 uint BmEval_dimention( BmEval* self ); // dimention of input code.
 uint BmEval_gaugeSize( BmEval* self ); // number of gauges.
+BmGauge* BmEval_gaugeAt( BmEval* self, uint iGauge );
 
 double BmEval_weightAt( BmEval* self, uint gaugeId);
+
+/* Evaluation */
+double BmEval_valueOf( BmEval* self, BmCode* code );
 
 /* Printing */
 

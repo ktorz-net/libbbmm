@@ -3,11 +3,12 @@
 
 ## On the fire:
 
-- newXXXWith: Optimized constructors - Add tests.
 - BmSystem - Reward: `BmGauge` and `BmValueFct` () (from_and_)
 - Réactivate cofeeRobot exemple
 - Réactivate Python Wrap (pyBbMm) with cofeeRobot
 - Multi-Robot version -> Article for EUMAS.
+
+- Simplify the API...
 
 - Respect the BmSystem_variable_addProbabilities order, (and adapt BmTree accordingly) (cf. _ToDo:_ tag in `tc-mld-BmSystem.c`)
 - Factorized printing of `BmSystem_printVariable`.

@@ -16,9 +16,9 @@ BmEval* _BmEval_gaugesCreate( BmEval* self, uint gaugeSize );
 BmEval* _BmEval_gaugesDistroy( BmEval* self );
 
 /* Constructor Destructor */
-BmEval* newBmEvalBasic( uint codeDimention )
+BmEval* newBmEvalBasic( uint codeDimention, uint numberOfGauges  )
 {
-    return newBmEvalWith( newBmCode_all( codeDimention, 2 ), 1 );
+    return newBmEvalWith( newBmCode_all( codeDimention, 2 ), numberOfGauges );
 }
 
 BmEval* newBmEvalWith( BmCode* newVariables, uint numberOfGauges )
@@ -32,7 +32,6 @@ BmEval* BmEval_createWith( BmEval* self, BmCode* newVariables, uint numberOfGaug
     _BmEval_gaugesCreate( self, numberOfGauges );
     return self;
 }
-
 
 void deleteBmEval( BmEval* self )
 {
@@ -97,7 +96,7 @@ BmEval* BmEval_initializeGauges( BmEval* self, uint gaugeSize )
     return self;
 }
 
-BmEval* BmEval_gaugeAt_initList( BmEval* self, uint gaugeId, uint varSize, uint var1, ... )
+BmEval* BmEval_gaugeAt_initList( BmEval* self, uint gaugeId, uint optionSize, uint varSize, uint var1, ... )
 {
     uint variables[varSize];
 
@@ -119,7 +118,7 @@ BmEval* BmEval_gaugeAt_initList( BmEval* self, uint gaugeId, uint varSize, uint 
     BmGauge_distroy( array_at( self->gauges, gaugeId ) );
     BmGauge_createBasic( 
         array_at( self->gauges, gaugeId ),
-        dependencies, 1 );
+        dependencies, optionSize );
     
     BmCode_distroy( array_at( self->masks, gaugeId ) );
     BmCode_create_numbers( array_at( self->masks, gaugeId ), varSize, variables );
@@ -147,9 +146,28 @@ uint BmEval_gaugeSize( BmEval* self )
     return self->gaugeSize;
 }
 
+BmGauge* BmEval_gaugeAt( BmEval* self, uint iGauge )
+{
+    return array_at( self->gauges, iGauge );
+}
+
 double BmEval_weightAt( BmEval* self, uint gaugeId)
 {
     return array_at( self->weights, gaugeId );
+}
+
+/* Process */
+double BmEval_valueOf( BmEval* self, BmCode* code )
+{
+    double value= 0.0;
+    for( uint iGauge=  1 ; iGauge <= self->gaugeSize ; ++iGauge )
+    {
+        BmCode* gaugeCode= BmCode_newBmCodeMask( code, array_at( self->masks, iGauge ) ); 
+        value+= array_at( self->weights, iGauge )
+                * BmGauge_at( array_at( self->gauges, iGauge ) , gaugeCode );
+        deleteBmCode( gaugeCode );
+    }
+    return value;
 }
 
 /* Printing */

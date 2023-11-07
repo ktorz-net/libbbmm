@@ -161,6 +161,7 @@ BmCode* BmCode_initialize_list( BmCode* self, uint newSize, uint number1, ... )
     va_end(ap);
     // initialize the instance
     BmCode_initializeBasic(self, newSize );
+    
     return BmCode_create_numbers(self, newSize, numbers);
 }
 
@@ -479,6 +480,20 @@ bool BmCode_isIncluding(BmCode* ranges, BmCode* code)
         ok= ok && BmCode_at(code, i) > 0 && (BmCode_at(code, i) <= BmCode_at(ranges, i));
     }
     return ok;
+}
+
+/* mask */
+BmCode* BmCode_newBmCodeMask(BmCode* self, BmCode* mask)
+{   
+    uint maskSize= BmCode_size(mask);
+    assert( maskSize <= BmCode_size(self) );
+    BmCode* code = newBmCodeBasic( BmCode_size(mask) );
+
+    for( uint i= 1 ; i <= maskSize ; ++i )
+            BmCode_at_set( code, i,
+                BmCode_at( self, BmCode_at(mask, i) ) );
+    
+    return code;
 }
 
 /* Printing */

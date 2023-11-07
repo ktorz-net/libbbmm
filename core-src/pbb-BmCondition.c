@@ -212,7 +212,7 @@ BmDistribution* BmCondition_newDistributionByInfering(BmCondition* self, BmDistr
 
 BmDistribution * BmCondition_newDistributionByInfering_mask(BmCondition* self, BmDistribution * longDistrib, BmCode * mask)
 {
-    // p uts("< BmCondition_inferMask");
+    // puts("< BmCondition_inferMask");
     BmDistribution* newDistrib= newBmDistribution( longDistrib->dimention + 1 );
     BmDistribution_resizeCapacity(newDistrib, self->outputSize * BmDistribution_size(longDistrib) );
 
