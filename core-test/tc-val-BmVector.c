@@ -4,8 +4,34 @@
 
 #include <stdio.h>
 
-START_TEST(test_BmVector_init)
+START_TEST(test_BmVector_init01)
 {
+    BmVector* vector= newBmVectorBasic(3);
+    
+    ck_assert_uint_eq( BmVector_size(vector), 3);
+
+    BmVector_at_set(vector, 1, 1.1);
+    BmVector_at_set(vector, 2, 2.1);
+    BmVector_at_set(vector, 3, 3.1);
+
+    ck_assert_double_eq_tol( BmVector_at(vector, 1), 1.1, 0.00001 );
+    ck_assert_double_eq_tol( BmVector_at(vector, 2), 2.1, 0.00001 );
+    ck_assert_double_eq_tol( BmVector_at(vector, 3), 3.1, 0.00001 );
+
+    deleteBmVector(vector);
+}
+END_TEST
+
+START_TEST(test_BmVector_init02)
+{
+    BmVector* vector= newBmVector_list(3, 1.1,  2.1,  3.1 );
+    
+    ck_assert_uint_eq( BmVector_size(vector), 3);
+    ck_assert_double_eq_tol( BmVector_at(vector, 1), 1.1, 0.00001 );
+    ck_assert_double_eq_tol( BmVector_at(vector, 2), 2.1, 0.00001 );
+    ck_assert_double_eq_tol( BmVector_at(vector, 3), 3.1, 0.00001 );
+
+    deleteBmVector(vector);
 }
 END_TEST
 
@@ -26,9 +52,10 @@ END_TEST
 TCase * test_case_BmVector(void)
 {
     /* WdDomain test case */
-    TCase *tc= tcase_create("BmCondition");
+    TCase *tc= tcase_create("BmVector");
 
-    tcase_add_test(tc, test_BmVector_init);
+    tcase_add_test(tc, test_BmVector_init01);
+    tcase_add_test(tc, test_BmVector_init02);
     tcase_add_test(tc, test_BmVector_construction);
     tcase_add_test(tc, test_BmVector_print);
     

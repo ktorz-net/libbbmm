@@ -1,9 +1,12 @@
-# BeMAge board
-
+# Bayesian-based Marokov-model board
 
 ## On the fire:
 
-- BmSystem - Reward: `BmGauge` and `BmValueFct` () (from_and_)
+- BmAgent
+	* Process: action= agent.decide(perception)
+- BmSystem
+	* Process: output/perception= system.process
+	* Reward: `BmGauge` and `BmValueFct` () (from_and_)(input/action)
 - Réactivate cofeeRobot exemple
 - Réactivate Python Wrap (pyBbMm) with cofeeRobot
 - Multi-Robot version -> Article for EUMAS.
