@@ -18,6 +18,11 @@ BmGauge* newBmGaugeBasic( BmCode* input, uint optionSize )
     return BmGauge_createBasic( newEmpty(BmGauge), input, optionSize );
 }
 
+BmGauge* newNmGaugeWith( BmTree* newSelector, BmVector* newOptions )
+{
+    return BmGauge_createWith( newEmpty(BmGauge), newSelector, newOptions );
+}
+
 BmGauge* newBmGauge_options( BmCode* input, uint optionSize, double* options )
 {
     return BmGauge_create_options( newEmpty(BmGauge), input, optionSize, options );
@@ -32,7 +37,13 @@ void deleteBmGauge( BmGauge* self )
 BmGauge* BmGauge_createBasic( BmGauge* self, BmCode* input, uint optionSize )
 {
     self->selector= newBmTree( input, optionSize );
-    self->options= newEmptyArray(double, optionSize);
+    self->options= newBmVectorBasic(optionSize);
+    return self;
+}
+BmGauge* BmGauge_createWith( BmGauge* self, BmTree* newSelector, BmVector* newOptions )
+{
+    self->selector= newSelector;
+    self->options= newOptions;
     return self;
 }
 
@@ -41,14 +52,14 @@ BmGauge* BmGauge_create_options( BmGauge* self, BmCode* input, uint optionSize, 
     BmGauge_createBasic(self, input, optionSize);
     for( uint i=0 ; i < optionSize ; ++i )
     {
-        array_at_set( self->options, i+1, options[i] );
+        BmVector_at_set( self->options, i+1, options[i] );
     }
     return self;
 }
 
 BmGauge* BmGauge_distroy( BmGauge* self)
 {
-    deleteEmptyArray( self->options );
+    deleteBmVector( self->options );
     deleteBmTree( self->selector );
     return self;
 }
@@ -56,7 +67,7 @@ BmGauge* BmGauge_distroy( BmGauge* self)
 /* Construction */
 BmGauge* BmGauge_optionId_set(BmGauge* self, uint iOption, double value)
 {
-    array_at_set( self->options, iOption, value );
+    BmVector_at_set( self->options, iOption, value );
     return self;
 }
 
@@ -99,7 +110,7 @@ uint BmGauge_optionSize( BmGauge* self )
 
 double BmGauge_optionId(  BmGauge* self, uint iOption )
 {
-    return array_at( self->options, iOption );
+    return BmVector_at( self->options, iOption );
 }
 
 double BmGauge_at( BmGauge* self, BmCode* code)
@@ -118,7 +129,7 @@ char* BmGauge_print( BmGauge* self, char* output)
     for( uint i= 1 ; i <= optionsSize ; ++i )
     {
         array_at_set( optionsStr, i, newEmptyArray( char*, 32 ); )
-        sprintf( array_at( optionsStr, i ), "%f", array_at(self->options, i) );
+        sprintf( array_at( optionsStr, i ), "%f", BmVector_at(self->options, i) );
     }
 
     // print

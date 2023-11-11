@@ -52,7 +52,7 @@ BmEval* _BmEval_gaugesCreate( BmEval* self, uint gaugeSize )
     double outputs[1]= {0.0};
     self->gauges= newEmptyArray( BmGauge*, gaugeSize );
     self->masks= newEmptyArray( BmCode*, gaugeSize );
-    self->weights= newEmptyArray( double, gaugeSize );
+    self->weights= newBmVectorBasic( gaugeSize );
 
     BmCode* mask= newBmCodeBasic( BmCode_size( self->variables ) );
     for( uint i= 1 ; i <= BmCode_size( self->variables ) ; ++i )
@@ -65,7 +65,7 @@ BmEval* _BmEval_gaugesCreate( BmEval* self, uint gaugeSize )
             newBmGauge_options( self->variables, 1, outputs)
         );
         array_at_set( self->masks, i, newBmCodeAs( mask ) );
-        array_at_set( self->weights, i, 1.0 );
+        BmVector_at_set( self->weights, i, 1.0 );
     }
     
     deleteBmCode( mask );
@@ -83,7 +83,7 @@ BmEval* _BmEval_gaugesDistroy( BmEval* self )
 
     deleteEmptyArray( self->gauges );
     deleteEmptyArray( self->masks );
-    deleteEmptyArray( self->weights );
+    deleteBmVector( self->weights );
 
     return self;
 }
@@ -129,7 +129,7 @@ BmEval* BmEval_gaugeAt_initList( BmEval* self, uint gaugeId, uint optionSize, ui
 
 BmEval* BmEval_weightAt_set( BmEval* self, uint gaugeId, double weight )
 {
-    array_at_set( self->weights, gaugeId, weight );
+    BmVector_at_set( self->weights, gaugeId, weight );
     return self;
 }
 
@@ -153,7 +153,7 @@ BmGauge* BmEval_gaugeAt( BmEval* self, uint iGauge )
 
 double BmEval_weightAt( BmEval* self, uint gaugeId)
 {
-    return array_at( self->weights, gaugeId );
+    return BmVector_at( self->weights, gaugeId );
 }
 
 /* Process */
@@ -163,7 +163,7 @@ double BmEval_valueOf( BmEval* self, BmCode* code )
     for( uint iGauge=  1 ; iGauge <= self->gaugeSize ; ++iGauge )
     {
         BmCode* gaugeCode= BmCode_newBmCodeMask( code, array_at( self->masks, iGauge ) ); 
-        value+= array_at( self->weights, iGauge )
+        value+= BmVector_at( self->weights, iGauge )
                 * BmGauge_at( array_at( self->gauges, iGauge ) , gaugeCode );
         deleteBmCode( gaugeCode );
     }

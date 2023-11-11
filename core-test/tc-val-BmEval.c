@@ -23,7 +23,7 @@ START_TEST(test_BmEval_init)
     BmCode_print( array_at( eval->masks, 1), buffer );
     ck_assert_str_eq( buffer, "[1, 2, 3]" );
 
-    ck_assert_double_eq( array_at(eval->weights, 1), 1.0 );
+    ck_assert_double_eq( BmEval_weightAt(eval, 1), 1.0 );
 
     deleteBmEval(eval);
 }
@@ -47,7 +47,7 @@ START_TEST(test_BmEval_initSpace)
     BmCode_print( array_at( eval->masks, 1), buffer );
     ck_assert_str_eq( buffer, "[1, 2, 3, 4, 5]" );
 
-    ck_assert_double_eq( array_at(eval->weights, 1), 1.0 );
+    ck_assert_double_eq( BmEval_weightAt(eval, 1), 1.0 );
 
     deleteBmEval(eval);
 }
@@ -74,7 +74,7 @@ START_TEST(test_BmEval_initStateAction)
     BmCode_print( array_at( eval1->masks, 1), buffer );
     ck_assert_str_eq( buffer, "[1, 2, 3, 4, 5]" );
 
-    ck_assert_double_eq( array_at(eval1->weights, 1), 1.0 );
+    ck_assert_double_eq( BmEval_weightAt(eval1, 1), 1.0 );
 
     BmEval* eval2= newBmEvalWith( 
         newBmCodeMergeList( 3, stateSpace, actionSpace, stateSpace ), 1 );

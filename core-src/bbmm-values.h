@@ -68,6 +68,10 @@ double BmVector_at( BmVector* self, uint i );
 /* Construction */
 double BmVector_at_set( BmVector* self, uint i, double value );
 
+/* Operation */
+double BmVector_sum( BmVector* self );
+double BmVector_product( BmVector* self );
+
 /* Printing */
 char* BmVector_print( BmVector* self, char* output );
 
@@ -80,18 +84,20 @@ char* BmVector_print( BmVector* self, char* output );
 
 typedef struct {
   BmTree* selector;
-  double* options;
+  BmVector* options;
 } BmGauge;
 
 /* Constructor Destructor */
 BmGauge* newBmGaugeBasic( BmCode* input, uint optionSize );
-// ToDo: BmGauge* newNmGaugeWith( BmTree* newSelector, BmVector* newOptions );
+BmGauge* newNmGaugeWith( BmTree* newSelector, BmVector* newOptions );
 
 BmGauge* newBmGauge_options( BmCode* input, uint optionSize, double* options );
 
 void deleteBmGauge( BmGauge* self );
 
 BmGauge* BmGauge_createBasic( BmGauge* self, BmCode* input, uint optionSize );
+BmGauge* BmGauge_createWith( BmGauge* self, BmTree* newSelector, BmVector* newOptions );
+
 BmGauge* BmGauge_create_options( BmGauge* self, BmCode* input, uint optionSize, double* options );
 BmGauge* BmGauge_distroy( BmGauge* self );
 
@@ -131,7 +137,7 @@ typedef struct {
   uint gaugeSize;
   BmGauge ** gauges;
   BmCode ** masks;
-  double * weights;
+  BmVector* weights;
 } BmEval ;
 
 /* Constructor Destructor */

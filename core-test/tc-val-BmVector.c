@@ -35,8 +35,14 @@ START_TEST(test_BmVector_init02)
 }
 END_TEST
 
-START_TEST(test_BmVector_construction)
+START_TEST(test_BmVector_operation)
 {
+    BmVector* vector= newBmVector_list(3, 1.1,  2.1,  3.1 );
+    
+    ck_assert_double_eq_tol( BmVector_sum(vector), 1.1+2.1+3.1, 0.00001 );
+    ck_assert_double_eq_tol( BmVector_product(vector), 1.1*2.1*3.1, 0.00001 );
+
+    deleteBmVector(vector);
 }
 END_TEST
 
@@ -56,7 +62,7 @@ TCase * test_case_BmVector(void)
 
     tcase_add_test(tc, test_BmVector_init01);
     tcase_add_test(tc, test_BmVector_init02);
-    tcase_add_test(tc, test_BmVector_construction);
+    tcase_add_test(tc, test_BmVector_operation);
     tcase_add_test(tc, test_BmVector_print);
     
     return tc;

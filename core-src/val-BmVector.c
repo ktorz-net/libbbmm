@@ -110,6 +110,26 @@ double BmVector_at_set(BmVector* self, uint i, double value)
     return array_at( self->values, i );
 }
 
+/* Operation */
+double BmVector_sum( BmVector* self )
+{
+    double result= 0;
+    for( uint i= 1 ; i <= self->size ; ++i )
+    {
+        result+= BmVector_at( self, i );
+    }
+    return result;
+}
+
+double BmVector_product( BmVector* self )
+{
+    double result= 1;
+    for( uint i= 1 ; i <= self->size ; ++i )
+        result*= BmVector_at( self, i );
+    return result;
+}
+
+
 /* Printing */
 char* BmVector_print( BmVector* self, char* buffer)
 {
