@@ -170,8 +170,8 @@ typedef struct {
   uint capacity, start, size;
   BmCode ** items;
   uint * tags;
+  double * values;
 } BmBench;
-
 
 /* Constructor */
 BmBench* newBmBench(uint capacity);
@@ -188,7 +188,7 @@ void deleteBmBench( BmBench* self);
 uint BmBench_size( BmBench* self);
 BmCode* BmBench_at( BmBench* self, uint i );
 uint BmBench_tagAt( BmBench* self, uint i );
-
+double BmBench_valueAt( BmBench* self, uint i );
 
 /* Construction */
 void BmBench_resizeCapacity( BmBench* self, uint newCapacity );
@@ -210,6 +210,7 @@ void BmBench_sortOnTag( BmBench* self);
 
 /* Printing */
 char* BmBench_print( BmBench* self, char* output); // print `self` at the end of `output`
+char* BmBench_printCodes(BmBench* self, char* output);
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
