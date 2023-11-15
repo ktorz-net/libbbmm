@@ -22,21 +22,15 @@ uint _BmTree_at_readOrder_set_fromBranch( BmTree* self, BmCode* code, BmCode* co
 
 
 /* Constructor Destructor */
-BmTree* newBmTreeBasic( uint inputSize, uint optionSize )
+BmTree* newBmTree( uint binarySpaceSize, uint optionSize )
 {
     return BmTree_createWhith( newEmpty(BmTree),
-            newBmCode_all(inputSize, 2), optionSize );
+            newBmCode_all(binarySpaceSize, 2), optionSize );
 }
 
-BmTree* newBmTreeWith( BmCode* input, uint optionSize )
+BmTree* newBmTreeWith( BmCode* newSpace, uint optionSize )
 {
-    return BmTree_createWhith( newEmpty(BmTree), input, optionSize );
-}
-
-BmTree* newBmTree( BmCode* input, uint optionSize )
-{
-    return BmTree_createWhith( newEmpty(BmTree),
-            newBmCodeAs(input), optionSize );
+    return BmTree_createWhith( newEmpty(BmTree), newSpace, optionSize );
 }
 
 void deleteBmTree(BmTree* self)
@@ -54,13 +48,17 @@ void BmTree_delete(BmTree* self)
 }
 
 /* Protected - to use with precaution */
-BmTree* BmTree_createWhith( BmTree* self, BmCode* newInput, uint optionSize )
+BmTree* BmTree_createWhith( BmTree* self, BmCode* newSpace, uint optionSize )
 {
-    self->input= newInput;
+    self->space= newSpace;
     self->optionBound= optionSize+1;
     self->capacity= 1;
     self->branches= malloc( sizeof(int*) * self->capacity );
     self->size= 0;
+
+    self->optionTags= newEmptyArray( uint, self->optionBound );
+    self->optionValues= newEmptyArray( double, self->optionBound );
+
     return self;
 }
 
@@ -69,6 +67,10 @@ BmTree* BmTree_destroy(BmTree* self)
     for( uint i= 0 ; i <  self->size ; ++i )
         free( self->branches[i] );
     free( self->branches );
+
+    deleteEmptyArray( self->optionTags );
+    deleteEmptyArray( self->optionTags );
+
     return self;
 }
 
@@ -114,13 +116,13 @@ void BmTree_reziseCapacity( BmTree* self, uint newCapacity)
 
 void BmTree_reziseCompleteCapacity( BmTree* self)
 {
-    BmTree_reziseCapacity( self, BmCode_product( self->input ) );
+    BmTree_reziseCapacity( self, BmCode_product( self->space ) );
 }
 
 uint BmTree_newBranch(BmTree* self, uint iVariable, int defaultOption)
 {
     int branch= self->size;
-    uint bound= BmCode_at(self->input, iVariable);
+    uint bound= BmCode_at(self->space, iVariable);
     self->size+= 1;
 
     // Rezise the capacity
@@ -150,7 +152,7 @@ void BmTree_branch_option_output( BmTree* self, uint iBranch, uint i, uint outpu
 
 uint _BmTree_at_readOrder_set_fromBranch( BmTree* self, BmCode* code, BmCode* codeOrder, uint output, uint iBranch )
 {
-    assert( BmCode_size(code) == BmCode_size(self->input) );
+    assert( BmCode_size(code) == BmCode_size(self->space) );
     assert( iBranch < self->size );
     
     uint iVar= BmTree_branchVariable(self, iBranch);
@@ -169,7 +171,7 @@ uint _BmTree_at_readOrder_set_fromBranch( BmTree* self, BmCode* code, BmCode* co
         assert( nextVariable != 0 ); // It must have another variable.
         // Keep going, what ever the value of this variable...
         uint count= 0;
-        for( uint option= 1 ; option <= BmCode_at(self->input, iVar) ; ++option )
+        for( uint option= 1 ; option <= BmCode_at(self->space, iVar) ; ++option )
         {
             BmCode * codeBis= newBmCodeAs( code );
             BmCode_at_set( codeBis, iVar, option );
@@ -256,9 +258,9 @@ uint BmTree_removeBranch(BmTree* self, uint iBranch)
 
 
 /* Getter */
-uint BmTree_branch_option( BmTree* self, uint iBranch, uint option )
+uint BmTree_branch_option( BmTree* self, uint iBranch, uint state )
 {
-    return self->branches[iBranch][option];
+    return self->branches[iBranch][state];
 }
 
 uint BmTree_branchVariable( BmTree* self, uint iBranch )
@@ -269,7 +271,7 @@ uint BmTree_branchVariable( BmTree* self, uint iBranch )
 uint BmTree_branchSize( BmTree* self, uint branch )
 {
     uint iVariable= BmTree_branchVariable(self, branch);
-    uint bound= BmCode_at(self->input, iVariable);
+    uint bound= BmCode_at(self->space, iVariable);
     uint count= 1;
     uint output[bound+1];
     output[0]= self->branches[branch][1];
@@ -301,7 +303,7 @@ uint BmTree_at( BmTree* self, BmCode* code)
     {
         return 1;
     }
-    while( option >= self->optionBound && deep <= BmCode_size(self->input) )
+    while( option >= self->optionBound && deep <= BmCode_size(self->space) )
     {
         uint branch= option-self->optionBound;
         uint iVar= BmTree_branchVariable(self, branch);
@@ -324,7 +326,7 @@ uint BmTree_deepOf( BmTree* self, BmCode* code )
     uint option= self->optionBound;// i.e. branch = 0
     uint deep= 1;
 
-    while( option >= self->optionBound && deep <= BmCode_size(self->input) )
+    while( option >= self->optionBound && deep <= BmCode_size(self->space) )
     {
         uint branch= option-self->optionBound;
         uint iVar= BmTree_branchVariable(self, branch);
@@ -340,7 +342,7 @@ BmBench* BmTree_asNewBench( BmTree* self )
     BmBench* bench= newBmBench( self->size*2 );
     BmCode *conditions[self->size];
 
-    uint codeSize= BmCode_size(self->input);
+    uint codeSize= BmCode_size(self->space);
     for( uint iBranch= 0; iBranch < self->size; ++iBranch )
     {
         conditions[iBranch]= newBmCode_all( codeSize, 0);
@@ -349,7 +351,7 @@ BmBench* BmTree_asNewBench( BmTree* self )
     for( uint iBranch= 0 ; iBranch < self->size ; ++iBranch )
     {
         uint branVar= BmTree_branchVariable(self, iBranch);
-        uint bound= BmCode_at(self->input, branVar);
+        uint bound= BmCode_at(self->space, branVar);
         for( uint i= 1 ; i <= bound ; ++i )
         {
             if( self->branches[iBranch][i] < self->optionBound )
@@ -381,7 +383,7 @@ char* BmTree_printBranch( BmTree* self, uint iBranch, char* output )
     strcat(output, "[");
     char sep[8]= "";
     char buffer[64];
-    uint bound= BmCode_at(self->input, iVariable);
+    uint bound= BmCode_at(self->space, iVariable);
     for( uint i= 1 ; i <= bound ; ++i )
     {
         if( self->branches[iBranch][i] < self->optionBound )
@@ -434,7 +436,7 @@ char* BmTree_print_sep_options( BmTree* self, char* output, char* separator, cha
     BmCode *conditions[self->size];
     for( uint iBranch= 0; iBranch < self->size; ++iBranch )
     {
-        conditions[iBranch]= newBmCode_all( BmCode_size(self->input), 0 );
+        conditions[iBranch]= newBmCode_all( BmCode_size(self->space), 0 );
     }
 
     strcat(output, "{");
@@ -442,7 +444,7 @@ char* BmTree_print_sep_options( BmTree* self, char* output, char* separator, cha
     for( uint iBranch= 0 ; iBranch < self->size ; ++iBranch )
     {
         uint branVar= BmTree_branchVariable(self, iBranch);
-        uint bound= BmCode_at(self->input, branVar);
+        uint bound= BmCode_at(self->space, branVar);
         for( uint i= 1 ; i <= bound ; ++i )
         {
             if( self->branches[iBranch][i] < self->optionBound )
@@ -475,7 +477,7 @@ char* BmTree_printInside(BmTree* self, char* output)
     char buffer[512];
         
     strcat(output, "input: ");
-    strcat(output, BmCode_wording( self->input) );
+    strcat(output, BmCode_wording( self->space) );
     sprintf( buffer, ", size: %u", self->size );
     strcat(output, buffer );
 
@@ -549,21 +551,21 @@ char* BmTree_printInside(BmTree* self, char* output)
     uint vars[ self->size ];
     BmTree_branchVariables( self, vars);
 
-    for( uint ii= 0 ; ii < self->input->size ; ++ii ) // for each input
+    for( uint ii= 0 ; ii < self->space->size ; ++ii ) // for each input
     {
-        BmCode_at_set( branchSubstates+0, ii, BmCode_at(self->input, ii) );
+        BmCode_at_set( branchSubstates+0, ii, BmCode_at(self->space, ii) );
     }
 
     for( uint iBranch= 0 ; iBranch< self->size ; ++iBranch ) // for each branch
     {
-        uint domainSize= BmCode_at( self->input, vars[iBranch] );
+        uint domainSize= BmCode_at( self->space, vars[iBranch] );
         for( uint iVal= 0 ; iVal < domainSize ; ++iVal ) // for each input
             if( self->branches[iBranch][iVal] >= self->optionBound )//if the output target another branch
         {
             //then initialize the target branch substate...
             BmCode* branch= branchSubstates + (self->branches[iBranch][iVal] - self->optionBound);
 
-            for( uint iVar= 0 ; iVar < self->input->size ; ++iVar ) // for each input
+            for( uint iVar= 0 ; iVar < self->space->size ; ++iVar ) // for each input
             {
                 BmCode_at_set( branch, iVar, branchSubstates[iBranch].numbers[iVar]);
             }
@@ -587,7 +589,7 @@ char* BmTree_printInside(BmTree* self, char* output)
 
 /* void BmTree_setState_onOption( BmTree* self, uint* state, uint option) // Return the branch encoding the information.
 {
-    BmTree_setBranch_onOption( self, self->input->size, state, option );
+    BmTree_setBranch_onOption( self, self->space->size, state, option );
 }*/
 
 /* void BmTree_setBranch_onOption( BmTree* self, uint branchDeep, uint * branchState, uint newOption )
@@ -662,7 +664,7 @@ char* BmTree_printInside(BmTree* self, char* output)
     for( uint ib = 0 ; ib < self->size ; ++ib )
         if( branchVariables[ib] != 0 || ib == 0 )
     {
-        uint bound= BmCode_at( self->input, branchVariables[ib] );
+        uint bound= BmCode_at( self->space, branchVariables[ib] );
         for( uint iv = 0 ; iv < bound ; ++iv )
         {
             if( self->branches[ib][iv] == iBranchCode )
@@ -705,7 +707,7 @@ char* BmTree_fctPrint(BmTree* self, char* output)
 {
     char buffer[512];
     uint branchVariables[ self->size ];
-    BmCode* branchSubstates= newArrayOfBmCode( self->size, self->input->size );
+    BmCode* branchSubstates= newArrayOfBmCode( self->size, self->space->size );
     
     BmTree_branchVariables(self, branchVariables);
 
@@ -730,7 +732,7 @@ char* BmTree_conditionOf_print(BmTree* self, uint iOption, char* output)
 {
     // Variables:
     uint* branchVariables= malloc( sizeof(int)*self->size );
-    BmCode* branchSubstates= newArrayOfBmCode( self->size, self->input->size );
+    BmCode* branchSubstates= newArrayOfBmCode( self->size, self->space->size );
 
     // Initialize:
     BmTree_branchVariables(self, branchVariables);
@@ -751,7 +753,7 @@ char* BmTree_conditionPrint(BmTree* self, BmCode* substate, uint iVar, uint star
 {
     strcat(output, "[");
     char sep[8]= "";
-    for( uint iInput= 0 ; iInput < BmCode_size(self->input) ; ++iInput )
+    for( uint iInput= 0 ; iInput < BmCode_size(self->space) ; ++iInput )
     {
         char values[32]= "X";
         if( iInput == iVar)
@@ -759,7 +761,7 @@ char* BmTree_conditionPrint(BmTree* self, BmCode* substate, uint iVar, uint star
             if (start == end ) sprintf( values, "%i", start );
             else sprintf( values, "%i-%i", start, end );
         }
-        else if ( BmCode_at(substate, iInput) < BmCode_at(self->input, iInput) )
+        else if ( BmCode_at(substate, iInput) < BmCode_at(self->space, iInput) )
             sprintf( values, "%i", BmCode_at(substate, iInput) );
 
         strcat(output, sep);
@@ -775,7 +777,7 @@ char* BmTree_conditionOf_fromBrancheVariables_andSubStates_print(BmTree* self, u
     char sep[8]= "";
     for( uint iBranch= 0 ; iBranch < self->size ; ++iBranch )
     {
-        uint domainSize= BmCode_at(self->input, branchVariables[iBranch]);
+        uint domainSize= BmCode_at(self->space, branchVariables[iBranch]);
         uint start= domainSize;
         for( uint iOut= 0 ; iOut < domainSize ; ++iOut )
         {

@@ -221,16 +221,17 @@ char* BmBench_printCodes(BmBench* self, char* output);
 */
 
 typedef struct {
-  BmCode* input;
+  BmCode* space;
   uint optionBound;
   uint capacity, size;
   uint** branches;
+  uint * optionTags;
+  double * optionValues;
 } BmTree;
 
 /* Constructor */
-BmTree* newBmTreeBasic( uint inputSize, uint optionSize );
-BmTree* newBmTreeWith( BmCode* newInput, uint optionSize );
-BmTree* newBmTree( BmCode* input, uint optionSize );
+BmTree* newBmTree( uint binarySpaceSize, uint optionSize );
+BmTree* newBmTreeWith( BmCode* newSpace, uint optionSize );
 
 BmTree* BmTree_createWhith( BmTree* self, BmCode* input, uint optionSize );
 
@@ -240,13 +241,16 @@ void deleteBmTree( BmTree* self );
 
 /* Re-Initializer */
 void BmTree_reinitWhith_on( BmTree* self, uint index, int defaultOption);
-void BmTree_reinitOn( BmTree* self, int defaultOption);
+void BmTree_reinitOn( BmTree* self, int defaultOption );
 
 /* Accessor */
-uint BmTree_at( BmTree* self, BmCode* code); // Return the ouput value of a code/state.
-uint BmTree_branch_option( BmTree* self, uint iBranch, uint option );
+uint BmTree_at( BmTree* self, BmCode* code); // Return the option number of a code/state.
+uint BmTree_tagAt( BmTree* self, BmCode* code); // Return the tag of a code/state.
+uint BmTree_valueAt( BmTree* self, BmCode* code); // Return the value of a code/state.
+
+uint BmTree_branchSize( BmTree* self, uint branch ); // Return the number of
+uint BmTree_branch_option( BmTree* self, uint iBranch, uint state );
 uint BmTree_branchVariable( BmTree* self, uint iBranch ); // Return the variable index represented by the branch.
-uint BmTree_branchSize( BmTree* self, uint branch ); // Return the number of possible output.
 uint BmTree_deepOf( BmTree* self, BmCode* code); // Return the number of branch to cross before reaching the output.
 
 /* Construction */

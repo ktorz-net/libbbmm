@@ -130,6 +130,46 @@ START_TEST(test_BmBench_tags)
 }
 END_TEST
 
+START_TEST(test_BmBench_values)
+{
+    BmBench* collec= newBmBench(4);
+
+    BmBench_attachLast(collec, newBmCode_list(1, 42) );
+    BmBench_attachLast(collec, newBmCode_list(2, 69, 103) );
+    BmBench_attachLast(collec, newBmCode_list(1, 3) );
+    BmBench_attachLast(collec, newBmCode_list(2, 69, 56) );
+    
+    ck_assert_uint_eq( BmBench_size(collec), 4 );
+    char buffer[1024];
+
+    strcpy( buffer, "" );
+    BmBench_printCodes(collec, buffer);
+    ck_assert_str_eq( buffer, "{[42], [69, 103], [3], [69, 56]}" );
+
+    strcpy( buffer, "" );
+    BmBench_print(collec, buffer);
+    ck_assert_str_eq( buffer, "{0:[42]:0.00, 0:[69, 103]:0.00, 0:[3]:0.00, 0:[69, 56]:0.00}" );
+
+    ck_assert_uint_eq( BmBench_tagAt( collec, 2 ), 0 );
+    BmBench_at_value( collec, 2, 1.1 );
+    ck_assert_double_eq_tol( BmBench_valueAt( collec, 2 ), 1.1, 0.00001 );
+
+    strcpy( buffer, "" );
+    BmBench_print(collec, buffer);
+    ck_assert_str_eq( buffer, "{0:[42]:0.00, 0:[69, 103]:1.10, 0:[3]:0.00, 0:[69, 56]:0.00}" );
+
+    BmBench_at_value( collec, 1, 3.3 );
+    BmBench_at_value( collec, 3, 4.4 );
+    BmBench_at_value( collec, 4, 1.1 );
+
+    strcpy( buffer, "" );
+    BmBench_print(collec, buffer);
+    ck_assert_str_eq( buffer, "{0:[42]:3.30, 0:[69, 103]:1.10, 0:[3]:4.40, 0:[69, 56]:1.10}" );
+
+    deleteBmBench(collec);
+}
+END_TEST
+
 START_TEST(test_BmBench_sortingWithTags)
 {
     BmBench* collec= newBmBench(10);
@@ -258,6 +298,7 @@ TCase * test_case_BmBench(void)
     tcase_add_test(tc, test_BmBench_init);
     tcase_add_test(tc, test_BmBench_sorting);
     tcase_add_test(tc, test_BmBench_tags);
+    tcase_add_test(tc, test_BmBench_values);
     tcase_add_test(tc, test_BmBench_sortingWithTags);
     tcase_add_test(tc, test_BmBench_attach_detach);
     tcase_add_test(tc, test_BmBench_attach_front);

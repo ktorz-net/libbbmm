@@ -82,7 +82,7 @@ set(TEST_SRC_FILES
     test/main-testrunner.c
 )
 
-add_executable(test-BbMm ${TEST_SRC_FILES})
-target_link_libraries(test-BbMm bbmm ${CHECK_LIBS})
+add_executable(run-test-BbMm ${TEST_SRC_FILES})
+target_link_libraries(run-test-BbMm bbmm ${CHECK_LIBS})
 
 endif()

@@ -12,4 +12,4 @@ make
 # Outputs
 cp libbbmm.so ..
 #cp libbbmm.so ../python-src/BeMAge
-cp test-BbMm ..
+cp run-test-BbMm ..
