@@ -240,28 +240,40 @@ BmTree* BmTree_destroy( BmTree* self);
 void deleteBmTree( BmTree* self );
 
 /* Re-Initializer */
-void BmTree_reinitWhith_on( BmTree* self, uint index, int defaultOption);
-void BmTree_reinitOn( BmTree* self, int defaultOption );
+BmTree* BmTree_reinitWhith_on( BmTree* self, uint index, int defaultOption);
+BmTree* BmTree_reinitOn( BmTree* self, int defaultOption );
 
 /* Accessor */
 uint BmTree_at( BmTree* self, BmCode* code); // Return the option number of a code/state.
 uint BmTree_tagAt( BmTree* self, BmCode* code); // Return the tag of a code/state.
-uint BmTree_valueAt( BmTree* self, BmCode* code); // Return the value of a code/state.
+double BmTree_valueAt( BmTree* self, BmCode* code); // Return the value of a code/state.
 
+/* Branch Accessor */
 uint BmTree_branchSize( BmTree* self, uint branch ); // Return the number of
-uint BmTree_branch_option( BmTree* self, uint iBranch, uint state );
 uint BmTree_branchVariable( BmTree* self, uint iBranch ); // Return the variable index represented by the branch.
+uint BmTree_branch_option( BmTree* self, uint iBranch, uint state );
 uint BmTree_deepOf( BmTree* self, BmCode* code); // Return the number of branch to cross before reaching the output.
 
 /* Construction */
-void BmTree_reziseCapacity( BmTree* self, uint newCapacity);
-void BmTree_reziseCompleteCapacity( BmTree* self);
-uint BmTree_newBranch( BmTree* self, uint iVariable, int defaultOption);
-void BmTree_branch_option_connect( BmTree* self, uint branchA, uint i, uint branchB );
-void BmTree_branch_option_output( BmTree* self, uint branchA, uint i, uint outbut );
+void BmTree_reziseCapacity( BmTree* self, uint newCapacity );
+void BmTree_reziseCompleteCapacity( BmTree* self );
+
+void BmTree_option_set( BmTree* self, uint iOption, uint tag, double value ); // attach a tag and a value to a given option.
 
 uint BmTree_at_set( BmTree* self, BmCode* code, uint output ); // set the ouput value of a code or a partial code (with 0), return the number of potential dead branches
 uint BmTree_at_readOrder_set( BmTree* self, BmCode* code, BmCode* codeOrder, uint output );
+
+
+/* Branch Accessor */
+uint BmTree_branchSize( BmTree* self, uint branch ); // Return the number of
+uint BmTree_branch_state( BmTree* self, uint iBranch, uint state );
+uint BmTree_branchVariable( BmTree* self, uint iBranch ); // Return the variable index represented by the branch.
+uint BmTree_deepOf( BmTree* self, BmCode* code); // Return the number of branch to cross before reaching the output.
+
+/* Branch Construction */
+uint BmTree_newBranch( BmTree* self, uint iVariable, int defaultOption);
+void BmTree_branch_state_connect( BmTree* self, uint branchA, uint stateA, uint branchB );
+void BmTree_branch_state_set( BmTree* self, uint branchA, uint iState, uint outbut );
 
 /* Cleanning */
 uint BmTree_cleanDeadBranches( BmTree* self); // Detect and remove detached branches (or BmTree_update, BmTree_regenerate : rebuild the tree without dead branches)

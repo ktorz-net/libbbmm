@@ -12,7 +12,7 @@ __pycache__/
 libbbmm.so
 
 # Test program
-test-BbMm
+run-test-BbMm
 
 # Extra program
 #wanda-viewer

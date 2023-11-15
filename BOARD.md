@@ -8,7 +8,8 @@
 	- Add a value to bench (as tags), transform BmDistribution to BmBench. A distribution, a Trace, etc... become benches of Codes.
 	- Add a value to tree (and change outputs to tags), transform BmGauge to BmTree. A gauge, etc... become tree of Codes.
 	- BmNet is also a BmBench, so remove BmNet...
-	
+
+- Make BmTree from BmBench...
 - Determine a frontend (bbmm.h) from construction structures (typicaly: Condition, Gauges...)
 - Redifine BbMm on top of [igraph](https://github.com/igraph/igraph) ?
 

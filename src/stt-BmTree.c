@@ -69,13 +69,13 @@ BmTree* BmTree_destroy(BmTree* self)
     free( self->branches );
 
     deleteEmptyArray( self->optionTags );
-    deleteEmptyArray( self->optionTags );
+    deleteEmptyArray( self->optionValues );
 
     return self;
 }
 
 /* Re-Initialize */
-void BmTree_reinitWhith_on(BmTree* self, uint index, int defaultOption)
+BmTree* BmTree_reinitWhith_on(BmTree* self, uint index, int defaultOption)
 {
     // free all branches:
     while( self->size > 0 )
@@ -84,11 +84,13 @@ void BmTree_reinitWhith_on(BmTree* self, uint index, int defaultOption)
         free( self->branches[ self->size ] );
     }
     BmTree_newBranch( self, index, defaultOption );
+
+    return self;
 }
 
-void BmTree_reinitOn(BmTree* self, int defaultOption)
+BmTree* BmTree_reinitOn(BmTree* self, int defaultOption)
 {
-    BmTree_reinitWhith_on( self, 1, defaultOption );
+    return BmTree_reinitWhith_on( self, 1, defaultOption );
 }
 
 /* Construction */
@@ -119,6 +121,12 @@ void BmTree_reziseCompleteCapacity( BmTree* self)
     BmTree_reziseCapacity( self, BmCode_product( self->space ) );
 }
 
+void BmTree_option_set( BmTree* self, uint iOption, uint tag, double value )
+{
+    array_at_set( self->optionTags, iOption, tag );
+    array_at_set( self->optionValues, iOption, value );
+}
+
 uint BmTree_newBranch(BmTree* self, uint iVariable, int defaultOption)
 {
     int branch= self->size;
@@ -140,14 +148,14 @@ uint BmTree_newBranch(BmTree* self, uint iVariable, int defaultOption)
     return branch;
 }
 
-void BmTree_branch_option_connect( BmTree* self, uint branchA, uint i, uint branchB )
+void BmTree_branch_state_connect( BmTree* self, uint branchA, uint stateA, uint branchB )
 {
-    self->branches[branchA][i]= self->optionBound+branchB;
+    self->branches[branchA][stateA]= self->optionBound+branchB;
 }
 
-void BmTree_branch_option_output( BmTree* self, uint iBranch, uint i, uint output )
+void BmTree_branch_state_set( BmTree* self, uint iBranch, uint iState, uint output )
 {
-    self->branches[iBranch][i]= output;
+    self->branches[iBranch][iState]= output;
 }
 
 uint _BmTree_at_readOrder_set_fromBranch( BmTree* self, BmCode* code, BmCode* codeOrder, uint output, uint iBranch )
@@ -182,10 +190,10 @@ uint _BmTree_at_readOrder_set_fromBranch( BmTree* self, BmCode* code, BmCode* co
     }
 
     // Count the number of significant variables.
-    uint branchOutput= BmTree_branch_option( self, iBranch, BmCode_at(code, iVar) );
+    uint branchOutput= BmTree_branch_state( self, iBranch, BmCode_at(code, iVar) );
     if( nextVariable == 0 )// Only one reminding variable define the output on the branch: iBranch
     {
-        BmTree_branch_option_output( self, iBranch, BmCode_at(code, iVar), output );
+        BmTree_branch_state_set( self, iBranch, BmCode_at(code, iVar), output );
         if( branchOutput >= self->optionBound )
             return 1;
         return 0;
@@ -195,7 +203,7 @@ uint _BmTree_at_readOrder_set_fromBranch( BmTree* self, BmCode* code, BmCode* co
         if( branchOutput < self->optionBound )
         {// The branch output is a leaf, we have to create a new branch on the next variable.
             uint newBranchId= BmTree_newBranch(self, nextVariable, branchOutput );
-            BmTree_branch_option_connect( self, iBranch, BmCode_at(code, iVar), newBranchId );
+            BmTree_branch_state_connect( self, iBranch, BmCode_at(code, iVar), newBranchId );
 
             //recursive call:
             BmCode_at_set( code, iVar, 0 );// set the variable visited
@@ -258,7 +266,7 @@ uint BmTree_removeBranch(BmTree* self, uint iBranch)
 
 
 /* Getter */
-uint BmTree_branch_option( BmTree* self, uint iBranch, uint state )
+uint BmTree_branch_state( BmTree* self, uint iBranch, uint state )
 {
     return self->branches[iBranch][state];
 }
@@ -311,6 +319,16 @@ uint BmTree_at( BmTree* self, BmCode* code)
         ++deep;
     }
     return option;
+}
+
+uint BmTree_tagAt( BmTree* self, BmCode* code)
+{
+    return array_at( self->optionTags, BmTree_at( self, code ) );
+}
+
+double BmTree_valueAt( BmTree* self, BmCode* code)
+{
+    return array_at( self->optionValues, BmTree_at( self, code ) );
 }
 
 uint BmTree_deepOf( BmTree* self, BmCode* code )
