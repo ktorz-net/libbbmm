@@ -30,7 +30,7 @@ BmGauge* newBmGauge_options( BmCode* input, uint optionSize, double* options )
 
 void deleteBmGauge( BmGauge* self )
 {
-    BmGauge_distroy(self);
+    BmGauge_destroy(self);
     free(self);
 }
 
@@ -57,7 +57,7 @@ BmGauge* BmGauge_create_options( BmGauge* self, BmCode* input, uint optionSize, 
     return self;
 }
 
-BmGauge* BmGauge_distroy( BmGauge* self)
+BmGauge* BmGauge_destroy( BmGauge* self)
 {
     deleteBmVector( self->options );
     deleteBmTree( self->selector );

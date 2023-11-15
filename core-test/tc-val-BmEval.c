@@ -239,6 +239,16 @@ START_TEST(test_BmEval_construction02)
     deleteBmEval( eval );
 }
 
+START_TEST(test_BmEval_construction03)
+{
+    BmEval* eval= newBmEvalWith( 
+        newBmCode_list(4, 16, 16, 16, 16), 3 );
+
+    //BmEval_gaugeAt
+
+    deleteBmEval( eval );
+}
+
 START_TEST(test_BmEval_print)
 {
 }
@@ -258,6 +268,7 @@ TCase * test_case_BmEval(void)
     tcase_add_test(tc, test_BmEval_initStateAction);
     tcase_add_test(tc, test_BmEval_construction01);
     tcase_add_test(tc, test_BmEval_construction02);
+    tcase_add_test(tc, test_BmEval_construction03);
     tcase_add_test(tc, test_BmEval_print);
     
     return tc;

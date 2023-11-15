@@ -2,6 +2,16 @@
 
 ## On the fire:
 
+- Create -> init -> (`init`, `init_list`, `init_with`)
+
+- KIS Structure: 
+	- Add a value to bench (as tags), transform BmDistribution to BmBench. A distribution, a Trace, etc... become benches of Codes.
+	- Add a value to tree (and change outputs to tags), transform BmGauge to BmTree. A gauge, etc... become tree of Codes.
+	- BmNet is also a BmBench, so remove BmNet...
+	
+- Determine a frontend (bbmm.h) from construction structures (typicaly: Condition, Gauges...)
+- Redifine BbMm on top of [igraph](https://github.com/igraph/igraph) ?
+
 - BmAgent
 	* Process: action= agent.decide(perception)
 - BmSystem
@@ -12,6 +22,8 @@
 - Multi-Robot version -> Article for EUMAS.
 
 - Simplify the API...
+
+- lookat [gmplib](https://gmplib.org/) to go on rational numbers and so on...
 
 - Respect the BmSystem_variable_addProbabilities order, (and adapt BmTree accordingly) (cf. _ToDo:_ tag in `tc-mld-BmSystem.c`)
 - Factorized printing of `BmSystem_printVariable`.

@@ -41,7 +41,7 @@ BmTree* newBmTree( BmCode* input, uint optionSize )
 
 void deleteBmTree(BmTree* self)
 {
-    BmTree_distroy(self);
+    BmTree_destroy(self);
     free(self);
 }
 
@@ -64,7 +64,7 @@ BmTree* BmTree_createWhith( BmTree* self, BmCode* newInput, uint optionSize )
     return self;
 }
 
-BmTree* BmTree_distroy(BmTree* self)
+BmTree* BmTree_destroy(BmTree* self)
 {
     for( uint i= 0 ; i <  self->size ; ++i )
         free( self->branches[i] );

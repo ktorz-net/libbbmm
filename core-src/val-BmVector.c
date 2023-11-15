@@ -52,7 +52,7 @@ BmVector* BmVector_create_values( BmVector* self, uint size, double* values )
     return self;
 }
 
-BmVector* BmVector_distroy( BmVector* self )
+BmVector* BmVector_destroy( BmVector* self )
 {
     deleteEmptyArray( self->values );
     return self;
@@ -60,7 +60,7 @@ BmVector* BmVector_distroy( BmVector* self )
 
 void deleteBmVector( BmVector* self )
 {
-    free( BmVector_distroy(self) );
+    free( BmVector_destroy(self) );
 }
 
 /* Initialize */

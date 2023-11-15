@@ -20,7 +20,7 @@ BmNet* newBmNet(uint size)
 
 void deleteBmNet(BmNet * self)
 {
-    BmNet_distroy(self);
+    BmNet_destroy(self);
     free( self );
 }
 
@@ -36,11 +36,11 @@ BmNet* BmNet_create(BmNet* self, uint size)
     return self;
 }
 
-BmNet* BmNet_distroy(BmNet* self)
+BmNet* BmNet_destroy(BmNet* self)
 {
     for( uint i = 1 ; i <= self->size; ++i )
     {
-        BmCode_distroy( array_on( self->edges, i ) );
+        BmCode_destroy( array_on( self->edges, i ) );
     }
     deleteEmptyArray(self->edges);
     return self;

@@ -19,7 +19,7 @@ BmBench* newBmBench(uint capacity)
 
 void deleteBmBench(BmBench* self)
 {
-    BmBench_distroy(self);
+    BmBench_destroy(self);
     free(self);
 }
 
@@ -33,7 +33,7 @@ BmBench* BmBench_create(BmBench* self, uint capacity)
     return self;
 }
 
-BmBench* BmBench_distroy(BmBench* self)
+BmBench* BmBench_destroy(BmBench* self)
 {
     while( self->size > 0 )
     {

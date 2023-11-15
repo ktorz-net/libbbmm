@@ -69,7 +69,7 @@ BmCode* newBmCodeMergeList( uint numberOfCodes, BmCode* code1, ... )
 
 void deleteBmCode(BmCode* instance)
 {
-    BmCode_distroy(instance);
+    BmCode_destroy(instance);
     delEmpty(instance);
 }
 
@@ -133,7 +133,7 @@ BmCode* BmCode_createMerge( BmCode* self, uint numberOfCodes, BmCode ** codes )
     return self;
 }
 
-BmCode* BmCode_distroy(BmCode* self)
+BmCode* BmCode_destroy(BmCode* self)
 {
     free(self->dsc);
     return self;
@@ -142,7 +142,7 @@ BmCode* BmCode_distroy(BmCode* self)
 /* Initializer */
 BmCode* BmCode_initializeBasic( BmCode* self, uint newSize )
 {
-    BmCode_distroy(self);
+    BmCode_destroy(self);
     return BmCode_createBasic( self, newSize );
 }
 
@@ -167,7 +167,7 @@ BmCode* BmCode_initialize_list( BmCode* self, uint newSize, uint number1, ... )
 
 BmCode* BmCode_copy(BmCode* self, BmCode* model)
 {
-    BmCode_distroy(self);
+    BmCode_destroy(self);
     return BmCode_createAs(self, model);
 }
 

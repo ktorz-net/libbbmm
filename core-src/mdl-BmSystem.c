@@ -29,13 +29,13 @@ BmSystem* newBmSystem( uint dimState, BmDomain ** stateDoms, uint dimAction, BmD
 
 void deleteBmSystem(BmSystem* self)
 {
-    BmSystem_distroy(self);
+    BmSystem_destroy(self);
     free(self);
 }
 
 void deleteDeepBmSystem(BmSystem* self)
 {
-    BmSystem_deepDistroy(self);
+    BmSystem_deepDestroy(self);
     free(self);
 }
 
@@ -129,7 +129,7 @@ BmSystem* BmSystem_create( BmSystem* self, uint dimState, BmDomain ** stateDoms,
     return self;
 }
 
-BmSystem* BmSystem_deepDistroy( BmSystem* self )
+BmSystem* BmSystem_deepDestroy( BmSystem* self )
 {
     /* Get the Different domains in spaces */
     BmDomain* differentDomains[ BmSpace_dimention(self->state)+BmSpace_dimention(self->action)+BmSpace_dimention(self->shift) ];
@@ -140,11 +140,11 @@ BmSystem* BmSystem_deepDistroy( BmSystem* self )
         deleteBmDomain( differentDomains[i] );
 
     /* Terminate */
-    BmSystem_distroy(self);
+    BmSystem_destroy(self);
     return self;
 }
 
-BmSystem* BmSystem_distroy( BmSystem* self )
+BmSystem* BmSystem_destroy( BmSystem* self )
 {
     uint dimState= BmSpace_dimention(self->state);
     for( uint i= 1 ; i < dimState ; ++i )

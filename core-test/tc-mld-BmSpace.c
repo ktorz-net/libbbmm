@@ -50,7 +50,7 @@ START_TEST(test_BmSpace_initCascade)
     
     BmSpace* space= newBmSpace(3, variableNames, domains );
 
-    BmSpace_distroyDeep( space );
+    BmSpace_destroyDeep( space );
     BmSpace_createEmpty( space, 3 );
 
     ck_assert( !BmSpace_isValid(space) );

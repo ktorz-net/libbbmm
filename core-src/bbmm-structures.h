@@ -5,8 +5,8 @@
  *   FEATURES:
  *       - BmCode        : a fixed size list of digit (unsigned integers)
  *       - BmBench       : a dynamic-size collection of BmCode
- *       - BmNet         : a network based on unsigned integers
- *       - BmTree        : a decision tree based BmCode ( BmCode -> uint)
+ *       - BmTree        : a decision tree based BmCode (BmCode -> uint)
+ *       - BmNet         : a adjacence list network based on unsigned integers
  *
  *   LICENSE: MIT License
  *
@@ -104,7 +104,7 @@ BmCode* BmCode_createMerge( BmCode* self, uint numberOfCodes, BmCode ** codes );
 
 /* Destructor */
 void deleteBmCode( BmCode* instance);
-BmCode* BmCode_distroy( BmCode* self);
+BmCode* BmCode_destroy( BmCode* self);
 
 /* Initializer */
 BmCode* BmCode_initializeBasic( BmCode* self, uint newSize);
@@ -175,12 +175,10 @@ typedef struct {
 
 /* Constructor Destructor */
 BmBench* newBmBench(uint capacity);
-
-void deleteBmBench( BmBench* self);
 void deleteBmBench( BmBench* self);
 
 BmBench* BmBench_create( BmBench* self, uint capacity);
-BmBench* BmBench_distroy( BmBench* self);
+BmBench* BmBench_destroy( BmBench* self);
 
 /* Initializer */
 
@@ -211,7 +209,7 @@ char* BmBench_print( BmBench* self, char* output); // print `self` at the end of
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   S T R U C T U R E :  N E T W O R K                        *
+ *   B b M m   S T R U C T U R E :  N E T W O R K                          *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 /*
   Define a Simple Network 
@@ -227,7 +225,7 @@ BmNet* newBmNet(uint size);
 void deleteBmNet( BmNet* self);
 
 BmNet* BmNet_create( BmNet* self, uint size); // generate
-BmNet* BmNet_distroy( BmNet* self);
+BmNet* BmNet_destroy( BmNet* self);
 
 /* Accessor */
 BmCode* BmNet_at( BmNet* self, uint i);
@@ -244,7 +242,7 @@ char* BmNet_print( BmNet* self, char* output); // print `self` at the end of `ou
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   T R E E                                                   *
+ *   B b M m   T R E E                                                     *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 /*
   Apply a tree structure to a Space for clustering states in a finit number of options.
@@ -265,7 +263,7 @@ BmTree* newBmTree( BmCode* input, uint optionSize );
 void deleteBmTree( BmTree* self );
 
 BmTree* BmTree_createWhith( BmTree* self, BmCode* input, uint optionSize );
-BmTree* BmTree_distroy( BmTree* self);
+BmTree* BmTree_destroy( BmTree* self);
 
 /* initialize */
 void BmTree_initializeWhith_on( BmTree* self, uint index, int defaultOption);

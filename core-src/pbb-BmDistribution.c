@@ -22,7 +22,7 @@ BmDistribution * newBmDistributionAs( BmDistribution * model )
 
 void deleteBmDistribution(BmDistribution *self)
 {
-    BmDistribution_distroy(self);
+    BmDistribution_destroy(self);
     free(self);
 }
 
@@ -57,7 +57,7 @@ BmDistribution * BmDistribution_createAs(BmDistribution* self, BmDistribution* m
     return self;
 }
 
-BmDistribution* BmDistribution_distroy(BmDistribution *self)
+BmDistribution* BmDistribution_destroy(BmDistribution *self)
 {
     for( uint i = 0 ; i < self->size ; ++i )
         deleteBmCode( self->configurations[i] );
@@ -112,13 +112,13 @@ double BmDistribution_probabilityAt(BmDistribution *self, uint i )
 /* Modification */
 void BmDistribution_initialize(BmDistribution *self, uint dimention)
 {
-    BmDistribution_distroy( self );
+    BmDistribution_destroy( self );
     BmDistribution_create(self, dimention);
 }
 
 void BmDistribution_initializeAs( BmDistribution *self, BmDistribution * model )
 {
-    BmDistribution_distroy( self );
+    BmDistribution_destroy( self );
     BmDistribution_createAs( self, model );
 }
 

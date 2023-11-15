@@ -52,7 +52,7 @@ BmDomain* newBmDomainAs(BmDomain* model)
 
 void deleteBmDomain(BmDomain* self)
 {
-    BmDomain_distroy(self);
+    BmDomain_destroy(self);
     free(self);
 }
 
@@ -163,7 +163,7 @@ BmDomain* BmDomain_createAs( BmDomain* self, BmDomain* model )
     }
 }
 
-BmDomain* BmDomain_distroy( BmDomain* self )
+BmDomain* BmDomain_destroy( BmDomain* self )
 {
     free(self->dsc);
     //delEmptyArray(self->name);

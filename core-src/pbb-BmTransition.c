@@ -29,7 +29,7 @@ BmTransition* newBmTransitionWithShift( BmCode* state, BmCode* action, BmCode* s
 
 void deleteBmTransition(BmTransition * self)
 {
-    BmTransition_distroy(self);
+    BmTransition_destroy(self);
     free(self);
 }
 
@@ -71,10 +71,10 @@ BmTransition* BmTransition_create(BmTransition* self, BmCode* state, BmCode* act
     return self;
 }
 
-BmTransition* BmTransition_distroy(BmTransition* self)
+BmTransition* BmTransition_destroy(BmTransition* self)
 {
     for(uint i = 1 ; i <= self->overallDimention ; ++i )
-        BmCondition_distroy( array_on(self->nodes, i) );
+        BmCondition_destroy( array_on(self->nodes, i) );
     free( self->nodes );
     deleteBmNet(self->network);
     deleteBmDistribution( self->transition );
@@ -147,7 +147,7 @@ BmCode* BmTransition_dependanciesAt( BmTransition * self, uint iVar )
 /* Construction */
 BmTransition* BmTransition_node_initialize( BmTransition* self, uint index, uint outputSize )
 {
-    BmCondition_distroy( array_on(self->nodes, index) );
+    BmCondition_destroy( array_on(self->nodes, index) );
     //Get parent configuration: fron net BmNet_at_connect( self->network, index, dependancy );
     BmCondition_createUndependant( array_on(self->nodes, index), outputSize );
     return self;

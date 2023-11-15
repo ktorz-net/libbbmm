@@ -32,13 +32,13 @@ BmSpace* newBmSpaceEmpty( uint dim )
 
 void deleteBmSpace(BmSpace* self)
 {
-    BmSpace_distroy(self);
+    BmSpace_destroy(self);
     free(self);
 }
 
 void deleteDeepBmSpace(BmSpace* self)
 {
-    BmSpace_distroyDeep(self);
+    BmSpace_destroyDeep(self);
     free(self);
 }
 
@@ -68,7 +68,7 @@ BmSpace* BmSpace_createEmpty( BmSpace* self, uint dim )
     return self;
 }
 
-BmSpace* BmSpace_distroy( BmSpace* self )
+BmSpace* BmSpace_destroy( BmSpace* self )
 {
     deleteEmptyArray( self->varDomains );
     for( uint i = 0; i < self->dimention ; ++i )
@@ -80,7 +80,7 @@ BmSpace* BmSpace_distroy( BmSpace* self )
     return self;
 }
 
-BmSpace* BmSpace_distroyDeep( BmSpace* self )
+BmSpace* BmSpace_destroyDeep( BmSpace* self )
 {
     /* Delete all diferents domains */
     BmDomain* differentDomains[ BmSpace_dimention(self) ];
@@ -88,8 +88,8 @@ BmSpace* BmSpace_distroyDeep( BmSpace* self )
     for( uint i = 0 ; i < nbDiffDom ; ++i )
         deleteBmDomain( differentDomains[i] );
 
-    /* Distroy self */
-    return BmSpace_distroy(self);
+    /* Destroy self */
+    return BmSpace_destroy(self);
 }
 
 /* Attach elements */

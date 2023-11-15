@@ -13,7 +13,7 @@
 
 /* Private Function : */
 BmEval* _BmEval_gaugesCreate( BmEval* self, uint gaugeSize );
-BmEval* _BmEval_gaugesDistroy( BmEval* self );
+BmEval* _BmEval_gaugesDestroy( BmEval* self );
 
 /* Constructor Destructor */
 BmEval* newBmEvalBasic( uint codeDimention, uint numberOfGauges  )
@@ -35,13 +35,13 @@ BmEval* BmEval_createWith( BmEval* self, BmCode* newVariables, uint numberOfGaug
 
 void deleteBmEval( BmEval* self )
 {
-    BmEval_distroy( self );
+    BmEval_destroy( self );
     free( self );
 }
 
-BmEval* BmEval_distroy( BmEval* self )
+BmEval* BmEval_destroy( BmEval* self )
 {
-    _BmEval_gaugesDistroy(self);
+    _BmEval_gaugesDestroy(self);
     deleteBmCode( self->variables );
     return self;
 }
@@ -73,7 +73,7 @@ BmEval* _BmEval_gaugesCreate( BmEval* self, uint gaugeSize )
     return self;
 }
 
-BmEval* _BmEval_gaugesDistroy( BmEval* self )
+BmEval* _BmEval_gaugesDestroy( BmEval* self )
 {
     for( uint i = 1 ; i < self->gaugeSize ; ++i )
     {
@@ -91,7 +91,7 @@ BmEval* _BmEval_gaugesDistroy( BmEval* self )
 /* Construction */
 BmEval* BmEval_initializeGauges( BmEval* self, uint gaugeSize )
 {
-    _BmEval_gaugesDistroy( self );
+    _BmEval_gaugesDestroy( self );
     _BmEval_gaugesCreate( self, gaugeSize );
     return self;
 }
@@ -115,12 +115,12 @@ BmEval* BmEval_gaugeAt_initList( BmEval* self, uint gaugeId, uint optionSize, ui
         BmCode_at_set( dependencies, i, BmCode_at( self->variables, variables[i-1] ) );
 
     // initialize gauge:
-    BmGauge_distroy( array_at( self->gauges, gaugeId ) );
+    BmGauge_destroy( array_at( self->gauges, gaugeId ) );
     BmGauge_createBasic( 
         array_at( self->gauges, gaugeId ),
         dependencies, optionSize );
     
-    BmCode_distroy( array_at( self->masks, gaugeId ) );
+    BmCode_destroy( array_at( self->masks, gaugeId ) );
     BmCode_create_numbers( array_at( self->masks, gaugeId ), varSize, variables );
 
     deleteBmCode( dependencies );

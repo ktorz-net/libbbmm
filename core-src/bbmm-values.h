@@ -3,9 +3,9 @@
  *   BbMm Evaluation - A library in KISS philosophy of *Bayesian-based Markov-models* values manipulation.
  * 
  *   FEATURES:
- *       - BmVector       : a fixed size collection of values. 
+ *       - BmVector       : a fixed size collection of values.
  *       - BmGauge        : a distribution of values over configuration (codes)
- *       - BmEval         : a composed value function over an state and action space. 
+ *       - BmReward       : a composed value function over multiple Gauges.
  * 
  *   LICENSE: MIT License
  *
@@ -55,7 +55,7 @@ BmVector* BmVector_createBasic( BmVector* self, uint size );
 BmVector* BmVector_create_values( BmVector* self, uint size, double* values );
 BmVector* BmVector_create_all( BmVector* self, uint size, double value );
 
-BmVector* BmVector_distroy( BmVector* self );
+BmVector* BmVector_destroy( BmVector* self );
 void deleteBmVector( BmVector* self );
 
 /* Initialize */
@@ -99,7 +99,7 @@ BmGauge* BmGauge_createBasic( BmGauge* self, BmCode* input, uint optionSize );
 BmGauge* BmGauge_createWith( BmGauge* self, BmTree* newSelector, BmVector* newOptions );
 
 BmGauge* BmGauge_create_options( BmGauge* self, BmCode* input, uint optionSize, double* options );
-BmGauge* BmGauge_distroy( BmGauge* self );
+BmGauge* BmGauge_destroy( BmGauge* self );
 
 /* initialize */
 //BmGauge* BmGauge_initializeBasic( BmGauge* self, BmCode* input, uint optionSize );
@@ -147,7 +147,7 @@ BmEval* newBmEvalWith( BmCode* newVariables, uint numberOfGauges );
 BmEval* BmEval_createWith( BmEval* self, BmCode* newVariables, uint numberOfGauges );
 
 void deleteBmEval( BmEval* self );
-BmEval* BmEval_distroy( BmEval* self);
+BmEval* BmEval_destroy( BmEval* self);
 
 /* Construction */
 BmEval* BmEval_initializeGauges( BmEval* self, uint gaugeSize );

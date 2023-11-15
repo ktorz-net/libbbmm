@@ -77,7 +77,7 @@ BmDomain* BmDomain_createRange( BmDomain* self, char* name, double from, double 
 BmDomain* BmDomain_createWords( BmDomain* self, char* name, uint size, char ** worlds );
 BmDomain* BmDomain_createMeans( BmDomain* self, char* name, uint size, double* means );
 BmDomain* BmDomain_createAs( BmDomain* self, BmDomain* model );
-BmDomain* BmDomain_distroy( BmDomain* self );
+BmDomain* BmDomain_destroy( BmDomain* self );
 
 /* Accessor */
 char* BmDomain_name(BmDomain* self);
@@ -146,8 +146,8 @@ void deleteDeepBmSpace(BmSpace* self);
 BmSpace* BmSpace_create( BmSpace* self, uint dim, char ** variableNames, BmDomain ** variableDomains ); // Create a BmSpace
 BmSpace* BmSpace_createEmpty( BmSpace* self, uint dim ); // Create a BmSpace
 
-BmSpace* BmSpace_distroy( BmSpace* self ); // Distroy a BmSpace
-BmSpace* BmSpace_distroyDeep( BmSpace* self ); // Distroy a BmSpace and all its domains
+BmSpace* BmSpace_destroy( BmSpace* self ); // Destroy a BmSpace
+BmSpace* BmSpace_destroyDeep( BmSpace* self ); // Destroy a BmSpace and all its domains
 
 /* Attach elements */
 BmSpace* BmSpace_attachVariable( BmSpace* self, uint i, char* name, BmDomain* domain );
@@ -218,8 +218,8 @@ void deleteDeepBmSystem(BmSystem* self);
 BmSystem* BmSystem_createEmpty( BmSystem* self, uint dimState, uint dimAction, uint dimShift );
 BmSystem* BmSystem_create( BmSystem* self, uint dimState, BmDomain ** stateDoms, uint dimAction, BmDomain ** actionDoms, uint dimShift, BmDomain ** shiftDomains );
 
-BmSystem* BmSystem_deepDistroy( BmSystem* self );
-BmSystem* BmSystem_distroy( BmSystem* self );
+BmSystem* BmSystem_deepDestroy( BmSystem* self );
+BmSystem* BmSystem_destroy( BmSystem* self );
 
 /* Initialize variable */
 uint BmSystem_attachStateVariable( BmSystem* self, char * name, BmDomain* domain );

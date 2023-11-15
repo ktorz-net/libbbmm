@@ -15,9 +15,11 @@ BbMm is an experimental toolbox, it comes with no more guaranty than the devotio
 
 - SaLinA : <https://arxiv.org/pdf/2110.07910.pdf> - <https://github.com/facebookresearch/salina>
 - MDPToolBox :
+- [LibDAI](https://github.com/dbtsai/libDAI) : C++ lib for Discrete Approximate Inference
 - [gobnilp](https://www.cs.york.ac.uk/aig/sw/gobnilp) : Bayesian Network learning using Integer Linear Programming
 - [torchhd](https://github.com/hyperdimensional-computing/torchhd) : Python lib for Hyperdimensional Computing (or Vector Symbolic Architectures) Artticle: https://jmlr.org/papers/v24/23-0300.html
 - [farama](https://farama.org/) : à fouiller.
+
 
 ## Installation
 

@@ -36,7 +36,6 @@
 
 #include "bbmm-structures.h"
 
-
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   D I S T R I B U T I O N                                   *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
@@ -60,7 +59,7 @@ void deleteBmDistribution(BmDistribution* instance);
 /* fill and empty a structure */
 BmDistribution* BmDistribution_create(BmDistribution* self, uint dimention);
 BmDistribution* BmDistribution_createAs(BmDistribution* self, BmDistribution* model);
-BmDistribution* BmDistribution_distroy(BmDistribution* self);
+BmDistribution* BmDistribution_destroy(BmDistribution* self);
 
 /* Switching double beffering */
 void BmDistribution_switch(BmDistribution* self, BmDistribution* another);
@@ -131,7 +130,7 @@ BmCondition* newBmConditionUndependant(uint outputSize);
 BmCondition* BmCondition_create(BmCondition* self, uint outputSize, BmCode* parentRanges, BmDistribution* defaultDistrib);
 BmCondition* BmCondition_createBasic(BmCondition* self, uint outputSize, BmCode* parentRanges);
 BmCondition* BmCondition_createUndependant(BmCondition* self, uint outputSize);
-BmCondition* BmCondition_distroy(BmCondition* self);
+BmCondition* BmCondition_destroy(BmCondition* self);
 
 void deleteBmCondition(BmCondition* instance);
 
@@ -202,7 +201,7 @@ void deleteBmTransition(BmTransition* self);
 
 /* fill and empty a structure */
 BmTransition* BmTransition_create(BmTransition* self, BmCode* state, BmCode* action, BmCode* shift );
-BmTransition* BmTransition_distroy(BmTransition* self);
+BmTransition* BmTransition_destroy(BmTransition* self);
 
 /* Accessor */
 BmDistribution* BmTransition_distribution( BmTransition* self );

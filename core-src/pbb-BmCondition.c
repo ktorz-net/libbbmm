@@ -29,7 +29,7 @@ BmCondition* newBmConditionUndependant(uint outputSize)
 
 void deleteBmCondition(BmCondition* instance)
 {
-    BmCondition_distroy( instance );
+    BmCondition_destroy( instance );
     free( instance );
 }
 
@@ -72,7 +72,7 @@ BmCondition* BmCondition_createUndependant(BmCondition* self, uint outputSize)
     return self;
 }
 
-BmCondition* BmCondition_distroy(BmCondition* self)
+BmCondition* BmCondition_destroy(BmCondition* self)
 {
     //free(self->name);
     for(uint i = 1 ; i <= self->distribSize ; ++i )
