@@ -37,45 +37,6 @@
 #include "bbmm-structures.h"
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   V A L U E  S :  V E C T O R 
- * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
-
-typedef struct {
-  uint size;
-  double * values;
-} BmVector;
-
-/* Constructor Destructor */
-BmVector* newBmVectorBasic( uint size );
-BmVector* newBmVector_values( uint size, double* values );
-BmVector* newBmVector_list( uint size, double val1, ... );
-BmVector* newBmVector_all( uint size, double* value );
-
-BmVector* BmVector_createBasic( BmVector* self, uint size );
-BmVector* BmVector_create_values( BmVector* self, uint size, double* values );
-BmVector* BmVector_create_all( BmVector* self, uint size, double value );
-
-BmVector* BmVector_destroy( BmVector* self );
-void deleteBmVector( BmVector* self );
-
-/* Initialize */
-//BmVector* BmVector_resize(BmVector* self, uint size);
-
-/* Accessor */
-uint BmVector_size( BmVector* self );
-double BmVector_at( BmVector* self, uint i );
-
-/* Construction */
-double BmVector_at_set( BmVector* self, uint i, double value );
-
-/* Operation */
-double BmVector_sum( BmVector* self );
-double BmVector_product( BmVector* self );
-
-/* Printing */
-char* BmVector_print( BmVector* self, char* output );
-
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   V A L U E S :  G A U G E
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 /*

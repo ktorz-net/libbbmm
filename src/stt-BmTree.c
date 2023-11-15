@@ -72,8 +72,8 @@ BmTree* BmTree_destroy(BmTree* self)
     return self;
 }
 
-/* initialize */
-void BmTree_initializeWhith_on(BmTree* self, uint index, int defaultOption)
+/* Re-Initialize */
+void BmTree_reinitWhith_on(BmTree* self, uint index, int defaultOption)
 {
     // free all branches:
     while( self->size > 0 )
@@ -84,9 +84,9 @@ void BmTree_initializeWhith_on(BmTree* self, uint index, int defaultOption)
     BmTree_newBranch( self, index, defaultOption );
 }
 
-void BmTree_initializeOn(BmTree* self, int defaultOption)
+void BmTree_reinitOn(BmTree* self, int defaultOption)
 {
-    BmTree_initializeWhith_on( self, 1, defaultOption );
+    BmTree_reinitWhith_on( self, 1, defaultOption );
 }
 
 /* Construction */
@@ -229,7 +229,7 @@ uint BmTree_at_readOrder_set( BmTree* self, BmCode* code, BmCode* codeOrder, uin
     // If not initialized yet: 
     if( self->size == 0 )
     {
-        BmTree_initializeWhith_on(self, BmCode_at( codeOrder, 1 ), 1);
+        BmTree_reinitWhith_on(self, BmCode_at( codeOrder, 1 ), 1);
     }
 
     // Then apply the code at output: 

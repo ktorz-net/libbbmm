@@ -140,13 +140,13 @@ BmCode* BmCode_destroy(BmCode* self)
 }
 
 /* Initializer */
-BmCode* BmCode_initializeBasic( BmCode* self, uint newSize )
+BmCode* BmCode_reinit( BmCode* self, uint newSize )
 {
     BmCode_destroy(self);
     return BmCode_create( self, newSize );
 }
 
-BmCode* BmCode_initialize_list( BmCode* self, uint newSize, uint number1, ... )
+BmCode* BmCode_reinit_list( BmCode* self, uint newSize, uint number1, ... )
 {
     uint numbers[newSize];
     // Build words array from args
@@ -160,7 +160,7 @@ BmCode* BmCode_initialize_list( BmCode* self, uint newSize, uint number1, ... )
     }
     va_end(ap);
     // initialize the instance
-    BmCode_initializeBasic(self, newSize );
+    BmCode_reinit(self, newSize );
     
     return BmCode_create_numbers(self, newSize, numbers);
 }

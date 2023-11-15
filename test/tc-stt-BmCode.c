@@ -96,11 +96,11 @@ START_TEST(test_BmCode_keys)
     );
     
     uint numbers1[8]= {2, 4, 2, 3, 3, 6, 1, 3};
-    BmCode_initializeBasic(code, 8);
+    BmCode_reinit(code, 8);
     BmCode_setNumbers(code, numbers1);
     ck_assert_uint_eq( (uint)BmCode_keyOf(domain, code), 118942 );
     
-    BmCode_initialize_list(code, 8, 3, 4, 4, 1, 2, 5, 6, 4);
+    BmCode_reinit_list(code, 8, 3, 4, 4, 1, 2, 5, 6, 4);
     ck_assert_uint_eq( (uint)BmCode_keyOf(domain, code), 218431 );
 
     deleteBmCode(code);
@@ -111,7 +111,7 @@ END_TEST
 
 START_TEST(test_BmCode_iterate)
 {
-    BmCode* domain= BmCode_initialize_list( newBmCode(0), 3, 2, 4, 3 );
+    BmCode* domain= BmCode_reinit_list( newBmCode(0), 3, 2, 4, 3 );
     BmCode* code= newBmCode_all(3, 0);
     
     ck_assert_str_eq(
@@ -140,7 +140,7 @@ START_TEST(test_BmCode_iterate)
     BmCode_nextCode(domain, code);
     ck_assert( !BmCode_isIncluding(domain, code) );
     
-    BmCode_initialize_list(code, 3, 1, 2, 3);
+    BmCode_reinit_list(code, 3, 1, 2, 3);
     ck_assert_str_eq(
         BmCode_wording(code),
         "[1, 2, 3]"

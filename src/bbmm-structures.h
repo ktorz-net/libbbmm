@@ -92,11 +92,10 @@ BmCode* newBmCode_all(uint size, uint defaultValue);
 BmCode* newBmCodeAs( BmCode* model );
 
 BmCode* newBmCode_list( uint size, uint number1, ... );
-
 BmCode* newBmCodeMergeList( uint numberOfCodes, BmCode* code1, ... );
 
-BmCode* BmCode_create_numbers( BmCode* self, uint size, uint* numbers );
 BmCode* BmCode_create( BmCode* self, uint size );
+BmCode* BmCode_create_numbers( BmCode* self, uint size, uint* numbers );
 BmCode* BmCode_create_all( BmCode* self, uint size, uint defaultValue );
 BmCode* BmCode_createAs( BmCode* self, BmCode* model );
 
@@ -106,13 +105,6 @@ BmCode* BmCode_createMerge( BmCode* self, uint numberOfCodes, BmCode ** codes );
 void deleteBmCode( BmCode* instance);
 BmCode* BmCode_destroy( BmCode* self);
 
-/* Initializer */
-BmCode* BmCode_initializeBasic( BmCode* self, uint newSize);
-BmCode* BmCode_initialize_list( BmCode* self, uint newSize, uint number1, ... );
-
-BmCode* BmCode_copy( BmCode* self, BmCode* model);
-BmCode* BmCode_copyNumbers( BmCode* self, BmCode* model);
-
 /* Accessor */
 uint BmCode_size( BmCode* self);
 uint* BmCode_numbers( BmCode* self);
@@ -120,6 +112,13 @@ uint BmCode_at( BmCode* self, uint index);
 uint BmCode_count( BmCode* self, uint value);
 ulong BmCode_sum( BmCode* self);
 ulong BmCode_product( BmCode* self);
+
+/* Re-Initializer */
+BmCode* BmCode_reinit( BmCode* self, uint newSize);
+BmCode* BmCode_reinit_list( BmCode* self, uint newSize, uint number1, ... );
+
+BmCode* BmCode_copy( BmCode* self, BmCode* model);
+BmCode* BmCode_copyNumbers( BmCode* self, BmCode* model);
 
 /* Construction */
 BmCode* BmCode_resize( BmCode* self, uint newSize);
@@ -130,7 +129,7 @@ BmCode* BmCode_at_decrement( BmCode* self, uint index, uint value );
 
 BmCode* BmCode_setNumbers( BmCode* self, uint* numbers );
 
-/* sort */
+/* Operator */
 void BmCode_sort( BmCode* self );
 void BmCode_switch( BmCode* self, BmCode* anotherCode );
 uint BmCode_search( BmCode* self, uint value );
@@ -140,7 +139,7 @@ bool BmCode_isEqualTo( BmCode* self, BmCode* another );
 bool BmCode_isGreaterThan( BmCode* self, BmCode* another );
 bool BmCode_isLighterThan( BmCode* self, BmCode* another );
 
-/* configuration managment (a BmCode configuration varring in a space defined by a ranges BmCode 'self' ) */
+/* As Configuration (a BmCode configuration varring in a space defined by a ranges BmCode 'self' ) */
 ulong BmCode_keyOf( BmCode* self, BmCode* code);       // get the key value of the code regarding given ranges ( i.e. 0 <= self.numbers[i] < ranges[i] )
 
 BmCode* BmCode_setCode_onKey( BmCode* self, BmCode* configuration, ulong key ); // set the code as a key value in given ranges
@@ -155,7 +154,7 @@ BmCode* BmCode_nextCode( BmCode* self, BmCode* configuration ); // set the code 
 BmCode* BmCode_previousCode( BmCode* self, BmCode* configuration ); // set the code as a key value in given ranges
 bool BmCode_isIncluding( BmCode* self, BmCode* configuration ); // set the code as a key value in given ranges
 
-/* mask */
+/* Mask */
 BmCode* BmCode_newBmCodeMask(BmCode* self, BmCode* mask);
 
 /* Printing */
@@ -173,36 +172,41 @@ typedef struct {
   uint * tags;
 } BmBench;
 
-/* Constructor Destructor */
+
+/* Constructor */
 BmBench* newBmBench(uint capacity);
-void deleteBmBench( BmBench* self);
 
 BmBench* BmBench_create( BmBench* self, uint capacity);
+
+/* Destructor */
 BmBench* BmBench_destroy( BmBench* self);
+void deleteBmBench( BmBench* self);
 
-/* Initializer */
-
-/* Modification */
-void BmBench_resizeCapacity( BmBench* self, uint newCapacity );
+/* Re-Initializer */
 
 /* Accessor */
 uint BmBench_size( BmBench* self);
 BmCode* BmBench_at( BmBench* self, uint i );
 uint BmBench_tagAt( BmBench* self, uint i );
 
-/* Test */
 
-/* Construction Item */
-uint BmBench_attachLast( BmBench* self, BmCode* item );
+/* Construction */
+void BmBench_resizeCapacity( BmBench* self, uint newCapacity );
+
+uint BmBench_attachLast( BmBench* self, BmCode* newItem );
 BmCode* BmBench_detachLast( BmBench* self );
 
-uint BmBench_attachFirst( BmBench* self, BmCode* item );
+uint BmBench_attachFirst( BmBench* self, BmCode* newItem );
 BmCode* BmBench_detachFirst( BmBench* self );
 
 BmCode* BmBench_at_tag( BmBench* self, uint i, uint tagValue );
+BmCode* BmBench_at_value( BmBench* self, uint i, double value );
 
+/* Operator */
 void BmBench_sortOnItem( BmBench* self);
 void BmBench_sortOnTag( BmBench* self);
+
+/* Test */
 
 /* Printing */
 char* BmBench_print( BmBench* self, char* output); // print `self` at the end of `output`
@@ -222,19 +226,27 @@ typedef struct {
   uint** branches;
 } BmTree;
 
-/* Constructor Destructor */
+/* Constructor */
 BmTree* newBmTreeBasic( uint inputSize, uint optionSize );
 BmTree* newBmTreeWith( BmCode* newInput, uint optionSize );
 BmTree* newBmTree( BmCode* input, uint optionSize );
 
+BmTree* BmTree_createWhith( BmTree* self, BmCode* input, uint optionSize );
+
+/* Destructor */
+BmTree* BmTree_destroy( BmTree* self);
 void deleteBmTree( BmTree* self );
 
-BmTree* BmTree_createWhith( BmTree* self, BmCode* input, uint optionSize );
-BmTree* BmTree_destroy( BmTree* self);
+/* Re-Initializer */
+void BmTree_reinitWhith_on( BmTree* self, uint index, int defaultOption);
+void BmTree_reinitOn( BmTree* self, int defaultOption);
 
-/* initialize */
-void BmTree_initializeWhith_on( BmTree* self, uint index, int defaultOption);
-void BmTree_initializeOn( BmTree* self, int defaultOption);
+/* Accessor */
+uint BmTree_at( BmTree* self, BmCode* code); // Return the ouput value of a code/state.
+uint BmTree_branch_option( BmTree* self, uint iBranch, uint option );
+uint BmTree_branchVariable( BmTree* self, uint iBranch ); // Return the variable index represented by the branch.
+uint BmTree_branchSize( BmTree* self, uint branch ); // Return the number of possible output.
+uint BmTree_deepOf( BmTree* self, BmCode* code); // Return the number of branch to cross before reaching the output.
 
 /* Construction */
 void BmTree_reziseCapacity( BmTree* self, uint newCapacity);
@@ -250,13 +262,6 @@ uint BmTree_at_readOrder_set( BmTree* self, BmCode* code, BmCode* codeOrder, uin
 uint BmTree_cleanDeadBranches( BmTree* self); // Detect and remove detached branches (or BmTree_update, BmTree_regenerate : rebuild the tree without dead branches)
 uint BmTree_removeBranch( BmTree* self, uint iBranch); // Remove a branch: (must not change the order or the numerotation of the branch -> maintain a list of removed branches)
 
-/* Accessor */
-uint BmTree_at( BmTree* self, BmCode* code); // Return the ouput value of a code/state.
-uint BmTree_branch_option( BmTree* self, uint iBranch, uint option );
-uint BmTree_branchVariable( BmTree* self, uint iBranch ); // Return the variable index represented by the branch.
-uint BmTree_branchSize( BmTree* self, uint branch ); // Return the number of possible output.
-uint BmTree_deepOf( BmTree* self, BmCode* code); // Return the number of branch to cross before reaching the output.
-
 /* Generating */
 BmBench* BmTree_asNewBench( BmTree* self );
 
@@ -271,6 +276,46 @@ char* BmTree_print( BmTree* self, char* output);
 
 char* BmTree_printInside( BmTree* self, char* output); // print `self` at the end of `output`
 
+
+/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *   B b M m   S T R U C T U R E :  V E C T O R                            *
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+typedef struct {
+  uint size;
+  double * values;
+} BmVector;
+
+/* Constructor */
+BmVector* newBmVectorBasic( uint size );
+BmVector* newBmVector_values( uint size, double* values );
+BmVector* newBmVector_list( uint size, double val1, ... );
+BmVector* newBmVector_all( uint size, double* value );
+
+BmVector* BmVector_createBasic( BmVector* self, uint size );
+BmVector* BmVector_create_values( BmVector* self, uint size, double* values );
+BmVector* BmVector_create_all( BmVector* self, uint size, double value );
+
+/* Destructor */
+BmVector* BmVector_destroy( BmVector* self );
+void deleteBmVector( BmVector* self );
+
+/* Re-Initialize */
+//BmVector* BmVector_resize(BmVector* self, uint size);
+
+/* Accessor */
+uint BmVector_size( BmVector* self );
+double BmVector_at( BmVector* self, uint i );
+
+/* Construction */
+double BmVector_at_set( BmVector* self, uint i, double value );
+
+/* Operation */
+double BmVector_sum( BmVector* self );
+double BmVector_product( BmVector* self );
+
+/* Printing */
+char* BmVector_print( BmVector* self, char* output );
 
 
 #endif

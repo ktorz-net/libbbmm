@@ -37,14 +37,14 @@ set(SRC_FILES
     src/stt-BmBench.c
     src/stt-BmTree.c
     src/stt-BmVector.c
-    src/val-BmGauge.c
-    src/val-BmEval.c
-    src/pbb-BmDistribution.c
-    src/pbb-BmCondition.c
-    src/pbb-BmTransition.c
-    src/mdl-BmDomain.c
-    src/mdl-BmSpace.c
-    src/mdl-BmSystem.c
+#    src/val-BmGauge.c
+#    src/val-BmEval.c
+#    src/pbb-BmDistribution.c
+#    src/pbb-BmCondition.c
+#    src/pbb-BmTransition.c
+#    src/mdl-BmDomain.c
+#    src/mdl-BmSpace.c
+#    src/mdl-BmSystem.c
 )
 
 # Build
@@ -68,16 +68,16 @@ set(CHECK_LIBS check subunit m rt pthread)
 set(TEST_SRC_FILES 
     test/tc-stt-BmCode.c
     test/tc-stt-BmBench.c
-    test/tc-stt-BmVector.c
     test/tc-stt-BmTree.c
-    test/tc-val-BmGauge.c
-    test/tc-val-BmEval.c
-    test/tc-pbb-BmDistribution.c
-    test/tc-pbb-BmCondition.c
-    test/tc-pbb-BmTransition.c
-    test/tc-mld-BmDomain.c
-    test/tc-mld-BmSpace.c
-    test/tc-mld-BmSystem.c
+    test/tc-stt-BmVector.c
+#    test/tc-val-BmGauge.c
+#    test/tc-val-BmEval.c
+#    test/tc-pbb-BmDistribution.c
+#    test/tc-pbb-BmCondition.c
+#    test/tc-pbb-BmTransition.c
+#    test/tc-mld-BmDomain.c
+#    test/tc-mld-BmSpace.c
+#    test/tc-mld-BmSystem.c
 #    test/tc-cofeeRobot.c
     test/main-testrunner.c
 )
