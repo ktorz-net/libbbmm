@@ -3,11 +3,12 @@ BbMm - a librayry for Bayesian-based Markov-models
 
 ![](./resources/logo-BbMm-128.png)
 
-
 BbMm, aims to become a multi-language library to create deliberative agent based on Decision Making under Uncertainty.
 The implemented approach for that relies on Markov Decision Process with transition based on Bayesian Network model.
 
 BbMm is an experimental toolbox, it comes with no more guaranty than the devotion of the developers.
+
+- Vertion 0.2X
 
 ## Concurency:
 
