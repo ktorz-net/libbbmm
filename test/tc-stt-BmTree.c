@@ -31,7 +31,7 @@ START_TEST(test_BmTree_init)
     //for( uint i = 1 ; i <= 2 ; ++i )
     //    ck_assert_uint_eq( tree->branches[0][i], (uint)0 );
 
-    BmCode* st= newBmCodeBasic(3);
+    BmCode* st= newBmCode(3);
     BmCode_setCodeFirst(tree->input, st);
     while( BmCode_isIncluding(tree->input, st) )
     {
@@ -47,7 +47,7 @@ END_TEST
 
 START_TEST(test_BmTree_treeConstruction)
 {
-    BmCode* domains= BmCode_initialize_list( newBmCodeBasic(3), 3, 2, 3, 2);
+    BmCode* domains= BmCode_initialize_list( newBmCode(3), 3, 2, 3, 2);
     BmTree* tree= newBmTree( domains, 4);
     deleteBmCode( domains );
     
@@ -105,7 +105,7 @@ END_TEST
 
 START_TEST(test_BmTree_optionSelection)
 {
-    BmCode* domains= BmCode_initialize_list( newBmCodeBasic(3), 3, 2, 3, 2);
+    BmCode* domains= BmCode_initialize_list( newBmCode(3), 3, 2, 3, 2);
     BmTree* tree= newBmTree( domains, 4);
     deleteBmCode( domains );
 
@@ -163,7 +163,7 @@ END_TEST
 
 START_TEST(test_BmTree_constructionFromExemple)
 {
-    BmCode* domains= BmCode_initialize_list( newBmCodeBasic(3), 3, 2, 3, 2);
+    BmCode* domains= BmCode_initialize_list( newBmCode(3), 3, 2, 3, 2);
     BmTree* tree= newBmTree( domains, 4);
     deleteBmCode( domains );
 
@@ -256,7 +256,7 @@ END_TEST
 
 START_TEST(test_BmTree_fromExempleFromScratch)
 {
-    BmCode* domains= BmCode_initialize_list( newBmCodeBasic(3), 3, 2, 3, 2);
+    BmCode* domains= BmCode_initialize_list( newBmCode(3), 3, 2, 3, 2);
     BmTree* tree= newBmTree( domains, 4);
     deleteBmCode( domains );
 
@@ -285,7 +285,7 @@ END_TEST
 
 START_TEST(test_BmTree_print)
 {
-    BmCode* domains= BmCode_initialize_list( newBmCodeBasic(3), 3, 2, 3, 2);
+    BmCode* domains= BmCode_initialize_list( newBmCode(3), 3, 2, 3, 2);
     BmTree* tree= newBmTree( domains, 4);
     deleteBmCode( domains );
     
@@ -362,7 +362,7 @@ START_TEST(test_BmTree_ordered)
 {
     BmTree* tree;
     {
-    BmCode* domains= BmCode_initialize_list( newBmCodeBasic(3), 3, 2, 3, 2);
+    BmCode* domains= BmCode_initialize_list( newBmCode(3), 3, 2, 3, 2);
     tree= newBmTree( domains, 4);
     deleteBmCode( domains );
     }

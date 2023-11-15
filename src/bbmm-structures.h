@@ -3,10 +3,10 @@
  *   BbMm Structures - A library in KISS philosophy for *Bayesian-based Markov-models* data structures.
  * 
  *   FEATURES:
- *       - BmCode        : a fixed size list of digit (unsigned integers)
- *       - BmBench       : a dynamic-size collection of BmCode
- *       - BmTree        : a decision tree based BmCode (BmCode -> uint)
- *       - BmNet         : a adjacence list network based on unsigned integers
+ *       - BmCode         : a fixed size list of digit (unsigned integers)
+ *       - BmBench        : a dynamic-size collection of BmCode with tag and value (i -> code + tag and value )
+ *       - BmTree         : a tree based BmCode (BmCode -> tag and value )
+ *       - BmVector       : a fixed size list of values (doubles)
  *
  *   LICENSE: MIT License
  *
@@ -86,7 +86,7 @@ typedef struct {
 } BmCode;
 
 /* Constructor */
-BmCode* newBmCodeBasic(uint size);
+BmCode* newBmCode(uint size);
 BmCode* newBmCode_numbers( uint size, uint* numbers );
 BmCode* newBmCode_all(uint size, uint defaultValue);
 BmCode* newBmCodeAs( BmCode* model );
@@ -96,7 +96,7 @@ BmCode* newBmCode_list( uint size, uint number1, ... );
 BmCode* newBmCodeMergeList( uint numberOfCodes, BmCode* code1, ... );
 
 BmCode* BmCode_create_numbers( BmCode* self, uint size, uint* numbers );
-BmCode* BmCode_createBasic( BmCode* self, uint size );
+BmCode* BmCode_create( BmCode* self, uint size );
 BmCode* BmCode_create_all( BmCode* self, uint size, uint defaultValue );
 BmCode* BmCode_createAs( BmCode* self, BmCode* model );
 
@@ -164,7 +164,7 @@ char* BmCode_print( BmCode* self, char* buffer);   // print `self` at the end of
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   S T R U C T U R E :  B E N C H                          *
+ *   B b M m   S T R U C T U R E :  B E N C H                              *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 typedef struct {
@@ -209,40 +209,7 @@ char* BmBench_print( BmBench* self, char* output); // print `self` at the end of
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   S T R U C T U R E :  N E T W O R K                          *
- * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
-/*
-  Define a Simple Network 
-*/
-
-typedef struct {
-  uint size;
-  BmCode* edges;
-} BmNet;
-
-/* Constructor Destructor */
-BmNet* newBmNet(uint size);
-void deleteBmNet( BmNet* self);
-
-BmNet* BmNet_create( BmNet* self, uint size); // generate
-BmNet* BmNet_destroy( BmNet* self);
-
-/* Accessor */
-BmCode* BmNet_at( BmNet* self, uint i);
-
-/* Test */
-
-/* Construction */
-void BmNet_clearAt( BmNet* self, uint node);
-void BmNet_at_connect( BmNet* self, uint from, BmCode* targets);
-
-/* Printing */
-char* BmNet_wording( BmNet* self); // print `self` on `output`
-char* BmNet_print( BmNet* self, char* output); // print `self` at the end of `output`
-
-
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   T R E E                                                     *
+ *   B b M m   S T R U C T U R E :  T R E E                                *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 /*
   Apply a tree structure to a Space for clustering states in a finit number of options.

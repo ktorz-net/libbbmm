@@ -111,7 +111,7 @@ END_TEST
 
 START_TEST(test_BmCode_iterate)
 {
-    BmCode* domain= BmCode_initialize_list( newBmCodeBasic(0), 3, 2, 4, 3 );
+    BmCode* domain= BmCode_initialize_list( newBmCode(0), 3, 2, 4, 3 );
     BmCode* code= newBmCode_all(3, 0);
     
     ck_assert_str_eq(

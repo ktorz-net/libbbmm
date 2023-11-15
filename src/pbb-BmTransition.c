@@ -16,7 +16,7 @@
 /* Constructor Destructor */
 BmTransition* newBmTransition( BmCode* state, BmCode* action )
 {
-    BmCode* shift= newBmCodeBasic(0);
+    BmCode* shift= newBmCode(0);
     BmTransition* trans= BmTransition_create( newEmpty(BmTransition), state, action, shift );
     deleteBmCode(shift);
     return trans;
@@ -41,28 +41,32 @@ BmTransition* BmTransition_create(BmTransition* self, BmCode* state, BmCode* act
     uint shiftDimention= BmCode_size(shift);
     self->overallDimention= self->stateDimention*2 + self->actionDimention + shiftDimention;
 
-    self->network= newBmNet( self->overallDimention );
+    self->network= newBmBench( self->overallDimention );
     self->nodes= newEmptyArray( BmCondition, self->overallDimention );
 
     uint o= 1;
     for( uint i = 1 ; i <= self->stateDimention ; ++i )
     {
         BmCondition_createUndependant( array_on(self->nodes, o), BmCode_at(state, i) );
+        BmBench_attachLast( self->network, newBmCode( 0 ) );
         ++o;
     }
     for( uint i = 1 ; i <= self->actionDimention ; ++i )
     {
         BmCondition_createUndependant( array_on(self->nodes, o), BmCode_at(action, i) );
+        BmBench_attachLast( self->network, newBmCode( 0 ) );
         ++o;
     }
     for( uint i = 1 ; i  <= shiftDimention ; ++i )
     {
         BmCondition_createUndependant( array_on(self->nodes, o), BmCode_at(shift, i) );
+        BmBench_attachLast( self->network, newBmCode( 0 ) );
         ++o;
     }
     for( uint i = 1 ; i <= self->stateDimention ; ++i )
     {
         BmCondition_createUndependant( array_on(self->nodes, o), BmCode_at(state, i) );
+        BmBench_attachLast( self->network, newBmCode( 0 ) );
         ++o;
     }
 
@@ -76,7 +80,7 @@ BmTransition* BmTransition_destroy(BmTransition* self)
     for(uint i = 1 ; i <= self->overallDimention ; ++i )
         BmCondition_destroy( array_on(self->nodes, i) );
     free( self->nodes );
-    deleteBmNet(self->network);
+    deleteBmBench(self->network);
     deleteBmDistribution( self->transition );
     return self;
 }
@@ -141,14 +145,13 @@ BmCondition* BmTransition_nodeAt( BmTransition * self, uint iVar )
 
 BmCode* BmTransition_dependanciesAt( BmTransition * self, uint iVar )
 {
-    return array_on(self->network->edges, iVar);
+    return BmBench_at(self->network, iVar);
 }
 
 /* Construction */
 BmTransition* BmTransition_node_initialize( BmTransition* self, uint index, uint outputSize )
 {
     BmCondition_destroy( array_on(self->nodes, index) );
-    //Get parent configuration: fron net BmNet_at_connect( self->network, index, dependancy );
     BmCondition_createUndependant( array_on(self->nodes, index), outputSize );
     return self;
 }
@@ -156,9 +159,10 @@ BmTransition* BmTransition_node_initialize( BmTransition* self, uint index, uint
 BmTransition* BmTransition_node_dependArray( BmTransition* self, uint index, uint parentSize, uint* parents )
 {
     BmCode* dependancy= newBmCode_numbers(parentSize, parents);
-    BmNet_at_connect( self->network, index, dependancy );
+    BmCode_sort( dependancy );
+    BmCode_copy( BmBench_at( self->network, index), dependancy );
 
-    BmCode* parentRanges= newBmCodeBasic( BmCode_size(dependancy) );
+    BmCode* parentRanges= newBmCode( BmCode_size(dependancy) );
     for( uint i= 1 ; i <= BmCode_size(dependancy) ; ++i )
     {
         BmCondition* parentNode= array_on(self->nodes, BmCode_at(dependancy, i) );
@@ -225,7 +229,7 @@ BmDistribution* BmTransition_newDistributionByInfering( BmTransition * self, BmD
 BmDistribution* BmTransition_inferFromState_andAction( BmTransition * self, BmCode* state, BmCode* action )
 {
     // Set initial configuration :
-    BmCode* startConf= newBmCodeBasic( BmCode_size(state) +  BmCode_size(action) );
+    BmCode* startConf= newBmCode( BmCode_size(state) +  BmCode_size(action) );
 
     for( uint i=1 ; i <= BmCode_size(state) ; ++i )
         BmCode_at_set( startConf, i, BmCode_at(state, i) );
@@ -318,12 +322,12 @@ char* BmTransition_printDependency(BmTransition* self, char* output)
     if( shiftDimention > 0 )
     {
         strcat(output, " ");
-        BmCode_print( array_on(self->network->edges, shiftStart), output );
+        BmCode_print( BmBench_at(self->network, shiftStart), output );
     }
     for( uint i= shiftStart+1 ; i < shiftEnd ; ++i)
     {
         strcat(output, ", ");
-        BmCode_print( array_on(self->network->edges, i), output );
+        BmCode_print( BmBench_at(self->network, i), output );
     }
     strcat(output, " |");
 
@@ -331,12 +335,12 @@ char* BmTransition_printDependency(BmTransition* self, char* output)
     if( self->stateDimention > 0 )
     {
         strcat(output, " ");
-        BmCode_print( array_on(self->network->edges, shiftEnd), output );
+        BmCode_print( BmBench_at(self->network, shiftEnd), output );
     }
     for( uint i= shiftEnd+1 ; i <= self->overallDimention ; ++i)
     {
         strcat(output, ", ");
-        BmCode_print( array_on(self->network->edges, i), output );
+        BmCode_print( BmBench_at(self->network, i), output );
     }
     strcat(output, " |");
 

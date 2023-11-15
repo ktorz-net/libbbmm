@@ -232,7 +232,7 @@ BmCode* BmSystem_variable_dependOnArray( BmSystem* self, char * varName, uint pa
 
     BmTransition_node_dependArray( self->transition, iNode, parentSize, parentNodes );
     
-    return array_on(self->transition->network->edges, iNode);
+    return BmBench_at(self->transition->network, iNode);
 }
 
 BmCode* BmSystem_variable_dependOn( BmSystem* self, char * varName, uint parentSize, ... )
@@ -417,7 +417,7 @@ uint BmSystem_variable_nodeId(BmSystem* self, char * varName)
 uint BmSystem_nodeId_parentId(BmSystem* self, uint id, char* parent)
 {
     return BmCode_search(
-        BmNet_at( self->transition->network, id),
+        BmBench_at( self->transition->network, id),
         BmSystem_variable_nodeId(self, parent)
     );
 }
@@ -499,7 +499,7 @@ uint BmSystem_feedWithDomains( BmSystem* self, BmDomain** domainsBuffer, uint nb
 /* Printing */
 char* BmSystem_nodeId_printIdentity( BmSystem* self, uint nodeId, char* output )
 {
-    BmCode* parents= BmNet_at(self->transition->network, nodeId);
+    BmCode* parents= BmBench_at(self->transition->network, nodeId);
     char buffer[1024];
 
     sprintf( buffer, "%s.%u(",
@@ -528,7 +528,7 @@ char* BmSystem_nodeId_printIdentity( BmSystem* self, uint nodeId, char* output )
 
 char* BmSystem_printNetwork( BmSystem* self, char* output )
 {
-    BmNet* net= self->transition->network;
+    BmBench* net= self->transition->network;
 
     if( net->size > 0 )
     {

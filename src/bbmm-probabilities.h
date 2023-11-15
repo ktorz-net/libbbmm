@@ -185,11 +185,11 @@ char* BmCondition_printIdentity( BmCondition* self, char* output ); // print `se
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 /*
   Define a Bayesian Network composed of state, action and tramsitional nodes 
-*/ 
+*/
 
 typedef struct {
   uint stateDimention, actionDimention, overallDimention;
-  BmNet* network;
+  BmBench* network;
   BmCondition* nodes;
   BmDistribution* transition;
 } BmTransition;

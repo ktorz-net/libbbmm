@@ -8,11 +8,10 @@
 // BbMm structures 
 TCase * test_case_BmCode(void);
 TCase * test_case_BmBench(void);
-TCase * test_case_BmNet(void);
 TCase * test_case_BmTree(void);
+TCase * test_case_BmVector(void);
 
 // BbMm values 
-TCase * test_case_BmVector(void);
 TCase * test_case_BmGauge(void);
 TCase * test_case_BmEval(void);
 

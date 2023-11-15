@@ -26,26 +26,25 @@ message( ${CMAKE_BUILD_TYPE} )
 # find_package(raylib 2.0 REQUIRED)
 
 # project configuration :
-include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/core-src)
+include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/src)
 
 #------------#
 ## C O R E  ##
 #------------#
 set(SRC_FILES
-    core-src/stt-basictools.c
-    core-src/stt-BmCode.c
-    core-src/stt-BmBench.c
-    core-src/stt-BmNet.c
-    core-src/stt-BmTree.c
-    core-src/val-BmVector.c
-    core-src/val-BmGauge.c
-    core-src/val-BmEval.c
-    core-src/pbb-BmDistribution.c
-    core-src/pbb-BmCondition.c
-    core-src/pbb-BmTransition.c
-    core-src/mdl-BmDomain.c
-    core-src/mdl-BmSpace.c
-    core-src/mdl-BmSystem.c
+    src/stt-basictools.c
+    src/stt-BmCode.c
+    src/stt-BmBench.c
+    src/stt-BmTree.c
+    src/stt-BmVector.c
+    src/val-BmGauge.c
+    src/val-BmEval.c
+    src/pbb-BmDistribution.c
+    src/pbb-BmCondition.c
+    src/pbb-BmTransition.c
+    src/mdl-BmDomain.c
+    src/mdl-BmSpace.c
+    src/mdl-BmSystem.c
 )
 
 # Build
@@ -67,21 +66,20 @@ if(TEST)
 
 set(CHECK_LIBS check subunit m rt pthread)
 set(TEST_SRC_FILES 
-    core-test/tc-stt-BmCode.c
-    core-test/tc-stt-BmBench.c
-    core-test/tc-stt-BmNet.c
-    core-test/tc-stt-BmTree.c
-    core-test/tc-val-BmVector.c
-    core-test/tc-val-BmGauge.c
-    core-test/tc-val-BmEval.c
-    core-test/tc-pbb-BmDistribution.c
-    core-test/tc-pbb-BmCondition.c
-    core-test/tc-pbb-BmTransition.c
-    core-test/tc-mld-BmDomain.c
-    core-test/tc-mld-BmSpace.c
-    core-test/tc-mld-BmSystem.c
-#    core-test/tc-cofeeRobot.c
-    core-test/main-testrunner.c
+    test/tc-stt-BmCode.c
+    test/tc-stt-BmBench.c
+    test/tc-stt-BmVector.c
+    test/tc-stt-BmTree.c
+    test/tc-val-BmGauge.c
+    test/tc-val-BmEval.c
+    test/tc-pbb-BmDistribution.c
+    test/tc-pbb-BmCondition.c
+    test/tc-pbb-BmTransition.c
+    test/tc-mld-BmDomain.c
+    test/tc-mld-BmSpace.c
+    test/tc-mld-BmSystem.c
+#    test/tc-cofeeRobot.c
+    test/main-testrunner.c
 )
 
 add_executable(test-BbMm ${TEST_SRC_FILES})

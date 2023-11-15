@@ -10,9 +10,9 @@
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 /* Constructor Destructor */
-BmCode* newBmCodeBasic(uint size)
+BmCode* newBmCode(uint size)
 {
-    return BmCode_createBasic( newEmpty(BmCode), size );
+    return BmCode_create( newEmpty(BmCode), size );
 }
 
 BmCode* newBmCode_numbers( uint size, uint* numbers )
@@ -74,7 +74,7 @@ void deleteBmCode(BmCode* instance)
 }
 
 /* Protected - to use with precaution */
-BmCode* BmCode_createBasic( BmCode* self, uint size )
+BmCode* BmCode_create( BmCode* self, uint size )
 {
     self->dsc = malloc( sizeof(uint)*(size+1) );
     self->dsc[0]= size;
@@ -83,7 +83,7 @@ BmCode* BmCode_createBasic( BmCode* self, uint size )
 
 BmCode* BmCode_create_numbers( BmCode* self, uint size, uint* numbers )
 {
-    BmCode_createBasic(self, size);
+    BmCode_create(self, size);
     for( uint i= 1 ; i <= size ; ++i )
         BmCode_at_set( self, i, numbers[i-1] );
     return self;
@@ -91,7 +91,7 @@ BmCode* BmCode_create_numbers( BmCode* self, uint size, uint* numbers )
 
 BmCode* BmCode_create_all( BmCode* self, uint size, uint defaultValue )
 {
-    BmCode_createBasic(self, size);
+    BmCode_create(self, size);
     BmCode_setAll(self, defaultValue);
     return self;
 }
@@ -143,7 +143,7 @@ BmCode* BmCode_destroy(BmCode* self)
 BmCode* BmCode_initializeBasic( BmCode* self, uint newSize )
 {
     BmCode_destroy(self);
-    return BmCode_createBasic( self, newSize );
+    return BmCode_create( self, newSize );
 }
 
 BmCode* BmCode_initialize_list( BmCode* self, uint newSize, uint number1, ... )
@@ -415,7 +415,7 @@ BmCode* BmCode_setCodeLast(BmCode* ranges, BmCode* code)
 
 BmCode* BmCode_newBmCodeOnKey(BmCode* ranges, ulong key)
 {
-    BmCode * code= newBmCodeBasic( BmCode_size(ranges) );
+    BmCode * code= newBmCode( BmCode_size(ranges) );
     BmCode_setCode_onKey( ranges, code, key );
     return code;
 }
@@ -487,7 +487,7 @@ BmCode* BmCode_newBmCodeMask(BmCode* self, BmCode* mask)
 {   
     uint maskSize= BmCode_size(mask);
     assert( maskSize <= BmCode_size(self) );
-    BmCode* code = newBmCodeBasic( BmCode_size(mask) );
+    BmCode* code = newBmCode( BmCode_size(mask) );
 
     for( uint i= 1 ; i <= maskSize ; ++i )
             BmCode_at_set( code, i,

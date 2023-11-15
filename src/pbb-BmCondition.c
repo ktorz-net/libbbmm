@@ -199,7 +199,7 @@ BmDistribution* BmCondition_newDistributionByInfering(BmCondition* self, BmDistr
 {
     assert( BmCondition_dimention(self) == distribOverConfigurations->dimention );
     uint dim= distribOverConfigurations->dimention;
-    BmCode* mask= newBmCodeBasic( dim );
+    BmCode* mask= newBmCode( dim );
 
     for( uint i= 1 ; i <= dim ; ++i )
         BmCode_at_set( mask, i, i );
@@ -222,7 +222,7 @@ BmDistribution * BmCondition_newDistributionByInfering_mask(BmCondition* self, B
     // foreach configuration in the distribution:
     uint numberOfCondition= BmDistribution_size(longDistrib);
     uint dim= BmCondition_dimention(self);
-    BmCode* parentConf= newBmCodeBasic( dim );
+    BmCode* parentConf= newBmCode( dim );
     for( uint iCondition= 0 ; iCondition < numberOfCondition ; ++iCondition )
     {
         BmCode* newConfig= newBmCode_all( BmCode_size(longDistrib->configurations[iCondition])+1, 0 );

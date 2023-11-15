@@ -79,7 +79,7 @@ uint BmGauge_at_setOptionId( BmGauge* self, BmCode* code, uint iOption)
 
 BmGauge* BmGauge_setList(BmGauge* self, uint number, ... )
 {
-    BmCode* code= newBmCodeBasic( BmGauge_dimention(self) );
+    BmCode* code= newBmCode( BmGauge_dimention(self) );
     // Build number code -> iOption tuples 
     va_list ap;
     va_start(ap, number); 

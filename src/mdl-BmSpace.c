@@ -190,7 +190,7 @@ uint BmSpace_feedWithDomains( BmSpace* self, BmDomain** domainsBuffer, uint nboD
 BmCode* BmSpace_asNewBmCode( BmSpace* self )
 {
     uint dim= BmSpace_dimention(self);
-    BmCode* code= newBmCodeBasic( dim );
+    BmCode* code= newBmCode( dim );
     for( uint i= 1 ; i <= dim ; ++i )
     {
         BmCode_at_set( code, i, BmSpace_variable_domainSize(self, i) );

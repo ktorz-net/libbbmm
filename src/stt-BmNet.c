@@ -30,7 +30,7 @@ BmNet* BmNet_create(BmNet* self, uint size)
     self->edges= newEmptyArray( BmCode, size );
     for( uint i = 1 ; i <= size ; ++i )
     {
-        BmCode_createBasic( array_on( self->edges, i ), 0 );
+        BmCode_create( array_on( self->edges, i ), 0 );
     }
     self->size= size;
     return self;
