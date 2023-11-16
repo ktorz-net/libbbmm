@@ -9,6 +9,9 @@
 	- Add a value to tree (and change outputs to tags), transform BmGauge to BmTree. A gauge, etc... become tree of Codes.
 	- BmNet is also a BmBench, so remove BmNet...
 
+- Manage explicit version number
+	- git ???
+	- [cmake](https://cmake.org/cmake/help/v3.18/guide/tutorial/#adding-a-version-number-and-configured-header-file)
 - Make BmTree from BmBench...
 - Determine a frontend (bbmm.h) from construction structures (typicaly: Condition, Gauges...)
 - Redifine BbMm on top of [igraph](https://github.com/igraph/igraph) ?

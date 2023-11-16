@@ -1,6 +1,6 @@
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *
- *   BbMm Structures - A library in KISS philosophy for *Bayesian-based Markov-models* data structures.
+ *   BbMm Structures - data structures usefull for libbbmm.
  * 
  *   FEATURES:
  *       - BmCode         : a fixed size list of digit (unsigned integers)
@@ -36,8 +36,8 @@
  *   S O M E   G L O B A L E   D E F I N I T I O N                         *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
-#ifndef BEMAGE_STT_H
-#define BEMAGE_STT_H
+#ifndef BBMM_STT_H
+#define BBMM_STT_H
 
 #include <stdarg.h>
 
@@ -66,7 +66,7 @@ typedef uint bool;
 #define array_at_set(instance, index, value) instance[index-1]= value
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   S T R U C T U R E :  B A S I C   T O O L S              *
+ *   B b M m   S T R U C T U R E :  B A S I C   T O O L S                  *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 /* buffers */
@@ -292,7 +292,6 @@ char* BmTree_print_sep_options( BmTree* self, char* output, char* separator, cha
 char* BmTree_print( BmTree* self, char* output);
 
 char* BmTree_printInside( BmTree* self, char* output); // print `self` at the end of `output`
-
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   S T R U C T U R E :  V E C T O R                            *

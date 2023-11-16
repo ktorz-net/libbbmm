@@ -203,13 +203,13 @@ START_TEST(test_BmTree_tagsNValues)
     ck_assert_double_eq_tol( BmTree_valueAt(tree, st), 1.1, 0.00001 );
     
     BmCode_reinit_list(st, 3, 1, 1, 1);
-    ck_assert_uint_eq( BmTree_tagAt(tree, st), (uint)30 );
+    ck_assert_double_eq_tol( BmTree_valueAt(tree, st), 3.1, 0.00001 );
     
     BmCode_reinit_list(st, 3, 1, 2, 2);
-    ck_assert_uint_eq( BmTree_tagAt(tree, st), (uint)10 );
+    ck_assert_double_eq_tol( BmTree_valueAt(tree, st), 1.1, 0.00001 );
     
     BmCode_reinit_list(st, 3, 1, 3, 2);
-    ck_assert_uint_eq( BmTree_tagAt(tree, st), (uint)40 );
+    ck_assert_double_eq_tol( BmTree_valueAt(tree, st), 4.1, 0.00001 );
 
     deleteBmCode( st );
     deleteBmTree( tree );
