@@ -193,10 +193,13 @@ double BmBench_valueAt( BmBench* self, uint i );
 /* Construction */
 void BmBench_resizeCapacity( BmBench* self, uint newCapacity );
 
-uint BmBench_attachLast( BmBench* self, BmCode* newItem );
+uint BmBench_attach( BmBench* self, BmCode* newItem );
+//BmCode* BmBench_detach( BmBench* self, uint i );
+
+uint BmBench_attachLast( BmBench* self, BmCode* newItem, uint tag, double value );
 BmCode* BmBench_detachLast( BmBench* self );
 
-uint BmBench_attachFirst( BmBench* self, BmCode* newItem );
+uint BmBench_attachFirst( BmBench* self, BmCode* newItem, uint tag, double value );
 BmCode* BmBench_detachFirst( BmBench* self );
 
 BmCode* BmBench_at_tag( BmBench* self, uint i, uint tagValue );

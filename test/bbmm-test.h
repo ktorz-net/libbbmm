@@ -11,22 +11,12 @@ TCase * test_case_BmBench(void);
 TCase * test_case_BmTree(void);
 TCase * test_case_BmVector(void);
 
-// BbMm values 
-TCase * test_case_BmGauge(void);
-TCase * test_case_BmEval(void);
-
-// BbMm Probabilities
-TCase * test_case_BmDistribution(void);
-TCase * test_case_BmCondition(void);
-TCase * test_case_BmTransition(void);
-
 // BbMm Models
-TCase * test_case_BmDomain(void);
-TCase * test_case_BmSpace(void);
-TCase * test_case_BmSystem(void);
+TCase * test_case_BmCondition(void);
+//TCase * test_case_BmTransition(void);
+//TCase * test_case_BmReward(void);
 
 // BbMm Solver
-
 
 // Examples
 //TCase * test_case_cofeeRobot(void);

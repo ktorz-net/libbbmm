@@ -105,7 +105,12 @@ double BmBench_valueAt( BmBench* self, uint i )
 /* Test */
 
 /* Construction Item */
-uint BmBench_attachLast( BmBench* self, BmCode* item )
+uint BmBench_attach( BmBench* self, BmCode* newItem )
+{
+    return BmBench_attachLast( self, newItem, 0, 0.0 );
+}
+
+uint BmBench_attachLast( BmBench* self, BmCode* newItem, uint tag, double value )
 {
     uint id= self->start+self->size+1;
     if( id >= self->capacity )
@@ -114,8 +119,10 @@ uint BmBench_attachLast( BmBench* self, BmCode* item )
         id= self->start+self->size+1;
     }
 
-    array_at_set( self->items, id, item );
-    array_at_set( self->tags, id, 0 );
+    array_at_set( self->items, id, newItem );
+    array_at_set( self->tags, id, tag );
+    array_at_set( self->values, id, value );
+
     self->size+= 1;
     return (id-self->start);
 }
@@ -128,14 +135,16 @@ BmCode* BmBench_detachLast( BmBench* self )
     return array_at( self->items, id );
 }
 
-uint BmBench_attachFirst( BmBench* self, BmCode* item )
+uint BmBench_attachFirst( BmBench* self, BmCode* newItem, uint tag, double value )
 {
     if( self->start == 0 )
     {
         BmBench_resizeCapacity( self, (self->size*2)+2);
     }
-    array_at_set( self->items, self->start, item );
-    array_at_set( self->tags, self->start, 0 );
+    array_at_set( self->items, self->start, newItem );
+    array_at_set( self->tags, self->start, tag );
+    array_at_set( self->values, self->start, value );
+
     self->start= self->start-1;
     self->size+= 1;
     return self->start+1;

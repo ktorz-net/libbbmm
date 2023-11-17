@@ -375,7 +375,7 @@ BmBench* BmTree_asNewBench( BmTree* self )
             if( self->branches[iBranch][i] < self->optionBound )
             {
                 BmCode_at_set( conditions[iBranch], branVar, i );
-                uint iItem= BmBench_attachLast( bench, newBmCodeAs( conditions[iBranch] ) );
+                uint iItem= BmBench_attach( bench, newBmCodeAs( conditions[iBranch] ) );
                 BmBench_at_tag( bench, iItem, self->branches[iBranch][i] );
             }
             else

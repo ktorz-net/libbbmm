@@ -37,6 +37,7 @@ set(SRC_FILES
     src/stt-BmBench.c
     src/stt-BmTree.c
     src/stt-BmVector.c
+    src/mdl-BmCondition.c
 #    src/val-BmGauge.c
 #    src/val-BmEval.c
 #    src/pbb-BmDistribution.c
@@ -70,10 +71,10 @@ set(TEST_SRC_FILES
     test/tc-stt-BmBench.c
     test/tc-stt-BmTree.c
     test/tc-stt-BmVector.c
+    test/tc-mdl-BmCondition.c
 #    test/tc-val-BmGauge.c
 #    test/tc-val-BmEval.c
 #    test/tc-pbb-BmDistribution.c
-#    test/tc-pbb-BmCondition.c
 #    test/tc-pbb-BmTransition.c
 #    test/tc-mld-BmDomain.c
 #    test/tc-mld-BmSpace.c
