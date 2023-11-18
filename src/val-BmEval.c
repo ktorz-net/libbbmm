@@ -54,8 +54,8 @@ BmEval* _BmEval_gaugesCreate( BmEval* self, uint gaugeSize )
     self->masks= newEmptyArray( BmCode*, gaugeSize );
     self->weights= newBmVectorBasic( gaugeSize );
 
-    BmCode* mask= newBmCode( BmCode_size( self->variables ) );
-    for( uint i= 1 ; i <= BmCode_size( self->variables ) ; ++i )
+    BmCode* mask= newBmCode( BmCode_dimention( self->variables ) );
+    for( uint i= 1 ; i <= BmCode_dimention( self->variables ) ; ++i )
         BmCode_at_set( mask, i , i );
         
     for( uint i= 1 ; i <= gaugeSize ; ++i )
@@ -138,7 +138,7 @@ BmEval* BmEval_weightAt_set( BmEval* self, uint gaugeId, double weight )
 /* Accessor */
 uint BmEval_dimention( BmEval* self )
 {
-    return BmCode_size( self->variables );
+    return BmCode_dimention( self->variables );
 }
 
 uint BmEval_gaugeSize( BmEval* self )

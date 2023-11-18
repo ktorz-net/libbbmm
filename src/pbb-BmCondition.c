@@ -29,30 +29,12 @@ BmCondition* newBmConditionUndependant(uint outputSize)
 
 void deleteBmCondition(BmCondition* instance)
 {
-    BmCondition_destroy( instance );
-    free( instance );
 }
 
 /* Protected - to use with precaution */
 BmCondition* BmCondition_create( BmCondition* self, uint outputSize, BmCode * parentsRanges, BmDistribution* defaultDistrib )
 {
-    assert( outputSize > 0 );
-    assert( BmCode_size(parentsRanges) > 0 );
-    
-    //self->name= malloc( sizeof(char) * strlen(name)+1 );
-    //strcpy(self->name, name);
 
-    self->outputSize= outputSize;
-
-    self->parentRanges= newBmCodeAs( parentsRanges );
-    self->selector= newBmTree( parentsRanges,  BmCode_product( self->parentRanges ) );
-    
-    self->distribCapacity= 1;
-    self->distributions= malloc( sizeof(BmDistribution*) * self->distribCapacity );
-    array_at_set( self->distributions, 1, newBmDistributionAs( defaultDistrib ) );
-    self->distribSize= 1;
-
-    return self;
 }
 
 BmCondition* BmCondition_createBasic(BmCondition* self, uint outputSize, BmCode* parentsRanges)
@@ -163,7 +145,7 @@ uint BmCondition_parentSize( BmCondition* self )
 
 uint BmCondition_dimention( BmCondition* self )
 {
-    return BmCode_size(self->parentRanges);
+    return BmCode_dimention(self->parentRanges);
 }
 
 BmDistribution* BmCondition_at( BmCondition* self, BmCode* configuration )
@@ -225,7 +207,7 @@ BmDistribution * BmCondition_newDistributionByInfering_mask(BmCondition* self, B
     BmCode* parentConf= newBmCode( dim );
     for( uint iCondition= 0 ; iCondition < numberOfCondition ; ++iCondition )
     {
-        BmCode* newConfig= newBmCode_all( BmCode_size(longDistrib->configurations[iCondition])+1, 0 );
+        BmCode* newConfig= newBmCode_all( BmCode_dimention(longDistrib->configurations[iCondition])+1, 0 );
         BmCode_copyNumbers( newConfig, longDistrib->configurations[iCondition] );
         double probability= longDistrib->probabilities[iCondition];
 
@@ -246,7 +228,7 @@ BmDistribution * BmCondition_newDistributionByInfering_mask(BmCondition* self, B
         for( uint iOutput= 0 ; iOutput < outputDistrib->size ; ++iOutput )
         {
             BmCode_at_set(
-                newConfig, BmCode_size(newConfig),
+                newConfig, BmCode_dimention(newConfig),
                 BmCode_at( outputDistrib->configurations[iOutput], 1 )
             );
             BmDistribution_addConfig(
@@ -292,7 +274,7 @@ uint BmCondition_resizeDistributionCapacity( BmCondition* self, uint newCapacity
 
 uint BmCondition_at_set( BmCondition* self, BmCode* configuration, BmDistribution* distribution )
 {
-    assert( BmCondition_dimention(self) == BmCode_size(configuration) );
+    assert( BmCondition_dimention(self) == BmCode_dimention(configuration) );
     if( self->distribSize+1 > self->distribCapacity )
         BmCondition_resizeDistributionCapacity( self, self->distribSize+1 );
     
@@ -305,7 +287,7 @@ uint BmCondition_at_set( BmCondition* self, BmCode* configuration, BmDistributio
 
 uint BmCondition_at_readOrder_set( BmCondition* self, BmCode* configuration, BmCode* configOrder, BmDistribution* distribution )
 {
-    assert( BmCondition_dimention(self) == BmCode_size(configuration) );
+    assert( BmCondition_dimention(self) == BmCode_dimention(configuration) );
     if( self->distribSize+1 > self->distribCapacity )
         BmCondition_resizeDistributionCapacity( self, self->distribSize+1 );
     
@@ -328,7 +310,7 @@ char* _BmCondition_printCode_withDistribution(BmCondition* self, BmCode* code, u
     uint inputSize= BmCondition_dimention(self);
     
     // Security:
-    assert( BmCode_size(code) == inputSize );
+    assert( BmCode_dimention(code) == inputSize );
 
     char tmp[64];
     strcat(output, "[");
@@ -407,7 +389,7 @@ char* BmCondition_printExtendSep(BmCondition* self, char* output, char* separato
     BmCondition_printIdentity(self, output);
     strcat(output, ": {");
 
-    if( BmCode_size(self->parentRanges) >= 1 )
+    if( BmCode_dimention(self->parentRanges) >= 1 )
     {
         BmCode* config= BmCode_newBmCodeFirst( self->parentRanges );
         

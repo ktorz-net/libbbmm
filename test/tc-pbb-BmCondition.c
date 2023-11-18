@@ -11,7 +11,7 @@ START_TEST(test_BmCondition_init)
     ck_assert_uint_eq( BmCondition_dimention( instance1 ), 1 );
     ck_assert_uint_eq( instance1->outputSize, 2 );
     ck_assert_str_eq( BmCode_wording( BmCondition_parentRanges(instance1) ), "[1]");
-    ck_assert_uint_eq( BmCode_size( BmCondition_parentRanges(instance1) ), 1 );
+    ck_assert_uint_eq( BmCode_dimention( BmCondition_parentRanges(instance1) ), 1 );
 
     ck_assert_str_eq( BmCode_wording(instance1->parentRanges), "[1]" );
     {

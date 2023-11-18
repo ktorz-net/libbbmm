@@ -60,10 +60,18 @@ BmCondition* BmCondition_createBasic(BmCondition* self, uint outputSize);
 BmCondition* BmCondition_createWith(BmCondition* self, uint domainSize, BmCode* newParentRanges, BmBench* newDefaultDistrib);
 
 /* Destructor */
-
 BmCondition* BmCondition_destroy(BmCondition* self);
 void deleteBmCondition(BmCondition* instance);
 
+/* re-initializer */
+
+/* Accessor */
+BmCode* BmCondition_parents( BmCondition* self );
+BmBench* BmCondition_at( BmCondition* self, BmCode* configuration );
+BmBench* BmCondition_atKey( BmCondition* self, uint configKey );
+
+
+// --- --- TO REINCORPORATE... --- --- // 
 /* instance basics */
 void BmCondition_switch(BmCondition* self, BmCondition* doppelganger);
 

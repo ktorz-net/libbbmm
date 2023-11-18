@@ -85,7 +85,7 @@ BmGauge* BmGauge_setList(BmGauge* self, uint number, ... )
     va_start(ap, number); 
     for ( uint i = 0 ; i < number ; ++i )
     {
-        for ( uint iVar = 1 ; iVar <= BmCode_size(code) ; ++iVar )
+        for ( uint iVar = 1 ; iVar <= BmCode_dimention(code) ; ++iVar )
         {
             BmCode_at_set(code, iVar, va_arg(ap, uint ) );
         }
@@ -100,7 +100,7 @@ BmGauge* BmGauge_setList(BmGauge* self, uint number, ... )
 /* Accessor */
 uint BmGauge_dimention( BmGauge* self )
 {
-    return BmCode_size( self->selector->input );
+    return BmCode_dimention( self->selector->input );
 }
 
 uint BmGauge_optionSize( BmGauge* self )

@@ -122,64 +122,6 @@ typedef struct {
   BmDistribution* * distributions;
 } BmCondition;
 
-/* Constructor Destructor */
-BmCondition* newBmCondition(uint outputSize, BmCode* parentRanges, BmDistribution* defaultDistrib);
-BmCondition* newBmConditionBasic(uint domainSize, BmCode* parentRanges);
-BmCondition* newBmConditionUndependant(uint outputSize);
-
-BmCondition* BmCondition_create(BmCondition* self, uint outputSize, BmCode* parentRanges, BmDistribution* defaultDistrib);
-BmCondition* BmCondition_createBasic(BmCondition* self, uint outputSize, BmCode* parentRanges);
-BmCondition* BmCondition_createUndependant(BmCondition* self, uint outputSize);
-BmCondition* BmCondition_destroy(BmCondition* self);
-
-void deleteBmCondition(BmCondition* instance);
-
-/* instance basics */
-void BmCondition_switch(BmCondition* self, BmCondition* doppelganger);
-
-/* initialize */
-void BmCondition_initialize( BmCondition* self, uint outputSize, BmCode* parentRanges, BmDistribution* defaultDistrib );
-void BmCondition_initializeEquiprobable( BmCondition* self, uint outputSize, BmCode* parentRanges );
-
-void BmCondition_reinitializeDefaultDistrib( BmCondition* self, BmDistribution* defaultDistrib );
-void BmCondition_reinitializeEquiprobable( BmCondition* self );
-
-/* Accessor */
-uint BmCondition_outputSize( BmCondition* self );
-BmCode* BmCondition_parentRanges( BmCondition* self );
-uint BmCondition_parentSize( BmCondition* self );
-uint BmCondition_dimention( BmCondition* self );
-BmDistribution* BmCondition_at( BmCondition* self, BmCode* configuration );
-uint BmCondition_distributionIndexAt( BmCondition* self, BmCode* configuration );
-BmDistribution* BmCondition_atKey( BmCondition* self, uint configKey );
-
-/* Inferring */
-BmDistribution* BmCondition_infer( BmCondition* self, BmDistribution* distribOverConfigurations );
-BmDistribution* BmCondition_newDistributionByInfering( BmCondition* self, BmDistribution* distribOverConfigurations );
-BmDistribution* BmCondition_newDistributionByInfering_mask(BmCondition* self, BmDistribution* longDistrib, BmCode* parentMask);
-
-/* Test */
-
-/* Construction*/
-/* Construction tools*/
-uint BmCondition_resizeDistributionCapacity( BmCondition* self, uint newCapacity );
-
-uint BmCondition_at_set( BmCondition* self, BmCode* configuration, BmDistribution* distribution );
-uint BmCondition_at_readOrder_set( BmCondition* self, BmCode* configuration, BmCode* configOrder, BmDistribution* distribution );
-
-void BmCondition_at_addOutput_onProbability( BmCondition* self, BmCode* configutation, uint option, double probability );
-
-/* Printing */
-char* _BmCondition_printCode_withDistribution(BmCondition* self, BmCode* code, uint iDistirb, char* output);
-char* BmCondition_print(BmCondition* self, char* output);
-char* BmCondition_printSep(BmCondition* self, char* output, char* separator);
-
-char* BmCondition_wordingExtend( BmCondition* self ); // print `self` on `output`
-char* BmCondition_printExtend(BmCondition* self, char* output); // print `self` at the end of `output`
-char* BmCondition_printExtendSep(BmCondition* self, char* output, char* separator);
-
-char* BmCondition_printIdentity( BmCondition* self, char* output ); // print `self` at the end of on `output`
-
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
  *   B b M m   T R A N S I T I O N
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */

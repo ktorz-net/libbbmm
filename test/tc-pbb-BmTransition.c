@@ -171,15 +171,15 @@ START_TEST(test_BmTransition_infering)
     BmDistribution* overallDistrib;
     {
         // Set initial configuration :
-        BmCode* startConf= newBmCode( BmCode_size(state) +  BmCode_size(action) );
+        BmCode* startConf= newBmCode( BmCode_dimention(state) +  BmCode_dimention(action) );
 
-        for( uint i=1 ; i <= BmCode_size(state) ; ++i )
+        for( uint i=1 ; i <= BmCode_dimention(state) ; ++i )
             BmCode_at_set( startConf, i, BmCode_at(state, i) );
-        for( uint i=1 ; i <= BmCode_size(action) ; ++i )
-            BmCode_at_set( startConf,  BmCode_size(state)+i, BmCode_at(action, i) );
+        for( uint i=1 ; i <= BmCode_dimention(action) ; ++i )
+            BmCode_at_set( startConf,  BmCode_dimention(state)+i, BmCode_at(action, i) );
 
         // Set a initial determinist distribution :
-        BmDistribution * distrib= newBmDistribution( BmCode_size(startConf) );
+        BmDistribution * distrib= newBmDistribution( BmCode_dimention(startConf) );
         BmDistribution_addConfig(distrib, startConf, 1.0);
 
         // infer :

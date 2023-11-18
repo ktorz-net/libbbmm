@@ -17,6 +17,17 @@ BmBench* newBmBench(uint capacity)
     return BmBench_create( newEmpty(BmBench), capacity );
 }
 
+BmBench* newBmBenchWith( uint capacity, BmCode* newFirstItems, uint tag, double value )
+{
+    return BmBench_createWith(
+        newEmpty(BmBench),
+        capacity,
+        newFirstItems,
+        tag,
+        value );
+}
+
+
 void deleteBmBench(BmBench* self)
 {
     BmBench_destroy(self);
@@ -31,6 +42,13 @@ BmBench* BmBench_create(BmBench* self, uint capacity)
     self->values= newEmptyArray( double, self->capacity );
     self->start= 0;
     self->size= 0;
+    return self;
+}
+
+BmBench* BmBench_createWith( BmBench* self, uint capacity, BmCode* newFirstItems, uint tag, double value )
+{
+    BmBench_create(self, capacity);
+    BmBench_attachLast( self, newFirstItems, tag, value );
     return self;
 }
 
@@ -233,6 +251,36 @@ char* BmBench_printItem(BmBench* self, uint iItem, char* output)
     strcat(output, ":");
     sprintf( buffer, "%.2f", BmBench_valueAt(self, iItem) );
     strcat( output, buffer );
+    return output;
+}
+
+char* _BmBench_printItemValue(BmBench* self, uint iItem, char* output)
+{
+    char buffer[16]= "";
+    BmCode_print( BmBench_at(self, iItem), output);
+    strcat(output, ":");
+    sprintf( buffer, "%.2f", BmBench_valueAt(self, iItem) );
+    strcat( output, buffer );
+    return output;
+}
+
+char* BmBench_printCodeValue(BmBench* self, char* output)
+{
+    strcat(output, "{");
+
+    if( self->size > 0 )
+    {
+        _BmBench_printItemValue( self, 1, output );
+    }
+
+    for( uint i= 2 ; i <= self->size ; ++i)
+    {
+        strcat(output, ", ");
+        _BmBench_printItemValue( self, i, output );
+    }
+
+    strcat(output, "}");
+
     return output;
 }
 

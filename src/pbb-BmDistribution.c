@@ -167,7 +167,7 @@ void BmDistribution_clear(BmDistribution *self)
 
 uint BmDistribution_addConfig(BmDistribution *self, BmCode* configuration, double probability )
 {
-    assert( BmCode_size(configuration) == BmDistribution_dimention(self) );
+    assert( BmCode_dimention(configuration) == BmDistribution_dimention(self) );
 
     if( self->capacity < self->size+1 )
         BmDistribution_resizeCapacity( self, self->capacity*2 );

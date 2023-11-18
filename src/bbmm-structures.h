@@ -106,7 +106,7 @@ void deleteBmCode( BmCode* instance);
 BmCode* BmCode_destroy( BmCode* self);
 
 /* Accessor */
-uint BmCode_size( BmCode* self);
+uint BmCode_dimention( BmCode* self);
 uint* BmCode_numbers( BmCode* self);
 uint BmCode_at( BmCode* self, uint index);
 uint BmCode_count( BmCode* self, uint value);
@@ -121,7 +121,7 @@ BmCode* BmCode_copy( BmCode* self, BmCode* model);
 BmCode* BmCode_copyNumbers( BmCode* self, BmCode* model);
 
 /* Construction */
-BmCode* BmCode_resize( BmCode* self, uint newSize);
+BmCode* BmCode_redimention( BmCode* self, uint newSize);
 BmCode* BmCode_setAll( BmCode* self, uint value );
 BmCode* BmCode_at_set( BmCode* self, uint index, uint value );
 BmCode* BmCode_at_increment( BmCode* self, uint index, uint value );
@@ -174,9 +174,11 @@ typedef struct {
 } BmBench;
 
 /* Constructor */
-BmBench* newBmBench(uint capacity);
+BmBench* newBmBench( uint capacity );
+BmBench* newBmBenchWith( uint capacity, BmCode* newFirstItems, uint tag, double value );
 
-BmBench* BmBench_create( BmBench* self, uint capacity);
+BmBench* BmBench_create( BmBench* self, uint capacity );
+BmBench* BmBench_createWith( BmBench* self, uint capacity, BmCode* newFirstItems, uint tag, double value );
 
 /* Destructor */
 BmBench* BmBench_destroy( BmBench* self);
@@ -214,7 +216,7 @@ void BmBench_sortOnTag( BmBench* self);
 /* Printing */
 char* BmBench_print( BmBench* self, char* output); // print `self` at the end of `output`
 char* BmBench_printCodes(BmBench* self, char* output);
-
+char* BmBench_printCodeValue(BmBench* self, char* output);
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   S T R U C T U R E :  T R E E                                *

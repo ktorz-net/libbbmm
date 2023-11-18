@@ -36,9 +36,9 @@ void deleteBmTransition(BmTransition * self)
 /* fill and empty a structure */
 BmTransition* BmTransition_create(BmTransition* self, BmCode* state, BmCode* action, BmCode* shift )
 {
-    self->stateDimention= BmCode_size(state);
-    self->actionDimention= BmCode_size(action);
-    uint shiftDimention= BmCode_size(shift);
+    self->stateDimention= BmCode_dimention(state);
+    self->actionDimention= BmCode_dimention(action);
+    uint shiftDimention= BmCode_dimention(shift);
     self->overallDimention= self->stateDimention*2 + self->actionDimention + shiftDimention;
 
     self->network= newBmBench( self->overallDimention );
@@ -162,8 +162,8 @@ BmTransition* BmTransition_node_dependArray( BmTransition* self, uint index, uin
     BmCode_sort( dependancy );
     BmCode_copy( BmBench_at( self->network, index), dependancy );
 
-    BmCode* parentRanges= newBmCode( BmCode_size(dependancy) );
-    for( uint i= 1 ; i <= BmCode_size(dependancy) ; ++i )
+    BmCode* parentRanges= newBmCode( BmCode_dimention(dependancy) );
+    for( uint i= 1 ; i <= BmCode_dimention(dependancy) ; ++i )
     {
         BmCondition* parentNode= array_on(self->nodes, BmCode_at(dependancy, i) );
         BmCode_at_set( parentRanges, i, parentNode->outputSize );
@@ -229,15 +229,15 @@ BmDistribution* BmTransition_newDistributionByInfering( BmTransition * self, BmD
 BmDistribution* BmTransition_inferFromState_andAction( BmTransition * self, BmCode* state, BmCode* action )
 {
     // Set initial configuration :
-    BmCode* startConf= newBmCode( BmCode_size(state) +  BmCode_size(action) );
+    BmCode* startConf= newBmCode( BmCode_dimention(state) +  BmCode_dimention(action) );
 
-    for( uint i=1 ; i <= BmCode_size(state) ; ++i )
+    for( uint i=1 ; i <= BmCode_dimention(state) ; ++i )
         BmCode_at_set( startConf, i, BmCode_at(state, i) );
-    for( uint i=1 ; i <= BmCode_size(action) ; ++i )
-        BmCode_at_set( startConf,  BmCode_size(state)+i, BmCode_at(action, i) );
+    for( uint i=1 ; i <= BmCode_dimention(action) ; ++i )
+        BmCode_at_set( startConf,  BmCode_dimention(state)+i, BmCode_at(action, i) );
 
     // Set a initial determinist distribution :
-    BmDistribution * distrib= newBmDistribution( BmCode_size(startConf) );
+    BmDistribution * distrib= newBmDistribution( BmCode_dimention(startConf) );
     BmDistribution_addConfig(distrib, startConf, 1.0);
 
     // infer :

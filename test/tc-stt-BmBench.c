@@ -106,6 +106,8 @@ START_TEST(test_BmBench_tags)
     BmBench_printCodes(collec, buffer);
     ck_assert_str_eq( buffer, "{[42], [69, 103], [3], [69, 56]}" );
 
+    ck_assert_uint_eq( BmBench_tagAt( collec, 1 ), 0 );
+
     strcpy( buffer, "" );
     BmBench_print(collec, buffer);
     ck_assert_str_eq( buffer, "{0:[42]:0.00, 0:[69, 103]:0.00, 0:[3]:0.00, 0:[69, 56]:0.00}" );
