@@ -64,11 +64,17 @@ BmCondition* BmCondition_destroy(BmCondition* self);
 void deleteBmCondition(BmCondition* instance);
 
 /* re-initializer */
+uint BmCondition_reinitWith( BmCondition* self, uint outputSize, BmCode* newParents, BmBench* newDistrib );
+uint BmCondition_reinitDistributionsWith( BmCondition* self, BmBench* newDistrib );
 
 /* Accessor */
 BmCode* BmCondition_parents( BmCondition* self );
 BmBench* BmCondition_at( BmCondition* self, BmCode* configuration );
 BmBench* BmCondition_atKey( BmCondition* self, uint configKey );
+BmBench* BmCondition_distribution( BmCondition* self, uint iDistrib );
+
+/* Construction */
+uint BmCondition_at_attach( BmCondition* self, BmCode* configuration, BmBench* distribution );
 
 /* Instance tools */
 void BmCondition_switch(BmCondition* self, BmCondition* doppelganger);

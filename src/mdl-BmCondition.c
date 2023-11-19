@@ -61,7 +61,20 @@ void deleteBmCondition(BmCondition* instance)
     free( instance );
 }
 
+/* re-initializer */
+uint BmCondition_reinitWith( BmCondition* self, uint outputSize, BmCode* newParents, BmBench* newDistrib )
+{
+    BmCondition_destroy( self );
+    BmCondition_createWith( self, outputSize, newParents, newDistrib );
+    return 1;
+}
 
+uint BmCondition_reinitDistributionsWith( BmCondition* self, BmBench* newDistrib )
+{
+    uint outputSize= self->outputSize;
+    BmCode* newParents= newBmCodeAs( self->parentRanges );
+    return BmCondition_reinitWith( self, outputSize, newParents, newDistrib );
+}
 
 /* Accessor */
 BmCode* BmCondition_parents( BmCondition* self )
@@ -82,6 +95,50 @@ BmBench* BmCondition_atKey( BmCondition* self, uint configKey )
     BmBench* distrib= BmCondition_at( self, config );
     deleteBmCode(config);
     return distrib;
+}
+BmBench* BmCondition_distribution( BmCondition* self, uint iDistrib )
+{
+    return array_at(self->distributions, iDistrib );
+}
+
+/* Construction */
+uint _BmCondition_resizeDistributionCapacity( BmCondition* self, uint newCapacity )
+{
+    // Allocate new memory
+    BmBench ** newDistrib= newEmptyArray( BmBench*, newCapacity+1 );
+    
+    uint boundedSize= self->distribSize;
+    if ( newCapacity < boundedSize )
+        boundedSize= self->distribCapacity;
+    
+    // Copy
+    for( uint i = 0 ; i < boundedSize ; ++i )
+        newDistrib[i]= self->distributions[i];
+
+    // Clean the reminders element
+    for( uint i = boundedSize ; i < self->distribSize ; ++i )
+        free( self->distributions[i] );
+
+    // Update the structure:
+    free(self->distributions);
+    self->distributions= newDistrib;
+    self->distribCapacity= newCapacity;
+    self->distribSize= boundedSize;
+
+    return boundedSize;
+}
+
+uint BmCondition_at_attach( BmCondition* self, BmCode* configuration, BmBench* distribution )
+{
+    assert( BmCode_dimention(self->parentRanges) == BmCode_dimention(configuration) );
+    if( self->distribSize+1 > self->distribCapacity )
+        _BmCondition_resizeDistributionCapacity( self, self->distribSize+1 );
+    
+    self->distribSize+= 1;
+    array_at_set(self->distributions, self->distribSize, distribution );
+    BmTree_at_set(self->selector, configuration, self->distribSize);
+
+    return self->distribSize;
 }
 
 /* Instance tools */

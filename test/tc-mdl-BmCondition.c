@@ -240,35 +240,54 @@ END_TEST
 
 START_TEST(test_BmCondition_manipulate)
 {
-    /*
-    BmCondition* instance;
-    {
-        BmCode* parentRanges= newBmCode_list(3, 4, 5, 6);
-        instance= newBmConditionBreack( 2, parentRanges);
-        deleteBmCode( parentRanges );
-    }
-
-    BmBench* d= newBmDistribution(1);
+    char buffer[1024];
+    BmCondition* instance= newBmConditionWith(
+        2,
+        newBmCode_list(3, 4, 5, 6),
+        newBmBenchWith( 1, newBmCode_list( 1, 1 ), 1, 1.0 )
+    );
 
     uint size= BmCode_product( BmCondition_parents(instance) );
-    for( uint i= 1; i <= size, ++i )
-        ck_assert_str_eq( BmDistribution_wording( BmCondition_atKey(instance, i) ), "{[1]:1.00}" );
+    for( uint i= 1; i <= size ; ++i )
+    {
+        strcpy( buffer, "" );
+        ck_assert_str_eq(
+            BmBench_printValues( BmCondition_atKey(instance, i), buffer ),
+            "{[1]:1.00}" );
+    }
 
+    // Attach a new distrib to another config:
     BmCode* config= newBmCode_list(3, 1, 2, 2);
+    
+    ck_assert_uint_eq(
+        BmCode_dimention(instance->parentRanges),
+        BmCode_dimention(config)
+    );
+    
+    uint iDistrib= BmCondition_at_attach(
+        instance, config,
+        newBmBenchWith( 2, newBmCode_list(1, 2), 0, 0.6 )
+    );
 
-    BmDistribution_addOutput( d, 2, 0.6 );
-    BmDistribution_addOutput( d, 1, 0.4 );
+    BmBench_attachLast( 
+        BmCondition_distribution( instance, iDistrib ),
+        newBmCode_list(1, 1), 0, 0.4
+    );
 
-    ck_assert_str_eq( BmDistribution_wording( d ), "{[2]:0.60, [1]:0.40}" );
-
-    BmCondition_at_set( instance, config, d );
-
-    ck_assert_str_eq( BmDistribution_wording( BmCondition_at(instance, config) ), "{[2]:0.60, [1]:0.40}" );
+    strcpy( buffer, "" );
+    ck_assert_str_eq(
+        BmBench_printValues( BmCondition_at(instance, config), buffer ),
+        "{[2]:0.60, [1]:0.40}"
+    );
 
     ck_assert_uint_eq( BmCode_keyOf( instance->parentRanges, config), 25 );
-    ck_assert_str_eq( BmDistribution_wording( BmCondition_atKey(instance, 25) ), "{[2]:0.60, [1]:0.40}" );
+    strcpy( buffer, "" );
+    ck_assert_str_eq(
+        BmBench_printValues( BmCondition_atKey(instance, 25), buffer ),
+        "{[2]:0.60, [1]:0.40}"
+    );
 
-    char buffer[1024]="";
+    strcpy( buffer, "" );
     BmCondition_print( instance, buffer );
     ck_assert_str_eq( buffer,
 "[4, 5, 6]->[2]: {[0, 2, 1]: {[1]:1.00},\n\
@@ -286,36 +305,78 @@ START_TEST(test_BmCondition_manipulate)
   [4, 0, 0]: {[1]:1.00}}"
     );
 
-    BmDistribution_clear( d );
-
-    ck_assert_uint_eq( d->capacity, 2 );
-//    ck_assert_uint_eq( d->dimention, 1 );
-    ck_assert_uint_eq( d->size, 0 );
-
-    BmDistribution_addOutput( d, 1, 0.8 );
-    BmDistribution_addOutput( d, 2, 0.2 );
-
-    ck_assert_uint_eq( d->size, 2 );
-    ck_assert_str_eq( BmDistribution_wording( d ), "{[1]:0.80, [2]:0.20}" );
-    BmCondition_reinitializeDefaultDistrib( instance, d );
-
-    for( uint i= 1; i <= BmCondition_dimention( instance ), ++i )
-        ck_assert_str_eq( BmDistribution_wording( BmCondition_atKey(instance, i) ), "{[1]:0.80, [2]:0.20}" );
+    // Attach another one...:
+    BmCode_reinit_list( config, 3, 1, 4, 3);
     
-    deleteBmCode(config);
-    deleteBmDistribution(d);
+    BmBench* distrib= newBmBench(2);
+    BmBench_attachLast( distrib, newBmCode_list(1, 1), 0, 0.8 );
+    BmBench_attachLast( distrib, newBmCode_list(1, 2), 0, 0.2 );
+
+    iDistrib= BmCondition_at_attach( instance, config, distrib );
+
+    ck_assert_uint_eq( iDistrib, 3 );
+
+    strcpy( buffer, "" );
+    BmCondition_print( instance, buffer );
+    ck_assert_str_eq( buffer,
+"[4, 5, 6]->[2]: {[0, 2, 1]: {[1]:1.00},\n\
+  [0, 2, 2]: {[2]:0.60, [1]:0.40},\n\
+  [0, 2, 3]: {[1]:1.00},\n\
+  [0, 2, 4]: {[1]:1.00},\n\
+  [0, 2, 5]: {[1]:1.00},\n\
+  [0, 2, 6]: {[1]:1.00},\n\
+  [0, 4, 1]: {[1]:1.00},\n\
+  [0, 4, 2]: {[1]:1.00},\n\
+  [0, 4, 3]: {[1]:0.80, [2]:0.20},\n\
+  [0, 4, 4]: {[1]:1.00},\n\
+  [0, 4, 5]: {[1]:1.00},\n\
+  [0, 4, 6]: {[1]:1.00},\n\
+  [1, 1, 0]: {[1]:1.00},\n\
+  [1, 3, 0]: {[1]:1.00},\n\
+  [1, 5, 0]: {[1]:1.00},\n\
+  [2, 0, 0]: {[1]:1.00},\n\
+  [3, 0, 0]: {[1]:1.00},\n\
+  [4, 0, 0]: {[1]:1.00}}"
+    );
+
+    // And reinit:
+    distrib= newBmBench(2);
+    BmBench_attachLast( distrib, newBmCode_list(1, 1), 0, 0.8 );
+    BmBench_attachLast( distrib, newBmCode_list(1, 2), 0, 0.2 );
+
+    BmCondition_reinitDistributionsWith( instance, distrib );
+
+    size= BmCode_product( BmCondition_parents( instance ) );
+    for( uint i= 1; i <= size ; ++i )
+    {
+        strcpy( buffer, "" );
+        ck_assert_str_eq(
+            BmBench_printValues( BmCondition_atKey(instance, i), buffer ),
+            "{[1]:0.80, [2]:0.20}" );
+    }
+
     deleteBmCondition(instance);
-    */
 }
 END_TEST
 
 START_TEST(test_BmCondition_manipulate2)
 {
+    //char buffer[1024];
+    BmCondition* instance= newBmConditionWith(
+        4,
+        newBmCode_list(2, 3, 5),
+        newBmBenchWith( 1, newBmCode_list( 1, 1 ), 1, 8.0 )
+    );
+    BmBench_attachLast( 
+        BmCondition_distribution( instance, 1 ),
+        newBmCode_list(1, 3), 2, 0.2
+    );
+
     /*
     BmCode* config= newBmCode_list(2, 2, 5 );
     BmCondition* instance;
     {
-        BmCode* parentRanges= newBmCode_list(2, 3, 5);
+        BmCode* parentRanges= 
         BmBench* distrib= newBmDistribution(1);
         BmCode* myStates[2] = { newBmCode_list(1, 1), newBmCode_list(1, 3) };
         double probas[2]  = { 0.8, 0.2 };
@@ -345,7 +406,7 @@ START_TEST(test_BmCondition_manipulate2)
         ck_assert(1);
         deleteBmDistribution( distrib );
         deleteBmCode( parentRanges );
-        for( uint i=0, i < 2, ++i )
+        for( uint i=0, i < 2 ; ++i )
             deleteBmCode( myStates[i] );
     }
 
@@ -392,8 +453,8 @@ START_TEST(test_BmCondition_manipulate2)
 
     deleteBmCode( config );
     deleteBmDistribution(parentDistribution);
-    deleteBmCondition(instance);
     */
+    deleteBmCondition(instance);
 }
 END_TEST
 
