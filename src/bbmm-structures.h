@@ -216,8 +216,9 @@ void BmBench_sortOnTag( BmBench* self);
 /* Printing */
 char* BmBench_print( BmBench* self, char* output); // print `self` at the end of `output`
 char* BmBench_printCodes(BmBench* self, char* output);
-char* BmBench_printCodeValue(BmBench* self, char* output);
-
+char* BmBench_printValues(BmBench* self, char* output);
+char* BmBench_printValues(BmBench* self, char* output);
+char* BmBench_printTags(BmBench* self, char* output);
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   S T R U C T U R E :  T R E E                                *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */

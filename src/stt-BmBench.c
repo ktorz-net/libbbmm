@@ -243,11 +243,11 @@ void BmBench_sortOnTag(BmBench* self)
 /* Printing */
 char* BmBench_printItem(BmBench* self, uint iItem, char* output)
 {
+    BmCode_print( BmBench_at(self, iItem), output);
+    strcat(output, ":");
     char buffer[16]= "";
     sprintf( buffer, "%u", BmBench_tagAt(self, iItem) );
     strcat( output, buffer );
-    strcat(output, ":");
-    BmCode_print( BmBench_at(self, iItem), output);
     strcat(output, ":");
     sprintf( buffer, "%.2f", BmBench_valueAt(self, iItem) );
     strcat( output, buffer );
@@ -264,7 +264,17 @@ char* _BmBench_printItemValue(BmBench* self, uint iItem, char* output)
     return output;
 }
 
-char* BmBench_printCodeValue(BmBench* self, char* output)
+char* _BmBench_printItemTag(BmBench* self, uint iItem, char* output)
+{
+    char buffer[16]= "";
+    BmCode_print( BmBench_at(self, iItem), output);
+    strcat(output, ":");
+    sprintf( buffer, "%u", BmBench_tagAt(self, iItem) );
+    strcat( output, buffer );
+    return output;
+}
+
+char* BmBench_printValues(BmBench* self, char* output)
 {
     strcat(output, "{");
 
@@ -277,6 +287,26 @@ char* BmBench_printCodeValue(BmBench* self, char* output)
     {
         strcat(output, ", ");
         _BmBench_printItemValue( self, i, output );
+    }
+
+    strcat(output, "}");
+
+    return output;
+}
+
+char* BmBench_printTags(BmBench* self, char* output)
+{
+    strcat(output, "{");
+
+    if( self->size > 0 )
+    {
+        _BmBench_printItemTag( self, 1, output );
+    }
+
+    for( uint i= 2 ; i <= self->size ; ++i)
+    {
+        strcat(output, ", ");
+        _BmBench_printItemTag( self, i, output );
     }
 
     strcat(output, "}");

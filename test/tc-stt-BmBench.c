@@ -110,7 +110,7 @@ START_TEST(test_BmBench_tags)
 
     strcpy( buffer, "" );
     BmBench_print(collec, buffer);
-    ck_assert_str_eq( buffer, "{0:[42]:0.00, 0:[69, 103]:0.00, 0:[3]:0.00, 0:[69, 56]:0.00}" );
+    ck_assert_str_eq( buffer, "{[42]:0:0.00, [69, 103]:0:0.00, [3]:0:0.00, [69, 56]:0:0.00}" );
 
     ck_assert_uint_eq( BmBench_tagAt( collec, 2 ), 0 );
     BmBench_at_tag( collec, 2, 1 );
@@ -118,7 +118,7 @@ START_TEST(test_BmBench_tags)
 
     strcpy( buffer, "" );
     BmBench_print(collec, buffer);
-    ck_assert_str_eq( buffer, "{0:[42]:0.00, 1:[69, 103]:0.00, 0:[3]:0.00, 0:[69, 56]:0.00}" );
+    ck_assert_str_eq( buffer, "{[42]:0:0.00, [69, 103]:1:0.00, [3]:0:0.00, [69, 56]:0:0.00}" );
 
     BmBench_at_tag( collec, 1, 3 );
     BmBench_at_tag( collec, 3, 4 );
@@ -126,7 +126,7 @@ START_TEST(test_BmBench_tags)
 
     strcpy( buffer, "" );
     BmBench_print(collec, buffer);
-    ck_assert_str_eq( buffer, "{3:[42]:0.00, 1:[69, 103]:0.00, 4:[3]:0.00, 1:[69, 56]:0.00}" );
+    ck_assert_str_eq( buffer, "{[42]:3:0.00, [69, 103]:1:0.00, [3]:4:0.00, [69, 56]:1:0.00}" );
 
     deleteBmBench(collec);
 }
@@ -150,7 +150,7 @@ START_TEST(test_BmBench_values)
 
     strcpy( buffer, "" );
     BmBench_print(collec, buffer);
-    ck_assert_str_eq( buffer, "{0:[42]:0.00, 0:[69, 103]:0.00, 0:[3]:0.00, 0:[69, 56]:0.00}" );
+    ck_assert_str_eq( buffer, "{[42]:0:0.00, [69, 103]:0:0.00, [3]:0:0.00, [69, 56]:0:0.00}" );
 
     ck_assert_uint_eq( BmBench_tagAt( collec, 2 ), 0 );
     BmBench_at_value( collec, 2, 1.1 );
@@ -158,7 +158,7 @@ START_TEST(test_BmBench_values)
 
     strcpy( buffer, "" );
     BmBench_print(collec, buffer);
-    ck_assert_str_eq( buffer, "{0:[42]:0.00, 0:[69, 103]:1.10, 0:[3]:0.00, 0:[69, 56]:0.00}" );
+    ck_assert_str_eq( buffer, "{[42]:0:0.00, [69, 103]:0:1.10, [3]:0:0.00, [69, 56]:0:0.00}" );
 
     BmBench_at_value( collec, 1, 3.3 );
     BmBench_at_value( collec, 3, 4.4 );
@@ -166,7 +166,7 @@ START_TEST(test_BmBench_values)
 
     strcpy( buffer, "" );
     BmBench_print(collec, buffer);
-    ck_assert_str_eq( buffer, "{0:[42]:3.30, 0:[69, 103]:1.10, 0:[3]:4.40, 0:[69, 56]:1.10}" );
+    ck_assert_str_eq( buffer, "{[42]:0:3.30, [69, 103]:0:1.10, [3]:0:4.40, [69, 56]:0:1.10}" );
 
     deleteBmBench(collec);
 }
@@ -191,13 +191,19 @@ START_TEST(test_BmBench_sortingWithTags)
     
     char buffer[1024];
     strcpy( buffer, "" );
-    ck_assert_str_eq( BmBench_print(collec, buffer), "{1:[5, 8, 12]:0.00, 2:[1, 2, 3]:0.00, 3:[1, 2, 1]:0.00, 4:[1, 1, 8]:0.00, 5:[4, 2, 1]:0.00, 6:[5, 2, 3]:0.00, 7:[2, 2, 2]:0.00, 0:[2, 3, 2]:0.00}" );
+    ck_assert_str_eq(
+        BmBench_print(collec, buffer),
+        "{[5, 8, 12]:1:0.00, [1, 2, 3]:2:0.00, [1, 2, 1]:3:0.00, [1, 1, 8]:4:0.00, [4, 2, 1]:5:0.00, [5, 2, 3]:6:0.00, [2, 2, 2]:7:0.00, [2, 3, 2]:0:0.00}" );
 
     BmBench_sortOnItem(collec);
 
     strcpy( buffer, "" );
     BmBench_print(collec, buffer);
-    ck_assert_str_eq( buffer, "{4:[1, 1, 8]:0.00, 3:[1, 2, 1]:0.00, 2:[1, 2, 3]:0.00, 7:[2, 2, 2]:0.00, 0:[2, 3, 2]:0.00, 5:[4, 2, 1]:0.00, 6:[5, 2, 3]:0.00, 1:[5, 8, 12]:0.00}" );
+    ck_assert_str_eq( buffer, "{[1, 1, 8]:4:0.00, [1, 2, 1]:3:0.00, [1, 2, 3]:2:0.00, [2, 2, 2]:7:0.00, [2, 3, 2]:0:0.00, [4, 2, 1]:5:0.00, [5, 2, 3]:6:0.00, [5, 8, 12]:1:0.00}" );
+
+    strcpy( buffer, "" );
+    BmBench_printTags(collec, buffer);
+    ck_assert_str_eq( buffer, "{[1, 1, 8]:4, [1, 2, 1]:3, [1, 2, 3]:2, [2, 2, 2]:7, [2, 3, 2]:0, [4, 2, 1]:5, [5, 2, 3]:6, [5, 8, 12]:1}" );
 
     deleteBmBench(collec);
 }

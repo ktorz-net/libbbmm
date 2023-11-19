@@ -70,10 +70,20 @@ BmCode* BmCondition_parents( BmCondition* self );
 BmBench* BmCondition_at( BmCondition* self, BmCode* configuration );
 BmBench* BmCondition_atKey( BmCondition* self, uint configKey );
 
+/* Instance tools */
+void BmCondition_switch(BmCondition* self, BmCondition* doppelganger);
+
+/* Printing */
+char* BmCondition_print(BmCondition* self, char* output);
+char* BmCondition_printSep(BmCondition* self, char* output, char* separator);
+
+char* BmCondition_printExtend(BmCondition* self, char* output); // print `self` at the end of `output`
+char* BmCondition_printExtendSep(BmCondition* self, char* output, char* separator);
+
+char* BmCondition_printIdentity( BmCondition* self, char* output ); // print `self` at the end of on `output`
+
 
 // --- --- TO REINCORPORATE... --- --- // 
-/* instance basics */
-void BmCondition_switch(BmCondition* self, BmCondition* doppelganger);
 
 /* re-initializer */
 void BmCondition_reinit( BmCondition* self, uint outputSize, BmCode* parentRanges, BmBench* defaultDistrib );

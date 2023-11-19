@@ -83,3 +83,139 @@ BmBench* BmCondition_atKey( BmCondition* self, uint configKey )
     deleteBmCode(config);
     return distrib;
 }
+
+/* Instance tools */
+void BmCondition_switch(BmCondition* self, BmCondition* doppelganger)
+{
+    // local copy:
+    uint outputSize= self->outputSize;
+    BmCode* parentRanges= self->parentRanges;
+    BmTree* selector= self->selector;
+    uint distribSize= self->distribSize;
+    uint distribCapacity= self->distribCapacity;
+    BmBench* * distributions= self->distributions;
+
+    // self as doppelganger:
+    self->outputSize= doppelganger->outputSize;
+    self->parentRanges= doppelganger->parentRanges;
+    self->selector= doppelganger->selector;
+    self->distribSize= doppelganger->distribSize;
+    self->distribCapacity= doppelganger->distribCapacity;
+    self->distributions= doppelganger->distributions;
+
+    // doppelganger as self:
+    doppelganger->outputSize= outputSize;
+    doppelganger->parentRanges= parentRanges;
+    doppelganger->selector= selector;
+    doppelganger->distribSize= distribSize;
+    doppelganger->distribCapacity= distribCapacity;
+    doppelganger->distributions= distributions;
+}
+
+/* Printing */
+char* _BmCondition_printCode_withDistribution(BmCondition* self, BmCode* code, uint iDistrib, char* output)
+{
+    uint inputSize= BmCode_dimention( self->parentRanges );
+    
+    // Security:
+    assert( BmCode_dimention(code) == inputSize );
+
+    char tmp[64];
+    strcat(output, "[");
+
+    if( inputSize > 0 )
+    {
+        sprintf( tmp, "%u", BmCode_at(code, 1) );
+        strcat(output, tmp );
+        
+        for( uint i= 2 ; i <= inputSize ; ++i)
+        {
+            sprintf( tmp, "%u", BmCode_at(code, i) );
+            strcat(output, ", ");
+            strcat(output, tmp );
+        }
+    }
+
+    strcat(output, "]: " );
+    BmBench_printValues( array_at(self->distributions, iDistrib ), output );
+
+    return output;
+}
+
+char* BmCondition_print(BmCondition* self, char* output)
+{
+    return BmCondition_printSep( self, output, ",\n  ");
+}
+
+char* BmCondition_printSep(BmCondition* self, char* output, char* separator)
+{
+    BmCondition_printIdentity(self, output);
+    strcat(output, ": {");
+
+    BmBench* collec = BmTree_asNewBench( self->selector );
+
+    if( BmBench_size(collec) == 0 )
+    {
+        uint iItem= BmBench_attach(
+            collec, newBmCode_all( BmCode_dimention( self->parentRanges ), 0) );
+        BmBench_at_tag(collec, iItem, 1 );
+    }
+
+    // First or unique one: 
+    _BmCondition_printCode_withDistribution(
+        self, BmBench_at( collec, 1 ), BmBench_tagAt( collec, 1 ), output );
+
+    // All the others: 
+    for( uint i = 2 ; i <= BmBench_size(collec) ; ++i )
+    {
+        strcat( output, separator );
+        _BmCondition_printCode_withDistribution(
+            self, BmBench_at( collec, i ), BmBench_tagAt( collec, i ), output );
+    }
+    strcat(output, "}");
+    return output;
+}
+
+char* BmCondition_printExtend(BmCondition* self, char* output)
+{
+    return BmCondition_printExtendSep(self,  output, ",\n");
+}
+
+char* BmCondition_printExtendSep(BmCondition* self, char* output, char* separator)
+{
+    BmCondition_printIdentity(self, output);
+    strcat(output, ": {");
+
+    if( BmCode_dimention(self->parentRanges) >= 1 )
+    {
+        BmCode* config= BmCode_newBmCodeFirst( self->parentRanges );
+        
+        BmCode_print( config, output );
+        strcat(output, ": ");
+        BmBench_printValues( BmCondition_at(self, config), output );
+        BmCode_nextCode( self->parentRanges, config );
+
+        while( BmCode_isIncluding( self->parentRanges, config ) )
+        {
+            strcat(output, separator);
+            BmCode_print( config, output );
+            strcat(output, ": ");
+            BmBench_printValues( BmCondition_at(self, config), output );
+            BmCode_nextCode( self->parentRanges, config );
+        }
+
+        deleteBmCode(config);
+    }
+
+    strcat(output, "}");
+    return output;
+}
+
+char* BmCondition_printIdentity(BmCondition* self, char* output)
+{
+    char buffer[1024];
+    BmCode_print( self->parentRanges, output );
+    sprintf( buffer, "->[%d]", self->outputSize );
+    strcat( output, buffer );
+    return output;
+}
