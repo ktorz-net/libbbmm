@@ -189,6 +189,33 @@ BmCode* BmBench_at_value( BmBench* self, uint i, double value )
     return array_at( self->items, self->start+i );
 }
 
+void BmBench_switch( BmBench* self, BmBench* doppleganger)
+{
+    // Local:
+    uint capacity  = self->capacity;
+    uint start     = self->start;
+    uint size      = self->size;
+    BmCode** items = self->items;
+    uint* tags     = self->tags;
+    double* values = self->values;
+    
+    // Self:
+    self->capacity = doppleganger->capacity;
+    self->start    = doppleganger->start;
+    self->size     = doppleganger->size;
+    self->items    = doppleganger->items;
+    self->tags     = doppleganger->tags;
+    self->values   = doppleganger->values;
+    
+    // Dopple:
+    doppleganger->capacity = capacity;
+    doppleganger->start    = start;
+    doppleganger->size     = size;
+    doppleganger->items    = items;
+    doppleganger->tags     = tags;
+    doppleganger->values   = values;
+}
+
 void BmBench_sortOnItem(BmBench* self)
 {
     bool searching= true;

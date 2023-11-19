@@ -79,6 +79,11 @@ uint BmCondition_at_attach( BmCondition* self, BmCode* configuration, BmBench* d
 /* Instance tools */
 void BmCondition_switch(BmCondition* self, BmCondition* doppelganger);
 
+/* Inferring */
+BmBench* BmCondition_infer( BmCondition* self, BmBench* distribOverConfigurations );
+BmBench* BmCondition_newDistributionByInfering( BmCondition* self, BmBench* distribOverConfigurations );
+BmBench* BmCondition_newDistributionByInfering_mask( BmCondition* self, BmBench* longDistrib, BmCode* parentMask );
+
 /* Printing */
 char* BmCondition_print(BmCondition* self, char* output);
 char* BmCondition_printSep(BmCondition* self, char* output, char* separator);
@@ -107,10 +112,6 @@ BmBench* BmCondition_at( BmCondition* self, BmCode* configuration );
 uint BmCondition_distributionIndexAt( BmCondition* self, BmCode* configuration );
 BmBench* BmCondition_atKey( BmCondition* self, uint configKey );
 
-/* Inferring */
-BmBench* BmCondition_infer( BmCondition* self, BmBench* distribOverConfigurations );
-BmBench* BmCondition_newDistributionByInfering( BmCondition* self, BmBench* distribOverConfigurations );
-BmBench* BmCondition_newDistributionByInfering_mask(BmCondition* self, BmBench* longDistrib, BmCode* parentMask);
 
 /* Test */
 

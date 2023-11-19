@@ -141,6 +141,70 @@ uint BmCondition_at_attach( BmCondition* self, BmCode* configuration, BmBench* d
     return self->distribSize;
 }
 
+BmBench* BmCondition_infer( BmCondition* self, BmBench* distribOverConfigurations )
+{
+    BmBench* newDistrib= BmCondition_newDistributionByInfering(self, distribOverConfigurations);
+    BmBench_switch(distribOverConfigurations, newDistrib);
+    deleteBmBench(newDistrib);
+    return distribOverConfigurations;
+}
+
+BmBench* BmCondition_newDistributionByInfering( BmCondition* self, BmBench* distribOverConfigurations )
+{
+    uint dim= BmCode_dimention(self->parentRanges);
+    BmCode* mask= newBmCode( dim );
+
+    for( uint i= 1 ; i <= dim ; ++i )
+        BmCode_at_set( mask, i, i );
+    
+    BmBench* resultingDistribution= BmCondition_newDistributionByInfering_mask(self, distribOverConfigurations, mask);
+    deleteBmCode( mask );
+
+    return resultingDistribution; 
+}
+
+BmBench* BmCondition_newDistributionByInfering_mask( BmCondition* self, BmBench* longDistrib, BmCode* mask )
+{
+    // Create new structure:
+    uint selfDim= BmCode_dimention(self->parentRanges);
+    uint longDim= BmCode_dimention( BmBench_at(longDistrib, 1) );
+    BmBench* newDistrib= newBmBench( self->outputSize * BmBench_size(longDistrib) );
+
+    // foreach configuration in the distribution:
+    uint numberOfCondition= BmBench_size(longDistrib);
+    BmCode* parentConf= newBmCode( selfDim );
+    for( uint iCondition= 0 ; iCondition < numberOfCondition ; ++iCondition )
+    {
+        BmCode* newConfig= newBmCode_all( longDim+1, 0 );
+        BmCode_copyNumbers( newConfig, BmBench_at( longDistrib, iCondition) );
+        double probability= BmBench_valueAt( longDistrib, iCondition);
+
+        // get the parents' configuration:
+        for( uint j= 1 ; j <= selfDim ; ++j )
+            BmCode_at_set(
+                parentConf, j,
+                BmCode_at( newConfig, BmCode_at( mask, j ) )
+            );
+
+        // foreach ouput in the conditional distribution resulting from the parent'config:
+        BmBench* outputDistrib= BmCondition_at( self, parentConf );
+        for( uint iOutput= 0 ; iOutput < outputDistrib->size ; ++iOutput )
+        {
+            BmCode_at_set(
+                newConfig, BmCode_dimention(newConfig),
+                BmCode_at( BmBench_at( outputDistrib, iOutput), 1 )
+            );
+            BmBench_attachLast(
+                newDistrib, newBmCodeAs(newConfig), 0,
+                probability * BmBench_valueAt( outputDistrib, iOutput)
+            );
+        }
+        deleteBmCode( newConfig );
+    }
+
+    return newDistrib;
+}
+
 /* Instance tools */
 void BmCondition_switch(BmCondition* self, BmCondition* doppelganger)
 {

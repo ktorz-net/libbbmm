@@ -194,7 +194,6 @@ double BmBench_valueAt( BmBench* self, uint i );
 
 /* Construction */
 void BmBench_resizeCapacity( BmBench* self, uint newCapacity );
-
 uint BmBench_attach( BmBench* self, BmCode* newItem );
 //BmCode* BmBench_detach( BmBench* self, uint i );
 
@@ -206,6 +205,8 @@ BmCode* BmBench_detachFirst( BmBench* self );
 
 BmCode* BmBench_at_tag( BmBench* self, uint i, uint tagValue );
 BmCode* BmBench_at_value( BmBench* self, uint i, double value );
+
+void BmBench_switch( BmBench* self, BmBench* doppleganger);
 
 /* Operator */
 void BmBench_sortOnItem( BmBench* self);
