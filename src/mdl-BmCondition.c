@@ -311,7 +311,6 @@ char* BmCondition_printExtendSep(BmCondition* self, char* output, char* separato
     if( BmCode_dimention(self->parentRanges) >= 1 )
     {
         BmCode* config= BmCode_newBmCodeFirst( self->parentRanges );
-        
         BmCode_print( config, output );
         strcat(output, ": ");
         BmBench_printValues( BmCondition_at(self, config), output );
