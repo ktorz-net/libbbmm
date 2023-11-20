@@ -397,12 +397,25 @@ START_TEST(test_BmCondition_manipulate2)
         }
     }
 
+    // Inferances 01:
     BmBench* parentDistribution= newBmBench(2);
 
     BmBench_attachLast( parentDistribution, newBmCodeAs(config), 0, 1.0 );
 
     ck_assert_uint_eq( BmBench_size( parentDistribution ), 1 );
-    
+
+    strcpy( buffer, "" );
+    ck_assert_str_eq(
+        BmBench_printValues( parentDistribution, buffer ),
+        "{[2, 5]:1.00}"
+    );
+
+    strcpy( buffer, "" );
+    ck_assert_str_eq(
+        BmBench_printValues( BmCondition_at( instance, config ), buffer ),
+        "{[2]:1.00}"
+    );
+
     BmCondition_infer( instance, parentDistribution );
 
     strcpy( buffer, "" );
@@ -411,28 +424,33 @@ START_TEST(test_BmCondition_manipulate2)
         "{[2, 5, 2]:1.00}"
     );
 
-    /*
-    BmDistribution_initialize(parentDistribution, 2);
-    BmDistribution_addConfig( parentDistribution, BmCode_at_set(config, 2, 3), 1.0 );
-    BmCondition_infer(instance, parentDistribution);
+    // Inferances 02:
+    BmBench_reinit( parentDistribution, 2 );
+    BmBench_attachLast( parentDistribution, newBmCode_list(2, 2, 3), 0, 1.0 );
 
-    ck_assert_str_eq( BmDistribution_wording( parentDistribution ), "{[2, 3, 1]:0.80, [2, 3, 3]:0.20}" );
+    BmCondition_infer( instance, parentDistribution );
 
-    BmDistribution_initialize(parentDistribution, 2);
-    BmDistribution_addConfig( parentDistribution, config, 0.5 );
+    strcpy( buffer, "" );
+    ck_assert_str_eq(
+        BmBench_printValues( parentDistribution, buffer ),
+        "{[2, 3, 1]:0.80, [2, 3, 3]:0.20}"
+    );
 
-    BmCode_at_set(config, 2, 5);
-    BmDistribution_addConfig( parentDistribution, config, 0.5 );
+    // Inferances 03:
+    BmBench_reinit( parentDistribution, 2 );
+    BmBench_attachLast( parentDistribution, newBmCode_list(2, 2, 3), 0, 0.5 );
+    BmBench_attachLast( parentDistribution, newBmCode_list(2, 2, 5), 0, 0.5 );
 
-    BmCondition_infer(instance, parentDistribution);
-    ck_assert_str_eq( BmDistribution_wording( parentDistribution ), "{[2, 3, 1]:0.40, [2, 3, 3]:0.10, [2, 5, 2]:0.50}" );
+    BmCondition_infer( instance, parentDistribution );
+    BmBench_sort( parentDistribution, (fctptr_BmBench_compare)BmBench_isSmallerValue );
+    
+    strcpy( buffer, "" );
+    BmBench_printValues( parentDistribution, buffer );
+    ck_assert_str_eq( buffer, "{[2, 5, 2]:0.50, [2, 3, 1]:0.40, [2, 3, 3]:0.10}" );
 
     deleteBmCode( config );
-    deleteBmDistribution(parentDistribution);
-    */
-
-    deleteBmCode( config );
-    deleteBmCondition(instance);
+    deleteBmBench( parentDistribution );
+    deleteBmCondition( instance );
 }
 END_TEST
 

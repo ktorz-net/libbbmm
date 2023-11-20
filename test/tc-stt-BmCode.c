@@ -205,8 +205,8 @@ START_TEST(test_BmCode_test)
     ck_assert_uint_eq( BmCode_search(c2, 3), 0 );
 
     ck_assert( BmCode_isGreaterThan( c1, c2 ) );
-    ck_assert( BmCode_isLighterThan( c2, c1 ) );
-    ck_assert( !BmCode_isLighterThan( c1Bis, c1 ) );
+    ck_assert( BmCode_isSmallerThan( c2, c1 ) );
+    ck_assert( !BmCode_isSmallerThan( c1Bis, c1 ) );
 
     deleteBmCode(c1);
     deleteBmCode(c2);

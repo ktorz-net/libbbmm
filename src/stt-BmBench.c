@@ -66,7 +66,13 @@ BmBench* BmBench_destroy(BmBench* self)
     return self;
 }
 
-/* Initializer */
+/* Re-Initializer */
+BmBench* BmBench_reinit( BmBench* self, uint capacity )
+{
+    BmBench_destroy( self );
+    BmBench_create( self, capacity );
+    return self;
+}
 
 /* Modification */
 void BmBench_resizeCapacity( BmBench* self, uint newCapacity )
@@ -216,56 +222,79 @@ void BmBench_switch( BmBench* self, BmBench* doppleganger)
     doppleganger->values   = values;
 }
 
-void BmBench_sortOnItem(BmBench* self)
+/* Operators */
+uint BmBench_sort( BmBench* self, fctptr_BmBench_compare compare )
 {
+    uint counter= 0;
     bool searching= true;
     while( searching )
     {
         searching= false;
-        for( uint iItem= 2 ; iItem <= self->size ; ++iItem )
+        for( uint i2= 2 ; i2 <= self->size ; ++i2 )
         {
-            uint id2= self->start+iItem;
-            uint id1= id2-1;
-            if( BmCode_isGreaterThan( array_at(self->items, id1), array_at(self->items, id2) ) )
+             if( (*compare)( self, i2-1, i2 ) )
             {
-                BmCode* tmp= array_at(self->items, id2);
-                uint tag= array_at(self->tags, id2);
-                array_at_set( self->items, id2, array_at( self->items, id1 ) );
-                array_at_set( self->tags, id2, array_at( self->tags, id1 ) );
-                array_at_set( self->items, id1, tmp );
-                array_at_set( self->tags, id1, tag );
+                counter+= BmBench_switchCodes( self, i2-1, i2 );
                 searching= true;
             }
         }
     }
+    return counter;
+}
+uint BmBench_switchCodes( BmBench* self, uint i1, uint i2 )
+{
+    uint id2= self->start+i1;
+    uint id1= self->start+i2;
+
+    // Local:
+    BmCode* tmp= array_at(self->items, id2);
+    uint tag= array_at(self->tags, id2);
+    double val= array_at(self->values, id2);
+
+    // id2:
+    array_at_set( self->items, id2, array_at( self->items, id1 ) );
+    array_at_set( self->tags, id2, array_at( self->tags, id1 ) );
+    array_at_set( self->values, id2, array_at( self->values, id1 ) );
+
+    // id1:
+    array_at_set( self->items, id1, tmp );
+    array_at_set( self->tags, id1, tag );
+    array_at_set( self->values, id1, val );
+    
+    return 1;
 }
 
-void BmBench_sortOnTag(BmBench* self)
+/* Comparison */
+bool BmBench_isGreater(BmBench* self, uint i1, uint i2)
 {
-    bool searching= true;
-    while( searching )
-    {
-        searching= false;
-        for( uint iItem= 2 ; iItem <= self->size ; ++iItem )
-        {
-            uint id2= self->start+iItem;
-            uint id1= id2-1;
-            if( array_at(self->tags, id1) > array_at(self->tags, id2) )
-            {
-                BmCode* tmp= array_at(self->items, id2);
-                uint tag= array_at(self->tags, id2);
-                double val= array_at(self->values, id2);
-                array_at_set( self->items, id2, array_at( self->items, id1 ) );
-                array_at_set( self->tags, id2, array_at( self->tags, id1 ) );
-                array_at_set( self->values, id2, array_at( self->values, id1 ) );
-                array_at_set( self->items, id1, tmp );
-                array_at_set( self->tags, id1, tag );
-                array_at_set( self->values, id1, val );
-                searching= true;
-            }
-        }
-    }
+    return BmCode_isGreaterThan( BmBench_at(self, i1), BmBench_at(self, i2) );
 }
+
+bool BmBench_isSmaller(BmBench* self, uint i1, uint i2)
+{
+    return BmCode_isSmallerThan( BmBench_at(self, i1), BmBench_at(self, i2) );
+}
+
+bool BmBench_isGreaterTag(BmBench* self, uint i1, uint i2)
+{
+    return BmBench_tagAt(self, i1) > BmBench_tagAt(self, i2);
+}
+
+bool BmBench_isSmallerTag(BmBench* self, uint i1, uint i2)
+{
+    return BmBench_tagAt(self, i1) < BmBench_tagAt(self, i2);
+}
+
+bool BmBench_isGreaterValue(BmBench* self, uint i1, uint i2)
+{
+    return BmBench_valueAt(self, i1) > BmBench_valueAt(self, i2);
+}
+
+bool BmBench_isSmallerValue(BmBench* self, uint i1, uint i2)
+{
+    return BmBench_valueAt(self, i1) < BmBench_valueAt(self, i2);
+}
+
 
 /* Printing */
 char* BmBench_printItem(BmBench* self, uint iItem, char* output)

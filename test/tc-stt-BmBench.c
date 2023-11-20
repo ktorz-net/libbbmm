@@ -60,7 +60,7 @@ START_TEST(test_BmBench_sorting)
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[42], [69, 103], [3], [69, 56]}" );
 
-    BmBench_sortOnItem(collec);
+    BmBench_sort(collec, (fctptr_BmBench_compare)BmBench_isGreater);
 
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[3], [42], [69, 56], [69, 103]}" );
@@ -81,7 +81,7 @@ START_TEST(test_BmBench_sorting)
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[5, 8, 12], [1, 2, 3], [1, 2, 1], [1, 1, 8], [4, 2, 1], [5, 2, 3], [2, 2, 2], [2, 3, 2]}" );
 
-    BmBench_sortOnItem(collec);
+    BmBench_sort(collec, (fctptr_BmBench_compare)BmBench_isGreater);
 
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[1, 1, 8], [1, 2, 1], [1, 2, 3], [2, 2, 2], [2, 3, 2], [4, 2, 1], [5, 2, 3], [5, 8, 12]}" );
@@ -195,7 +195,7 @@ START_TEST(test_BmBench_sortingWithTags)
         BmBench_print(collec, buffer),
         "{[5, 8, 12]:1:0.00, [1, 2, 3]:2:0.00, [1, 2, 1]:3:0.00, [1, 1, 8]:4:0.00, [4, 2, 1]:5:0.00, [5, 2, 3]:6:0.00, [2, 2, 2]:7:0.00, [2, 3, 2]:0:0.00}" );
 
-    BmBench_sortOnItem(collec);
+    BmBench_sort(collec, (fctptr_BmBench_compare)BmBench_isGreater);
 
     strcpy( buffer, "" );
     BmBench_print(collec, buffer);

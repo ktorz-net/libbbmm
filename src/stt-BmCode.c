@@ -248,7 +248,7 @@ bool BmCode_isGreaterThan(BmCode* self, BmCode* another)
     return false;
 }
 
-bool BmCode_isLighterThan(BmCode* self, BmCode* another)
+bool BmCode_isSmallerThan(BmCode* self, BmCode* another)
 {
     uint minSize= (BmCode_dimention(self) < BmCode_dimention(another) ? BmCode_dimention(self) : BmCode_dimention(another));
     for( uint i= 1 ; i <= minSize ; ++i )

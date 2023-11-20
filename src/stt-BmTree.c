@@ -389,7 +389,7 @@ BmBench* BmTree_asNewBench( BmTree* self )
     {
         deleteBmCode( conditions[i] );
     }
-    BmBench_sortOnItem(bench);
+    BmBench_sort( bench, (fctptr_BmBench_compare)BmBench_isGreater );
     return bench;
 }
 

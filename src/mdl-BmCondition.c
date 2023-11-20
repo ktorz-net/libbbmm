@@ -173,10 +173,11 @@ BmBench* BmCondition_newDistributionByInfering_mask( BmCondition* self, BmBench*
     // foreach configuration in the distribution:
     uint numberOfCondition= BmBench_size(longDistrib);
     BmCode* parentConf= newBmCode( selfDim );
-    for( uint iCondition= 0 ; iCondition < numberOfCondition ; ++iCondition )
+    for( uint iCondition= 1 ; iCondition <= numberOfCondition ; ++iCondition )
     {
         BmCode* newConfig= newBmCode_all( longDim+1, 0 );
-        BmCode_copyNumbers( newConfig, BmBench_at( longDistrib, iCondition) );
+        BmCode* cond= BmBench_at( longDistrib, iCondition);
+        BmCode_copyNumbers( newConfig, cond );
         double probability= BmBench_valueAt( longDistrib, iCondition);
 
         // get the parents' configuration:
@@ -188,7 +189,7 @@ BmBench* BmCondition_newDistributionByInfering_mask( BmCondition* self, BmBench*
 
         // foreach ouput in the conditional distribution resulting from the parent'config:
         BmBench* outputDistrib= BmCondition_at( self, parentConf );
-        for( uint iOutput= 0 ; iOutput < outputDistrib->size ; ++iOutput )
+        for( uint iOutput= 1 ; iOutput <= outputDistrib->size ; ++iOutput )
         {
             BmCode_at_set(
                 newConfig, BmCode_dimention(newConfig),

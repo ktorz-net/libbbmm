@@ -374,7 +374,7 @@ START_TEST(test_BmTree_print)
     strcpy(buffer, "");
     BmBench* collection= BmTree_asNewBench( tree );
 
-    BmBench_sortOnItem( collection );
+    BmBench_sort( collection, (fctptr_BmBench_compare)BmBench_isGreater );
 
     strcpy(buffer, "");
     BmBench_print(collection, buffer);
@@ -383,7 +383,7 @@ START_TEST(test_BmTree_print)
         "{[0, 2, 0]:1:0.00, [0, 3, 1]:2:0.00, [0, 3, 2]:4:0.00, [1, 1, 0]:3:0.00, [2, 1, 0]:1:0.00}"
     );
 
-    BmBench_sortOnTag( collection );
+    BmBench_sort( collection, (fctptr_BmBench_compare)BmBench_isGreaterTag );
     
     strcpy(buffer, "");
     BmBench_print( collection, buffer);

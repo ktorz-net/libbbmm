@@ -137,7 +137,7 @@ uint BmCode_search( BmCode* self, uint value );
 /* Test */
 bool BmCode_isEqualTo( BmCode* self, BmCode* another );
 bool BmCode_isGreaterThan( BmCode* self, BmCode* another );
-bool BmCode_isLighterThan( BmCode* self, BmCode* another );
+bool BmCode_isSmallerThan( BmCode* self, BmCode* another );
 
 /* As Configuration (a BmCode configuration varring in a space defined by a ranges BmCode 'self' ) */
 ulong BmCode_keyOf( BmCode* self, BmCode* code);       // get the key value of the code regarding given ranges ( i.e. 0 <= self.numbers[i] < ranges[i] )
@@ -185,6 +185,7 @@ BmBench* BmBench_destroy( BmBench* self);
 void deleteBmBench( BmBench* self);
 
 /* Re-Initializer */
+BmBench* BmBench_reinit( BmBench* self, uint capacity );
 
 /* Accessor */
 uint BmBench_size( BmBench* self);
@@ -208,9 +209,18 @@ BmCode* BmBench_at_value( BmBench* self, uint i, double value );
 
 void BmBench_switch( BmBench* self, BmBench* doppleganger);
 
-/* Operator */
-void BmBench_sortOnItem( BmBench* self);
-void BmBench_sortOnTag( BmBench* self);
+/* Operators */
+typedef bool (*fctptr_BmBench_compare)(BmBench*,uint,uint);
+uint BmBench_sort( BmBench* self, fctptr_BmBench_compare compare );
+uint BmBench_switchCodes( BmBench* self, uint id1, uint id2 );
+
+/* Comparison */
+bool BmBench_isGreater(BmBench* self, uint i1, uint i2);
+bool BmBench_isSmaller(BmBench* self, uint i1, uint i2);
+bool BmBench_isGreaterTag(BmBench* self, uint i1, uint i2);
+bool BmBench_isSmallerTag(BmBench* self, uint i1, uint i2);
+bool BmBench_isGreaterValue(BmBench* self, uint i1, uint i2);
+bool BmBench_isSmallerValue(BmBench* self, uint i1, uint i2);
 
 /* Test */
 
