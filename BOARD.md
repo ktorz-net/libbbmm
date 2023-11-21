@@ -5,7 +5,10 @@
 - Manage explicit version number
 	- git ???
 	- [cmake](https://cmake.org/cmake/help/v3.18/guide/tutorial/#adding-a-version-number-and-configured-header-file)
-- Make BmTree from BmBench and vise versa (Code with 0 in BmBench).
+- Updated version of BmTree and BmBench.
+	* Removing of the notion of tag (plus D1 version for attach)
+	* BmTree BmTree_at return a code (BmTree integrate a bench in place of tag and value).
+	* Make BmTree from BmBench + separator and vise versa.
 - Generate a frontend (bbmm.h) from bbmm-xxx.h and licence.
 - It's time for solvers based on `<transition, reward>`
 	*  `BmSolver` with process function variable and `policyIteration`, `valueIteration`.

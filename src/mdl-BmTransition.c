@@ -145,46 +145,25 @@ BmCode* BmTransition_dependanciesAt( BmTransition * self, uint iVar )
 
 
 /* Construction */
-BmTransition* BmTransition_node_dependArray( BmTransition* self, uint index, uint parentSize, uint* parents )
+BmCondition* BmTransition_node_reinitWith( BmTransition* self, uint index, BmCode* newDependenceMask, BmBench* newDistrib )
 {
-    BmCode* dependancy= newBmCode_numbers(parentSize, parents);
-    BmCode_sort( dependancy );
-    BmCode_copy( BmBench_at( self->network, index), dependancy );
-
-    BmCode* parentRanges= newBmCode( BmCode_dimention(dependancy) );
-    for( uint i= 1 ; i <= BmCode_dimention(dependancy) ; ++i )
-    {
-        BmCondition* parentNode= array_on(self->nodes, BmCode_at(dependancy, i) );
-        BmCode_at_set( parentRanges, i, parentNode->outputSize );
-    }
-
-
-    BmCondition* cond= array_on(self->nodes, index);
-    BmBench* distrib= newBmBench( cond->outputSize );
-    double proba= 1.0/(cond->outputSize);
-    for( uint i = 1 ; i <= cond->outputSize ; ++i  )
-    {
-        BmBench_attachLast( distrib, newBmCode_list(1, i), 0, proba  );
-    }
+    // Reccord parent mask: dependency
+    BmCode_switch( BmBench_at( self->network, index ), newDependenceMask );
+    deleteBmCode( newDependenceMask );
+    BmCode* dependency= BmBench_at( self->network, index );
     
-    BmCondition_reinitWith( cond, cond->outputSize, parentRanges, distrib );
-    deleteBmCode(dependancy);
-    return self;
-}
-
-BmTransition* BmTransition_node_depends( BmTransition * self, uint index, uint parentSize, ... )
-{
-    uint parents[parentSize];
-    // Build words array from args
-    va_list ap;
-    va_start(ap, parentSize); 
-    for ( uint i = 0 ; i < parentSize ; ++i )
+    // Build dependance space:
+    BmCode* depSpace= newBmCode( BmCode_dimention(dependency) );
+    for( uint i= 1 ; i <= BmCode_dimention(dependency) ; ++i )
     {
-        parents[i]= va_arg(ap, uint);
+        BmCode_at_set( depSpace, i,
+            BmTransition_sizeAt(self, BmCode_at(dependency, i)) );
     }
-    va_end(ap);
-    // Create the instance
-    return BmTransition_node_dependArray( self, index, parentSize, parents );
+
+    // Re-initialize the condition
+    BmCondition* condition= array_on(self->nodes, index);
+    BmCondition_reinitWith( condition, condition->outputSize, depSpace, newDistrib );
+    return condition;
 }
 
 /* Infering */

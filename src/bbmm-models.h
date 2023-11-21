@@ -68,6 +68,7 @@ uint BmCondition_reinitWith( BmCondition* self, uint outputSize, BmCode* newPare
 uint BmCondition_reinitDistributionsWith( BmCondition* self, BmBench* newDistrib );
 
 /* Accessor */
+uint BmCondition_output( BmCondition* self );
 BmCode* BmCondition_parents( BmCondition* self );
 BmBench* BmCondition_at( BmCondition* self, BmCode* configuration );
 BmBench* BmCondition_atKey( BmCondition* self, uint configKey );
@@ -137,8 +138,7 @@ uint BmTransition_sizeAt( BmTransition* self, uint iVar );
 BmCode* BmTransition_dependanciesAt( BmTransition* self, uint iVar );
 
 /* Construction */
-BmTransition* BmTransition_node_dependArray( BmTransition* self, uint index, uint parentSize, uint* parents );
-BmTransition* BmTransition_node_depends( BmTransition* self, uint index, uint parentSize, ... );
+BmCondition* BmTransition_node_reinitWith( BmTransition* self, uint index, BmCode* newDependenceMask, BmBench* newDistrib );
 
 /* Infering */
 BmBench* BmTransition_newDistributionByInfering( BmTransition* self, BmBench* partialDistribution );

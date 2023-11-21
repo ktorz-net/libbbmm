@@ -77,6 +77,11 @@ uint BmCondition_reinitDistributionsWith( BmCondition* self, BmBench* newDistrib
 }
 
 /* Accessor */
+uint BmCondition_output( BmCondition* self )
+{
+    return self->outputSize;
+}
+
 BmCode* BmCondition_parents( BmCondition* self )
 {
     return self->parentRanges;

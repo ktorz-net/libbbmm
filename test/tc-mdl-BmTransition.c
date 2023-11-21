@@ -71,19 +71,17 @@ START_TEST(test_BmTransition_construction)
     char buffer[1024]= "";
     ck_assert_str_eq( BmBench_print( trans->network, buffer ), "1[], 2[], 3[], 4[], 5[], 6[], 7[], 8[]" );
 
-    {
-        uint dependancy[2]= {1, 3};
-        BmTransition_node_dependArray(trans, 6, 2, dependancy);
-    }
+    BmTransition_node_reinitWith(trans, 6, 
+        newBmCode_list(2, 1, 3),
+        newBmBenchWith( 1, newBmCode_list(1, 1), 0, 1.0 ) );
 
-    BmTransition_node_depends(
-        trans, 7, 3,
-        1, 4, 5
-    );
-    BmTransition_node_depends(
-        trans, 8, 2,
-        2, 6
-    );
+    BmTransition_node_reinitWith(trans, 7, 
+        newBmCode_list(3, 1, 4, 5),
+        newBmBenchWith( 1, newBmCode_list(1, 1), 0, 1.0 ) );
+
+    BmTransition_node_reinitWith(trans, 8, 
+        newBmCode_list(2, 2, 6),
+        newBmBenchWith( 1, newBmCode_list(1, 1), 0, 1.0 ) );
     
     strcpy(buffer, "");
     ck_assert_str_eq( BmBench_print( trans->network, buffer ), "1[], 2[], 3[], 4[], 5[], 6[1, 3], 7[1, 4, 5], 8[2, 6]" );
@@ -97,70 +95,67 @@ START_TEST(test_BmTransition_construction)
 }
 END_TEST
 
-/*
 void test_initializeNode6(BmTransition * trans)
 {
-    BmTransition_node_depends(trans, 6, 2, 1, 3);
+    BmBench* distrib= newBmBench(2);
+    BmBench_attachLast( distrib, newBmCode_list(1, 1), 0, 0.5 );
+    BmBench_attachLast( distrib, newBmCode_list(1, 2), 0, 0.5 );
 
-    BmCondition * dep= BmTransition_nodeAt( trans, 6 );
-    BmDistribution* distrib= newBmDistribution(1);
+    BmCondition * dep= BmTransition_node_reinitWith(
+        trans, 6, 
+        newBmCode_list(2, 1, 3),
+        distrib
+    );
 
-    BmDistribution_addOutput( distrib, 1, 0.5 );
-    BmDistribution_addOutput( distrib, 2, 0.5 );
-    BmCondition_reinitializeDefaultDistrib( dep, distrib );
-
-    BmDistribution_initialize(distrib, 1);
-    BmDistribution_addOutput( distrib, 1, 0.9 );
-    BmDistribution_addOutput( distrib, 2, 0.1 );
+    distrib= newBmBench(2);
+    BmBench_attachLast( distrib, newBmCode_list(1, 1), 0, 0.9 );
+    BmBench_attachLast( distrib, newBmCode_list(1, 2), 0, 0.1 );
 
     BmCode* inputCondition= newBmCode_list(2, 1, 1);
-    BmCondition_at_set(dep, inputCondition, distrib);
-    
-    deleteBmCode(inputCondition);
-    deleteBmDistribution(distrib);
+    BmCondition_at_attach(dep, inputCondition, distrib);
 
+    deleteBmCode(inputCondition);
 }
 
 void test_initializeNode7(BmTransition * trans)
 {
-    BmTransition_node_depends(trans, 7, 3, 1, 4, 5);
+    BmBench* distrib= newBmBench(2);
+    BmBench_attachLast( distrib, newBmCode_list(1, 2), 0, 0.6 );
+    BmBench_attachLast( distrib, newBmCode_list(1, 1), 0, 0.4 );
 
-    BmCondition* dep= BmTransition_nodeAt( trans, 7 );
-    BmDistribution* distrib= newBmDistribution(1);
+    BmCondition * dep= BmTransition_node_reinitWith(
+        trans, 7, 
+        newBmCode_list(3, 1, 4, 5),
+        distrib
+    );
 
-    BmDistribution_addOutput( distrib, 2, 0.6 );
-    BmDistribution_addOutput( distrib, 1, 0.4 );
-    BmCondition_reinitializeDefaultDistrib( dep, distrib );
-
-    BmDistribution_initialize(distrib, 1);
-    BmDistribution_addOutput( distrib, 1, 0.8 );
-    BmDistribution_addOutput( distrib, 2, 0.2 );
+    distrib= newBmBench(2);
+    BmBench_attachLast( distrib, newBmCode_list(1, 1), 0, 0.8 );
+    BmBench_attachLast( distrib, newBmCode_list(1, 2), 0, 0.2 );
 
     BmCode* inputCondition= newBmCode_list(3, 1, 2, 2);
-    BmCondition_at_set(dep, inputCondition, distrib);
+    BmCondition_at_attach(dep, inputCondition, distrib);
     
     deleteBmCode(inputCondition);
-    deleteBmDistribution(distrib);
 }
 
 void test_initializeNode8(BmTransition * trans)
 {
-    BmTransition_node_depends(trans, 8, 2, 2, 6);
+    BmBench* distrib= newBmBench(2);
+    BmBench_attachLast( distrib, newBmCode_list(1, 1), 0, 0.7 );
+    BmBench_attachLast( distrib, newBmCode_list(1, 2), 0, 0.3 );
 
-    BmCondition* dep= BmTransition_nodeAt(trans, 8);
-    BmDistribution* distrib= newBmDistribution(1);
+    BmTransition_node_reinitWith(
+        trans, 8,
+        newBmCode_list(2, 2, 6),
+        distrib
+    );
 
-    BmDistribution_addOutput( distrib, 1, 0.7 );
-    BmDistribution_addOutput( distrib, 2, 0.3 );
-    BmCondition_reinitializeDefaultDistrib( dep, distrib );
-    
-    deleteBmDistribution(distrib);
+    deleteBmBench(distrib);
 }
-*/
 
 START_TEST(test_BmTransition_infering)
 {
-    /*
     BmTransition* trans= test_newBmTransitionExemple();
     test_initializeNode6(trans);
     test_initializeNode7(trans);
@@ -171,7 +166,7 @@ START_TEST(test_BmTransition_infering)
 
     BmCode* state= newBmCode_list(2, 1, 2);
     BmCode* action= newBmCode_list(3, 2, 1, 2);
-    BmDistribution* overallDistrib;
+    BmBench* overallDistrib;
     {
         // Set initial configuration :
         BmCode* startConf= newBmCode( BmCode_dimention(state) +  BmCode_dimention(action) );
@@ -182,45 +177,46 @@ START_TEST(test_BmTransition_infering)
             BmCode_at_set( startConf,  BmCode_dimention(state)+i, BmCode_at(action, i) );
 
         // Set a initial determinist distribution :
-        BmDistribution * distrib= newBmDistribution( BmCode_dimention(startConf) );
-        BmDistribution_addConfig(distrib, startConf, 1.0);
+        BmBench * distrib= newBmBench( BmCode_dimention(startConf) );
+        BmBench_attachLast(distrib, newBmCodeAs( startConf ), 0, 1.0);
 
         // infer :
         overallDistrib= BmTransition_newDistributionByInfering(trans, distrib);
         
         // Clean :
-        deleteBmDistribution(distrib);
+        deleteBmBench(distrib);
         deleteBmCode( startConf );
     }
     
+    strcpy( buffer, "" );
     ck_assert_str_eq(
-    BmDistribution_wording( overallDistrib ),
+    BmBench_print( overallDistrib, buffer ),
         "{[1, 2, 2, 1, 2, 1, 2, 1]: 0.21 ; [1, 2, 2, 1, 2, 1, 2, 2]: 0.090 ; [1, 2, 2, 1, 2, 1, 1, 1]: 0.14 ; [1, 2, 2, 1, 2, 1, 1, 2]: 0.060 ; [1, 2, 2, 1, 2, 2, 2, 1]: 0.21 ; [1, 2, 2, 1, 2, 2, 2, 2]: 0.090 ; [1, 2, 2, 1, 2, 2, 1, 1]: 0.14 ; [1, 2, 2, 1, 2, 2, 1, 2]: 0.060}"
         );
 
+    strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmDistribution_wording( BmTransition_distribution(trans) ),
+        BmBench_print( BmTransition_distribution(trans), buffer ),
         "{[1, 1]: 0.20 ; [1, 2]: 0.30 ; [2, 1]: 0.20 ; [2, 2]: 0.30}"
     );
 
     ck_assert_str_eq( BmCode_wording( state ), "[1, 2]" );
     ck_assert_str_eq( BmCode_wording( action ), "[2, 1, 2]" );
 
+    strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmDistribution_wording( BmTransition_inferFromState_andAction(trans, state, action) ),
+        BmBench_print( BmTransition_inferFromState_andAction(trans, state, action), buffer ),
         "{[1, 1]: 0.20 ; [1, 2]: 0.30 ; [2, 1]: 0.20 ; [2, 2]: 0.30}"
     );
     
-    deleteBmDistribution( overallDistrib );
+    deleteBmBench( overallDistrib );
     deleteBmTransition( trans );
-    */
 }
 END_TEST
 
 
 START_TEST(test_BmTransition_print)
 {
-    /*
     BmTransition* trans= test_newBmTransitionExemple();
 
     char buffer[1024]= "";
@@ -240,7 +236,6 @@ START_TEST(test_BmTransition_print)
     );
 
     deleteBmTransition( trans );
-    */
 }
 END_TEST
 
