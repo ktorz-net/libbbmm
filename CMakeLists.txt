@@ -38,11 +38,12 @@ set(SRC_FILES
     src/stt-BmTree.c
     src/stt-BmVector.c
     src/mdl-BmCondition.c
-#    src/val-BmGauge.c
+    src/mdl-BmTransition.c
+
+    #    src/val-BmGauge.c
 #    src/val-BmEval.c
 #    src/pbb-BmDistribution.c
 #    src/pbb-BmCondition.c
-#    src/pbb-BmTransition.c
 #    src/mdl-BmDomain.c
 #    src/mdl-BmSpace.c
 #    src/mdl-BmSystem.c
@@ -55,8 +56,6 @@ target_link_libraries(bbmm)
 # Install
 install(TARGETS bbmm LIBRARY DESTINATION lib)
 install(FILES bbmm-structures.h DESTINATION include)
-install(FILES bbmm-values.h DESTINATION include)
-install(FILES bbmm-probabilities.h DESTINATION include)
 install(FILES bbmm-models.h DESTINATION include)
 install(FILES bbmm-solvers.h DESTINATION include)
 
@@ -72,6 +71,7 @@ set(TEST_SRC_FILES
     test/tc-stt-BmTree.c
     test/tc-stt-BmVector.c
     test/tc-mdl-BmCondition.c
+    test/tc-mdl-BmTransition.c
 #    test/tc-val-BmGauge.c
 #    test/tc-val-BmEval.c
 #    test/tc-pbb-BmDistribution.c

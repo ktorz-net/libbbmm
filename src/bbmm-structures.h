@@ -176,9 +176,11 @@ typedef struct {
 /* Constructor */
 BmBench* newBmBench( uint capacity );
 BmBench* newBmBenchWith( uint capacity, BmCode* newFirstItems, uint tag, double value );
+BmBench* newBmBenchAs( BmBench* model );
 
 BmBench* BmBench_create( BmBench* self, uint capacity );
 BmBench* BmBench_createWith( BmBench* self, uint capacity, BmCode* newFirstItems, uint tag, double value );
+BmBench* BmBench_createAs( BmBench* self, BmBench* model );
 
 /* Destructor */
 BmBench* BmBench_destroy( BmBench* self);
@@ -208,6 +210,9 @@ BmCode* BmBench_at_tag( BmBench* self, uint i, uint tagValue );
 BmCode* BmBench_at_value( BmBench* self, uint i, double value );
 
 void BmBench_switch( BmBench* self, BmBench* doppleganger);
+
+//void BmBench_add( BmBench *self, BmBench *another );
+void BmBench_add_reducted( BmBench *self, BmBench *another, BmCode* mask );
 
 /* Operators */
 typedef bool (*fctptr_BmBench_compare)(BmBench*,uint,uint);

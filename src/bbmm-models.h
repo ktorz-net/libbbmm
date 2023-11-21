@@ -94,49 +94,6 @@ char* BmCondition_printExtendSep(BmCondition* self, char* output, char* separato
 char* BmCondition_printIdentity( BmCondition* self, char* output ); // print `self` at the end of on `output`
 
 
-// --- --- TO REINCORPORATE... --- --- // 
-
-/* re-initializer */
-void BmCondition_reinit( BmCondition* self, uint outputSize, BmCode* parentRanges, BmBench* defaultDistrib );
-void BmCondition_reinitEquiprobable( BmCondition* self, uint outputSize, BmCode* parentRanges );
-
-void BmCondition_reiniteDefaultDistrib( BmCondition* self, BmBench* defaultDistrib );
-void BmCondition_setEquiprobable( BmCondition* self );
-
-/* Accessor */
-uint BmCondition_outputSize( BmCondition* self );
-BmCode* BmCondition_parentRanges( BmCondition* self );
-uint BmCondition_parentSize( BmCondition* self );
-uint BmCondition_dimention( BmCondition* self );
-BmBench* BmCondition_at( BmCondition* self, BmCode* configuration );
-uint BmCondition_distributionIndexAt( BmCondition* self, BmCode* configuration );
-BmBench* BmCondition_atKey( BmCondition* self, uint configKey );
-
-
-/* Test */
-
-/* Construction*/
-
-/* Construction tools*/
-uint BmCondition_resizeDistributionCapacity( BmCondition* self, uint newCapacity );
-
-uint BmCondition_at_set( BmCondition* self, BmCode* configuration, BmBench* distribution );
-uint BmCondition_at_readOrder_set( BmCondition* self, BmCode* configuration, BmCode* configOrder, BmBench* distribution );
-
-void BmCondition_at_addOutput_onProbability( BmCondition* self, BmCode* configutation, uint option, double probability );
-
-/* Printing */
-char* _BmCondition_printCode_withDistribution(BmCondition* self, BmCode* code, uint iDistirb, char* output);
-char* BmCondition_print(BmCondition* self, char* output);
-char* BmCondition_printSep(BmCondition* self, char* output, char* separator);
-
-char* BmCondition_wordingExtend( BmCondition* self ); // print `self` on `output`
-char* BmCondition_printExtend(BmCondition* self, char* output); // print `self` at the end of `output`
-char* BmCondition_printExtendSep(BmCondition* self, char* output, char* separator);
-
-char* BmCondition_printIdentity( BmCondition* self, char* output ); // print `self` at the end of on `output`
-
-
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   M O D E L  :  T R A N S I T I O N                           *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
@@ -144,6 +101,54 @@ char* BmCondition_printIdentity( BmCondition* self, char* output ); // print `se
  * Define a Bayesian Network composed of state, action and tramsitional nodes
  * 
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+typedef struct {
+  uint stateDimention, actionDimention, overallDimention;
+  BmBench* network;
+  BmCondition* nodes;
+  BmBench* transition;
+} BmTransition;
+
+/* Constructor*/
+BmTransition* newBmTransition( BmCode* state, BmCode* action );
+BmTransition* newBmTransitionShift( BmCode* state, BmCode* action, BmCode* shift );
+
+BmTransition* BmTransition_create(BmTransition* self, BmCode* state, BmCode* action, BmCode* shift );
+
+/* Destructor */
+BmTransition* BmTransition_destroy(BmTransition* self);
+void deleteBmTransition(BmTransition* self);
+
+/* Accessor */
+BmBench* BmTransition_distribution( BmTransition* self );
+
+uint BmTransition_stateDimention( BmTransition* self );
+uint BmTransition_actionDimention( BmTransition* self );
+uint BmTransition_shiftDimention( BmTransition* self );
+uint BmTransition_overallDimention( BmTransition* self );
+
+uint BmTransition_indexOfStateVariableT0( BmTransition* self, uint iVar );
+uint BmTransition_indexOfStateVariableT1( BmTransition* self, uint iVar );
+uint BmTransition_indexOfActionVariable( BmTransition* self, uint iVar );
+uint BmTransition_indexOfShiftVariable( BmTransition* self, uint iVar );
+
+BmCondition* BmTransition_nodeAt( BmTransition* self, uint iVar );
+uint BmTransition_sizeAt( BmTransition* self, uint iVar );
+BmCode* BmTransition_dependanciesAt( BmTransition* self, uint iVar );
+
+/* Construction */
+BmTransition* BmTransition_node_dependArray( BmTransition* self, uint index, uint parentSize, uint* parents );
+BmTransition* BmTransition_node_depends( BmTransition* self, uint index, uint parentSize, ... );
+
+/* Infering */
+BmBench* BmTransition_newDistributionByInfering( BmTransition* self, BmBench* partialDistribution );
+BmBench* BmTransition_inferFromState_andAction( BmTransition* self, BmCode* state, BmCode* action );
+
+/* Printing */
+char* BmTransition_print(BmTransition* self, char* output); // print `self` at the end of `output`
+char* BmTransition_printSignature(BmTransition* self, char* output); // print `self` at the end of `output`
+char* BmTransition_printDependency(BmTransition* self, char* output); // print `self` at the end of `output`
+
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *

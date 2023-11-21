@@ -26,7 +26,10 @@ BmBench* newBmBenchWith( uint capacity, BmCode* newFirstItems, uint tag, double 
         tag,
         value );
 }
-
+BmBench* newBmBenchAs( BmBench* model )
+{
+    return BmBench_createAs( newEmpty(BmBench), model );
+}
 
 void deleteBmBench(BmBench* self)
 {
@@ -49,6 +52,19 @@ BmBench* BmBench_createWith( BmBench* self, uint capacity, BmCode* newFirstItems
 {
     BmBench_create(self, capacity);
     BmBench_attachLast( self, newFirstItems, tag, value );
+    return self;
+}
+
+BmBench* BmBench_createAs( BmBench* self, BmBench* model )
+{
+    BmBench_create(self, BmBench_size(model) );
+    for( uint i= 1 ; i < BmBench_size(model) ; ++i )
+    {
+        BmBench_attachLast( self,
+            newBmCodeAs( BmBench_at( model, i ) ),
+            BmBench_tagAt( model, i ),
+            BmBench_valueAt( model, i ) );
+    }
     return self;
 }
 
@@ -220,6 +236,24 @@ void BmBench_switch( BmBench* self, BmBench* doppleganger)
     doppleganger->items    = items;
     doppleganger->tags     = tags;
     doppleganger->values   = values;
+}
+
+void BmBench_add_reducted( BmBench *self, BmBench *another, BmCode* mask )
+{
+    uint dim= BmCode_dimention( mask );
+    BmCode* state= newBmCode_all( dim, 0 );
+    for( uint iCode = 0 ; iCode < BmBench_size(another) ; ++iCode  )
+    {
+        BmCode* model= BmBench_at( another, iCode );
+        for( uint i= 1 ; i <= dim ; ++i )
+        {
+            BmCode_at_set( state, i, BmCode_at(model, BmCode_at( mask, i) ) );
+        }
+        BmBench_attachLast( self, newBmCodeAs(state),
+            BmBench_tagAt( another, iCode), BmBench_valueAt( another, iCode)
+        );
+    }
+    deleteBmCode( state );
 }
 
 /* Operators */
