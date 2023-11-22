@@ -58,7 +58,7 @@ BmBench* BmBench_createWith( BmBench* self, uint capacity, BmCode* newFirstItems
 BmBench* BmBench_createAs( BmBench* self, BmBench* model )
 {
     BmBench_create(self, BmBench_size(model) );
-    for( uint i= 1 ; i < BmBench_size(model) ; ++i )
+    for( uint i= 1 ; i <= BmBench_size(model) ; ++i )
     {
         BmBench_attachLast( self,
             newBmCodeAs( BmBench_at( model, i ) ),
@@ -242,7 +242,7 @@ void BmBench_add_reducted( BmBench *self, BmBench *another, BmCode* mask )
 {
     uint dim= BmCode_dimention( mask );
     BmCode* state= newBmCode_all( dim, 0 );
-    for( uint iCode = 0 ; iCode < BmBench_size(another) ; ++iCode  )
+    for( uint iCode = 1 ; iCode <= BmBench_size(another) ; ++iCode  )
     {
         BmCode* model= BmBench_at( another, iCode );
         for( uint i= 1 ; i <= dim ; ++i )
@@ -354,6 +354,16 @@ char* _BmBench_printItemValue(BmBench* self, uint iItem, char* output)
     return output;
 }
 
+char* _BmBench_printNode(BmBench* self, uint iItem, char* output)
+{
+    char buffer[16]= "";
+    sprintf( buffer, "%u", iItem );
+    strcat( output, buffer );
+    BmCode_print( BmBench_at(self, iItem), output);
+    return output;
+}
+
+
 char* _BmBench_printItemTag(BmBench* self, uint iItem, char* output)
 {
     char buffer[16]= "";
@@ -381,6 +391,21 @@ char* BmBench_printValues(BmBench* self, char* output)
 
     strcat(output, "}");
 
+    return output;
+}
+
+char* BmBench_printNetwork(BmBench* self, char* output)
+{
+    if( self->size > 0 )
+    {
+        _BmBench_printNode( self, 1, output );
+    }
+
+    for( uint i= 2 ; i <= self->size ; ++i)
+    {
+        strcat(output, ", ");
+        _BmBench_printNode( self, i, output );
+    }
     return output;
 }
 

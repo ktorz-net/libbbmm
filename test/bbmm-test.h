@@ -13,8 +13,8 @@ TCase * test_case_BmVector(void);
 
 // BbMm Models
 TCase * test_case_BmCondition(void);
-//TCase * test_case_BmTransition(void);
-//TCase * test_case_BmReward(void);
+TCase * test_case_BmTransition(void);
+TCase * test_case_BmReward(void);
 
 // BbMm Solver
 

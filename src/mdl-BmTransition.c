@@ -182,7 +182,8 @@ BmBench* BmTransition_setFomOverallDistribution(BmTransition * self, BmBench* ov
     BmBench_add_reducted( buildTransition, overallDistrib, statePrimeMask );
     BmBench_sort( buildTransition, (fctptr_BmBench_compare)BmBench_isGreater );
 
-    // merge consecutive identic output:
+
+    // merge consecutive doubles:
     uint size= BmBench_size( buildTransition );
     BmBench_reinit( self->transition, size );
     BmBench_attachLast( self->transition,
@@ -215,6 +216,7 @@ BmBench* BmTransition_setFomOverallDistribution(BmTransition * self, BmBench* ov
 BmBench* BmTransition_newDistributionByInfering( BmTransition * self, BmBench* configDistribution )
 {
     BmBench* constructionDistrib= newBmBenchAs( configDistribution );
+
     uint configDimention = BmCode_dimention( BmBench_at( configDistribution, 1 ) );
     for( uint i= configDimention + 1 ; i <= self->overallDimention ; ++i )
     {
@@ -228,6 +230,7 @@ BmBench* BmTransition_newDistributionByInfering( BmTransition * self, BmBench* c
     }
     
     BmTransition_setFomOverallDistribution(self, constructionDistrib);
+
     return constructionDistrib;
 }
 

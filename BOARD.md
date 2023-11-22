@@ -14,6 +14,10 @@
 	*  `BmSolver` with process function variable and `policyIteration`, `valueIteration`.
 - Réactivate cofeeRobot exemple and generate cofeeFleet.
 
+- In some way, Transition and Stoschastic policy are sames: Bayesian Network...
+	* BmTranstion => BmBayenet( input, shift, output );
+	* BmReward => BmEvaluator( input, criterion ).
+
 - move bbmm repo to libbbmm and create a BbMM-space project, then -> PAAMS / EUMAS
 
 ## Next:
