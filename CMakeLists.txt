@@ -39,14 +39,7 @@ set(SRC_FILES
     src/stt-BmVector.c
     src/mdl-BmCondition.c
     src/mdl-BmTransition.c
-
-    #    src/val-BmGauge.c
-#    src/val-BmEval.c
-#    src/pbb-BmDistribution.c
-#    src/pbb-BmCondition.c
-#    src/mdl-BmDomain.c
-#    src/mdl-BmSpace.c
-#    src/mdl-BmSystem.c
+    src/mdl-BmEvaluator.c
 )
 
 # Build
@@ -72,13 +65,7 @@ set(TEST_SRC_FILES
     test/tc-stt-BmVector.c
     test/tc-mdl-BmCondition.c
     test/tc-mdl-BmTransition.c
-#    test/tc-val-BmGauge.c
-#    test/tc-val-BmEval.c
-#    test/tc-pbb-BmDistribution.c
-#    test/tc-pbb-BmTransition.c
-#    test/tc-mld-BmDomain.c
-#    test/tc-mld-BmSpace.c
-#    test/tc-mld-BmSystem.c
+    test/tc-mdl-BmEvaluator.c
 #    test/tc-cofeeRobot.c
     test/main-testrunner.c
 )

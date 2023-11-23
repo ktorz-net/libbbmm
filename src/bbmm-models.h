@@ -152,12 +152,14 @@ char* BmTransition_printDependency(BmTransition* self, char* output); // print `
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   M O D E L  :  R E W A R D                                   *
+ *   B b M m   M O D E L  :  E V A L U A T O R                             *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *
  * Define a multi-critera Value function
  * (code -> value vector dot weight -> value)
  * 
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+
 
 #endif // BBMM_MODEL_H
