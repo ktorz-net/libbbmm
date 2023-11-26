@@ -86,8 +86,9 @@ START_TEST(test_BmTransition_construction)
     strcpy(buffer, "");
     ck_assert_str_eq( BmBench_printNetwork( trans->network, buffer ), "1[], 2[], 3[], 4[], 5[], 6[1, 3], 7[1, 4, 5], 8[2, 6]" );
 
+    strcpy(buffer, "");
     ck_assert_str_eq(
-        BmCode_wording( ((BmCondition*)array_on( trans->nodes, 7))->parentRanges ),
+        BmCode_print( ((BmCondition*)array_on( trans->nodes, 7))->parentRanges, buffer ),
         "[2, 4, 2]"
     );
 
@@ -269,8 +270,10 @@ START_TEST(test_BmTransition_infering)
         "{[1, 1]:0.20, [1, 2]:0.30, [2, 1]:0.20, [2, 2]:0.30}"
     );
 
-    ck_assert_str_eq( BmCode_wording( state ), "[1, 2]" );
-    ck_assert_str_eq( BmCode_wording( action ), "[2, 1, 2]" );
+    strcpy( buffer, "" );
+    ck_assert_str_eq( BmCode_print( state, buffer ), "[1, 2]" );
+    strcpy( buffer, "" );
+    ck_assert_str_eq( BmCode_print( action, buffer ), "[2, 1, 2]" );
 
     strcpy( buffer, "" );
     ck_assert_str_eq(

@@ -32,7 +32,6 @@ include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/src)
 ## C O R E  ##
 #------------#
 set(SRC_FILES
-    src/stt-basictools.c
     src/stt-BmCode.c
     src/stt-BmBench.c
     src/stt-BmTree.c

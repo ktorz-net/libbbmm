@@ -497,13 +497,6 @@ BmCode* BmCode_newBmCodeMask(BmCode* self, BmCode* mask)
 }
 
 /* Printing */
-char* BmCode_wording(BmCode* self)
-{
-    char* buffer= bm_wordBuffer();
-    strcpy( buffer, "");
-    return BmCode_print(self, buffer);
-}
-
 char* BmCode_print(BmCode* self, char* buffer)
 {
     char tmp[64];

@@ -35,8 +35,10 @@ START_TEST(test_BmCode_init2)
     ck_assert_uint_eq( BmCode_at(code, 10),  1 );
     ck_assert_uint_eq( BmCode_at(code, 11),  2 );
 
+    char buffer[1024]= "";
+    strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmCode_wording(code),
+        BmCode_print(code, buffer),
         "[2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2]"
     );
     
@@ -64,8 +66,10 @@ START_TEST(test_BmCode_keys)
     BmCode* domain= newBmCode_numbers(8, numbers);
     BmCode* code= newBmCode_all(8, 0);
     
+    char buffer[1024]= "";
+    strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmCode_wording(code),
+        BmCode_print(code, buffer),
         "[0, 0, 0, 0, 0, 0, 0, 0]"
     );
 
@@ -77,21 +81,24 @@ START_TEST(test_BmCode_keys)
 
     // neutral code
     BmCode_setCode_onKey(domain, code, 0);
+    strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmCode_wording(code),
+        BmCode_print(code, buffer),
         "[0, 0, 0, 0, 0, 0, 0, 0]"
     );
 
     ck_assert(1);
     BmCode_setCode_onKey(domain, code, 1);
+    strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmCode_wording(code),
+        BmCode_print(code, buffer),
         "[1, 1, 1, 1, 1, 1, 1, 1]"
     );
 
     BmCode_setCode_onKey(domain, code, 118942);
+    strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmCode_wording(code),
+        BmCode_print(code, buffer),
         "[2, 4, 2, 3, 3, 6, 1, 3]"
     );
     
@@ -114,15 +121,19 @@ START_TEST(test_BmCode_iterate)
     BmCode* domain= BmCode_reinit_list( newBmCode(0), 3, 2, 4, 3 );
     BmCode* code= newBmCode_all(3, 0);
     
+    char buffer[1024]= "";
+    strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmCode_wording(code),
+        BmCode_print(code, buffer),
         "[0, 0, 0]"
     );
     ck_assert( !BmCode_isIncluding(domain, code) );
 
     BmCode_setCodeFirst(domain, code); // set the code as a key value in given ranges
+    
+    strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmCode_wording(code),
+        BmCode_print(code, buffer),
         "[1, 1, 1]"
     );
     ck_assert( BmCode_isIncluding(domain, code) );
@@ -131,8 +142,10 @@ START_TEST(test_BmCode_iterate)
     ck_assert( !BmCode_isIncluding(domain, code) );
 
     BmCode_setCodeLast(domain, code); // set the code as a key value in given ranges
+    
+    strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmCode_wording(code),
+        BmCode_print(code, buffer),
         "[2, 4, 3]"
     );
     ck_assert( BmCode_isIncluding(domain, code) );
@@ -141,35 +154,42 @@ START_TEST(test_BmCode_iterate)
     ck_assert( !BmCode_isIncluding(domain, code) );
     
     BmCode_reinit_list(code, 3, 1, 2, 3);
+    
+    strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmCode_wording(code),
+        BmCode_print(code, buffer),
         "[1, 2, 3]"
     );
 
     BmCode_nextCode(domain, code);
+    
+    strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmCode_wording(code),
+        BmCode_print(code, buffer),
         "[2, 2, 3]"
     );
     
     BmCode_nextCode(domain, code);
     BmCode_nextCode(domain, code);
     BmCode_nextCode(domain, code);
+    strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmCode_wording(code),
+        BmCode_print(code, buffer),
         "[1, 4, 3]"
     );
 
     BmCode_previousCode(domain, code);
+    strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmCode_wording(code),
+        BmCode_print(code, buffer),
         "[2, 3, 3]"
     );
 
     BmCode_previousCode(domain, code);
     BmCode_previousCode(domain, code);
+    strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmCode_wording(code),
+        BmCode_print(code, buffer),
         "[2, 2, 3]"
     );
 
@@ -187,12 +207,16 @@ START_TEST(test_BmCode_test)
     ck_assert( BmCode_isEqualTo( c1, c1Bis ) );
     ck_assert( !BmCode_isEqualTo( c1, c2 ) );
 
+    char buffer[1024]= "";
+    strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmCode_wording(c1),
+        BmCode_print(c1, buffer),
         "[2, 2, 3]"
     );
+    
+    strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmCode_wording(c2),
+        BmCode_print(c2, buffer),
         "[1, 2, 4]"
     );
     

@@ -4,8 +4,8 @@
  * 
  *   FEATURES:
  *       - BmCode         : a fixed size list of digit (unsigned integers)
- *       - BmBench        : a dynamic-size collection of BmCode with tag and value (i -> code + tag and value )
- *       - BmTree         : a tree based BmCode (BmCode -> tag and value )
+ *       - BmBench        : a dynamic-size collection of BmCode with and value (i -> code and value )
+ *       - BmTree         : a tree based BmCode (code -> output and value )
  *       - BmVector       : a fixed size list of values (doubles)
  *
  *   LICENSE: MIT License
@@ -64,18 +64,6 @@ typedef uint bool;
 #define array_on(instance, index) instance+(index-1)
 #define array_at(instance, index) instance[index-1]
 #define array_at_set(instance, index, value) instance[index-1]= value
-
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   S T R U C T U R E :  B A S I C   T O O L S                  *
- * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
-
-/* buffers */
-char* bm_wordBuffer(); //[WORD_BUFFER_SIZE];
-char* bm_lineBuffer(); //[WORD_BUFFER_SIZE];
-char* bm_textBuffer(); //[WORD_BUFFER_SIZE];
-
-/* double  manipulation */
-char* bm_printDouble(double p, char* output);
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   S T R U C T U R E :  C O D E                              *
@@ -158,7 +146,6 @@ bool BmCode_isIncluding( BmCode* self, BmCode* configuration ); // set the code 
 BmCode* BmCode_newBmCodeMask(BmCode* self, BmCode* mask);
 
 /* Printing */
-char* BmCode_wording( BmCode* self); // print `self` on `output`
 char* BmCode_print( BmCode* self, char* buffer);   // print `self` at the end of `output`
 
 
@@ -307,7 +294,6 @@ BmBench* BmTree_asNewBench( BmTree* self );
 
 /* Printing */
 char* BmTree_printBranch( BmTree* self, uint iBranch, char* output );
-char* BmTree_wording( BmTree* self); // print `self` on `output`
 
 char* BmTree_print( BmTree* self, char* output);
 char* BmTree_print_sep( BmTree* self, char* output, char* separator );

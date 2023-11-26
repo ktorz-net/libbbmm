@@ -10,17 +10,22 @@ START_TEST(test_BmCondition_init)
     BmCondition* instance1= newBmConditionBasic(2);
     char buffer[1024];
 
+    strcpy(buffer, "");
     ck_assert_uint_eq( BmCode_dimention( BmCondition_parents( instance1 ) ), 1 );
     ck_assert_uint_eq( instance1->outputSize, 2 );
-    ck_assert_str_eq( BmCode_wording( BmCondition_parents(instance1) ), "[1]");
+    ck_assert_str_eq( BmCode_print( BmCondition_parents(instance1), buffer ), "[1]");
     ck_assert_uint_eq( BmCode_dimention( BmCondition_parents(instance1) ), 1 );
 
-    ck_assert_str_eq( BmCode_wording(instance1->parentRanges), "[1]" );
+    strcpy(buffer, "");
+    ck_assert_str_eq( BmCode_print(instance1->parentRanges, buffer), "[1]" );
     {
         BmCode* config= BmCode_newBmCodeOnKey( instance1->parentRanges, 1 );
-        ck_assert_str_eq( BmCode_wording(config), "[1]" );
+        
+        strcpy(buffer, "");
+        ck_assert_str_eq( BmCode_print(config, buffer), "[1]" );
     
-        ck_assert_str_eq( BmTree_wording( instance1->selector), "{}" );
+        strcpy(buffer, "");
+        ck_assert_str_eq( BmTree_print( instance1->selector, buffer), "{}" );
 
         BmBench* distrib= BmCondition_at( instance1, config );
         deleteBmCode(config);
@@ -41,7 +46,9 @@ START_TEST(test_BmCondition_init)
 
     ck_assert_uint_eq( BmCode_product( BmCondition_parents(instance2) ), 4*5*6 );
     ck_assert_uint_eq( instance2->outputSize, 2 );
-    ck_assert_str_eq( BmCode_wording( BmCondition_parents(instance2) ), "[4, 5, 6]");
+
+    strcpy(buffer, "");
+    ck_assert_str_eq( BmCode_print( BmCondition_parents(instance2), buffer ), "[4, 5, 6]");
 
     uint dim= BmCode_dimention( BmCondition_parents( instance2 ) );
     for( uint i= 1; i <= dim ; ++i )
@@ -74,7 +81,8 @@ START_TEST(test_BmCondition_init2)
     strcpy(buffer, "");
     ck_assert_str_eq( BmCondition_printIdentity( instance, buffer ), "[3, 5]->[4]" ); 
 
-    strcpy(buffer, BmTree_wording( instance->selector ));
+    strcpy(buffer, "");
+    BmTree_print( instance->selector, buffer );
     ck_assert_str_eq( buffer, "{}");
 
     strcpy(buffer, "");
