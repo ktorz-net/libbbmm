@@ -361,7 +361,7 @@ BmBench* BmTree_asNewBench( BmTree* self )
     BmBench* bench= newBmBench( self->size*2 );
     BmCode *conditions[self->size];
 
-    uint codeSize= BmCode_dimention(self->space);
+    uint codeSize= BmCode_dimention(self->space)+1;
     for( uint iBranch= 0; iBranch < self->size; ++iBranch )
     {
         conditions[iBranch]= newBmCode_all( codeSize, 0);
@@ -373,15 +373,16 @@ BmBench* BmTree_asNewBench( BmTree* self )
         uint bound= BmCode_at(self->space, branVar);
         for( uint i= 1 ; i <= bound ; ++i )
         {
-            if( self->branches[iBranch][i] < self->optionBound )
+            uint output= self->branches[iBranch][i];
+            if( output < self->optionBound )
             {
                 BmCode_at_set( conditions[iBranch], branVar, i );
-                uint iItem= BmBench_attach( bench, newBmCodeAs( conditions[iBranch] ) );
-                BmBench_at_tag( bench, iItem, self->branches[iBranch][i] );
+                BmCode_at_set( conditions[iBranch], codeSize, output );
+                BmBench_attachLast( bench, newBmCodeAs( conditions[iBranch] ), self->optionValues[output] );
             }
             else
             {
-                uint nextBranch= self->branches[iBranch][i] - self->optionBound;
+                uint nextBranch= output - self->optionBound;
                 BmCode_at_set( conditions[nextBranch], branVar, i );
             }
         }

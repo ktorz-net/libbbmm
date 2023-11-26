@@ -380,18 +380,8 @@ START_TEST(test_BmTree_print)
     BmBench_print(collection, buffer);
     ck_assert_str_eq(
         buffer,
-        "{[0, 2, 0]:1:0.00, [0, 3, 1]:2:0.00, [0, 3, 2]:4:0.00, [1, 1, 0]:3:0.00, [2, 1, 0]:1:0.00}"
+        "{[0, 2, 0, 1]:0.00, [0, 3, 1, 2]:0.00, [0, 3, 2, 4]:0.00, [1, 1, 0, 3]:0.00, [2, 1, 0, 1]:0.00}"
     );
-
-    BmBench_sort( collection, (fctptr_BmBench_compare)BmBench_isGreaterTag );
-    
-    strcpy(buffer, "");
-    BmBench_print( collection, buffer);
-    ck_assert_str_eq(
-        buffer,
-        "{[0, 2, 0]:1:0.00, [2, 1, 0]:1:0.00, [0, 3, 1]:2:0.00, [1, 1, 0]:3:0.00, [0, 3, 2]:4:0.00}"
-    );
-    deleteBmBench(collection);    
 
     strcpy(buffer, "");
     BmTree_print(tree, buffer);

@@ -140,7 +140,7 @@ BmCondition* BmTransition_nodeAt( BmTransition * self, uint iVar )
 
 BmCode* BmTransition_dependanciesAt( BmTransition * self, uint iVar )
 {
-    return BmBench_at(self->network, iVar);
+    return BmBench_at_code(self->network, iVar);
 }
 
 
@@ -148,9 +148,9 @@ BmCode* BmTransition_dependanciesAt( BmTransition * self, uint iVar )
 BmCondition* BmTransition_node_reinitWith( BmTransition* self, uint index, BmCode* newDependenceMask, BmBench* newDistrib )
 {
     // Reccord parent mask: dependency
-    BmCode_switch( BmBench_at( self->network, index ), newDependenceMask );
+    BmCode_switch( BmBench_at_code( self->network, index ), newDependenceMask );
     deleteBmCode( newDependenceMask );
-    BmCode* dependency= BmBench_at( self->network, index );
+    BmCode* dependency= BmBench_at_code( self->network, index );
     
     // Build dependance space:
     BmCode* depSpace= newBmCode( BmCode_dimention(dependency) );
@@ -187,24 +187,22 @@ BmBench* BmTransition_setFomOverallDistribution(BmTransition * self, BmBench* ov
     uint size= BmBench_size( buildTransition );
     BmBench_reinit( self->transition, size );
     BmBench_attachLast( self->transition,
-        newBmCodeAs( BmBench_at( buildTransition, 1 ) ),
-        0, BmBench_valueAt( buildTransition, 1 )
+        newBmCodeAs( BmBench_at_code( buildTransition, 1 ) ), BmBench_at_value( buildTransition, 1 )
     );
     uint counter= 1;
 
     for( uint i= 2 ; i <= size ; ++i )
     {
-        if ( BmCode_isEqualTo( BmBench_at( self->transition, counter ), BmBench_at( buildTransition, i ) ) )
+        if ( BmCode_isEqualTo( BmBench_at_code( self->transition, counter ), BmBench_at_code( buildTransition, i ) ) )
         {
-            BmBench_at_value( self->transition, counter,
-                BmBench_valueAt( self->transition, counter ) + BmBench_valueAt( buildTransition, i )
+            BmBench_at_setValue( self->transition, counter,
+                BmBench_at_value( self->transition, counter ) + BmBench_at_value( buildTransition, i )
             );
         }
         else 
         {
             counter= BmBench_attachLast( self->transition,
-                newBmCodeAs( BmBench_at( buildTransition, i ) ),
-                0, BmBench_valueAt( buildTransition, i ) );            
+                newBmCodeAs( BmBench_at_code( buildTransition, i ) ), BmBench_at_value( buildTransition, i ) );            
         }
     }
     
@@ -217,7 +215,7 @@ BmBench* BmTransition_newDistributionByInfering( BmTransition * self, BmBench* c
 {
     BmBench* constructionDistrib= newBmBenchAs( configDistribution );
 
-    uint configDimention = BmCode_dimention( BmBench_at( configDistribution, 1 ) );
+    uint configDimention = BmCode_dimention( BmBench_at_code( configDistribution, 1 ) );
     for( uint i= configDimention + 1 ; i <= self->overallDimention ; ++i )
     {
         // Infers dependency possibilities:
@@ -246,7 +244,7 @@ BmBench* BmTransition_inferFromState_andAction( BmTransition * self, BmCode* sta
 
     // Set a initial determinist distribution :
     BmBench * distrib= newBmBench( BmCode_dimention(startConf) );
-    BmBench_attachLast(distrib, startConf, 0, 1.0);
+    BmBench_attachLast(distrib, startConf, 1.0);
 
     // infer :
     deleteBmBench( BmTransition_newDistributionByInfering(self, distrib) );
@@ -329,12 +327,12 @@ char* BmTransition_printDependency(BmTransition* self, char* output)
     if( shiftDimention > 0 )
     {
         strcat(output, " ");
-        BmCode_print( BmBench_at(self->network, shiftStart), output );
+        BmCode_print( BmBench_at_code(self->network, shiftStart), output );
     }
     for( uint i= shiftStart+1 ; i < shiftEnd ; ++i)
     {
         strcat(output, ", ");
-        BmCode_print( BmBench_at(self->network, i), output );
+        BmCode_print( BmBench_at_code(self->network, i), output );
     }
     strcat(output, " |");
 
@@ -342,12 +340,12 @@ char* BmTransition_printDependency(BmTransition* self, char* output)
     if( self->stateDimention > 0 )
     {
         strcat(output, " ");
-        BmCode_print( BmBench_at(self->network, shiftEnd), output );
+        BmCode_print( BmBench_at_code(self->network, shiftEnd), output );
     }
     for( uint i= shiftEnd+1 ; i <= self->overallDimention ; ++i)
     {
         strcat(output, ", ");
-        BmCode_print( BmBench_at(self->network, i), output );
+        BmCode_print( BmBench_at_code(self->network, i), output );
     }
     strcat(output, " |");
 

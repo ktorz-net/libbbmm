@@ -156,17 +156,16 @@ char* BmCode_print( BmCode* self, char* buffer);   // print `self` at the end of
 typedef struct {
   uint capacity, start, size;
   BmCode ** items;
-  uint * tags;
   double * values;
 } BmBench;
 
 /* Constructor */
 BmBench* newBmBench( uint capacity );
-BmBench* newBmBenchWith( uint capacity, BmCode* newFirstItems, uint tag, double value );
+BmBench* newBmBenchWith( uint capacity, BmCode* newFirstItems, double value );
 BmBench* newBmBenchAs( BmBench* model );
 
 BmBench* BmBench_create( BmBench* self, uint capacity );
-BmBench* BmBench_createWith( BmBench* self, uint capacity, BmCode* newFirstItems, uint tag, double value );
+BmBench* BmBench_createWith( BmBench* self, uint capacity, BmCode* newFirstItems, double value );
 BmBench* BmBench_createAs( BmBench* self, BmBench* model );
 
 /* Destructor */
@@ -178,23 +177,21 @@ BmBench* BmBench_reinit( BmBench* self, uint capacity );
 
 /* Accessor */
 uint BmBench_size( BmBench* self);
-BmCode* BmBench_at( BmBench* self, uint i );
-uint BmBench_tagAt( BmBench* self, uint i );
-double BmBench_valueAt( BmBench* self, uint i );
+BmCode* BmBench_at_code( BmBench* self, uint i );
+double BmBench_at_value( BmBench* self, uint i );
 
 /* Construction */
 void BmBench_resizeCapacity( BmBench* self, uint newCapacity );
 uint BmBench_attach( BmBench* self, BmCode* newItem );
 //BmCode* BmBench_detach( BmBench* self, uint i );
 
-uint BmBench_attachLast( BmBench* self, BmCode* newItem, uint tag, double value );
+uint BmBench_attachLast( BmBench* self, BmCode* newItem, double value );
 BmCode* BmBench_detachLast( BmBench* self );
 
-uint BmBench_attachFirst( BmBench* self, BmCode* newItem, uint tag, double value );
+uint BmBench_attachFirst( BmBench* self, BmCode* newItem, double value );
 BmCode* BmBench_detachFirst( BmBench* self );
 
-BmCode* BmBench_at_tag( BmBench* self, uint i, uint tagValue );
-BmCode* BmBench_at_value( BmBench* self, uint i, double value );
+BmCode* BmBench_at_setValue( BmBench* self, uint i, double value );
 
 void BmBench_switch( BmBench* self, BmBench* doppleganger);
 
@@ -209,8 +206,6 @@ uint BmBench_switchCodes( BmBench* self, uint id1, uint id2 );
 /* Comparison */
 bool BmBench_isGreater(BmBench* self, uint i1, uint i2);
 bool BmBench_isSmaller(BmBench* self, uint i1, uint i2);
-bool BmBench_isGreaterTag(BmBench* self, uint i1, uint i2);
-bool BmBench_isSmallerTag(BmBench* self, uint i1, uint i2);
 bool BmBench_isGreaterValue(BmBench* self, uint i1, uint i2);
 bool BmBench_isSmallerValue(BmBench* self, uint i1, uint i2);
 
@@ -219,9 +214,7 @@ bool BmBench_isSmallerValue(BmBench* self, uint i1, uint i2);
 /* Printing */
 char* BmBench_print( BmBench* self, char* output); // print `self` at the end of `output`
 char* BmBench_printCodes(BmBench* self, char* output);
-char* BmBench_printValues(BmBench* self, char* output);
 char* BmBench_printNetwork(BmBench* self, char* output);
-char* BmBench_printTags(BmBench* self, char* output);
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   S T R U C T U R E :  T R E E                                *

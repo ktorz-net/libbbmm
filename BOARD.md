@@ -2,20 +2,21 @@
 
 ## On the fire:
 
+- In some way, Transition and Stoschastic policy are sames: Bayesian Network...
+	* BmTranstion => BmInferencor( input (state) / premises, shift, output / consequences (distribution) );
+
 - Manage explicit version number
 	- git ???
 	- [cmake](https://cmake.org/cmake/help/v3.18/guide/tutorial/#adding-a-version-number-and-configured-header-file)
 - Updated version of BmTree and BmBench.
-	* Removing of the notion of tag (plus D1 version for attach)
-	* BmTree BmTree_at return a code (BmTree integrate a bench in place of tag and value).
-	* Make BmTree from BmBench + separator and vise versa.
+	* Removing of the notion of tag
+	* BmTree: code -> code + value.
+	* Make BmTree from BmBench + separator.
 - Generate a frontend (bbmm.h) from bbmm-xxx.h and licence.
 - It's time for solvers based on `<transition, reward>`
 	*  `BmSolver` with process function variable and `policyIteration`, `valueIteration`.
 - Réactivate cofeeRobot exemple and generate cofeeFleet.
 
-- In some way, Transition and Stoschastic policy are sames: Bayesian Network...
-	* BmTranstion => BmInferencor( input (state) / premises, shift, output / consequences (distribution) );
 
 - move bbmm repo to libbbmm and create a BbMM-space project, then -> PAAMS / EUMAS
 

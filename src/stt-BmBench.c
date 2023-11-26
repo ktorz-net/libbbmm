@@ -17,13 +17,12 @@ BmBench* newBmBench(uint capacity)
     return BmBench_create( newEmpty(BmBench), capacity );
 }
 
-BmBench* newBmBenchWith( uint capacity, BmCode* newFirstItems, uint tag, double value )
+BmBench* newBmBenchWith( uint capacity, BmCode* newFirstItems, double value )
 {
     return BmBench_createWith(
         newEmpty(BmBench),
         capacity,
         newFirstItems,
-        tag,
         value );
 }
 BmBench* newBmBenchAs( BmBench* model )
@@ -41,17 +40,16 @@ BmBench* BmBench_create(BmBench* self, uint capacity)
 {
     self->capacity= capacity;
     self->items= newEmptyArray( BmCode*, self->capacity );
-    self->tags= newEmptyArray( uint, self->capacity );
     self->values= newEmptyArray( double, self->capacity );
     self->start= 0;
     self->size= 0;
     return self;
 }
 
-BmBench* BmBench_createWith( BmBench* self, uint capacity, BmCode* newFirstItems, uint tag, double value )
+BmBench* BmBench_createWith( BmBench* self, uint capacity, BmCode* newFirstItems, double value )
 {
     BmBench_create(self, capacity);
-    BmBench_attachLast( self, newFirstItems, tag, value );
+    BmBench_attachLast( self, newFirstItems, value );
     return self;
 }
 
@@ -61,9 +59,8 @@ BmBench* BmBench_createAs( BmBench* self, BmBench* model )
     for( uint i= 1 ; i <= BmBench_size(model) ; ++i )
     {
         BmBench_attachLast( self,
-            newBmCodeAs( BmBench_at( model, i ) ),
-            BmBench_tagAt( model, i ),
-            BmBench_valueAt( model, i ) );
+            newBmCodeAs( BmBench_at_code( model, i ) ),
+            BmBench_at_value( model, i ) );
     }
     return self;
 }
@@ -76,7 +73,6 @@ BmBench* BmBench_destroy(BmBench* self)
         deleteBmCode( array_at( self->items, self->start ) );
         self->size-= 1;
     }
-    deleteEmptyArray( self->tags );
     deleteEmptyArray( self->values );
     deleteEmptyArray( self->items );
     return self;
@@ -99,23 +95,19 @@ void BmBench_resizeCapacity( BmBench* self, uint newCapacity )
     // Allocate new memory
     uint start= (newCapacity-self->size)/2;
     BmCode ** newItems= newEmptyArray( BmCode*, newCapacity );
-    uint* newTags= newEmptyArray( uint, newCapacity );
     double* newValues= newEmptyArray( double, newCapacity );
 
     // Copy
     for( uint i = 1 ; i <= self->size ; ++i )
     {
         array_at_set( newItems, start+i, array_at( self->items, self->start+i ) );
-        array_at_set( newTags, start+i, array_at( self->tags, self->start+i ) );
         array_at_set( newValues, start+i, array_at( self->values, self->start+i ) );
     }
     
     // Update the structure:
     deleteEmptyArray( self->items );
-    deleteEmptyArray( self->tags );
     deleteEmptyArray( self->values );
     self->items= newItems;
-    self->tags= newTags;
     self->values= newValues;
     self->capacity= newCapacity;
     self->start= start;
@@ -127,17 +119,12 @@ uint BmBench_size(BmBench* self)
     return self->size;
 }
 
-BmCode* BmBench_at( BmBench* self, uint i )
+BmCode* BmBench_at_code( BmBench* self, uint i )
 {
     return array_at( self->items, self->start+i );
 }
 
-uint BmBench_tagAt( BmBench* self, uint i )
-{
-    return array_at( self->tags, self->start+i );
-}
-
-double BmBench_valueAt( BmBench* self, uint i )
+double BmBench_at_value( BmBench* self, uint i )
 {
     return array_at( self->values, self->start+i );
 }
@@ -147,10 +134,10 @@ double BmBench_valueAt( BmBench* self, uint i )
 /* Construction Item */
 uint BmBench_attach( BmBench* self, BmCode* newItem )
 {
-    return BmBench_attachLast( self, newItem, 0, 0.0 );
+    return BmBench_attachLast( self, newItem, 0.0 );
 }
 
-uint BmBench_attachLast( BmBench* self, BmCode* newItem, uint tag, double value )
+uint BmBench_attachLast( BmBench* self, BmCode* newItem, double value )
 {
     uint id= self->start+self->size+1;
     if( id >= self->capacity )
@@ -160,7 +147,6 @@ uint BmBench_attachLast( BmBench* self, BmCode* newItem, uint tag, double value 
     }
 
     array_at_set( self->items, id, newItem );
-    array_at_set( self->tags, id, tag );
     array_at_set( self->values, id, value );
 
     self->size+= 1;
@@ -175,14 +161,13 @@ BmCode* BmBench_detachLast( BmBench* self )
     return array_at( self->items, id );
 }
 
-uint BmBench_attachFirst( BmBench* self, BmCode* newItem, uint tag, double value )
+uint BmBench_attachFirst( BmBench* self, BmCode* newItem, double value )
 {
     if( self->start == 0 )
     {
         BmBench_resizeCapacity( self, (self->size*2)+2);
     }
     array_at_set( self->items, self->start, newItem );
-    array_at_set( self->tags, self->start, tag );
     array_at_set( self->values, self->start, value );
 
     self->start= self->start-1;
@@ -199,13 +184,7 @@ BmCode* BmBench_detachFirst( BmBench* self )
     return array_at( self->items, id );
 }
 
-BmCode* BmBench_at_tag( BmBench* self, uint i, uint tagValue )
-{
-    array_at_set( self->tags, self->start+i, tagValue );
-    return array_at( self->items, self->start+i );
-}
-
-BmCode* BmBench_at_value( BmBench* self, uint i, double value )
+BmCode* BmBench_at_setValue( BmBench* self, uint i, double value )
 {
     array_at_set( self->values, self->start+i, value );
     return array_at( self->items, self->start+i );
@@ -218,7 +197,6 @@ void BmBench_switch( BmBench* self, BmBench* doppleganger)
     uint start     = self->start;
     uint size      = self->size;
     BmCode** items = self->items;
-    uint* tags     = self->tags;
     double* values = self->values;
     
     // Self:
@@ -226,7 +204,6 @@ void BmBench_switch( BmBench* self, BmBench* doppleganger)
     self->start    = doppleganger->start;
     self->size     = doppleganger->size;
     self->items    = doppleganger->items;
-    self->tags     = doppleganger->tags;
     self->values   = doppleganger->values;
     
     // Dopple:
@@ -234,7 +211,6 @@ void BmBench_switch( BmBench* self, BmBench* doppleganger)
     doppleganger->start    = start;
     doppleganger->size     = size;
     doppleganger->items    = items;
-    doppleganger->tags     = tags;
     doppleganger->values   = values;
 }
 
@@ -244,13 +220,12 @@ void BmBench_add_reducted( BmBench *self, BmBench *another, BmCode* mask )
     BmCode* state= newBmCode_all( dim, 0 );
     for( uint iCode = 1 ; iCode <= BmBench_size(another) ; ++iCode  )
     {
-        BmCode* model= BmBench_at( another, iCode );
+        BmCode* model= BmBench_at_code( another, iCode );
         for( uint i= 1 ; i <= dim ; ++i )
         {
             BmCode_at_set( state, i, BmCode_at(model, BmCode_at( mask, i) ) );
         }
-        BmBench_attachLast( self, newBmCodeAs(state),
-            BmBench_tagAt( another, iCode), BmBench_valueAt( another, iCode)
+        BmBench_attachLast( self, newBmCodeAs(state), BmBench_at_value( another, iCode)
         );
     }
     deleteBmCode( state );
@@ -282,17 +257,14 @@ uint BmBench_switchCodes( BmBench* self, uint i1, uint i2 )
 
     // Local:
     BmCode* tmp= array_at(self->items, id2);
-    uint tag= array_at(self->tags, id2);
     double val= array_at(self->values, id2);
 
     // id2:
     array_at_set( self->items, id2, array_at( self->items, id1 ) );
-    array_at_set( self->tags, id2, array_at( self->tags, id1 ) );
     array_at_set( self->values, id2, array_at( self->values, id1 ) );
 
     // id1:
     array_at_set( self->items, id1, tmp );
-    array_at_set( self->tags, id1, tag );
     array_at_set( self->values, id1, val );
     
     return 1;
@@ -301,55 +273,32 @@ uint BmBench_switchCodes( BmBench* self, uint i1, uint i2 )
 /* Comparison */
 bool BmBench_isGreater(BmBench* self, uint i1, uint i2)
 {
-    return BmCode_isGreaterThan( BmBench_at(self, i1), BmBench_at(self, i2) );
+    return BmCode_isGreaterThan( BmBench_at_code(self, i1), BmBench_at_code(self, i2) );
 }
 
 bool BmBench_isSmaller(BmBench* self, uint i1, uint i2)
 {
-    return BmCode_isSmallerThan( BmBench_at(self, i1), BmBench_at(self, i2) );
-}
-
-bool BmBench_isGreaterTag(BmBench* self, uint i1, uint i2)
-{
-    return BmBench_tagAt(self, i1) > BmBench_tagAt(self, i2);
-}
-
-bool BmBench_isSmallerTag(BmBench* self, uint i1, uint i2)
-{
-    return BmBench_tagAt(self, i1) < BmBench_tagAt(self, i2);
+    return BmCode_isSmallerThan( BmBench_at_code(self, i1), BmBench_at_code(self, i2) );
 }
 
 bool BmBench_isGreaterValue(BmBench* self, uint i1, uint i2)
 {
-    return BmBench_valueAt(self, i1) > BmBench_valueAt(self, i2);
+    return BmBench_at_value(self, i1) > BmBench_at_value(self, i2);
 }
 
 bool BmBench_isSmallerValue(BmBench* self, uint i1, uint i2)
 {
-    return BmBench_valueAt(self, i1) < BmBench_valueAt(self, i2);
+    return BmBench_at_value(self, i1) < BmBench_at_value(self, i2);
 }
 
 
 /* Printing */
-char* BmBench_printItem(BmBench* self, uint iItem, char* output)
-{
-    BmCode_print( BmBench_at(self, iItem), output);
-    strcat(output, ":");
-    char buffer[16]= "";
-    sprintf( buffer, "%u", BmBench_tagAt(self, iItem) );
-    strcat( output, buffer );
-    strcat(output, ":");
-    sprintf( buffer, "%.2f", BmBench_valueAt(self, iItem) );
-    strcat( output, buffer );
-    return output;
-}
-
-char* _BmBench_printItemValue(BmBench* self, uint iItem, char* output)
+char* _BmBench_printItem(BmBench* self, uint iItem, char* output)
 {
     char buffer[16]= "";
-    BmCode_print( BmBench_at(self, iItem), output);
+    BmCode_print( BmBench_at_code(self, iItem), output);
     strcat(output, ":");
-    sprintf( buffer, "%.2f", BmBench_valueAt(self, iItem) );
+    sprintf( buffer, "%.2f", BmBench_at_value(self, iItem) );
     strcat( output, buffer );
     return output;
 }
@@ -359,34 +308,23 @@ char* _BmBench_printNode(BmBench* self, uint iItem, char* output)
     char buffer[16]= "";
     sprintf( buffer, "%u", iItem );
     strcat( output, buffer );
-    BmCode_print( BmBench_at(self, iItem), output);
+    BmCode_print( BmBench_at_code(self, iItem), output);
     return output;
 }
 
-
-char* _BmBench_printItemTag(BmBench* self, uint iItem, char* output)
-{
-    char buffer[16]= "";
-    BmCode_print( BmBench_at(self, iItem), output);
-    strcat(output, ":");
-    sprintf( buffer, "%u", BmBench_tagAt(self, iItem) );
-    strcat( output, buffer );
-    return output;
-}
-
-char* BmBench_printValues(BmBench* self, char* output)
+char* BmBench_print(BmBench* self, char* output)
 {
     strcat(output, "{");
 
     if( self->size > 0 )
     {
-        _BmBench_printItemValue( self, 1, output );
+        _BmBench_printItem( self, 1, output );
     }
 
     for( uint i= 2 ; i <= self->size ; ++i)
     {
         strcat(output, ", ");
-        _BmBench_printItemValue( self, i, output );
+        _BmBench_printItem( self, i, output );
     }
 
     strcat(output, "}");
@@ -409,59 +347,19 @@ char* BmBench_printNetwork(BmBench* self, char* output)
     return output;
 }
 
-char* BmBench_printTags(BmBench* self, char* output)
-{
-    strcat(output, "{");
-
-    if( self->size > 0 )
-    {
-        _BmBench_printItemTag( self, 1, output );
-    }
-
-    for( uint i= 2 ; i <= self->size ; ++i)
-    {
-        strcat(output, ", ");
-        _BmBench_printItemTag( self, i, output );
-    }
-
-    strcat(output, "}");
-
-    return output;
-}
-
-char* BmBench_print(BmBench* self, char* output)
-{
-    strcat(output, "{");
-
-    if( self->size > 0 )
-    {
-        BmBench_printItem( self, 1, output );
-    }
-
-    for( uint i= 2 ; i <= self->size ; ++i)
-    {
-        strcat(output, ", ");
-        BmBench_printItem( self, i, output );
-    }
-
-    strcat(output, "}");
-
-    return output;
-}
-
 char* BmBench_printCodes(BmBench* self, char* output)
 {
     strcat(output, "{");
 
     if( self->size > 0 )
     {
-        BmCode_print( BmBench_at(self, 1), output);
+        BmCode_print( BmBench_at_code(self, 1), output);
     }
 
     for( uint i= 2 ; i <= self->size ; ++i)
     {
         strcat(output, ", ");
-        BmCode_print( BmBench_at(self, i), output);
+        BmCode_print( BmBench_at_code(self, i), output);
     }
 
     strcat(output, "}");

@@ -20,7 +20,7 @@ BmCondition* newBmConditionWith(uint domainSize, BmCode* newParentRanges, BmBenc
 BmCondition* BmCondition_createBasic( BmCondition* self, uint outputSize )
 {
     BmBench* distrib = newBmBench( 1 );
-    BmBench_attachLast( distrib, newBmCode_list(1, 1), 0, 1.0 );
+    BmBench_attachLast( distrib, newBmCode_list(1, 1), 1.0 );
     return BmCondition_createWith( self, outputSize,
         newBmCode_all(1, 1), distrib );
 }
@@ -172,7 +172,7 @@ BmBench* BmCondition_newDistributionByInfering_mask( BmCondition* self, BmBench*
 {
     // Create new structure:
     uint selfDim= BmCode_dimention(self->parentRanges);
-    uint longDim= BmCode_dimention( BmBench_at(longDistrib, 1) );
+    uint longDim= BmCode_dimention( BmBench_at_code(longDistrib, 1) );
     BmBench* newDistrib= newBmBench( self->outputSize * BmBench_size(longDistrib) );
 
     // foreach configuration in the distribution:
@@ -181,9 +181,9 @@ BmBench* BmCondition_newDistributionByInfering_mask( BmCondition* self, BmBench*
     for( uint iCondition= 1 ; iCondition <= numberOfCondition ; ++iCondition )
     {
         BmCode* newConfig= newBmCode_all( longDim+1, 0 );
-        BmCode* cond= BmBench_at( longDistrib, iCondition);
+        BmCode* cond= BmBench_at_code( longDistrib, iCondition);
         BmCode_copyNumbers( newConfig, cond );
-        double probability= BmBench_valueAt( longDistrib, iCondition);
+        double probability= BmBench_at_value( longDistrib, iCondition);
 
         // get the parents' configuration:
         for( uint j= 1 ; j <= selfDim ; ++j )
@@ -198,11 +198,11 @@ BmBench* BmCondition_newDistributionByInfering_mask( BmCondition* self, BmBench*
         {
             BmCode_at_set(
                 newConfig, BmCode_dimention(newConfig),
-                BmCode_at( BmBench_at( outputDistrib, iOutput), 1 )
+                BmCode_at( BmBench_at_code( outputDistrib, iOutput), 1 )
             );
             BmBench_attachLast(
-                newDistrib, newBmCodeAs(newConfig), 0,
-                probability * BmBench_valueAt( outputDistrib, iOutput)
+                newDistrib, newBmCodeAs(newConfig),
+                probability * BmBench_at_value( outputDistrib, iOutput)
             );
         }
         deleteBmCode( newConfig );
@@ -240,13 +240,14 @@ void BmCondition_switch(BmCondition* self, BmCondition* doppelganger)
 }
 
 /* Printing */
-char* _BmCondition_printCode_withDistribution(BmCondition* self, BmCode* code, uint iDistrib, char* output)
+char* _BmCondition_printCode_withDistribution(BmCondition* self, BmCode* code, char* output)
 {
+    uint iDistrib= BmCode_at( code, BmCode_dimention(code) );
     uint inputSize= BmCode_dimention( self->parentRanges );
     
     // Security:
-    assert( BmCode_dimention(code) == inputSize );
-
+    assert( BmCode_dimention(code) == inputSize+1 );
+    
     char tmp[64];
     strcat(output, "[");
 
@@ -264,7 +265,7 @@ char* _BmCondition_printCode_withDistribution(BmCondition* self, BmCode* code, u
     }
 
     strcat(output, "]: " );
-    BmBench_printValues( array_at(self->distributions, iDistrib ), output );
+    BmBench_print( array_at(self->distributions, iDistrib ), output );
 
     return output;
 }
@@ -283,21 +284,19 @@ char* BmCondition_printSep(BmCondition* self, char* output, char* separator)
 
     if( BmBench_size(collec) == 0 )
     {
-        uint iItem= BmBench_attach(
-            collec, newBmCode_all( BmCode_dimention( self->parentRanges ), 0) );
-        BmBench_at_tag(collec, iItem, 1 );
+        BmBench_attach( collec, newBmCode_all( BmCode_dimention( self->parentRanges ), 0) );
     }
 
     // First or unique one: 
     _BmCondition_printCode_withDistribution(
-        self, BmBench_at( collec, 1 ), BmBench_tagAt( collec, 1 ), output );
+        self, BmBench_at_code( collec, 1 ), output );
 
     // All the others: 
     for( uint i = 2 ; i <= BmBench_size(collec) ; ++i )
     {
         strcat( output, separator );
         _BmCondition_printCode_withDistribution(
-            self, BmBench_at( collec, i ), BmBench_tagAt( collec, i ), output );
+            self, BmBench_at_code( collec, i ), output );
     }
     strcat(output, "}");
     return output;
@@ -318,7 +317,7 @@ char* BmCondition_printExtendSep(BmCondition* self, char* output, char* separato
         BmCode* config= BmCode_newBmCodeFirst( self->parentRanges );
         BmCode_print( config, output );
         strcat(output, ": ");
-        BmBench_printValues( BmCondition_at(self, config), output );
+        BmBench_print( BmCondition_at(self, config), output );
         BmCode_nextCode( self->parentRanges, config );
 
         while( BmCode_isIncluding( self->parentRanges, config ) )
@@ -326,7 +325,7 @@ char* BmCondition_printExtendSep(BmCondition* self, char* output, char* separato
             strcat(output, separator);
             BmCode_print( config, output );
             strcat(output, ": ");
-            BmBench_printValues( BmCondition_at(self, config), output );
+            BmBench_print( BmCondition_at(self, config), output );
             BmCode_nextCode( self->parentRanges, config );
         }
 
