@@ -328,6 +328,7 @@ uint BmTree_tagAt( BmTree* self, BmCode* code)
 
 double BmTree_valueAt( BmTree* self, BmCode* code)
 {
+    assert( BmCode_isIncluding( self->space, code ) );
     return array_at( self->optionValues, BmTree_at( self, code ) );
 }
 

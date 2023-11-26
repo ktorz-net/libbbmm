@@ -45,25 +45,25 @@ START_TEST(test_BmGauge_construction)
 
     BmCode* code= newBmCode_list(4, 0, 1, 0, 4 );
     BmGauge_at_setOptionId( crit, code, 2 );
-    BmCode_initialize_list( code, 4, 1, 1, 2, 0 );    
+    BmCode_reinit_list( code, 4, 1, 1, 2, 0 );    
     BmGauge_at_setOptionId( crit, code, 3 );
 
-    BmCode_initialize_list( code, 4, 1, 1, 1, 1 );    
+    BmCode_reinit_list( code, 4, 1, 1, 1, 1 );    
     ck_assert_double_eq( BmGauge_at( crit, code ), 1.1 );
 
-    BmCode_initialize_list( code, 4, 1, 1, 1, 4 );    
+    BmCode_reinit_list( code, 4, 1, 1, 1, 4 );    
     ck_assert_double_eq( BmGauge_at( crit, code ), 2.2 );
 
-    BmCode_initialize_list( code, 4, 2, 1, 3, 4 );    
+    BmCode_reinit_list( code, 4, 2, 1, 3, 4 );    
     ck_assert_double_eq( BmGauge_at( crit, code ), 2.2 );
 
-    BmCode_initialize_list( code, 4, 1, 1, 2, 8 );    
+    BmCode_reinit_list( code, 4, 1, 1, 2, 8 );    
     ck_assert_double_eq( BmGauge_at( crit, code ), 3.3 );
 
-    BmCode_initialize_list( code, 4, 1, 1, 2, 4 );    
+    BmCode_reinit_list( code, 4, 1, 1, 2, 4 );    
     ck_assert_double_eq( BmGauge_at( crit, code ), 3.3 );
 
-    BmCode_initialize_list( code, 4, 1, 2, 2, 7 );    
+    BmCode_reinit_list( code, 4, 1, 2, 2, 7 );    
     ck_assert_double_eq( BmGauge_at( crit, code ), 1.1 );
     
     deleteBmCode( code );

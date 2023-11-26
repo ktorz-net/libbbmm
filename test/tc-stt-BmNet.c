@@ -13,9 +13,9 @@ START_TEST(test_BmNet_init)
 
     BmCode* dep= newBmCode_list(2, 1, 2);
     BmNet_at_connect(net, 1, dep);
-    BmNet_at_connect(net, 2, BmCode_initialize_list(dep, 3, 2, 3, 4));
-    BmNet_at_connect(net, 3, BmCode_initialize_list(dep, 1, 2));
-    BmNet_at_connect(net, 4, BmCode_initialize_list(dep, 1, 3));
+    BmNet_at_connect(net, 2, BmCode_reinit_list(dep, 3, 2, 3, 4));
+    BmNet_at_connect(net, 3, BmCode_reinit_list(dep, 1, 2));
+    BmNet_at_connect(net, 4, BmCode_reinit_list(dep, 1, 3));
     
     ck_assert_str_eq( BmNet_wording(net), "1[1, 2], 2[2, 3, 4], 3[2], 4[3]" );
 

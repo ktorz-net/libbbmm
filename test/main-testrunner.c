@@ -21,7 +21,7 @@ Suite * bbmm_mdl_test_suite(void)
 
     suite_add_tcase( s, test_case_BmCondition() );
     suite_add_tcase( s, test_case_BmTransition() );
-    //suite_add_tcase( s, test_case_BmReward() );
+    suite_add_tcase( s, test_case_BmEvaluator() );
 
     return s;
 }

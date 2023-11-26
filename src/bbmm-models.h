@@ -156,9 +156,52 @@ char* BmTransition_printDependency(BmTransition* self, char* output); // print `
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *
  * Define a multi-critera Value function
- * (code -> value vector dot weight -> value)
+ * (input -> value vector \times weight -> value)
  * 
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+typedef struct {
+  BmCode* space;
+  uint criteriaSize;
+  BmTree ** criteria;
+  BmCode ** masks;
+  BmVector* weights;
+} BmEvaluator ;
+
+/* Constructor*/
+BmEvaluator* newBmEvaluatorBasic( uint spaceDimention, uint numberOfCriteria );
+BmEvaluator* newBmEvaluatorWith( BmCode* newSpace, uint numberOfCriteria );
+
+BmEvaluator* BmEvaluator_createWith( BmEvaluator* self, BmCode* newSpace, uint numberOfCriteria );
+
+/* Destructor */
+void deleteBmEvaluator( BmEvaluator* self );
+BmEvaluator* BmEvaluator_destroy( BmEvaluator* self);
+
+/* Accessor */
+BmCode* BmEvaluator_space( BmEvaluator* self );
+uint BmEvaluator_numberOfCriteria( BmEvaluator* self );
+BmTree* BmEvaluator_crit( BmEvaluator* self, uint iCritirion );
+BmVector* BmEvaluator_weights( BmEvaluator* self );
+double BmEvaluator_crit_weight( BmEvaluator* self, uint iCritirion );
+
+/* Process */
+double BmEvaluator_process( BmEvaluator* self, BmCode* input );
+double BmEvaluator_processState_action(BmEvaluator* self, BmCode* state, BmCode* action);
+double BmEvaluator_processState_action_state(BmEvaluator* self, BmCode* state, BmCode* action, BmCode* statePrime);
+
+double BmEvaluator_crit_process( BmEvaluator* self, uint iCriterion, BmCode* input );
+
+/* Construction */
+BmEvaluator* BmEvaluator_reinitCriterion( BmEvaluator* self, uint numberOfCriterion );
+BmTree* BmEvaluator_crit_reinitWith( BmEvaluator* self, uint index, BmCode* newDependenceMask, uint numberOfOptions, double defaultValue );
+void BmEvaluator_crit_setWeight( BmEvaluator* self, uint iCritirion, double weight );
+
+/* Infering */
+
+
+/* Printing */
+
 
 
 

@@ -133,17 +133,22 @@ double BmVector_product( BmVector* self )
 /* Printing */
 char* BmVector_print( BmVector* self, char* buffer)
 {
+    return BmVector_format_print( self, "%.2f", buffer );
+}
+
+char* BmVector_format_print( BmVector* self, char* format, char* buffer)
+{
     char tmp[64];
     strcat(buffer, "[");
 
     if( BmVector_size(self) > 0 )
     {
-        sprintf( tmp, "%f", BmVector_at(self, 1) );
+        sprintf( tmp, format, BmVector_at(self, 1) );
         strcat(buffer, tmp );
         
         for( uint i= 2 ; i <= BmVector_size(self) ; ++i)
         {
-            sprintf( tmp, "%f", BmVector_at(self, i) );
+            sprintf( tmp, format, BmVector_at(self, i) );
             strcat(buffer, ", ");
             strcat(buffer, tmp );
         }

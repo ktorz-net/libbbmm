@@ -1,5 +1,12 @@
 # version trace...
 
+## v0.21
+
+* BbMm Solver - Solvers..
+       - BmValueIt      : ...
+       - BmPolicyIt     : ...
+* 421 test case.
+
 ## v0.20
 
 Restructure: 
@@ -11,8 +18,8 @@ Restructure:
        - BmVector       : a fixed size list of values (doubles)
 * BbMm Model - Bayesian-based Markov-models
        - BmCondition    : Define a Bayesian Node (conditional probabilities over variable affectations)
-       - BmTransition   : Define a Dynamic Bayesian Network composed of state, action and tramsitional nodes 
-       - BmReward       : a composed value function over multiple Gauges
+       - BmInferencor   : Define a Bayesian Network (potentially Dynamic) composed of Input, Output and Shift node. 
+       - BmEvaluator    : a composed value function over multiple Gauges
 * BbMm Solver - Solvers..
        - BmValueIt      : ...
        - BmPolicyIt     : ...

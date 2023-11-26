@@ -355,6 +355,7 @@ double BmVector_product( BmVector* self );
 
 /* Printing */
 char* BmVector_print( BmVector* self, char* output );
+char* BmVector_format_print( BmVector* self, char* format, char* buffer);
 
 
 #endif
