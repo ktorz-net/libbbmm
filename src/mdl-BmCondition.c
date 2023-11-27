@@ -284,7 +284,8 @@ char* BmCondition_printSep(BmCondition* self, char* output, char* separator)
 
     if( BmBench_size(collec) == 0 )
     {
-        BmBench_attach( collec, newBmCode_all( BmCode_dimention( self->parentRanges ), 0) );
+        strcat(output, "}");
+        return output;
     }
 
     // First or unique one: 

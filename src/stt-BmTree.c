@@ -359,14 +359,14 @@ uint BmTree_deepOf( BmTree* self, BmCode* code )
 BmBench* BmTree_asNewBench( BmTree* self )
 {
     BmBench* bench= newBmBench( self->size*2 );
-    BmCode *conditions[self->size];
-
     uint codeSize= BmCode_dimention(self->space)+1;
+
+    // Process the tree:
+    BmCode *conditions[self->size];
     for( uint iBranch= 0; iBranch < self->size; ++iBranch )
     {
         conditions[iBranch]= newBmCode_all( codeSize, 0);
     }
-
     for( uint iBranch= 0 ; iBranch < self->size ; ++iBranch )
     {
         uint branVar= BmTree_branchVariable(self, iBranch);
@@ -378,7 +378,8 @@ BmBench* BmTree_asNewBench( BmTree* self )
             {
                 BmCode_at_set( conditions[iBranch], branVar, i );
                 BmCode_at_set( conditions[iBranch], codeSize, output );
-                BmBench_attachLast( bench, newBmCodeAs( conditions[iBranch] ), self->optionValues[output] );
+                BmBench_attachLast(
+                    bench, newBmCodeAs( conditions[iBranch] ), array_at(self->optionValues, output) );
             }
             else
             {
@@ -391,6 +392,15 @@ BmBench* BmTree_asNewBench( BmTree* self )
     {
         deleteBmCode( conditions[i] );
     }
+
+    // Empty tree:
+    if( BmBench_size(bench) == 0 )
+    {
+        BmCode* zeroConf= newBmCode_all( codeSize, 0 );
+        BmCode_at_set( zeroConf, codeSize, 1 );
+        BmBench_attachLast( bench, zeroConf, array_at(self->optionValues, 1) );
+    }
+
     BmBench_sort( bench, (fctptr_BmBench_compare)BmBench_isGreater );
     return bench;
 }

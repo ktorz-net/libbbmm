@@ -149,6 +149,9 @@ START_TEST(test_BmCondition_defaultDistrib)
     "{[1]:0.30, [2]:0.10, [3]:0.30, [5]:0.30}"
     );
 
+    ck_assert_uint_eq( BmCode_dimention( instance->selector->space ), 2 );
+    ck_assert_uint_eq( BmCode_dimention( instance->parentRanges ), 2 );
+    
     strcpy(buffer, "");
     BmCondition_print( instance, buffer );
     ck_assert_str_eq(
