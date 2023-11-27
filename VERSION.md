@@ -38,7 +38,7 @@ Restructure:
 * BbMm Probability - A library in KISS philosophy of *Bayesian-based Markov-models* probability manipulation.
        - BmDistribution : Define a distribution of probabilities over configuration (codes)
        - BmCondition    : Define a Bayesian Node (conditional probabilities over variable affectations)
-       - BmTransition   : Define a Dynamic Bayesian Network composed of state, action and tramsitional nodes 
+       - BmInferer   : Define a Dynamic Bayesian Network composed of state, action and tramsitional nodes 
 * BbMm Evaluation - A library in KISS philosophy of *Bayesian-based Markov-models* values manipulation.
        - BmVector       : a fixed size collection of values.
        - BmGauge        : a distribution of values over configuration (codes)

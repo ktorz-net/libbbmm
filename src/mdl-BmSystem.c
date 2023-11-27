@@ -50,7 +50,7 @@ BmSystem* BmSystem_createEmpty( BmSystem* self, uint dimState, uint dimAction, u
     BmCode* actionCode= newBmCode_all(dimAction, 1);
     BmCode* shiftCode= newBmCode_all(dimShift, 1);
 
-    self->transition= newBmTransitionWithShift( stateCode, actionCode, shiftCode );
+    self->transition= newBmInfererWithShift( stateCode, actionCode, shiftCode );
     //WdValueFct *reward;
 
     deleteBmCode(stateCode);
@@ -98,7 +98,7 @@ BmSystem* BmSystem_create( BmSystem* self, uint dimState, BmDomain ** stateDoms,
     BmCode* actionCode= BmSpace_asNewBmCode(self->state);
     BmCode* shiftCode= BmSpace_asNewBmCode(self->state);
 
-    self->transition= newBmTransitionWithShift( stateCode, actionCode, shiftCode );
+    self->transition= newBmInfererWithShift( stateCode, actionCode, shiftCode );
     //WdValueFct *reward;
 
     for( uint i = 0 ; i < dimState ; ++i )
@@ -151,7 +151,7 @@ BmSystem* BmSystem_destroy( BmSystem* self )
         free( array_at(self->futureName, i) );
     free( self->futureName );
 
-    deleteBmTransition( self->transition );
+    deleteBmInferer( self->transition );
     deleteBmSpace( self->state );
     deleteBmSpace( self->action );
     deleteBmSpace( self->shift );
@@ -172,8 +172,8 @@ uint BmSystem_attachStateVariable( BmSystem* self, char * name, BmDomain* domain
 
     // Create the variable
     BmSpace_attachVariable( self->state, iVar, name, domain );
-    BmTransition_node_initialize( self->transition, BmTransition_indexOfStateVariableT0( self->transition, iVar), BmDomain_size(domain) );
-    BmTransition_node_initialize( self->transition, BmTransition_indexOfStateVariableT1( self->transition, iVar), BmDomain_size(domain) );
+    BmInferer_node_initialize( self->transition, BmInferer_indexOfStateVariableT0( self->transition, iVar), BmDomain_size(domain) );
+    BmInferer_node_initialize( self->transition, BmInferer_indexOfStateVariableT1( self->transition, iVar), BmDomain_size(domain) );
 
     // record future name:
     free( array_at( self->futureName, iVar ) );
@@ -196,7 +196,7 @@ uint  BmSystem_attachActionVariable( BmSystem* self, char * name, BmDomain* doma
 
     // Create the variable
     BmSpace_attachVariable( self->action, iVar, name, domain );
-    BmTransition_node_initialize( self->transition, BmTransition_indexOfActionVariable( self->transition, iVar), BmDomain_size(domain) );
+    BmInferer_node_initialize( self->transition, BmInferer_indexOfActionVariable( self->transition, iVar), BmDomain_size(domain) );
 
     return iVar;
 }
@@ -213,7 +213,7 @@ uint  BmSystem_attachShiftVariable( BmSystem* self, char * name, BmDomain* domai
 
     // Create the variable
     BmSpace_attachVariable( self->shift, iVar, name, domain );
-    BmTransition_node_initialize( self->transition, BmTransition_indexOfShiftVariable( self->transition, iVar), BmDomain_size(domain) );
+    BmInferer_node_initialize( self->transition, BmInferer_indexOfShiftVariable( self->transition, iVar), BmDomain_size(domain) );
 
     return iVar;
 }
@@ -230,7 +230,7 @@ BmCode* BmSystem_variable_dependOnArray( BmSystem* self, char * varName, uint pa
         parentNodes[i]= BmSystem_variable_nodeId(self, parentNames[i]);
     }
 
-    BmTransition_node_dependArray( self->transition, iNode, parentSize, parentNodes );
+    BmInferer_node_dependArray( self->transition, iNode, parentSize, parentNodes );
     
     return BmBench_at_code(self->transition->network, iNode);
 }
@@ -282,7 +282,7 @@ BmSystem* BmSystem_variable_initializeProbabilities( BmSystem* self, char * varN
 
     // Initialize condition BmDistribution
     BmDistribution* distrib= BmSystem_nodeId_newBmDistribution(self, id, numberOfOutputs, outputs, probabilities );
-    BmCondition* c= BmTransition_nodeAt( self->transition, id );
+    BmCondition* c= BmInferer_nodeAt( self->transition, id );
     BmCondition_initialize( c, c->outputSize, c->parentRanges, distrib );
     deleteBmDistribution( distrib );
 
@@ -295,7 +295,7 @@ BmSystem* BmSystem_variable_addProbabilities( BmSystem* self, char * varName, ui
     uint id= BmSystem_variable_nodeId(self, varName);
 
     // Generate parent state:
-    BmCondition* condition= BmTransition_nodeAt( self->transition, id );
+    BmCondition* condition= BmInferer_nodeAt( self->transition, id );
     BmCode* config= newBmCode_all( BmCondition_dimention(condition), 0);
     BmCode* configOrder= newBmCode_all( BmCondition_dimention(condition), 0);
 
@@ -327,7 +327,7 @@ BmSystem* BmSystem_variable_addProbabilities( BmSystem* self, char * varName, ui
 
     // Add condition BmDistribution
     BmDistribution* distrib= BmSystem_nodeId_newBmDistribution(self, id, numberOfOutputs, outputs, probabilities );
-    BmCondition_at_readOrder_set( BmTransition_nodeAt( self->transition, id ), config, configOrder, distrib );
+    BmCondition_at_readOrder_set( BmInferer_nodeAt( self->transition, id ), config, configOrder, distrib );
 
     deleteBmDistribution( distrib );
     deleteBmCode(config);
@@ -364,7 +364,7 @@ BmSpace* BmSystem_shiftSpace(BmSystem* self)
     return self->shift;
 }
 
-BmTransition* BmSystem_transition(BmSystem* self)
+BmInferer* BmSystem_transition(BmSystem* self)
 {
     return self->transition;
 }
@@ -373,7 +373,7 @@ BmTransition* BmSystem_transition(BmSystem* self)
 BmCondition* BmSystem_variable(BmSystem* self, char * varName)
 {
     uint varId= BmSystem_variable_nodeId(self, varName);
-    return BmTransition_nodeAt( BmSystem_transition(self), varId );
+    return BmInferer_nodeAt( BmSystem_transition(self), varId );
 }
 
 uint BmSystem_variable_nodeId(BmSystem* self, char * varName)
@@ -424,9 +424,9 @@ uint BmSystem_nodeId_parentId(BmSystem* self, uint id, char* parent)
 
 char* BmSystem_nodeId_variableName(BmSystem* self, uint id)
 {
-    uint stateDim= BmTransition_stateDimention( self->transition );
-    uint actionDim= BmTransition_actionDimention( self->transition );
-    uint shiftDim= BmTransition_shiftDimention( self->transition );
+    uint stateDim= BmInferer_stateDimention( self->transition );
+    uint actionDim= BmInferer_actionDimention( self->transition );
+    uint shiftDim= BmInferer_shiftDimention( self->transition );
 
     // is a state variable
     if( id <= stateDim )
@@ -453,14 +453,14 @@ char* BmSystem_nodeId_variableName(BmSystem* self, uint id)
 
 uint BmSystem_nodeId_parentSize(BmSystem* self, uint id)
 {
-    return BmCode_dimention( BmTransition_dependanciesAt( self->transition, id) );
+    return BmCode_dimention( BmInferer_dependanciesAt( self->transition, id) );
 }
 
 BmDomain* BmSystem_nodeId_domain(BmSystem* self, uint id)
 {
-    uint stateDim= BmTransition_stateDimention( self->transition );
-    uint actionDim= BmTransition_actionDimention( self->transition );
-    uint shiftDim= BmTransition_shiftDimention( self->transition );
+    uint stateDim= BmInferer_stateDimention( self->transition );
+    uint actionDim= BmInferer_actionDimention( self->transition );
+    uint shiftDim= BmInferer_shiftDimention( self->transition );
 
     // is a state variable
     if( id <= stateDim )
@@ -504,21 +504,21 @@ char* BmSystem_nodeId_printIdentity( BmSystem* self, uint nodeId, char* output )
 
     sprintf( buffer, "%s.%u(",
         BmSystem_nodeId_variableName(self, nodeId), 
-        BmTransition_sizeAt( self->transition, nodeId ) );
+        BmInferer_sizeAt( self->transition, nodeId ) );
     strcat(output, buffer );
 
     if( BmCode_dimention(parents) > 0 )
     {
         sprintf( buffer, "%s.%u",
         BmSystem_nodeId_variableName(self, BmCode_at(parents, 1)), 
-        BmTransition_sizeAt( self->transition, BmCode_at(parents, 1) ) );
+        BmInferer_sizeAt( self->transition, BmCode_at(parents, 1) ) );
         strcat(output, buffer );
                 
         for( uint i= 2 ; i <= BmCode_dimention(parents) ; ++i)
         {
         sprintf( buffer, ", %s.%u",
         BmSystem_nodeId_variableName(self, BmCode_at(parents, i)), 
-        BmTransition_sizeAt( self->transition, BmCode_at(parents, i) ) );
+        BmInferer_sizeAt( self->transition, BmCode_at(parents, i) ) );
         strcat(output, buffer );
         }
     }
@@ -568,7 +568,7 @@ char* BmSystem_printVariable( BmSystem* self, char* varName, char* output )
     uint nodeId= BmSystem_variable_nodeId(self, varName);
     
     // get parents' spaces
-    BmCode* parents= BmTransition_dependanciesAt( self->transition, nodeId);
+    BmCode* parents= BmInferer_dependanciesAt( self->transition, nodeId);
     BmDomain* pDom[ BmCode_dimention(parents) ];
     for( uint i= 1; i <= BmCode_dimention(parents); ++i )
     {
@@ -578,7 +578,7 @@ char* BmSystem_printVariable( BmSystem* self, char* varName, char* output )
     BmSystem_nodeId_printIdentity(self, nodeId, output);
     strcat(output, ": {");
 
-    BmCondition* cdt= BmTransition_nodeAt( self->transition, nodeId );
+    BmCondition* cdt= BmInferer_nodeAt( self->transition, nodeId );
     BmBench* collec = BmTree_asNewBench( cdt->selector );
 
     if( BmBench_size(collec) == 0 )

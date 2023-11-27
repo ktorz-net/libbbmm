@@ -37,7 +37,7 @@ set(SRC_FILES
     src/stt-BmTree.c
     src/stt-BmVector.c
     src/mdl-BmCondition.c
-    src/mdl-BmTransition.c
+    src/mdl-BmInferer.c
     src/mdl-BmEvaluator.c
 )
 
@@ -63,7 +63,7 @@ set(TEST_SRC_FILES
     test/tc-stt-BmTree.c
     test/tc-stt-BmVector.c
     test/tc-mdl-BmCondition.c
-    test/tc-mdl-BmTransition.c
+    test/tc-mdl-BmInferer.c
     test/tc-mdl-BmEvaluator.c
 #    test/tc-cofeeRobot.c
     test/main-testrunner.c

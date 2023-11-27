@@ -66,7 +66,10 @@ typedef uint bool;
 #define array_at_set(instance, index, value) instance[index-1]= value
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   S T R U C T U R E :  C O D E                              *
+ *   B b M m   S T R U C T U R E :  C O D E                                *
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *
+ * 
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 typedef struct {
@@ -151,6 +154,9 @@ char* BmCode_print( BmCode* self, char* buffer);   // print `self` at the end of
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   S T R U C T U R E :  V E C T O R                            *
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *
+ * 
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 typedef struct {
@@ -193,6 +199,9 @@ char* BmVector_format_print( BmVector* self, char* format, char* buffer);
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   S T R U C T U R E :  B E N C H                              *
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *
+ * 
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 typedef struct {
@@ -261,10 +270,12 @@ char* BmBench_printNetwork(BmBench* self, char* output);
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   S T R U C T U R E :  T R E E                                *
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *
+ * Apply a tree structure to a Space for clustering states
+ * in a finit number of options.
+ * 
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
-/*
-  Apply a tree structure to a Space for clustering states in a finit number of options.
-*/
 
 typedef struct {
   BmCode* inputSpace;

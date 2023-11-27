@@ -4,8 +4,8 @@
  * 
  *   FEATURES:
  *       - BmCondition    : Define a Bayesian Node (conditional probabilities over variable affectations)
- *       - BmTransition   : Define a Dynamic Bayesian Network as P(state' | state, action) 
- *       - BmReward       : A value function over multiple criteria
+ *       - BmInferer      : Define a Dynamic Bayesian Network as P(state' | state, action) 
+ *       - BmEvaluator    : A value function over multiple criteria
  * 
  *   LICENSE: MIT License
  *
@@ -96,7 +96,7 @@ char* BmCondition_printIdentity( BmCondition* self, char* output ); // print `se
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   M O D E L  :  T R A N S I T I O N                           *
+ *   B b M m   M O D E L  :  I N F E R E R                                 *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *
  * Define a Bayesian Network composed of state, action and tramsitional nodes
@@ -104,50 +104,48 @@ char* BmCondition_printIdentity( BmCondition* self, char* output ); // print `se
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 typedef struct {
-  uint stateDimention, actionDimention, overallDimention;
+  uint inputDimention, outputDimention, overallDimention;
   BmBench* network;
   BmCondition* nodes;
-  BmBench* transition;
-} BmTransition;
+  BmBench* distribution;
+} BmInferer;
 
 /* Constructor*/
-BmTransition* newBmTransition( BmCode* state, BmCode* action );
-BmTransition* newBmTransitionShift( BmCode* state, BmCode* action, BmCode* shift );
+BmInferer* newBmInferer( BmCode* variableSpace, uint inputDimention, uint outputDimention );
+BmInferer* newBmInfererStateAction( BmCode* stateSpace, BmCode* actionSpace );
+BmInferer* newBmInfererStateActionShift( BmCode* stateSpace, BmCode* actionSpace, BmCode* shiftSpace );
 
-BmTransition* BmTransition_create(BmTransition* self, BmCode* state, BmCode* action, BmCode* shift );
+BmInferer* BmInferer_create( BmInferer* self, BmCode* varDomains, uint inputDimention, uint outputDimention );
 
 /* Destructor */
-BmTransition* BmTransition_destroy(BmTransition* self);
-void deleteBmTransition(BmTransition* self);
+BmInferer* BmInferer_destroy(BmInferer* self);
+void deleteBmInferer(BmInferer* self);
 
 /* Accessor */
-BmBench* BmTransition_distribution( BmTransition* self );
+BmBench* BmInferer_distribution( BmInferer* self );
 
-uint BmTransition_stateDimention( BmTransition* self );
-uint BmTransition_actionDimention( BmTransition* self );
-uint BmTransition_shiftDimention( BmTransition* self );
-uint BmTransition_overallDimention( BmTransition* self );
+uint BmInferer_inputDimention( BmInferer* self );
+uint BmInferer_outputDimention( BmInferer* self );
+uint BmInferer_shiftDimention( BmInferer* self );
+uint BmInferer_overallDimention( BmInferer* self );
 
-uint BmTransition_indexOfStateVariableT0( BmTransition* self, uint iVar );
-uint BmTransition_indexOfStateVariableT1( BmTransition* self, uint iVar );
-uint BmTransition_indexOfActionVariable( BmTransition* self, uint iVar );
-uint BmTransition_indexOfShiftVariable( BmTransition* self, uint iVar );
-
-BmCondition* BmTransition_nodeAt( BmTransition* self, uint iVar );
-uint BmTransition_sizeAt( BmTransition* self, uint iVar );
-BmCode* BmTransition_dependanciesAt( BmTransition* self, uint iVar );
+BmCondition* BmInferer_node( BmInferer* self, uint iNode );
+uint BmInferer_node_size( BmInferer* self, uint iVar );
+BmCode* BmInferer_node_parents( BmInferer* self, uint iVar );
 
 /* Construction */
-BmCondition* BmTransition_node_reinitWith( BmTransition* self, uint index, BmCode* newDependenceMask, BmBench* newDistrib );
+BmCondition* BmInferer_node_reinitIndependant( BmInferer* self, uint index );
+BmCondition* BmInferer_node_reinitWith( BmInferer* self, uint index, BmCode* newDependenceMask, BmBench* newDefaultDistrib );
 
-/* Infering */
-BmBench* BmTransition_newDistributionByInfering( BmTransition* self, BmBench* partialDistribution );
-BmBench* BmTransition_inferFromState_andAction( BmTransition* self, BmCode* state, BmCode* action );
+/* Process */
+BmBench* BmInferer_process( BmInferer* self, BmBench* inputDistribution );        // Return distribution over output varibales
+BmBench* BmInferer_process_newOverallDistribution( BmInferer* self, BmBench* inputDistribution ); // Return distribution over all variables
+BmBench* BmInferer_processState_Action( BmInferer* self, BmCode* state, BmCode* action ); // Return distribution over statePrime (output)
 
 /* Printing */
-char* BmTransition_print(BmTransition* self, char* output); // print `self` at the end of `output`
-char* BmTransition_printSignature(BmTransition* self, char* output); // print `self` at the end of `output`
-char* BmTransition_printDependency(BmTransition* self, char* output); // print `self` at the end of `output`
+char* BmInferer_print(BmInferer* self, char* output); // print `self` at the end of `output`
+char* BmInferer_printStateActionSignature(BmInferer* self, char* output); // print `self` at the end of `output`
+char* BmInferer_printDependency(BmInferer* self, char* output); // print `self` at the end of `output`
 
 
 

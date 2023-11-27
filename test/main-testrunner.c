@@ -20,7 +20,7 @@ Suite * bbmm_mdl_test_suite(void)
     Suite *s= suite_create("BbMm-model");
 
     suite_add_tcase( s, test_case_BmCondition() );
-    suite_add_tcase( s, test_case_BmTransition() );
+    suite_add_tcase( s, test_case_BmInferer() );
     suite_add_tcase( s, test_case_BmEvaluator() );
 
     return s;
