@@ -137,7 +137,7 @@ START_TEST(test_BmEvaluator_construction01)
     ck_assert_str_eq( buffer, "[1, 2]" );
 
     strcpy( buffer, "" );
-    BmCode_print( BmEvaluator_crit(eval, 1)->space, buffer );
+    BmCode_print( BmEvaluator_crit(eval, 1)->inputSpace, buffer );
     ck_assert_str_eq( buffer, "[10, 2]" );
 
     BmEvaluator_crit_reinitWith(
@@ -193,7 +193,7 @@ START_TEST(test_BmEvaluator_construction02)
         newBmCode_list(2, 1, 2),
         2, 0.0
     );
-    BmTree_option_set( crit, 2, 2, 1.1 );
+    BmTree_option_setValue( crit, 2, 1.1 );
     BmTree_at_set( crit, code, 2 );
 
     // Initialize Criterion 2:
@@ -202,7 +202,7 @@ START_TEST(test_BmEvaluator_construction02)
         newBmCode_list(1, 3),
         2, 0.0
     );
-    BmTree_option_set( crit, 2, 2, 1.0 );
+    BmTree_option_setValue( crit, 2, 1.0 );
     BmTree_at_set( crit, BmCode_reinit_list(code, 1, 3), 2 );
     BmEvaluator_crit_setWeight( eval, 2, 2.0 );
 
@@ -212,10 +212,10 @@ START_TEST(test_BmEvaluator_construction02)
         newBmCode_list(2, 2, 4),
         2, 0.0
     );
-    BmTree_option_set( crit, 2, 2, 1.0 );
+    BmTree_option_setValue( crit, 2, 1.0 );
     BmTree_at_set( crit, BmCode_reinit_list(code, 2, 2, 4), 2 );
     BmEvaluator_crit_setWeight( eval, 3, 3.0 );
-
+    
     // Tests:
     code= BmCode_reinit_list( code, 4, 11, 12, 13, 14 );
     BmCode* part= BmCode_newBmCodeMask( code, array_at( eval->masks, 1) );

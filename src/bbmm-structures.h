@@ -150,6 +150,48 @@ char* BmCode_print( BmCode* self, char* buffer);   // print `self` at the end of
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *   B b M m   S T R U C T U R E :  V E C T O R                            *
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+typedef struct {
+  uint size;
+  double * values;
+} BmVector;
+
+/* Constructor */
+BmVector* newBmVectorBasic( uint size );
+BmVector* newBmVector_values( uint size, double* values );
+BmVector* newBmVector_list( uint size, double val1, ... );
+BmVector* newBmVector_all( uint size, double value );
+
+BmVector* BmVector_createBasic( BmVector* self, uint size );
+BmVector* BmVector_create_values( BmVector* self, uint size, double* values );
+BmVector* BmVector_create_all( BmVector* self, uint size, double value );
+
+/* Destructor */
+BmVector* BmVector_destroy( BmVector* self );
+void deleteBmVector( BmVector* self );
+
+/* Re-Initialize */
+//BmVector* BmVector_resize(BmVector* self, uint size);
+
+/* Accessor */
+uint BmVector_dimention( BmVector* self );
+double BmVector_at( BmVector* self, uint i );
+
+/* Construction */
+double BmVector_at_set( BmVector* self, uint i, double value );
+
+/* Operation */
+double BmVector_sum( BmVector* self );
+double BmVector_product( BmVector* self );
+
+/* Printing */
+char* BmVector_print( BmVector* self, char* output );
+char* BmVector_format_print( BmVector* self, char* format, char* buffer);
+
+
+/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   S T R U C T U R E :  B E N C H                              *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
@@ -216,6 +258,7 @@ char* BmBench_print( BmBench* self, char* output); // print `self` at the end of
 char* BmBench_printCodes(BmBench* self, char* output);
 char* BmBench_printNetwork(BmBench* self, char* output);
 
+
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   S T R U C T U R E :  T R E E                                *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
@@ -224,12 +267,10 @@ char* BmBench_printNetwork(BmBench* self, char* output);
 */
 
 typedef struct {
-  BmCode* space;
-  uint optionBound;
-  uint capacity, size;
+  BmCode* inputSpace;
+  BmVector* outputValues;
+  uint bound, capacity, size;
   uint** branches;
-  uint * optionTags;
-  double * optionValues;
 } BmTree;
 
 /* Constructor */
@@ -247,9 +288,9 @@ BmTree* BmTree_reinitWhith_on( BmTree* self, uint index, int defaultOption);
 BmTree* BmTree_reinitOn( BmTree* self, int defaultOption );
 
 /* Accessor */
+uint BmTree_outputSize( BmTree* self );
 uint BmTree_at( BmTree* self, BmCode* code); // Return the option number of a code/state.
-uint BmTree_tagAt( BmTree* self, BmCode* code); // Return the tag of a code/state.
-double BmTree_valueAt( BmTree* self, BmCode* code); // Return the value of a code/state.
+double BmTree_at_value( BmTree* self, BmCode* code); // Return the value of a code/state.
 
 /* Branch Accessor */
 uint BmTree_branchSize( BmTree* self, uint branch ); // Return the number of
@@ -261,11 +302,10 @@ uint BmTree_deepOf( BmTree* self, BmCode* code); // Return the number of branch 
 void BmTree_reziseCapacity( BmTree* self, uint newCapacity );
 void BmTree_reziseCompleteCapacity( BmTree* self );
 
-void BmTree_option_set( BmTree* self, uint iOption, uint tag, double value ); // attach a tag and a value to a given option.
+void BmTree_option_setValue( BmTree* self, uint iOption, double value ); // attach a tag and a value to a given option.
 
 uint BmTree_at_set( BmTree* self, BmCode* code, uint output ); // set the ouput value of a code or a partial code (with 0), return the number of potential dead branches
 uint BmTree_at_readOrder_set( BmTree* self, BmCode* code, BmCode* codeOrder, uint output );
-
 
 /* Branch Accessor */
 uint BmTree_branchSize( BmTree* self, uint branch ); // Return the number of
@@ -294,47 +334,5 @@ char* BmTree_print_sep_options( BmTree* self, char* output, char* separator, cha
 char* BmTree_print( BmTree* self, char* output);
 
 char* BmTree_printInside( BmTree* self, char* output); // print `self` at the end of `output`
-
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   S T R U C T U R E :  V E C T O R                            *
- * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
-
-typedef struct {
-  uint size;
-  double * values;
-} BmVector;
-
-/* Constructor */
-BmVector* newBmVectorBasic( uint size );
-BmVector* newBmVector_values( uint size, double* values );
-BmVector* newBmVector_list( uint size, double val1, ... );
-BmVector* newBmVector_all( uint size, double* value );
-
-BmVector* BmVector_createBasic( BmVector* self, uint size );
-BmVector* BmVector_create_values( BmVector* self, uint size, double* values );
-BmVector* BmVector_create_all( BmVector* self, uint size, double value );
-
-/* Destructor */
-BmVector* BmVector_destroy( BmVector* self );
-void deleteBmVector( BmVector* self );
-
-/* Re-Initialize */
-//BmVector* BmVector_resize(BmVector* self, uint size);
-
-/* Accessor */
-uint BmVector_size( BmVector* self );
-double BmVector_at( BmVector* self, uint i );
-
-/* Construction */
-double BmVector_at_set( BmVector* self, uint i, double value );
-
-/* Operation */
-double BmVector_sum( BmVector* self );
-double BmVector_product( BmVector* self );
-
-/* Printing */
-char* BmVector_print( BmVector* self, char* output );
-char* BmVector_format_print( BmVector* self, char* format, char* buffer);
-
 
 #endif

@@ -133,7 +133,7 @@ double BmEvaluator_processState_action_state(BmEvaluator* self, BmCode* state, B
 double BmEvaluator_crit_process( BmEvaluator* self, uint iCriterion, BmCode* input )
 {
     BmCode* critCode= BmCode_newBmCodeMask( input, array_at( self->masks, iCriterion ) );
-    double value= BmTree_valueAt( array_at( self->criteria, iCriterion ) , critCode );
+    double value= BmTree_at_value( array_at( self->criteria, iCriterion ) , critCode );
     deleteBmCode( critCode );
     return value;
 }
@@ -159,7 +159,7 @@ BmTree* BmEvaluator_crit_reinitWith( BmEvaluator* self, uint iCrit, BmCode* newD
     );
     
     // feed the default option:
-    BmTree_option_set( criterion, 1, 1, defaultValue );
+    BmTree_option_setValue( criterion, 1, defaultValue );
 
     // record the mask:
     BmCode_destroy( array_at( self->masks, iCrit ) );

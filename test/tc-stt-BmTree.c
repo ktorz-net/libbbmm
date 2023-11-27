@@ -9,10 +9,10 @@ START_TEST(test_BmTree_init)
 {
     BmTree* tree= newBmTreeWith( newBmCode_list(3, 2, 3, 2), 4);
 
-    ck_assert_uint_eq( BmCode_dimention( tree->space ), (uint)3 );
+    ck_assert_uint_eq( BmCode_dimention( tree->inputSpace ), (uint)3 );
     ck_assert_uint_eq( tree->capacity, (uint)1 );
     ck_assert_uint_eq( tree->size, (uint)0 );
-    ck_assert_uint_eq( tree->optionBound, (uint)5 );
+    ck_assert_uint_eq( tree->bound, (uint)5 );
     
     {
         BmCode* config= newBmCode_list(3, 1, 1, 1);
@@ -30,11 +30,11 @@ START_TEST(test_BmTree_init)
     //    ck_assert_uint_eq( tree->branches[0][i], (uint)0 );
 
     BmCode* st= newBmCode(3);
-    BmCode_setCodeFirst(tree->space, st);
-    while( BmCode_isIncluding(tree->space, st) )
+    BmCode_setCodeFirst(tree->inputSpace, st);
+    while( BmCode_isIncluding(tree->inputSpace, st) )
     {
         ck_assert_uint_eq( BmTree_at(tree, st), (uint)1 );
-        BmCode_nextCode(tree->space, st);
+        BmCode_nextCode(tree->inputSpace, st);
     }
 
     deleteBmCode( st );
@@ -154,14 +154,14 @@ START_TEST(test_BmTree_optionSelection)
 }
 END_TEST
 
-START_TEST(test_BmTree_tagsNValues)
+START_TEST(test_BmTree_values)
 {
     BmTree* tree= newBmTreeWith( newBmCode_list( 3, 2, 3, 2), 4);
 
-    BmTree_option_set(tree, 1, 10, 1.1);
-    BmTree_option_set(tree, 2, 20, 2.1);
-    BmTree_option_set(tree, 3, 30, 3.1);
-    BmTree_option_set(tree, 4, 40, 4.1);
+    BmTree_option_setValue(tree, 1, 1.1);
+    BmTree_option_setValue(tree, 2, 2.1);
+    BmTree_option_setValue(tree, 3, 3.1);
+    BmTree_option_setValue(tree, 4, 4.1);
 
     uint root= BmTree_newBranch( tree, 2, 1 );
     uint b1=  BmTree_newBranch( tree, 1, 3 );
@@ -199,17 +199,16 @@ START_TEST(test_BmTree_tagsNValues)
 3. input(3): [leaf(1), leaf(3)]" );
 
     BmCode* st= newBmCode_list(3, 2, 1, 1);
-    ck_assert_uint_eq( BmTree_tagAt(tree, st), (uint)10 );
-    ck_assert_double_eq_tol( BmTree_valueAt(tree, st), 1.1, 0.00001 );
+    ck_assert_double_eq_tol( BmTree_at_value(tree, st), 1.1, 0.00001 );
     
     BmCode_reinit_list(st, 3, 1, 1, 1);
-    ck_assert_double_eq_tol( BmTree_valueAt(tree, st), 3.1, 0.00001 );
+    ck_assert_double_eq_tol( BmTree_at_value(tree, st), 3.1, 0.00001 );
     
     BmCode_reinit_list(st, 3, 1, 2, 2);
-    ck_assert_double_eq_tol( BmTree_valueAt(tree, st), 1.1, 0.00001 );
+    ck_assert_double_eq_tol( BmTree_at_value(tree, st), 1.1, 0.00001 );
     
     BmCode_reinit_list(st, 3, 1, 3, 2);
-    ck_assert_double_eq_tol( BmTree_valueAt(tree, st), 4.1, 0.00001 );
+    ck_assert_double_eq_tol( BmTree_at_value(tree, st), 4.1, 0.00001 );
 
     deleteBmCode( st );
     deleteBmTree( tree );
@@ -449,7 +448,7 @@ TCase * test_case_BmTree(void)
     tcase_add_test(tc, test_BmTree_init);
     tcase_add_test(tc, test_BmTree_treeConstruction);
     tcase_add_test(tc, test_BmTree_optionSelection);
-    tcase_add_test(tc, test_BmTree_tagsNValues);
+    tcase_add_test(tc, test_BmTree_values);
     tcase_add_test(tc, test_BmTree_constructionFromExemple);
     tcase_add_test(tc, test_BmTree_fromExempleFromScratch);
     tcase_add_test(tc, test_BmTree_print);
