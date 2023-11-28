@@ -30,7 +30,6 @@ It requires the compilation of the _c_ librairie (core).
 The instruction and support is providing only for Linux based machine.
 For conveignance, command is provided for debian like distribution.
 
-
 ### Dependancies :
 
 The construction of the librairy relies on `Cmake`. Then `Check` is used for test-driven developments.
@@ -48,15 +47,16 @@ The `build.sh` script permits to build _BbMm_ localy.
 From _BbMm_ directory:
 
 ```sh
-./bin/build.sh
+mkdir build
+cd build
+cmake .. # for testing add: -DTEST=ON -DCMAKE_BUILD_TYPE=Debug
+make
 ```
 
-A `build` directory, the `libbbmm.so` librairy and the `test-bemage` executable should be generated.
-You can run the `test-bemage`.
+the `libbbmm.so` librairy and the `run-test-BbMm` executable should be generated into a `build` directory, 
+You can run the `run-test-BbMm`.
 
-```sh
-./test-BbMm
-```
+
 
 ### Python
 

@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Pharo Launcher
-Comment=Pharo Launcher
-Exec=/home/guillaume/pharolauncher/pharo-launcher
-Path=/home/guillaume/pharolauncher/
-Terminal=false
-Icon=/home/guillaume/pharolauncher/icons/pharo-launcher.png
-Type=Application
-Categories=Development;Pharo
