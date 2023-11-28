@@ -36,9 +36,12 @@ set(SRC_FILES
     src/stt-BmBench.c
     src/stt-BmTree.c
     src/stt-BmVector.c
-    src/mdl-BmCondition.c
-    src/mdl-BmInferer.c
-    src/mdl-BmEvaluator.c
+    src/fct-BmCondition.c
+    src/fct-BmInferer.c
+    src/fct-BmEvaluator.c
+    src/mdl-BmChain.c
+    src/mdl-BmProcess.c
+    src/slv-BmBasicPolicy.c
 )
 
 # Build
@@ -62,9 +65,12 @@ set(TEST_SRC_FILES
     test/tc-stt-BmBench.c
     test/tc-stt-BmTree.c
     test/tc-stt-BmVector.c
-    test/tc-mdl-BmCondition.c
-    test/tc-mdl-BmInferer.c
-    test/tc-mdl-BmEvaluator.c
+    test/tc-fct-BmCondition.c
+    test/tc-fct-BmInferer.c
+    test/tc-fct-BmEvaluator.c
+    test/tc-mdl-BmChain.c
+    test/tc-mdl-BmProcess.c
+    test/tc-slv-BmBasicPolicy.c
 #    test/tc-cofeeRobot.c
     test/main-testrunner.c
 )

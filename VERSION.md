@@ -2,10 +2,20 @@
 
 ## v0.21
 
-* BbMm Solver - Solvers..
-       - BmValueIt      : ...
-       - BmPolicyIt     : ...
-* test cases: 421, CofeeRobot, Labyrinth test case...
+* Unique header `bbmm.h`.
+* BbMm Functions
+       - BmCondition     : Define a Bayesian Node (conditional probabilities over variable affectations)
+       - BmInferencor    : Define a Bayesian Network (potentially Dynamic) composed of Input, Output and Shift node. 
+       - BmEvaluator     : a composed value function over multiple Gauges
+* BbMm Models
+       - BmChain         : Markov Chain $<S, T>$
+       - BmProcess       : Define a classical Markov Decision Process $<S, A, t, r>$
+* BbMm Solvers
+       - BmBasicPolicy   : Basic algorythm to solve BmProcess, generate basicly defined policy.
+       - BmBasicQLearner : ...
+       - BmStockasticPolicy :
+       - ... 
+* Test cases: 421, CofeeRobot, Labyrinth test case...
 
 ## v0.20
 

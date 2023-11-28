@@ -1,5 +1,5 @@
 // BbMm
-#include "bbmm-structures.h"
+#include "bbmm.h"
 #include "bbmm-test.h"
 
 #include <stdio.h>

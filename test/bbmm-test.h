@@ -1,5 +1,5 @@
-#ifndef WANDA_TEST
-#define WANDA_TEST
+#ifndef BBMM_TEST
+#define BBMM_TEST
 
 #include <check.h>
 
@@ -11,15 +11,20 @@ TCase * test_case_BmBench(void);
 TCase * test_case_BmTree(void);
 TCase * test_case_BmVector(void);
 
-// BbMm Models
+// BbMm Functions
 TCase * test_case_BmCondition(void);
 TCase * test_case_BmInferer(void);
 TCase * test_case_BmEvaluator(void);
 
+// BbMm Models
+TCase * test_case_BmChain(void);
+TCase * test_case_BmProcess(void);
+
 // BbMm Solver
+TCase * test_case_BmBasicPolicy(void);
 
 // Examples
 //TCase * test_case_cofeeRobot(void);
 
 
-#endif //WANDA_TEST
+#endif //BBMM_TEST

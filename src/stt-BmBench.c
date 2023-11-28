@@ -1,5 +1,5 @@
 
-#include "bbmm-structures.h"
+#include "bbmm.h"
 
 #include <stdlib.h>
 #include <string.h>

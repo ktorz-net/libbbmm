@@ -8,10 +8,12 @@
  *       - BmTree         : a tree based BmCode (code -> output and value )
  *       - BmVector       : a fixed size list of values (doubles)
  * 
- *   MODEL MODULE:
+ *   FUNCTION MODULE:
  *       - BmCondition    : Define a Bayesian Node (conditional probabilities over variable affectations)
  *       - BmInferer      : Define a Dynamic Bayesian Network as P(state' | state, action) 
  *       - BmEvaluator    : A value function over multiple criteria
+ * 
+ *   MODEL MODULE:
  * 
  *   LICENSE: MIT License
  *
@@ -344,13 +346,11 @@ char* BmTree_printInside( BmTree* self, char* output); // print `self` at the en
 #endif
 
 
-#ifndef BBMM_MODEL_H
-#define BBMM_MODEL_H
-
-#include "bbmm-structures.h"
+#ifndef BBMM_FUNCTION_H
+#define BBMM_FUNCTION_H
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   M O D E L  :  C O N D I T I O N                             *
+ *   B b M m   F U N C T I O N  :  C O N D I T I O N                       *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *
  * Define a Bayesian Node (conditional probabilities over variable affectations)
@@ -409,7 +409,7 @@ char* BmCondition_printIdentity( BmCondition* self, char* output ); // print `se
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   M O D E L  :  I N F E R E R                                 *
+ *   B b M m   F U N C T I O N  :  I N F E R E R                           *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *
  * Define a Bayesian Network composed of state, action and tramsitional nodes
@@ -463,7 +463,7 @@ char* BmInferer_printDependency(BmInferer* self, char* output); // print `self` 
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   M O D E L  :  E V A L U A T O R                             *
+ *   B b M m   F U N C T I O N  :  E V A L U A T O R                       *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *
  * Define a multi-critera Value function
