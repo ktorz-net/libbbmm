@@ -6,7 +6,7 @@
 
 START_TEST(test_BmVector_init01)
 {
-    BmVector* vector= newBmVectorBasic(3);
+    BmVector* vector= newBmVector(3);
     
     ck_assert_uint_eq( BmVector_dimention(vector), 3);
 

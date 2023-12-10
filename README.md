@@ -1,4 +1,4 @@
-BbMm - a librayry for Bayesian-based Markov-models
+libBbMm - a librayry for Bayesian-based Markov-models
 ======================================================================
 
 ![](./resources/logo-BbMm-128.png)
@@ -9,17 +9,6 @@ The implemented approach for that relies on Markov Decision Process with transit
 BbMm is an experimental toolbox, it comes with no more guaranty than the devotion of the developers.
 
 - Vertion 0.2X
-
-## Concurency:
-
-**BbMm** is not what you looking for ? Look at those solutions:
-
-- SaLinA : <https://arxiv.org/pdf/2110.07910.pdf> - <https://github.com/facebookresearch/salina>
-- MDPToolBox :
-- [LibDAI](https://github.com/dbtsai/libDAI) : C++ lib for Discrete Approximate Inference
-- [gobnilp](https://www.cs.york.ac.uk/aig/sw/gobnilp) : Bayesian Network learning using Integer Linear Programming
-- [torchhd](https://github.com/hyperdimensional-computing/torchhd) : Python lib for Hyperdimensional Computing (or Vector Symbolic Architectures) Artticle: https://jmlr.org/papers/v24/23-0300.html
-- [farama](https://farama.org/) : à fouiller.
 
 
 ## Installation
@@ -32,25 +21,27 @@ For conveignance, command is provided for debian like distribution.
 
 ### Dependancies :
 
-The construction of the librairy relies on `Cmake`. Then `Check` is used for test-driven developments.
+The construction of the librairy relies on `Cmake`.
+Also, `Check` is used for test-driven developments.
 
 ```sh
 sudo apt install python3 build-essential cmake check
 pip install pytest
 ```
 
+
 ### Compilation
 
-As said compilation relies on `cmake`.
-The `build.sh` script permits to build _BbMm_ localy.
+As said compilation relies on `cmake`:
 
-From _BbMm_ directory:
+From _libBbMm_ directory:
 
 ```sh
 mkdir build
 cd build
 cmake .. # for testing add: -DTEST=ON -DCMAKE_BUILD_TYPE=Debug
 make
+sudo make install
 ```
 
 the `libbbmm.so` librairy and the `run-test-BbMm` executable should be generated into a `build` directory, 

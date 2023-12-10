@@ -162,12 +162,12 @@ typedef struct {
 } BmVector;
 
 /* Constructor */
-BmVector* newBmVectorBasic( uint size );
+BmVector* newBmVector( uint size );
 BmVector* newBmVector_values( uint size, double* values );
 BmVector* newBmVector_list( uint size, double val1, ... );
 BmVector* newBmVector_all( uint size, double value );
 
-BmVector* BmVector_createBasic( BmVector* self, uint size );
+BmVector* BmVector_create( BmVector* self, uint size );
 BmVector* BmVector_create_values( BmVector* self, uint size, double* values );
 BmVector* BmVector_create_all( BmVector* self, uint size, double value );
 
@@ -176,18 +176,28 @@ BmVector* BmVector_destroy( BmVector* self );
 void deleteBmVector( BmVector* self );
 
 /* Re-Initialize */
-//BmVector* BmVector_resize(BmVector* self, uint size);
+BmVector* BmVector_reinit( BmVector* self, uint newSize );
+
+BmVector* BmVector_copy( BmVector* self, BmVector* model );
 
 /* Accessor */
 uint BmVector_dimention( BmVector* self );
 double BmVector_at( BmVector* self, uint i );
+double* BmVector_values( BmVector* self );
 
 /* Construction */
+BmVector* BmVector_redimention(BmVector* self, uint size);
 double BmVector_at_set( BmVector* self, uint i, double value );
+BmVector* BmVector_setValues( BmVector* self, double* values );
 
 /* Operation */
 double BmVector_sum( BmVector* self );
 double BmVector_product( BmVector* self );
+
+/* Test */
+bool BmVector_isEqualTo( BmVector* self, BmVector* another );
+bool BmVector_isGreaterThan( BmVector* self, BmVector* another );
+bool BmVector_isSmallerThan( BmVector* self, BmVector* another );
 
 /* Printing */
 char* BmVector_print( BmVector* self, char* output );
@@ -244,7 +254,7 @@ BmCode* BmBench_at_setValue( BmBench* self, uint i, double value );
 void BmBench_switch( BmBench* self, BmBench* doppleganger);
 
 //void BmBench_add( BmBench *self, BmBench *another );
-void BmBench_add_reducted( BmBench *self, BmBench *another, BmCode* mask );
+void BmBench_add_reducted( BmBench* self, BmBench* another, BmCode* mask );
 
 /* Operators */
 typedef bool (*fctptr_BmBench_compare)(BmBench*,uint,uint);
@@ -303,7 +313,6 @@ double BmTree_at_value( BmTree* self, BmCode* code); // Return the value of a co
 /* Branch Accessor */
 uint BmTree_branchSize( BmTree* self, uint branch ); // Return the number of
 uint BmTree_branchVariable( BmTree* self, uint iBranch ); // Return the variable index represented by the branch.
-uint BmTree_branch_option( BmTree* self, uint iBranch, uint state );
 uint BmTree_deepOf( BmTree* self, BmCode* code); // Return the number of branch to cross before reaching the output.
 
 /* Construction */

@@ -4,26 +4,20 @@ project(BbMm LANGUAGES C)
 # Options:
 cmake_policy(SET CMP0064 NEW)
 option(TEST "Generate tests" OFF)
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE RELEASE)
+
+if(TEST)
+  set(CMAKE_BUILD_TYPE DEBUG)
+  message("Build_type: Debug with Test - ON ")
+else()
+  message("Build_type: Release")
+endif()
 
 # Activate C99 :
 SET(CMAKE_C_FLAGS "-std=c99" )
 #SET(CMAKE_C_FLAGS_DEBUG "-Wall -Wextra -g -fsanitize=address")
 SET(CMAKE_C_FLAGS_DEBUG "-Wall -Wextra -g")
 SET(CMAKE_C_FLAGS_RELEASE "-Wall")
-
-if(TEST)
-  message("Test")
-else()
-  message("no Test")
-endif()
-message( ${CMAKE_BUILD_TYPE} )
-
-# Dependancy :
-# Check for unit-test:
-# find_package(check REQUIRED)
-# RayLib for viewer:
-# find_package(raylib 2.0 REQUIRED)
 
 # project configuration :
 include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/src)
@@ -50,9 +44,7 @@ target_link_libraries(bbmm)
 
 # Install
 install(TARGETS bbmm LIBRARY DESTINATION lib)
-install(FILES bbmm-structures.h DESTINATION include)
-install(FILES bbmm-models.h DESTINATION include)
-install(FILES bbmm-solvers.h DESTINATION include)
+install(FILES src/bbmm.h DESTINATION include)
 
 #-----------#
 ## T E S T ##

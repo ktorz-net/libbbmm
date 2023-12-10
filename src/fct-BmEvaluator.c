@@ -25,7 +25,7 @@ BmEvaluator* BmEvaluator_createWith( BmEvaluator* self, BmCode* newSpace, uint n
     self->space= newSpace;
     self->criteria= newEmptyArray( BmTree*, numberOfCriteria );
     self->masks= newEmptyArray( BmCode*, numberOfCriteria );
-    self->weights= newBmVectorBasic( numberOfCriteria );
+    self->weights= newBmVector( numberOfCriteria );
         
     for( uint i= 1 ; i <= numberOfCriteria ; ++i )
     {

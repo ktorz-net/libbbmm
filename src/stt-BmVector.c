@@ -10,9 +10,9 @@
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 /* Constructor Destructor */
-BmVector* newBmVectorBasic( uint size )
+BmVector* newBmVector( uint size )
 {
-    return BmVector_createBasic( newEmpty(BmVector), size );
+    return BmVector_create( newEmpty(BmVector), size );
 }
 BmVector* newBmVector_values( uint size, double* values )
 {
@@ -42,7 +42,7 @@ BmVector* newBmVector_all( uint size, double value )
     return BmVector_create_all( newEmpty(BmVector), size, value );
 }
 
-BmVector* BmVector_createBasic( BmVector* self, uint size )
+BmVector* BmVector_create( BmVector* self, uint size )
 {
     self->values= newEmptyArray(double, size);
     self->size= size;
@@ -51,7 +51,7 @@ BmVector* BmVector_createBasic( BmVector* self, uint size )
 
 BmVector* BmVector_create_values( BmVector* self, uint size, double* values )
 {
-    BmVector_createBasic(self, size);
+    BmVector_create(self, size);
     for( uint i=0 ; i < size ; ++i )
         array_at_set( self->values, i+1, values[i] );
     return self;
@@ -59,7 +59,7 @@ BmVector* BmVector_create_values( BmVector* self, uint size, double* values )
 
 BmVector* BmVector_create_all( BmVector* self, uint size, double value )
 {
-    BmVector_createBasic(self, size);
+    BmVector_create(self, size);
     for( uint i=0 ; i < size ; ++i )
         array_at_set( self->values, i+1, value );
     return self;
@@ -76,8 +76,39 @@ void deleteBmVector( BmVector* self )
     free( BmVector_destroy(self) );
 }
 
-/* Initialize */
-BmVector* BmVector_resize(BmVector* self, uint size)
+/* Re-Initialize */
+BmVector* BmVector_reinit( BmVector* self, uint newSize )
+{
+    BmVector_destroy( self );
+    BmVector_create( self, newSize );
+    return self;
+}
+
+BmVector* BmVector_copy( BmVector* self, BmVector* model )
+{
+    BmVector_destroy( self );
+    BmVector_create_values( self, BmVector_dimention(model), BmVector_values(model) );
+    return self;
+}
+
+/* Accessor */
+uint BmVector_dimention(BmVector* self)
+{
+    return self->size;
+}
+
+double BmVector_at(BmVector* self, uint i)
+{
+    return array_at( self->values, i );
+}
+
+double* BmVector_values( BmVector* self )
+{
+    return self->values;
+}
+
+/* Construction */
+BmVector* BmVector_redimention(BmVector* self, uint size)
 {
     // Allocate new memory
     double *newValues= newEmptyArray(double, size);
@@ -106,22 +137,18 @@ BmVector* BmVector_resize(BmVector* self, uint size)
     return self;
 }
 
-/* Accessor */
-uint BmVector_dimention(BmVector* self)
-{
-    return self->size;
-}
-
-double BmVector_at(BmVector* self, uint i)
-{
-    return array_at( self->values, i );
-}
-
-/* Construction */
 double BmVector_at_set(BmVector* self, uint i, double value)
 {
     array_at_set( self->values, i, value );
     return array_at( self->values, i );
+}
+
+BmVector* BmVector_setValues( BmVector* self, double* values )
+{
+    uint size= BmVector_dimention( self );
+    for( uint i= 0 ; i < size ; ++i )
+        array_at_set( self->values, i+1, values[i] );
+    return self;
 }
 
 /* Operation */
@@ -141,6 +168,48 @@ double BmVector_product( BmVector* self )
     for( uint i= 1 ; i <= self->size ; ++i )
         result*= BmVector_at( self, i );
     return result;
+}
+
+/* Test */
+bool BmVector_isEqualTo( BmVector* self, BmVector* another )
+{
+    bool eq= (BmVector_dimention(self) == BmVector_dimention(another));
+    for( uint i= 1 ; eq && i <= BmVector_dimention(self) ; ++i )
+    {
+        eq= (BmVector_at(self, i) == BmVector_at(another, i));
+    }
+    return eq;
+}
+
+bool BmVector_isGreaterThan( BmVector* self, BmVector* another )
+{
+    uint minSize= (BmVector_dimention(self) < BmVector_dimention(another) ? BmVector_dimention(self) : BmVector_dimention(another));
+    for( uint i= 1 ; i <= minSize ; ++i )
+    {
+        if( BmVector_at(self, i) > BmVector_at(another, i) )
+            return true;
+        if( BmVector_at(self, i) < BmVector_at(another, i) )
+            return false;
+    }
+    if ( BmVector_dimention(self) > BmVector_dimention(another) )
+        return true;
+    return false;
+}
+
+
+bool BmVector_isSmallerThan( BmVector* self, BmVector* another )
+{
+    uint minSize= (BmVector_dimention(self) < BmVector_dimention(another) ? BmVector_dimention(self) : BmVector_dimention(another));
+    for( uint i= 1 ; i <= minSize ; ++i )
+    {
+        if( BmVector_at(self, i) < BmVector_at(another, i) )
+            return true;
+        if( BmVector_at(self, i) > BmVector_at(another, i) )
+            return false;
+    }
+    if ( BmVector_dimention(self) < BmVector_dimention(another) )
+        return true;
+    return false;
 }
 
 
