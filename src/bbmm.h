@@ -235,6 +235,7 @@ BmBench* BmBench_reinit( BmBench* self, uint capacity );
 
 /* Accessor */
 uint BmBench_size( BmBench* self);
+uint BmBench_capacity( BmBench* self);
 BmCode* BmBench_at_code( BmBench* self, uint i );
 double BmBench_at_value( BmBench* self, uint i );
 

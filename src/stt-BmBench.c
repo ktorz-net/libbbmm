@@ -119,6 +119,11 @@ uint BmBench_size(BmBench* self)
     return self->size;
 }
 
+uint BmBench_capacity(BmBench* self)
+{
+    return self->capacity;
+}
+
 BmCode* BmBench_at_code( BmBench* self, uint i )
 {
     return array_at( self->items, self->start+i );

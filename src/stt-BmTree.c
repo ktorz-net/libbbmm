@@ -296,7 +296,7 @@ uint BmTree_branchSize( BmTree* self, uint branch )
 
 uint BmTree_outputSize( BmTree* self )
 {
-    return BmVector_dimention( self->outputValues )+1;
+    return BmVector_dimention( self->outputValues );
 }
 
 uint BmTree_at( BmTree* self, BmCode* code)
