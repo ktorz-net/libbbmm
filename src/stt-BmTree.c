@@ -68,7 +68,7 @@ BmTree* BmTree_destroy(BmTree* self)
 }
 
 /* Re-Initialize */
-BmTree* BmTree_reinitWhith_on(BmTree* self, uint index, int defaultOption)
+BmTree* BmTree_reinitWhith_on(BmTree* self, uint index, uint defaultOption)
 {
     // free all branches:
     while( self->size > 0 )
@@ -81,7 +81,7 @@ BmTree* BmTree_reinitWhith_on(BmTree* self, uint index, int defaultOption)
     return self;
 }
 
-BmTree* BmTree_reinitOn(BmTree* self, int defaultOption)
+BmTree* BmTree_reinitOn(BmTree* self, uint defaultOption)
 {
     return BmTree_reinitWhith_on( self, 1, defaultOption );
 }
@@ -119,9 +119,9 @@ void BmTree_option_setValue( BmTree* self, uint iOption, double value )
     BmVector_at_set( self->outputValues, iOption, value );
 }
 
-uint BmTree_newBranch(BmTree* self, uint iVariable, int defaultOption)
+uint BmTree_newBranch(BmTree* self, uint iVariable, uint defaultOption)
 {
-    int branch= self->size;
+    uint branch= self->size;
     uint bound= BmCode_at(self->inputSpace, iVariable);
     self->size+= 1;
 

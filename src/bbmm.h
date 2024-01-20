@@ -3,10 +3,10 @@
  *   libBbMm - a libraray dedicated to Bayesian-based Markov-models.
  * 
  *   STRUCTURE MODULE:
- *       - BmCode         : a fixed size list of digit (unsigned integers)
+ *       - BmCode         : a fixed size array of digit (unsigned integers)
  *       - BmBench        : a dynamic-size collection of BmCode with and value (i -> code and value )
  *       - BmTree         : a tree based BmCode (code -> output and value )
- *       - BmVector       : a fixed size list of values (doubles)
+ *       - BmVector       : a fixed size array of values (doubles)
  * 
  *   FUNCTION MODULE:
  *       - BmCondition    : Define a Bayesian Node (conditional probabilities over variable affectations)
@@ -303,18 +303,13 @@ BmTree* BmTree_destroy( BmTree* self);
 void deleteBmTree( BmTree* self );
 
 /* Re-Initializer */
-BmTree* BmTree_reinitWhith_on( BmTree* self, uint index, int defaultOption);
-BmTree* BmTree_reinitOn( BmTree* self, int defaultOption );
+BmTree* BmTree_reinitWhith_on( BmTree* self, uint index, uint defaultOption);
+BmTree* BmTree_reinitOn( BmTree* self, uint defaultOption );
 
 /* Accessor */
 uint BmTree_outputSize( BmTree* self );
 uint BmTree_at( BmTree* self, BmCode* code); // Return the option number of a code/state.
 double BmTree_at_value( BmTree* self, BmCode* code); // Return the value of a code/state.
-
-/* Branch Accessor */
-uint BmTree_branchSize( BmTree* self, uint branch ); // Return the number of
-uint BmTree_branchVariable( BmTree* self, uint iBranch ); // Return the variable index represented by the branch.
-uint BmTree_deepOf( BmTree* self, BmCode* code); // Return the number of branch to cross before reaching the output.
 
 /* Construction */
 void BmTree_reziseCapacity( BmTree* self, uint newCapacity );
@@ -332,7 +327,7 @@ uint BmTree_branchVariable( BmTree* self, uint iBranch ); // Return the variable
 uint BmTree_deepOf( BmTree* self, BmCode* code); // Return the number of branch to cross before reaching the output.
 
 /* Branch Construction */
-uint BmTree_newBranch( BmTree* self, uint iVariable, int defaultOption);
+uint BmTree_newBranch( BmTree* self, uint iVariable, uint defaultOption);
 void BmTree_branch_state_connect( BmTree* self, uint branchA, uint stateA, uint branchB );
 void BmTree_branch_state_set( BmTree* self, uint branchA, uint iState, uint outbut );
 
