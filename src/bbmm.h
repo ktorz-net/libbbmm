@@ -363,7 +363,7 @@ char* BmTree_printInside( BmTree* self, char* output); // print `self` at the en
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 typedef struct {
-  uint outputSize;
+  uint domain;
   BmCode* parentRanges;
   BmTree* selector;
   uint distribSize, distribCapacity;
@@ -371,22 +371,22 @@ typedef struct {
 } BmCondition;
 
 /* Constructor */
-BmCondition* newBmConditionBasic(uint outputSize);
-BmCondition* newBmConditionWith(uint domainSize, BmCode* newParentRanges, BmBench* newDefaultDistrib);
+BmCondition* newBmConditionBasic(uint domain);
+BmCondition* newBmConditionWith(uint domain, BmCode* newParentRanges, BmBench* newDefaultDistrib);
 
-BmCondition* BmCondition_createBasic(BmCondition* self, uint outputSize);
-BmCondition* BmCondition_createWith(BmCondition* self, uint domainSize, BmCode* newParentRanges, BmBench* newDefaultDistrib);
+BmCondition* BmCondition_createBasic(BmCondition* self, uint domain);
+BmCondition* BmCondition_createWith(BmCondition* self, uint domain, BmCode* newParentRanges, BmBench* newDefaultDistrib);
 
 /* Destructor */
 BmCondition* BmCondition_destroy(BmCondition* self);
 void deleteBmCondition(BmCondition* instance);
 
 /* re-initializer */
-uint BmCondition_reinitWith( BmCondition* self, uint outputSize, BmCode* newParents, BmBench* newDistrib );
+uint BmCondition_reinitWith( BmCondition* self, uint domain, BmCode* newParents, BmBench* newDistrib );
 uint BmCondition_reinitDistributionsWith( BmCondition* self, BmBench* newDistrib );
 
 /* Accessor */
-uint BmCondition_output( BmCondition* self );
+uint BmCondition_domain( BmCondition* self );
 BmCode* BmCondition_parents( BmCondition* self );
 BmBench* BmCondition_at( BmCondition* self, BmCode* configuration );
 BmBench* BmCondition_atKey( BmCondition* self, uint configKey );

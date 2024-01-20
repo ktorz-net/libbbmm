@@ -6,30 +6,30 @@
 #include <assert.h>
 
 /* Constructor */
-BmCondition* newBmConditionBasic(uint outputSize)
+BmCondition* newBmConditionBasic(uint domain)
 {
-    return BmCondition_createBasic( newEmpty(BmCondition), outputSize );
+    return BmCondition_createBasic( newEmpty(BmCondition), domain );
 }
 
-BmCondition* newBmConditionWith(uint domainSize, BmCode* newParentRanges, BmBench* newDefaultDistrib)
+BmCondition* newBmConditionWith(uint domain, BmCode* newParentRanges, BmBench* newDefaultDistrib)
 {
-    return BmCondition_createWith( newEmpty(BmCondition), domainSize, newParentRanges, newDefaultDistrib );
+    return BmCondition_createWith( newEmpty(BmCondition), domain, newParentRanges, newDefaultDistrib );
 }
 
-BmCondition* BmCondition_createBasic( BmCondition* self, uint outputSize )
+BmCondition* BmCondition_createBasic( BmCondition* self, uint domain )
 {
     BmBench* distrib = newBmBench( 1 );
     BmBench_attachLast( distrib, newBmCode_list(1, 1), 1.0 );
-    return BmCondition_createWith( self, outputSize,
+    return BmCondition_createWith( self, domain,
         newBmCode_all(1, 1), distrib );
 }
 
-BmCondition* BmCondition_createWith( BmCondition* self, uint domainSize, BmCode* newParentRanges, BmBench* newDefaultDistrib )
+BmCondition* BmCondition_createWith( BmCondition* self, uint domain, BmCode* newParentRanges, BmBench* newDefaultDistrib )
 {
-    assert( domainSize > (uint)0 );
+    assert( domain > (uint)0 );
     assert( BmCode_dimention(newParentRanges) > (uint)0 );
 
-    self->outputSize= domainSize;
+    self->domain= domain;
 
     self->parentRanges= newParentRanges;
     self->selector= newBmTreeWith( newParentRanges,  BmCode_product( self->parentRanges ) );
@@ -61,24 +61,24 @@ void deleteBmCondition(BmCondition* instance)
 }
 
 /* re-initializer */
-uint BmCondition_reinitWith( BmCondition* self, uint outputSize, BmCode* newParents, BmBench* newDistrib )
+uint BmCondition_reinitWith( BmCondition* self, uint domain, BmCode* newParents, BmBench* newDistrib )
 {
     BmCondition_destroy( self );
-    BmCondition_createWith( self, outputSize, newParents, newDistrib );
+    BmCondition_createWith( self, domain, newParents, newDistrib );
     return 1;
 }
 
 uint BmCondition_reinitDistributionsWith( BmCondition* self, BmBench* newDistrib )
 {
-    uint outputSize= self->outputSize;
+    uint domain= self->domain;
     BmCode* newParents= newBmCodeAs( self->parentRanges );
-    return BmCondition_reinitWith( self, outputSize, newParents, newDistrib );
+    return BmCondition_reinitWith( self, domain, newParents, newDistrib );
 }
 
 /* Accessor */
-uint BmCondition_output( BmCondition* self )
+uint BmCondition_domain( BmCondition* self )
 {
-    return self->outputSize;
+    return self->domain;
 }
 
 BmCode* BmCondition_parents( BmCondition* self )
@@ -172,7 +172,7 @@ BmBench* BmCondition_newDistributionByInfering_mask( BmCondition* self, BmBench*
     // Create new structure:
     uint selfDim= BmCode_dimention(self->parentRanges);
     uint longDim= BmCode_dimention( BmBench_at_code(longDistrib, 1) );
-    BmBench* newDistrib= newBmBench( self->outputSize * BmBench_size(longDistrib) );
+    BmBench* newDistrib= newBmBench( self->domain * BmBench_size(longDistrib) );
 
     // foreach configuration in the distribution:
     uint numberOfCondition= BmBench_size(longDistrib);
@@ -214,7 +214,7 @@ BmBench* BmCondition_newDistributionByInfering_mask( BmCondition* self, BmBench*
 void BmCondition_switch(BmCondition* self, BmCondition* doppelganger)
 {
     // local copy:
-    uint outputSize= self->outputSize;
+    uint domain= self->domain;
     BmCode* parentRanges= self->parentRanges;
     BmTree* selector= self->selector;
     uint distribSize= self->distribSize;
@@ -222,7 +222,7 @@ void BmCondition_switch(BmCondition* self, BmCondition* doppelganger)
     BmBench* * distributions= self->distributions;
 
     // self as doppelganger:
-    self->outputSize= doppelganger->outputSize;
+    self->domain= doppelganger->domain;
     self->parentRanges= doppelganger->parentRanges;
     self->selector= doppelganger->selector;
     self->distribSize= doppelganger->distribSize;
@@ -230,7 +230,7 @@ void BmCondition_switch(BmCondition* self, BmCondition* doppelganger)
     self->distributions= doppelganger->distributions;
 
     // doppelganger as self:
-    doppelganger->outputSize= outputSize;
+    doppelganger->domain= domain;
     doppelganger->parentRanges= parentRanges;
     doppelganger->selector= selector;
     doppelganger->distribSize= distribSize;
@@ -340,7 +340,7 @@ char* BmCondition_printIdentity(BmCondition* self, char* output)
 {
     char buffer[1024];
     BmCode_print( self->parentRanges, output );
-    sprintf( buffer, "->[%d]", self->outputSize );
+    sprintf( buffer, "->[%d]", self->domain );
     strcat( output, buffer );
     return output;
 }
