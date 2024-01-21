@@ -111,7 +111,7 @@ START_TEST(test_BmBench_values)
     ck_assert_str_eq( buffer, "{[42]:0.00, [69, 103]:0.00, [3]:0.00, [69, 56]:0.00}" );
 
     BmBench_at_setValue( collec, 2, 1.1 );
-    ck_assert_double_eq_tol( BmBench_at_value( collec, 2 ), 1.1, 0.00001 );
+    ck_assert_double_eq_tol( BmBench_valueAt( collec, 2 ), 1.1, 0.00001 );
 
     strcpy( buffer, "" );
     BmBench_print(collec, buffer);

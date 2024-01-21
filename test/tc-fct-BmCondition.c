@@ -27,7 +27,7 @@ START_TEST(test_BmCondition_init)
         strcpy(buffer, "");
         ck_assert_str_eq( BmTree_print( instance1->selector, buffer), "{}" );
 
-        BmBench* distrib= BmCondition_at( instance1, config );
+        BmBench* distrib= BmCondition_from( instance1, config );
         deleteBmCode(config);
 
         strcpy( buffer, "" );
@@ -36,7 +36,7 @@ START_TEST(test_BmCondition_init)
 
     strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmBench_print( BmCondition_atKey(instance1, 1), buffer ), "{[1]:1.00}" );
+        BmBench_print( BmCondition_fromKey(instance1, 1), buffer ), "{[1]:1.00}" );
 
     BmCondition* instance2= newBmConditionWith(
         2,
@@ -55,7 +55,7 @@ START_TEST(test_BmCondition_init)
     {
         strcpy( buffer, "" );
         ck_assert_str_eq(
-            BmBench_print( BmCondition_atKey(instance2, i), buffer ),
+            BmBench_print( BmCondition_fromKey(instance2, i), buffer ),
             "{[1]:1.00}"
         );
     }
@@ -133,7 +133,7 @@ START_TEST(test_BmCondition_defaultDistrib)
     
     strcpy(buffer, "");
     BmCode* code= newBmCodeAs( BmCondition_parents(instance) );
-    BmBench_print( BmCondition_at(instance, code), buffer );
+    BmBench_print( BmCondition_from(instance, code), buffer );
     ck_assert_str_eq(
     buffer,
     "{[1]:0.30, [2]:0.10, [3]:0.30, [5]:0.30}"
@@ -143,7 +143,7 @@ START_TEST(test_BmCondition_defaultDistrib)
     BmCode_at_set(code, 2, 1);
 
     strcpy(buffer, "");
-    BmBench_print( BmCondition_at(instance, code), buffer );
+    BmBench_print( BmCondition_from(instance, code), buffer );
     ck_assert_str_eq(
     buffer,
     "{[1]:0.30, [2]:0.10, [3]:0.30, [5]:0.30}"
@@ -263,7 +263,7 @@ START_TEST(test_BmCondition_manipulate)
     {
         strcpy( buffer, "" );
         ck_assert_str_eq(
-            BmBench_print( BmCondition_atKey(instance, i), buffer ),
+            BmBench_print( BmCondition_fromKey(instance, i), buffer ),
             "{[1]:1.00}" );
     }
 
@@ -275,26 +275,26 @@ START_TEST(test_BmCondition_manipulate)
         BmCode_dimention(config)
     );
     
-    uint iDistrib= BmCondition_at_attach(
+    uint iDistrib= BmCondition_from_attach(
         instance, config,
         newBmBenchWith( 2, newBmCode_list(1, 2), 0.6 )
     );
 
     BmBench_attachLast( 
-        BmCondition_distribution( instance, iDistrib ),
+        BmCondition_distributionAt( instance, iDistrib ),
         newBmCode_list(1, 1), 0.4
     );
 
     strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmBench_print( BmCondition_at(instance, config), buffer ),
+        BmBench_print( BmCondition_from(instance, config), buffer ),
         "{[2]:0.60, [1]:0.40}"
     );
 
     ck_assert_uint_eq( BmCode_keyOf( instance->parentRanges, config), 25 );
     strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmBench_print( BmCondition_atKey(instance, 25), buffer ),
+        BmBench_print( BmCondition_fromKey(instance, 25), buffer ),
         "{[2]:0.60, [1]:0.40}"
     );
 
@@ -323,7 +323,7 @@ START_TEST(test_BmCondition_manipulate)
     BmBench_attachLast( distrib, newBmCode_list(1, 1), 0.8 );
     BmBench_attachLast( distrib, newBmCode_list(1, 2), 0.2 );
 
-    iDistrib= BmCondition_at_attach( instance, config, distrib );
+    iDistrib= BmCondition_from_attach( instance, config, distrib );
 
     ck_assert_uint_eq( iDistrib, 3 );
 
@@ -362,7 +362,7 @@ START_TEST(test_BmCondition_manipulate)
     {
         strcpy( buffer, "" );
         ck_assert_str_eq(
-            BmBench_print( BmCondition_atKey(instance, i), buffer ),
+            BmBench_print( BmCondition_fromKey(instance, i), buffer ),
             "{[1]:0.80, [2]:0.20}" );
     }
 
@@ -382,7 +382,7 @@ START_TEST(test_BmCondition_manipulate2)
 
     BmCode* config= newBmCode_list(2, 2, 5 );
     distrib= newBmBenchWith( 1, newBmCode_list(1, 2), 1.0 );
-    BmCondition_at_attach( instance, config, distrib );
+    BmCondition_from_attach( instance, config, distrib );
 
 
     uint configId= BmCode_keyOf( instance->parentRanges, config );
@@ -394,7 +394,7 @@ START_TEST(test_BmCondition_manipulate2)
         {
             strcpy( buffer, "" );
             ck_assert_str_eq(
-                BmBench_print( BmCondition_atKey(instance, i), buffer ),
+                BmBench_print( BmCondition_fromKey(instance, i), buffer ),
                 "{[2]:1.00}"
             );
         }
@@ -402,7 +402,7 @@ START_TEST(test_BmCondition_manipulate2)
         {
             strcpy( buffer, "" );
             ck_assert_str_eq(
-                BmBench_print( BmCondition_atKey(instance, i), buffer ),
+                BmBench_print( BmCondition_fromKey(instance, i), buffer ),
                 "{[1]:0.80, [3]:0.20}"
             );
         }
@@ -423,7 +423,7 @@ START_TEST(test_BmCondition_manipulate2)
 
     strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmBench_print( BmCondition_at( instance, config ), buffer ),
+        BmBench_print( BmCondition_from( instance, config ), buffer ),
         "{[2]:1.00}"
     );
 

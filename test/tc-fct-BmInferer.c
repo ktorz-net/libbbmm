@@ -110,7 +110,7 @@ void test_initializeNode6(BmInferer * trans)
     BmBench_attachLast( distrib, newBmCode_list(1, 2), 0.1 );
 
     BmCode* inputCondition= newBmCode_list(2, 1, 1);
-    BmCondition_at_attach(dep, inputCondition, distrib);
+    BmCondition_from_attach(dep, inputCondition, distrib);
 
     deleteBmCode(inputCondition);
 /*
@@ -128,7 +128,7 @@ void test_initializeNode6(BmInferer * trans)
     BmDistribution_addOutput( distrib, 2, 0.1 );
 
     BmCode* inputCondition= newBmCode_list(2, 1, 1);
-    BmCondition_at_set(dep, inputCondition, distrib);
+    BmCondition_from_set(dep, inputCondition, distrib);
     
     deleteBmCode(inputCondition);
     deleteBmDistribution(distrib);
@@ -160,7 +160,7 @@ void test_initializeNode7(BmInferer * trans)
     BmBench_attachLast( distrib, newBmCode_list(1, 2), 0.2 );
 
     BmCode* inputCondition= newBmCode_list(3, 1, 2, 2);
-    BmCondition_at_attach(dep, inputCondition, distrib);
+    BmCondition_from_attach(dep, inputCondition, distrib);
     
     deleteBmCode(inputCondition);
 
@@ -179,7 +179,7 @@ void test_initializeNode7(BmInferer * trans)
     BmDistribution_addOutput( distrib, 2, 0.2 );
 
     BmCode* inputCondition= newBmCode_list(3, 1, 2, 2);
-    BmCondition_at_set(dep, inputCondition, distrib);
+    BmCondition_from_set(dep, inputCondition, distrib);
     
     deleteBmCode(inputCondition);
     deleteBmDistribution(distrib);

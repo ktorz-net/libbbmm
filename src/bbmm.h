@@ -10,10 +10,10 @@
  * 
  *   FUNCTION MODULE:
  *       - BmCondition    : Define a Bayesian Node (conditional probabilities over variable affectations)
- *       - BmInferer      : Define a Dynamic Bayesian Network as P(state' | state, action) 
+ *       - BmInferer      : Define a Dynamic Bayesian Network as P(state' | state, action)
  *       - BmEvaluator    : A value function over multiple criteria
  * 
- *   MODEL MODULE:
+ *   SOLVER MODULE:
  * 
  *   LICENSE: MIT License
  *
@@ -236,8 +236,9 @@ BmBench* BmBench_reinit( BmBench* self, uint capacity );
 /* Accessor */
 uint BmBench_size( BmBench* self);
 uint BmBench_capacity( BmBench* self);
-BmCode* BmBench_at_code( BmBench* self, uint i );
-double BmBench_at_value( BmBench* self, uint i );
+BmCode* BmBench_at( BmBench* self, uint i );
+double BmBench_valueAt( BmBench* self, uint i );
+uint BmBench_dimention( BmBench* self);
 
 /* Construction */
 void BmBench_resizeCapacity( BmBench* self, uint newCapacity );
@@ -388,12 +389,13 @@ uint BmCondition_reinitDistributionsWith( BmCondition* self, BmBench* newDistrib
 /* Accessor */
 uint BmCondition_domain( BmCondition* self );
 BmCode* BmCondition_parents( BmCondition* self );
-BmBench* BmCondition_at( BmCondition* self, BmCode* configuration );
-BmBench* BmCondition_atKey( BmCondition* self, uint configKey );
-BmBench* BmCondition_distribution( BmCondition* self, uint iDistrib );
+BmBench* BmCondition_from( BmCondition* self, BmCode* configuration );
+BmBench* BmCondition_fromKey( BmCondition* self, uint configKey );
+uint BmCondition_distributionSize( BmCondition* self );
+BmBench* BmCondition_distributionAt( BmCondition* self, uint iDistrib );
 
 /* Construction */
-uint BmCondition_at_attach( BmCondition* self, BmCode* configuration, BmBench* distribution );
+uint BmCondition_from_attach( BmCondition* self, BmCode* configuration, BmBench* distribution );
 
 /* Instance tools */
 void BmCondition_switch(BmCondition* self, BmCondition* doppelganger);

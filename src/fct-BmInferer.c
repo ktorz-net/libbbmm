@@ -114,7 +114,7 @@ uint BmInferer_node_size( BmInferer * self, uint iNode )
 
 BmCode* BmInferer_node_parents( BmInferer * self, uint iNode )
 {
-    return BmBench_at_code(self->network, iNode);
+    return BmBench_at(self->network, iNode);
 }
 
 
@@ -127,9 +127,9 @@ BmCondition* BmInferer_node_reinitIndependant( BmInferer* self, uint index )
 BmCondition* BmInferer_node_reinitWith( BmInferer* self, uint index, BmCode* newDependenceMask, BmBench* newDefaultDistrib )
 {
     // Reccord parent mask: dependency
-    BmCode_switch( BmBench_at_code( self->network, index ), newDependenceMask );
+    BmCode_switch( BmBench_at( self->network, index ), newDependenceMask );
     deleteBmCode( newDependenceMask );
-    BmCode* dependency= BmBench_at_code( self->network, index );
+    BmCode* dependency= BmBench_at( self->network, index );
     
     // Build dependance space:
     BmCode* depSpace= newBmCode( BmCode_dimention(dependency) );
@@ -166,22 +166,22 @@ BmBench* _BmInferer_setFomOverallDistribution(BmInferer * self, BmBench* overall
     uint size= BmBench_size( buildTransition );
     BmBench_reinit( self->distribution, size );
     BmBench_attachLast( self->distribution,
-        newBmCodeAs( BmBench_at_code( buildTransition, 1 ) ), BmBench_at_value( buildTransition, 1 )
+        newBmCodeAs( BmBench_at( buildTransition, 1 ) ), BmBench_valueAt( buildTransition, 1 )
     );
     uint counter= 1;
 
     for( uint i= 2 ; i <= size ; ++i )
     {
-        if ( BmCode_isEqualTo( BmBench_at_code( self->distribution, counter ), BmBench_at_code( buildTransition, i ) ) )
+        if ( BmCode_isEqualTo( BmBench_at( self->distribution, counter ), BmBench_at( buildTransition, i ) ) )
         {
             BmBench_at_setValue( self->distribution, counter,
-                BmBench_at_value( self->distribution, counter ) + BmBench_at_value( buildTransition, i )
+                BmBench_valueAt( self->distribution, counter ) + BmBench_valueAt( buildTransition, i )
             );
         }
         else 
         {
             counter= BmBench_attachLast( self->distribution,
-                newBmCodeAs( BmBench_at_code( buildTransition, i ) ), BmBench_at_value( buildTransition, i ) );            
+                newBmCodeAs( BmBench_at( buildTransition, i ) ), BmBench_valueAt( buildTransition, i ) );            
         }
     }
     
@@ -194,7 +194,7 @@ BmBench* BmInferer_process_newOverallDistribution( BmInferer* self, BmBench* inp
 {
     BmBench* constructionDistrib= newBmBenchAs( inputDistribution );
 
-    uint configDimention = BmCode_dimention( BmBench_at_code( inputDistribution, 1 ) );
+    uint configDimention = BmCode_dimention( BmBench_at( inputDistribution, 1 ) );
     for( uint i= configDimention + 1 ; i <= self->overallDimention ; ++i )
     {
         // Infers dependency possibilities:
@@ -307,12 +307,12 @@ char* BmInferer_printDependency(BmInferer* self, char* output)
     if( shiftDimention > 0 )
     {
         strcat(output, " ");
-        BmCode_print( BmBench_at_code(self->network, shiftStart), output );
+        BmCode_print( BmBench_at(self->network, shiftStart), output );
     }
     for( uint i= shiftStart+1 ; i < shiftEnd ; ++i)
     {
         strcat(output, ", ");
-        BmCode_print( BmBench_at_code(self->network, i), output );
+        BmCode_print( BmBench_at(self->network, i), output );
     }
     strcat(output, " |");
 
@@ -320,12 +320,12 @@ char* BmInferer_printDependency(BmInferer* self, char* output)
     if( self->outputDimention > 0 )
     {
         strcat(output, " ");
-        BmCode_print( BmBench_at_code(self->network, shiftEnd), output );
+        BmCode_print( BmBench_at(self->network, shiftEnd), output );
     }
     for( uint i= shiftEnd+1 ; i <= self->overallDimention ; ++i)
     {
         strcat(output, ", ");
-        BmCode_print( BmBench_at_code(self->network, i), output );
+        BmCode_print( BmBench_at(self->network, i), output );
     }
     strcat(output, " |");
 
