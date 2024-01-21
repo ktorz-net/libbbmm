@@ -124,11 +124,11 @@ BmCondition* BmInferer_node_reinitIndependant( BmInferer* self, uint index )
     return BmInferer_node_reinitWith( self, index, newBmCode(0), newBmBench(1) );
 }
 
-BmCondition* BmInferer_node_reinitWith( BmInferer* self, uint index, BmCode* newDependenceMask, BmBench* newDefaultDistrib )
+BmCondition* BmInferer_node_reinitWith( BmInferer* self, uint index, BmCode* newDependenceList, BmBench* newDefaultDistrib )
 {
     // Reccord parent mask: dependency
-    BmCode_switch( BmBench_at( self->network, index ), newDependenceMask );
-    deleteBmCode( newDependenceMask );
+    BmCode_switch( BmBench_at( self->network, index ), newDependenceList );
+    deleteBmCode( newDependenceList );
     BmCode* dependency= BmBench_at( self->network, index );
     
     // Build dependance space:

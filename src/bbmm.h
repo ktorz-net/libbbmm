@@ -10,7 +10,7 @@
  * 
  *   FUNCTION MODULE:
  *       - BmCondition    : Define a Bayesian Node (conditional probabilities over variable affectations)
- *       - BmInferer      : Define a Dynamic Bayesian Network as P(state' | state, action)
+ *       - BmInferer      : Define a Bayesian Network as P(output | input) - potentially Dynamic P(state' | state, action)
  *       - BmEvaluator    : A value function over multiple criteria
  * 
  *   SOLVER MODULE:
@@ -39,8 +39,8 @@
  * 
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
-#ifndef BBMM_STT_H
-#define BBMM_STT_H
+#ifndef BBMM_H
+#define BBMM_H
 
 #include <stdarg.h>
 
@@ -349,11 +349,6 @@ char* BmTree_print( BmTree* self, char* output);
 
 char* BmTree_printInside( BmTree* self, char* output); // print `self` at the end of `output`
 
-#endif
-
-
-#ifndef BBMM_FUNCTION_H
-#define BBMM_FUNCTION_H
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   F U N C T I O N  :  C O N D I T I O N                       *
@@ -455,7 +450,7 @@ BmCode* BmInferer_node_parents( BmInferer* self, uint iVar );
 
 /* Construction */
 BmCondition* BmInferer_node_reinitIndependant( BmInferer* self, uint index );
-BmCondition* BmInferer_node_reinitWith( BmInferer* self, uint index, BmCode* newDependenceMask, BmBench* newDefaultDistrib );
+BmCondition* BmInferer_node_reinitWith( BmInferer* self, uint index, BmCode* newDependenceList, BmBench* newDefaultDistrib );
 
 /* Process */
 BmBench* BmInferer_process( BmInferer* self, BmBench* inputDistribution );        // Return distribution over output varibales
@@ -466,7 +461,6 @@ BmBench* BmInferer_processState_Action( BmInferer* self, BmCode* state, BmCode* 
 char* BmInferer_print(BmInferer* self, char* output); // print `self` at the end of `output`
 char* BmInferer_printStateActionSignature(BmInferer* self, char* output); // print `self` at the end of `output`
 char* BmInferer_printDependency(BmInferer* self, char* output); // print `self` at the end of `output`
-
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
@@ -521,4 +515,12 @@ void BmEvaluator_crit_setWeight( BmEvaluator* self, uint iCritirion, double weig
 /* Printing */
 
 
-#endif // BBMM_MODEL_H
+/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *   B b M m   S O L V E R :  . . .                                        *
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *
+ * 
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+
+#endif // BBMM_H
