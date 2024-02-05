@@ -265,6 +265,12 @@ uint BmTree_removeBranch(BmTree* self, uint iBranch)
 
 
 /* Getter */
+uint BmTree_branchSize( BmTree* self, uint iBranch )
+{
+    uint iVariable= BmTree_branchVariable(self, iBranch);
+    return BmCode_at(self->inputSpace, iVariable);
+}
+
 uint BmTree_branch_state( BmTree* self, uint iBranch, uint state )
 {
     return self->branches[iBranch][state];
@@ -275,13 +281,13 @@ uint BmTree_branchVariable( BmTree* self, uint iBranch )
     return self->branches[iBranch][0];
 }
 
-uint BmTree_branchSize( BmTree* self, uint branch )
+uint BmTree_branchNumberOfOutputs( BmTree* self, uint iBranch )
 {
-    uint iVariable= BmTree_branchVariable(self, branch);
+    uint iVariable= BmTree_branchVariable(self, iBranch);
     uint bound= BmCode_at(self->inputSpace, iVariable);
     uint count= 1;
     uint output[bound+1];
-    output[0]= self->branches[branch][1];
+    output[0]= self->branches[iBranch][1];
 
     //For each possible output
     for( uint i= 2 ; i <= bound ; ++i )
@@ -289,16 +295,21 @@ uint BmTree_branchSize( BmTree* self, uint branch )
         //search if it is a new output
         uint new= 1;
         for( uint r = 0 ; new && r < count ; ++r )
-            new= output[r] != self->branches[branch][i];
+            new= output[r] != self->branches[iBranch][i];
         
         //If yes, mark it and increase the counter.
         if( new )
         {
-            output[count]= self->branches[branch][i];
+            output[count]= self->branches[iBranch][i];
             count+= 1;
         }
     }
     return count; //So, return the number of possible output on the branch...
+}
+
+uint BmTree_size( BmTree* self )
+{
+    return self->size;
 }
 
 BmCode* BmTree_inputSpace( BmTree* self )

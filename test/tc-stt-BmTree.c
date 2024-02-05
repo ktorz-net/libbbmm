@@ -62,29 +62,29 @@ START_TEST(test_BmTree_treeConstruction)
 
     ck_assert_uint_eq( root, (uint)0 );
     ck_assert_uint_eq( BmTree_branchVariable(tree, root ), (uint)2 );
-    ck_assert_uint_eq( BmTree_branchSize(tree, root ), (uint)1 );
+    ck_assert_uint_eq( BmTree_branchNumberOfOutputs(tree, root ), (uint)1 );
 
     uint b1=  BmTree_newBranch( tree, 1, 3 );
     BmTree_branch_state_set( tree, b1, 2, 1 );
     
     ck_assert_uint_eq( b1, (uint)1 );
     ck_assert_uint_eq( BmTree_branchVariable(tree, b1 ), (uint)1 );
-    ck_assert_uint_eq( BmTree_branchSize(tree, b1 ), (uint)2 );
+    ck_assert_uint_eq( BmTree_branchNumberOfOutputs(tree, b1 ), (uint)2 );
 
     BmTree_branch_state_connect( tree, root, 1, b1 );
     
-    ck_assert_uint_eq( BmTree_branchSize(tree, root ), (uint)2 );
+    ck_assert_uint_eq( BmTree_branchNumberOfOutputs(tree, root ), (uint)2 );
 
     uint b2=  BmTree_newBranch( tree, 3, 2 );
     BmTree_branch_state_set( tree, b2, 2, 4 );
     
     ck_assert_uint_eq( b2, (uint)2 );
     ck_assert_uint_eq( BmTree_branchVariable(tree, b2 ), (uint)3 );
-    ck_assert_uint_eq( BmTree_branchSize(tree, b2 ), (uint)2 );
+    ck_assert_uint_eq( BmTree_branchNumberOfOutputs(tree, b2 ), (uint)2 );
 
     BmTree_branch_state_connect( tree, root, 3, b2 );
     
-    ck_assert_uint_eq( BmTree_branchSize(tree, root ), (uint)3 );
+    ck_assert_uint_eq( BmTree_branchNumberOfOutputs(tree, root ), (uint)3 );
 
     char buffer[1024]= "";
     ck_assert_str_eq(

@@ -309,6 +309,7 @@ BmTree* BmTree_clearWhith_on( BmTree* self, uint index, uint defaultOption );
 BmTree* BmTree_clearOn( BmTree* self, uint defaultOption );
 
 /* Accessor */
+uint BmTree_size( BmTree* self );
 BmCode* BmTree_inputSpace( BmTree* self );
 uint BmTree_outputSize( BmTree* self );
 uint BmTree_at( BmTree* self, BmCode* code); // Return the option number of a code/state.
@@ -324,9 +325,10 @@ uint BmTree_at_set( BmTree* self, BmCode* code, uint output ); // set the ouput 
 uint BmTree_at_readOrder_set( BmTree* self, BmCode* code, BmCode* codeOrder, uint output );
 
 /* Branch Accessor */
-uint BmTree_branchSize( BmTree* self, uint branch ); // Return the number of
+uint BmTree_branchSize( BmTree* self, uint iBranch );
 uint BmTree_branch_state( BmTree* self, uint iBranch, uint state );
 uint BmTree_branchVariable( BmTree* self, uint iBranch ); // Return the variable index represented by the branch.
+uint BmTree_branchNumberOfOutputs( BmTree* self, uint branch ); // Return the number of differents output
 uint BmTree_deepOf( BmTree* self, BmCode* code); // Return the number of branch to cross before reaching the output.
 
 /* Branch Construction */
