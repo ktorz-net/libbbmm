@@ -9,7 +9,7 @@ START_TEST(test_BmTree_init)
 {
     BmTree* tree= newBmTreeWith( newBmCode_list(3, 2, 3, 2), 4);
 
-    ck_assert_uint_eq( BmCode_dimention( tree->inputSpace ), (uint)3 );
+    ck_assert_uint_eq( BmCode_dimention( BmTree_inputSpace(tree) ), (uint)3 );
     ck_assert_uint_eq( tree->capacity, (uint)1 );
     ck_assert_uint_eq( tree->size, (uint)0 );
     ck_assert_uint_eq( tree->bound, (uint)5 );
@@ -30,11 +30,11 @@ START_TEST(test_BmTree_init)
     //    ck_assert_uint_eq( tree->branches[0][i], (uint)0 );
 
     BmCode* st= newBmCode(3);
-    BmCode_setCodeFirst(tree->inputSpace, st);
-    while( BmCode_isIncluding(tree->inputSpace, st) )
+    BmCode_setCodeFirst( BmTree_inputSpace(tree), st);
+    while( BmCode_isIncluding( BmTree_inputSpace(tree), st) )
     {
         ck_assert_uint_eq( BmTree_at(tree, st), (uint)1 );
-        BmCode_nextCode(tree->inputSpace, st);
+        BmCode_nextCode( BmTree_inputSpace(tree), st);
     }
 
     deleteBmCode( st );
@@ -234,7 +234,7 @@ START_TEST(test_BmTree_constructionFromExemple)
      *               -1-  -1-   -1-
      */
 
-    BmTree_reinitWhith_on( tree, 2, 1 );
+    BmTree_clearWhith_on( tree, 2, 1 );
     
     strcpy( buffer, "");
     ck_assert_str_eq(
@@ -329,6 +329,58 @@ START_TEST(test_BmTree_fromExempleFromScratch)
 1. input(3): [leaf(3), leaf(1)]" );
 
     deleteBmCode(code);
+    deleteBmTree( tree );
+}
+END_TEST
+
+START_TEST(test_BmTree_BmBenchInterface)
+{
+    BmTree* tree= newBmTreeWith( newBmCode_list( 3, 2, 3, 2), 4);
+    char buffer[1024]= "";
+    
+    BmCode *code= newBmCode_list(3,  0, 1, 1 );
+    BmTree_at_set( tree, code, 3 );
+
+    strcpy(buffer, "");
+    BmTree_printInside(tree, buffer);
+    ck_assert_str_eq(
+        buffer,
+        "input: [2, 3, 2], size: 2\n\
+0. input(2): [branch(1), leaf(1), leaf(1)]\n\
+1. input(3): [leaf(3), leaf(1)]" );
+
+    BmBench* collection= BmTree_asNewBench( tree );
+    BmBench_sort( collection, (fctptr_BmBench_compare)BmBench_isGreater );
+
+    strcpy(buffer, "");
+    BmBench_print(collection, buffer);
+    ck_assert_str_eq(
+        buffer,
+        "{[0, 1, 1, 3]:0.00, [0, 1, 2, 1]:0.00, [0, 2, 0, 1]:0.00, [0, 3, 0, 1]:0.00}"
+    );
+
+    BmTree_clearWhith_on( tree, 2, 4 );
+
+    strcpy(buffer, "");
+    BmTree_printInside(tree, buffer);
+    ck_assert_str_eq(
+        buffer,
+        "input: [2, 3, 2], size: 1\n0. input(2): [leaf(4), leaf(4), leaf(4)]"
+    );
+
+//    BmTree_fromBench( tree, collection );
+//
+//    strcpy(buffer, "");
+//    BmTree_printInside(tree, buffer);
+//    ck_assert_str_eq(
+//        buffer,
+//        "input: [2, 3, 2], size: 2\n\
+//0. input(2): [branch(1), leaf(1), leaf(1)]\n\
+//1. input(3): [leaf(3), leaf(1)]"
+//    );
+
+    deleteBmBench( collection );
+    deleteBmCode( code );
     deleteBmTree( tree );
 }
 END_TEST
@@ -451,6 +503,7 @@ TCase * test_case_BmTree(void)
     tcase_add_test(tc, test_BmTree_values);
     tcase_add_test(tc, test_BmTree_constructionFromExemple);
     tcase_add_test(tc, test_BmTree_fromExempleFromScratch);
+    tcase_add_test(tc, test_BmTree_BmBenchInterface);
     tcase_add_test(tc, test_BmTree_print);
     tcase_add_test(tc, test_BmTree_ordered);
     tcase_add_test(tc, test_BmTree_deadBranch);

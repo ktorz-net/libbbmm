@@ -38,12 +38,12 @@ From _libBbMm_ directory:
 ```sh
 mkdir build
 cd build
-cmake .. # for testing add: -DTEST=ON -DCMAKE_BUILD_TYPE=Debug
+cmake .. # for testing add: -DTEST=ON -DCMAKE_BUILD_TYPE=Debug, requires check
 make
 sudo make install
 ```
 
-the `libbbmm.so` librairy and the `run-test-BbMm` executable should be generated into a `build` directory, 
+The `libbbmm.so` librairy and the `run-test-BbMm` executable should be generated into the `build` directory.
 You can run the `run-test-BbMm`.
 
 

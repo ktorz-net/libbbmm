@@ -177,7 +177,6 @@ void deleteBmVector( BmVector* self );
 
 /* Re-Initialize */
 BmVector* BmVector_reinit( BmVector* self, uint newSize );
-
 BmVector* BmVector_copy( BmVector* self, BmVector* model );
 
 /* Accessor */
@@ -304,10 +303,13 @@ BmTree* BmTree_destroy( BmTree* self);
 void deleteBmTree( BmTree* self );
 
 /* Re-Initializer */
-BmTree* BmTree_reinitWhith_on( BmTree* self, uint index, uint defaultOption);
-BmTree* BmTree_reinitOn( BmTree* self, uint defaultOption );
+BmTree* BmTree_reinitWith( BmTree* self, BmCode* newSpace, uint optionSize );
+
+BmTree* BmTree_clearWhith_on( BmTree* self, uint index, uint defaultOption );
+BmTree* BmTree_clearOn( BmTree* self, uint defaultOption );
 
 /* Accessor */
+BmCode* BmTree_inputSpace( BmTree* self );
 uint BmTree_outputSize( BmTree* self );
 uint BmTree_at( BmTree* self, BmCode* code); // Return the option number of a code/state.
 double BmTree_at_value( BmTree* self, BmCode* code); // Return the value of a code/state.
@@ -338,6 +340,7 @@ uint BmTree_removeBranch( BmTree* self, uint iBranch); // Remove a branch: (must
 
 /* Generating */
 BmBench* BmTree_asNewBench( BmTree* self );
+void BmTree_fromBench( BmTree* self, BmBench* model );
 
 /* Printing */
 char* BmTree_printBranch( BmTree* self, uint iBranch, char* output );

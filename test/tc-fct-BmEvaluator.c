@@ -137,7 +137,7 @@ START_TEST(test_BmEvaluator_construction01)
     ck_assert_str_eq( buffer, "[1, 2]" );
 
     strcpy( buffer, "" );
-    BmCode_print( BmEvaluator_crit(eval, 1)->inputSpace, buffer );
+    BmCode_print( BmTree_inputSpace( BmEvaluator_crit(eval, 1) ), buffer );
     ck_assert_str_eq( buffer, "[10, 2]" );
 
     BmEvaluator_crit_reinitWith(

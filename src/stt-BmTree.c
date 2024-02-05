@@ -68,7 +68,14 @@ BmTree* BmTree_destroy(BmTree* self)
 }
 
 /* Re-Initialize */
-BmTree* BmTree_reinitWhith_on(BmTree* self, uint index, uint defaultOption)
+BmTree* BmTree_reinitWith( BmTree* self, BmCode* newSpace, uint optionSize )
+{
+    BmTree_destroy(self);
+    BmTree_createWhith( self, newSpace, optionSize );
+    return self;
+}
+
+BmTree* BmTree_clearWhith_on(BmTree* self, uint index, uint defaultOption)
 {
     // free all branches:
     while( self->size > 0 )
@@ -81,9 +88,9 @@ BmTree* BmTree_reinitWhith_on(BmTree* self, uint index, uint defaultOption)
     return self;
 }
 
-BmTree* BmTree_reinitOn(BmTree* self, uint defaultOption)
+BmTree* BmTree_clearOn(BmTree* self, uint defaultOption)
 {
-    return BmTree_reinitWhith_on( self, 1, defaultOption );
+    return BmTree_clearWhith_on( self, 1, defaultOption );
 }
 
 /* Construction */
@@ -231,7 +238,7 @@ uint BmTree_at_readOrder_set( BmTree* self, BmCode* code, BmCode* codeOrder, uin
     // If not initialized yet: 
     if( self->size == 0 )
     {
-        BmTree_reinitWhith_on(self, BmCode_at( codeOrder, 1 ), 1);
+        BmTree_clearWhith_on(self, BmCode_at( codeOrder, 1 ), 1);
     }
 
     // Then apply the code at output: 
@@ -292,6 +299,11 @@ uint BmTree_branchSize( BmTree* self, uint branch )
         }
     }
     return count; //So, return the number of possible output on the branch...
+}
+
+BmCode* BmTree_inputSpace( BmTree* self )
+{
+    return self->inputSpace;
 }
 
 uint BmTree_outputSize( BmTree* self )
@@ -394,6 +406,11 @@ BmBench* BmTree_asNewBench( BmTree* self )
 
     BmBench_sort( bench, (fctptr_BmBench_compare)BmBench_isGreater );
     return bench;
+}
+
+void BmTree_fromBench( BmTree* self, BmBench* model )
+{
+    assert( "TO IMPLEMENT" == 0 );
 }
 
 /* Printing */
