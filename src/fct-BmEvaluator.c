@@ -24,12 +24,14 @@ BmEvaluator* BmEvaluator_createWith( BmEvaluator* self, BmCode* newSpace, uint n
 {
     self->space= newSpace;
     self->criteria= newEmptyArray( BmTree*, numberOfCriteria );
+    self->critValues= newEmptyArray( BmVector*, numberOfCriteria );
     self->masks= newEmptyArray( BmCode*, numberOfCriteria );
     self->weights= newBmVector( numberOfCriteria );
         
     for( uint i= 1 ; i <= numberOfCriteria ; ++i )
     {
         array_at_set( self->criteria, i, newBmTree( 0, 1) );
+        array_at_set( self->critValues, i, newBmVector(1) );
         array_at_set( self->masks, i, newBmCode( 0 ) );
         BmVector_at_set( self->weights, i, 1.0 );
     }
@@ -44,10 +46,12 @@ BmEvaluator* BmEvaluator_destroy( BmEvaluator* self)
     for( uint i = 1 ; i < self->criteriaSize ; ++i )
     {
         deleteBmTree( array_at( self->criteria, i ) );
+        deleteBmVector( array_at( self->critValues, i ) );
         deleteBmCode( array_at( self->masks, i ) );
     }
 
     deleteEmptyArray( self->criteria );
+    deleteEmptyArray( self->critValues );
     deleteEmptyArray( self->masks );
     deleteBmVector( self->weights );
     deleteBmCode( self->space );
@@ -133,7 +137,8 @@ double BmEvaluator_processState_action_state(BmEvaluator* self, BmCode* state, B
 double BmEvaluator_crit_process( BmEvaluator* self, uint iCriterion, BmCode* input )
 {
     BmCode* critCode= BmCode_newBmCodeMask( input, array_at( self->masks, iCriterion ) );
-    double value= BmTree_at_value( array_at( self->criteria, iCriterion ) , critCode );
+    uint outputIndex= BmTree_at( array_at( self->criteria, iCriterion ), critCode );
+    double value= BmVector_at( array_at( self->critValues, iCriterion ), outputIndex );
     deleteBmCode( critCode );
     return value;
 }
@@ -144,9 +149,11 @@ BmTree* BmEvaluator_crit_reinitWith( BmEvaluator* self, uint iCrit, BmCode* newD
 {
     // initialize criterion:
     BmTree* criterion= array_at( self->criteria, iCrit );
+    BmVector* critValues= array_at( self->critValues, iCrit );
     
     // make blanc page:
     BmTree_destroy( criterion );
+    BmVector_destroy( critValues );
     
     // Initialize the structure:
     BmCode* critSpace= BmCode_newBmCodeMask( self->space, newDependenceMask );
@@ -157,16 +164,24 @@ BmTree* BmEvaluator_crit_reinitWith( BmEvaluator* self, uint iCrit, BmCode* newD
         critSpace,
         numberOfOptions
     );
+    BmVector_create_all( critValues, numberOfOptions, defaultValue );
     
-    // feed the default option:
-    BmTree_option_setValue( criterion, 1, defaultValue );
-
     // record the mask:
     BmCode_destroy( array_at( self->masks, iCrit ) );
     array_at_set( self->masks, iCrit, newDependenceMask );
 
     // and go:
     return criterion;   
+}
+
+void BmEvaluator_crit_at_set( BmEvaluator* self, uint iCrit, BmCode* option, uint output, double value )
+{
+    // index criteria:
+    BmTree* criterion= array_at( self->criteria, iCrit );
+    BmVector* critValues= array_at( self->critValues, iCrit );
+
+    BmTree_at_set( criterion, option, output );
+    BmVector_at_set( critValues, output, value );
 }
 
 void BmEvaluator_crit_setWeight( BmEvaluator* self, uint iCritirion, double weight )

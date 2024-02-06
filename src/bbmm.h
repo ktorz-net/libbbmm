@@ -286,8 +286,7 @@ char* BmBench_printNetwork(BmBench* self, char* output);
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 typedef struct {
-  BmCode* inputSpace;
-  BmVector* outputValues;
+  BmCode* inputRanges;
   uint bound, capacity, size;
   uint** branches;
 } BmTree;
@@ -310,16 +309,12 @@ BmTree* BmTree_clearOn( BmTree* self, uint defaultOption );
 
 /* Accessor */
 uint BmTree_size( BmTree* self );
-BmCode* BmTree_inputSpace( BmTree* self );
-uint BmTree_outputSize( BmTree* self );
+BmCode* BmTree_inputRanges( BmTree* self );
 uint BmTree_at( BmTree* self, BmCode* code); // Return the option number of a code/state.
-double BmTree_at_value( BmTree* self, BmCode* code); // Return the value of a code/state.
 
 /* Construction */
 void BmTree_reziseCapacity( BmTree* self, uint newCapacity );
 void BmTree_reziseCompleteCapacity( BmTree* self );
-
-void BmTree_option_setValue( BmTree* self, uint iOption, double value ); // attach a tag and a value to a given option.
 
 uint BmTree_at_set( BmTree* self, BmCode* code, uint output ); // set the ouput value of a code or a partial code (with 0), return the number of potential dead branches
 uint BmTree_at_readOrder_set( BmTree* self, BmCode* code, BmCode* codeOrder, uint output );
@@ -482,6 +477,7 @@ typedef struct {
   BmCode* space;
   uint criteriaSize;
   BmTree ** criteria;
+  BmVector ** critValues;
   BmCode ** masks;
   BmVector* weights;
 } BmEvaluator ;
@@ -513,6 +509,7 @@ double BmEvaluator_crit_process( BmEvaluator* self, uint iCriterion, BmCode* inp
 /* Construction */
 BmEvaluator* BmEvaluator_reinitCriterion( BmEvaluator* self, uint numberOfCriterion );
 BmTree* BmEvaluator_crit_reinitWith( BmEvaluator* self, uint index, BmCode* newDependenceMask, uint numberOfOptions, double defaultValue );
+void BmEvaluator_crit_at_set( BmEvaluator* self, uint index, BmCode* option, uint output, double value );
 void BmEvaluator_crit_setWeight( BmEvaluator* self, uint iCritirion, double weight );
 
 /* Infering */

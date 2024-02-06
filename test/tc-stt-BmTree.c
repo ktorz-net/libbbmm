@@ -9,7 +9,7 @@ START_TEST(test_BmTree_init)
 {
     BmTree* tree= newBmTreeWith( newBmCode_list(3, 2, 3, 2), 4);
 
-    ck_assert_uint_eq( BmCode_dimention( BmTree_inputSpace(tree) ), (uint)3 );
+    ck_assert_uint_eq( BmCode_dimention( BmTree_inputRanges(tree) ), (uint)3 );
     ck_assert_uint_eq( tree->capacity, (uint)1 );
     ck_assert_uint_eq( tree->size, (uint)0 );
     ck_assert_uint_eq( tree->bound, (uint)5 );
@@ -30,11 +30,11 @@ START_TEST(test_BmTree_init)
     //    ck_assert_uint_eq( tree->branches[0][i], (uint)0 );
 
     BmCode* st= newBmCode(3);
-    BmCode_setCodeFirst( BmTree_inputSpace(tree), st);
-    while( BmCode_isIncluding( BmTree_inputSpace(tree), st) )
+    BmCode_setCodeFirst( BmTree_inputRanges(tree), st);
+    while( BmCode_isIncluding( BmTree_inputRanges(tree), st) )
     {
         ck_assert_uint_eq( BmTree_at(tree, st), (uint)1 );
-        BmCode_nextCode( BmTree_inputSpace(tree), st);
+        BmCode_nextCode( BmTree_inputRanges(tree), st);
     }
 
     deleteBmCode( st );
@@ -154,66 +154,6 @@ START_TEST(test_BmTree_optionSelection)
 }
 END_TEST
 
-START_TEST(test_BmTree_values)
-{
-    BmTree* tree= newBmTreeWith( newBmCode_list( 3, 2, 3, 2), 4);
-
-    BmTree_option_setValue(tree, 1, 1.1);
-    BmTree_option_setValue(tree, 2, 2.1);
-    BmTree_option_setValue(tree, 3, 3.1);
-    BmTree_option_setValue(tree, 4, 4.1);
-
-    uint root= BmTree_newBranch( tree, 2, 1 );
-    uint b1=  BmTree_newBranch( tree, 1, 3 );
-    BmTree_branch_state_connect( tree, root, 1, b1 );
-    uint b2=  BmTree_newBranch( tree, 3, 2 );
-    BmTree_branch_state_set( tree, b2, 2, 4 );
-    BmTree_branch_state_connect( tree, root, 3, b2 );
-    uint b3=  BmTree_newBranch( tree, 3, 1 );
-    BmTree_branch_state_set( tree, b3, 2, 3 );
-    BmTree_branch_state_connect( tree, b1, 2, b3 );
-    
-
-    /* Tree:
-     *  root   :           (2)
-     *         :          / | \ 
-     *         :         1  2  3
-     *         :        /   |   \ 
-     *  b1, b2 :      (1)  -1-   (3) 
-     *         :     / |          | \ 
-     *         :    1  2          1  2
-     *         :   /   |          |   \ 
-     *  b3     : -3-  (3)        -2-  -4-
-     *         :       | \
-     *         :       1  2
-     *         :       |   \
-     *         :      -1-  -3-
-     */
-    char buffer[1024]= "";
-    ck_assert_str_eq(
-        BmTree_printInside(tree, buffer),
-        "input: [2, 3, 2], size: 4\n\
-0. input(2): [branch(1), leaf(1), branch(2)]\n\
-1. input(1): [leaf(3), branch(3)]\n\
-2. input(3): [leaf(2), leaf(4)]\n\
-3. input(3): [leaf(1), leaf(3)]" );
-
-    BmCode* st= newBmCode_list(3, 2, 1, 1);
-    ck_assert_double_eq_tol( BmTree_at_value(tree, st), 1.1, 0.00001 );
-    
-    BmCode_reinit_list(st, 3, 1, 1, 1);
-    ck_assert_double_eq_tol( BmTree_at_value(tree, st), 3.1, 0.00001 );
-    
-    BmCode_reinit_list(st, 3, 1, 2, 2);
-    ck_assert_double_eq_tol( BmTree_at_value(tree, st), 1.1, 0.00001 );
-    
-    BmCode_reinit_list(st, 3, 1, 3, 2);
-    ck_assert_double_eq_tol( BmTree_at_value(tree, st), 4.1, 0.00001 );
-
-    deleteBmCode( st );
-    deleteBmTree( tree );
-}
-END_TEST
 
 START_TEST(test_BmTree_constructionFromExemple)
 {
@@ -368,16 +308,16 @@ START_TEST(test_BmTree_BmBenchInterface)
         "input: [2, 3, 2], size: 1\n0. input(2): [leaf(4), leaf(4), leaf(4)]"
     );
 
-//    BmTree_fromBench( tree, collection );
-//
-//    strcpy(buffer, "");
-//    BmTree_printInside(tree, buffer);
-//    ck_assert_str_eq(
-//        buffer,
-//        "input: [2, 3, 2], size: 2\n\
-//0. input(2): [branch(1), leaf(1), leaf(1)]\n\
-//1. input(3): [leaf(3), leaf(1)]"
-//    );
+/*    BmTree_fromBench( tree, collection );
+ *
+ *    strcpy(buffer, "");
+ *    BmTree_printInside(tree, buffer);
+ *    ck_assert_str_eq(
+ *        buffer,
+ *        "input: [2, 3, 2], size: 2\n\
+ *0. input(2): [branch(1), leaf(1), leaf(1)]\n\
+ *1. input(3): [leaf(3), leaf(1)]"
+ *    ); */
 
     deleteBmBench( collection );
     deleteBmCode( code );
@@ -500,7 +440,6 @@ TCase * test_case_BmTree(void)
     tcase_add_test(tc, test_BmTree_init);
     tcase_add_test(tc, test_BmTree_treeConstruction);
     tcase_add_test(tc, test_BmTree_optionSelection);
-    tcase_add_test(tc, test_BmTree_values);
     tcase_add_test(tc, test_BmTree_constructionFromExemple);
     tcase_add_test(tc, test_BmTree_fromExempleFromScratch);
     tcase_add_test(tc, test_BmTree_BmBenchInterface);
