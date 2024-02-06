@@ -364,7 +364,7 @@ char* BmTree_printInside( BmTree* self, char* output); // print `self` at the en
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 typedef struct {
-  uint domain;
+  uint range;
   BmCode* parentRanges;
   BmTree* selector;
   uint distribSize, distribCapacity;
@@ -387,7 +387,8 @@ uint BmCondition_reinitWith( BmCondition* self, uint domain, BmCode* newParents,
 uint BmCondition_reinitDistributionsWith( BmCondition* self, BmBench* newDistrib );
 
 /* Accessor */
-uint BmCondition_domain( BmCondition* self );
+uint BmCondition_range( BmCondition* self );
+BmTree* BmCondition_selector( BmCondition* self );
 BmCode* BmCondition_parents( BmCondition* self );
 BmBench* BmCondition_from( BmCondition* self, BmCode* configuration );
 BmBench* BmCondition_fromKey( BmCondition* self, uint configKey );

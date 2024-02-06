@@ -109,7 +109,7 @@ BmCondition* BmInferer_node( BmInferer * self, uint iNode )
 
 uint BmInferer_node_size( BmInferer * self, uint iNode )
 {
-    return ((BmCondition*)array_on( self->nodes, iNode ))->domain;
+    return ((BmCondition*)array_on( self->nodes, iNode ))->range;
 }
 
 BmCode* BmInferer_node_parents( BmInferer * self, uint iNode )
@@ -141,7 +141,7 @@ BmCondition* BmInferer_node_reinitWith( BmInferer* self, uint index, BmCode* new
 
     // Re-initialize the condition
     BmCondition* condition= array_on(self->nodes, index);
-    BmCondition_reinitWith( condition, condition->domain, depSpace, newDefaultDistrib );
+    BmCondition_reinitWith( condition, condition->range, depSpace, newDefaultDistrib );
     return condition;
 }
 
@@ -254,12 +254,12 @@ char* BmInferer_printStateActionSignature(BmInferer* self, char* output)
     strcat(output, "[");
     if( stateDimention > 0 )
     {
-        sprintf(buffer, "%u", BmInferer_node(self, 1)->domain );
+        sprintf(buffer, "%u", BmInferer_node(self, 1)->range );
         strcat(output, buffer);
     }
     for( uint i= 2 ; i <= stateDimention ; ++i)
     {
-        sprintf(buffer, ", %u", BmInferer_node(self, i)->domain );
+        sprintf(buffer, ", %u", BmInferer_node(self, i)->range );
         strcat(output, buffer);
     }
     strcat(output, "]x[");
@@ -268,12 +268,12 @@ char* BmInferer_printStateActionSignature(BmInferer* self, char* output)
     uint stateActionDim= stateDimention + actionDimention;
     if( actionDimention > 0 )
     {
-        sprintf(buffer, "%u", BmInferer_node(self, stateDimention+1)->domain );
+        sprintf(buffer, "%u", BmInferer_node(self, stateDimention+1)->range );
         strcat(output, buffer);
     }
     for( uint i= stateDimention+2 ; i <= stateActionDim ; ++i)
     {
-        sprintf(buffer, ", %u", BmInferer_node(self, i)->domain );
+        sprintf(buffer, ", %u", BmInferer_node(self, i)->range );
         strcat(output, buffer);
     }
     strcat(output, "](");
@@ -283,12 +283,12 @@ char* BmInferer_printStateActionSignature(BmInferer* self, char* output)
     uint end= stateActionDim+shiftDimention;
     if( shiftDimention > 0 )
     {
-        sprintf(buffer, "%u", BmInferer_node(self, stateActionDim+1)->domain );
+        sprintf(buffer, "%u", BmInferer_node(self, stateActionDim+1)->range );
         strcat(output, buffer);
     }
     for( uint i= stateActionDim+2 ; i <= end ; ++i)
     {
-        sprintf(buffer, ", %u", BmInferer_node(self, i)->domain );
+        sprintf(buffer, ", %u", BmInferer_node(self, i)->range );
         strcat(output, buffer);
     }
     strcat(output, ")");
