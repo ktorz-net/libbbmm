@@ -30,7 +30,7 @@ BmEvaluator* BmEvaluator_createWith( BmEvaluator* self, BmCode* newSpace, uint n
         
     for( uint i= 1 ; i <= numberOfCriteria ; ++i )
     {
-        array_at_set( self->criteria, i, newBmTree( 0, 1) );
+        array_at_set( self->criteria, i, newBmTree(0) );
         array_at_set( self->critValues, i, newBmVector(1) );
         array_at_set( self->masks, i, newBmCode( 0 ) );
         BmVector_at_set( self->weights, i, 1.0 );
@@ -159,11 +159,7 @@ BmTree* BmEvaluator_crit_reinitWith( BmEvaluator* self, uint iCrit, BmCode* newD
     BmCode* critSpace= BmCode_newBmCodeMask( self->space, newDependenceMask );
 
     // Initialize the structure:
-    BmTree_createWhith(
-        criterion,
-        critSpace,
-        numberOfOptions
-    );
+    BmTree_createWhith( criterion, critSpace );
     BmVector_create_all( critValues, numberOfOptions, defaultValue );
     
     // record the mask:

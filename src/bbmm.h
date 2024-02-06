@@ -287,22 +287,22 @@ char* BmBench_printNetwork(BmBench* self, char* output);
 
 typedef struct {
   BmCode* inputRanges;
-  uint bound, capacity, size;
+  uint capacity, size;
   uint** branches;
 } BmTree;
 
 /* Constructor */
-BmTree* newBmTree( uint binarySpaceSize, uint optionSize );
-BmTree* newBmTreeWith( BmCode* newSpace, uint optionSize );
+BmTree* newBmTree( uint binarySpaceSize );
+BmTree* newBmTreeWith( BmCode* newSpace );
 
-BmTree* BmTree_createWhith( BmTree* self, BmCode* input, uint optionSize );
+BmTree* BmTree_createWhith( BmTree* self, BmCode* input );
 
 /* Destructor */
 BmTree* BmTree_destroy( BmTree* self);
 void deleteBmTree( BmTree* self );
 
 /* Re-Initializer */
-BmTree* BmTree_reinitWith( BmTree* self, BmCode* newSpace, uint optionSize );
+BmTree* BmTree_reinitWith( BmTree* self, BmCode* newSpace );
 
 BmTree* BmTree_clearWhith_on( BmTree* self, uint index, uint defaultOption );
 BmTree* BmTree_clearOn( BmTree* self, uint defaultOption );
@@ -310,7 +310,11 @@ BmTree* BmTree_clearOn( BmTree* self, uint defaultOption );
 /* Accessor */
 uint BmTree_size( BmTree* self );
 BmCode* BmTree_inputRanges( BmTree* self );
-uint BmTree_at( BmTree* self, BmCode* code); // Return the option number of a code/state.
+uint BmTree_at( BmTree* self, BmCode* code ); // Return the option number of a code/state.
+
+/* output */
+uint BmTreeChild( uint key );
+uint BmTreeLeaf( uint key );
 
 /* Construction */
 void BmTree_reziseCapacity( BmTree* self, uint newCapacity );
@@ -344,7 +348,6 @@ char* BmTree_printBranch( BmTree* self, uint iBranch, char* output );
 
 char* BmTree_print( BmTree* self, char* output);
 char* BmTree_print_sep( BmTree* self, char* output, char* separator );
-char* BmTree_print_sep_options( BmTree* self, char* output, char* separator, char** optionStrs );
 char* BmTree_print( BmTree* self, char* output);
 
 char* BmTree_printInside( BmTree* self, char* output); // print `self` at the end of `output`

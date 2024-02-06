@@ -33,7 +33,7 @@ BmCondition* BmCondition_createWith( BmCondition* self, uint range, BmCode* newP
     self->range= range;
 
     self->parentRanges= newParentRanges;
-    self->selector= newBmTreeWith( newParentRanges,  BmCode_product( self->parentRanges ) );
+    self->selector= newBmTreeWith( newParentRanges );
     
     self->distribCapacity= 1;
     self->distributions= newEmptyArray( BmBench*, self->distribCapacity );
