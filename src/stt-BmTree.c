@@ -134,7 +134,7 @@ uint BmTree_newBranch(BmTree* self, uint iVariable, uint defaultOption)
     // Set to default:
     self->branches[branch][0]= iVariable;
     for( uint i = 1 ; i <= bound ; ++i )
-        self->branches[branch][i]= defaultOption;
+        BmTree_branch_state_set( self, branch, i, defaultOption );
     
     return branch;
 }
@@ -382,26 +382,32 @@ BmBench* BmTree_asNewBench( BmTree* self )
     BmCode *conditions[self->size];
     for( uint iBranch= 0; iBranch < self->size; ++iBranch )
     {
+        // Initialize all conditions to zero codes, one condition per branch to explain.
         conditions[iBranch]= newBmCode_all( codeSize, 0);
     }
+
+    // For each branch :
     for( uint iBranch= 0 ; iBranch < self->size ; ++iBranch )
     {
         uint branVar= BmTree_branchVariable(self, iBranch);
         uint bound= BmCode_at(self->inputRanges, branVar);
+        // For each state of the branch variable:
         for( uint i= 1 ; i <= bound ; ++i )
         {
             uint key= self->branches[iBranch][i];
-            if( BmTreeLeaf( key) )
+            // if state matches a leaf:
+            uint output= BmTreeLeaf(key);
+            if( output )
             {
-                uint output= BmTreeLeaf( key);
                 BmCode_at_set( conditions[iBranch], branVar, i );
                 BmCode_at_set( conditions[iBranch], codeSize, output );
                 BmBench_attachLast(
                     bench, newBmCodeAs( conditions[iBranch] ), 0.0 );
             }
+            // if state matches a child branch:
             else
             {
-                uint nextBranch= BmTreeLeaf( key);
+                uint nextBranch= BmTreeChild(key);
                 BmCode_at_set( conditions[nextBranch], branVar, i );
             }
         }

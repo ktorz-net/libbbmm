@@ -43,7 +43,8 @@ END_TEST
 
 START_TEST(test_BmTree_treeConstruction)
 {
-    BmTree* tree= newBmTreeWith( newBmCode_list( 3, 2, 3, 2));
+    BmTree* tree= newBmTreeWith( newBmCode_list( 3, 2, 3, 2) );
+    char buffer[1024]= "";
     
     /* Tree:
      *  root   :           (2)
@@ -62,6 +63,15 @@ START_TEST(test_BmTree_treeConstruction)
     ck_assert_uint_eq( root, (uint)0 );
     ck_assert_uint_eq( BmTree_branchVariable(tree, root ), (uint)2 );
     ck_assert_uint_eq( BmTree_branchNumberOfOutputs(tree, root ), (uint)1 );
+
+    strcpy(buffer, "");
+    BmTree_printInside(tree, buffer);
+
+    // printf( "---\n%s\n---\n", buffer );
+
+    ck_assert_str_eq( buffer,
+        "input: [2, 3, 2], size: 1\n\
+0. input(2): [leaf(1), leaf(1), leaf(1)]" );
 
     uint b1=  BmTree_newBranch( tree, 1, 3 );
     BmTree_branch_state_set( tree, b1, 2, 1 );
@@ -85,9 +95,12 @@ START_TEST(test_BmTree_treeConstruction)
     
     ck_assert_uint_eq( BmTree_branchNumberOfOutputs(tree, root ), (uint)3 );
 
-    char buffer[1024]= "";
-    ck_assert_str_eq(
-        BmTree_printInside(tree, buffer),
+    strcpy(buffer, "");
+    BmTree_printInside(tree, buffer);
+
+    // printf( "---\n%s\n---\n", buffer );
+
+    ck_assert_str_eq( buffer,
         "input: [2, 3, 2], size: 3\n\
 0. input(2): [branch(1), leaf(1), branch(2)]\n\
 1. input(1): [leaf(3), leaf(1)]\n\
@@ -274,7 +287,7 @@ END_TEST
 
 START_TEST(test_BmTree_BmBenchInterface)
 {
-    BmTree* tree= newBmTreeWith( newBmCode_list( 3, 2, 3, 2));
+    BmTree* tree= newBmTreeWith( newBmCode_list( 3, 2, 3, 2) );
     char buffer[1024]= "";
     
     BmCode *code= newBmCode_list(3,  0, 1, 1 );
@@ -289,12 +302,14 @@ START_TEST(test_BmTree_BmBenchInterface)
 1. input(3): [leaf(3), leaf(1)]" );
 
     BmBench* collection= BmTree_asNewBench( tree );
+
+    strcpy(buffer, "");
+    BmBench_print(collection, buffer);
     BmBench_sort( collection, (fctptr_BmBench_compare)BmBench_isGreater );
 
     strcpy(buffer, "");
     BmBench_print(collection, buffer);
-    ck_assert_str_eq(
-        buffer,
+    ck_assert_str_eq( buffer,
         "{[0, 1, 1, 3]:0.00, [0, 1, 2, 1]:0.00, [0, 2, 0, 1]:0.00, [0, 3, 0, 1]:0.00}"
     );
 
