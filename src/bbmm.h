@@ -387,10 +387,12 @@ BmTree*   BmFunction_selector( BmFunction* self );
 BmBench*  BmFunction_outputs( BmFunction* self );
 
 uint    BmFunction_from( BmFunction* self, BmCode* input );
-BmCode* BmFunction_from_code( BmFunction* self, BmCode* input );
-double  BmFunction_from_value( BmFunction* self, BmCode* input );
+BmCode* BmFunction_codeFrom( BmFunction* self, BmCode* input );
+double  BmFunction_valueFrom( BmFunction* self, BmCode* input );
 
 /* Construction */
+uint BmFunction_attachOuput( BmFunction* self, BmCode* newOuputCode, double ouputValue );
+uint BmFunction_from_set( BmFunction* self, BmCode* input, uint ouputId );
 
 /* Instance tools */
 void BmFunction_switch(BmFunction* self, BmFunction* doppelganger);

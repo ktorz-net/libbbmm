@@ -72,3 +72,47 @@ double BmFunction_valueFrom( BmFunction* self, BmCode* input )
 {
     return BmBench_valueAt( self->outputs, BmTree_at( self->selector, input) );
 }
+
+/* Construction */
+uint BmFunction_attachOuput( BmFunction* self, BmCode* newOuputCode, double ouputValue )
+{
+    return BmBench_attachLast( self->outputs, newOuputCode, ouputValue );
+}
+
+uint BmFunction_from_set( BmFunction* self, BmCode* input, uint ouputId )
+{
+    return BmTree_at_set( self->selector, input, ouputId );
+}
+
+
+/* Instance tools */
+void BmFunction_switch(BmFunction* self, BmFunction* doppelganger)
+{
+    // local copy:
+    BmTree* selector= self->selector;
+    BmBench* outputs= self->outputs;
+
+    // self as doppelganger:
+    self->selector= doppelganger->selector;
+    self->outputs= doppelganger->outputs;
+
+    // doppelganger as self:
+    doppelganger->selector= selector;
+    doppelganger->outputs= outputs;
+}
+
+/* Printing */
+char* BmFunction_print( BmFunction* self, char* buffer )
+{
+    return BmFunction_printSep( self, buffer, ",\n  ");
+}
+
+char* BmFunction_printSep( BmFunction* self, char* buffer, char* separator )
+{
+    strcat( buffer, "Selector:\n" );
+    BmTree_print_sep( self->selector, buffer, separator );
+    strcat( buffer, "\nOutputs:\n" );
+    BmBench_print( self->outputs, buffer );
+    return buffer;
+}
+
