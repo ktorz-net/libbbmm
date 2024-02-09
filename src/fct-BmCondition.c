@@ -11,9 +11,9 @@ BmCondition* newBmConditionBasic(uint range)
     return BmCondition_createBasic( newEmpty(BmCondition), range );
 }
 
-BmCondition* newBmConditionWith(uint range, BmCode* newParentRanges, BmBench* newDefaultDistrib)
+BmCondition* newBmConditionWith(uint range, BmCode* newInputRanges, BmBench* newDefaultDistrib)
 {
-    return BmCondition_createWith( newEmpty(BmCondition), range, newParentRanges, newDefaultDistrib );
+    return BmCondition_createWith( newEmpty(BmCondition), range, newInputRanges, newDefaultDistrib );
 }
 
 BmCondition* BmCondition_createBasic( BmCondition* self, uint range )
@@ -24,16 +24,15 @@ BmCondition* BmCondition_createBasic( BmCondition* self, uint range )
         newBmCode_all(1, 1), distrib );
 }
 
-BmCondition* BmCondition_createWith( BmCondition* self, uint range, BmCode* newParentRanges, BmBench* newDefaultDistrib )
+BmCondition* BmCondition_createWith( BmCondition* self, uint range, BmCode* newInputRanges, BmBench* newDefaultDistrib )
 {
     assert( range > (uint)0 );
-    assert( BmCode_dimention(newParentRanges) > (uint)0 );
+    assert( BmCode_dimention(newInputRanges) > (uint)0 );
     assert( BmBench_dimention(newDefaultDistrib) == (uint)1 );
 
     self->range= range;
 
-    self->parentRanges= newParentRanges;
-    self->selector= newBmTreeWith( newParentRanges );
+    self->selector= newBmTreeWith( newInputRanges );
     
     self->distribCapacity= 1;
     self->distributions= newEmptyArray( BmBench*, self->distribCapacity );
@@ -49,7 +48,6 @@ BmCondition* BmCondition_destroy(BmCondition* self)
     for(uint i = 1 ; i <= self->distribSize ; ++i )
         deleteBmBench( array_at(self->distributions, i) );
     deleteEmptyArray( self->distributions );
-    deleteBmCode( self->parentRanges );
     deleteBmTree( self->selector );
     return self;
 }
@@ -71,7 +69,7 @@ uint BmCondition_reinitWith( BmCondition* self, uint range, BmCode* newParents, 
 uint BmCondition_reinitDistributionsWith( BmCondition* self, BmBench* newDistrib )
 {
     uint range= BmCondition_range(self);
-    BmCode* newParents= newBmCodeAs( self->parentRanges );
+    BmCode* newParents= newBmCodeAs( BmCondition_parents(self) );
     return BmCondition_reinitWith( self, range, newParents, newDistrib );
 }
 
@@ -88,7 +86,7 @@ BmTree* BmCondition_selector( BmCondition* self )
 
 BmCode* BmCondition_parents( BmCondition* self )
 {
-    return self->parentRanges;
+    return self->selector->inputRanges;
 }
 
 BmBench* BmCondition_from( BmCondition* self, BmCode* configuration )
@@ -100,7 +98,9 @@ BmBench* BmCondition_from( BmCondition* self, BmCode* configuration )
 
 BmBench* BmCondition_fromKey( BmCondition* self, uint configKey )
 {
-    BmCode* config= BmCode_newBmCodeOnKey( self->parentRanges, configKey );
+    BmCode* config= BmCode_newBmCodeOnKey(
+        BmCondition_parents(self),
+        configKey );
     BmBench* distrib= BmCondition_from( self, config );
     deleteBmCode(config);
     return distrib;
@@ -157,7 +157,7 @@ uint BmCondition_attach( BmCondition* self, BmBench* distribution )
 
 uint BmCondition_from_attach( BmCondition* self, BmCode* configuration, BmBench* distribution )
 {
-    assert( BmCode_dimention(self->parentRanges) == BmCode_dimention(configuration) );
+    assert( BmCode_dimention( BmCondition_parents(self) ) == BmCode_dimention(configuration) );
     uint iDistrib= BmCondition_attach(self, distribution);
     
     BmTree_at_set(self->selector, configuration, iDistrib);
@@ -175,7 +175,7 @@ BmBench* BmCondition_infer( BmCondition* self, BmBench* distribOverConfiguration
 
 BmBench* BmCondition_newDistributionByInfering( BmCondition* self, BmBench* distribOverConfigurations )
 {
-    uint dim= BmCode_dimention(self->parentRanges);
+    uint dim= BmCode_dimention( BmCondition_parents(self) );
     BmCode* mask= newBmCode( dim );
 
     for( uint i= 1 ; i <= dim ; ++i )
@@ -190,7 +190,7 @@ BmBench* BmCondition_newDistributionByInfering( BmCondition* self, BmBench* dist
 BmBench* BmCondition_newDistributionByInfering_mask( BmCondition* self, BmBench* longDistrib, BmCode* mask )
 {
     // Create new structure:
-    uint selfDim= BmCode_dimention(self->parentRanges);
+    uint selfDim= BmCode_dimention( BmCondition_parents(self) );
     uint longDim= BmCode_dimention( BmBench_at(longDistrib, 1) );
     BmBench* newDistrib= newBmBench( self->range * BmBench_size(longDistrib) );
 
@@ -235,7 +235,6 @@ void BmCondition_switch(BmCondition* self, BmCondition* doppelganger)
 {
     // local copy:
     uint range= BmCondition_range(self);
-    BmCode* parentRanges= self->parentRanges;
     BmTree* selector= self->selector;
     uint distribSize= self->distribSize;
     uint distribCapacity= self->distribCapacity;
@@ -243,7 +242,6 @@ void BmCondition_switch(BmCondition* self, BmCondition* doppelganger)
 
     // self as doppelganger:
     self->range= doppelganger->range;
-    self->parentRanges= doppelganger->parentRanges;
     self->selector= doppelganger->selector;
     self->distribSize= doppelganger->distribSize;
     self->distribCapacity= doppelganger->distribCapacity;
@@ -251,7 +249,6 @@ void BmCondition_switch(BmCondition* self, BmCondition* doppelganger)
 
     // doppelganger as self:
     doppelganger->range= range;
-    doppelganger->parentRanges= parentRanges;
     doppelganger->selector= selector;
     doppelganger->distribSize= distribSize;
     doppelganger->distribCapacity= distribCapacity;
@@ -262,7 +259,7 @@ void BmCondition_switch(BmCondition* self, BmCondition* doppelganger)
 char* _BmCondition_printCode_withDistribution(BmCondition* self, BmCode* code, char* output)
 {
     uint iDistrib= BmCode_at( code, BmCode_dimention(code) );
-    uint inputSize= BmCode_dimention( self->parentRanges );
+    uint inputSize= BmCode_dimention( BmCondition_parents(self) );
     
     // Security:
     assert( BmCode_dimention(code) == inputSize+1 );
@@ -331,22 +328,23 @@ char* BmCondition_printExtendSep(BmCondition* self, char* output, char* separato
 {
     BmCondition_printIdentity(self, output);
     strcat(output, ": {");
+    BmCode* parentRanges= BmCondition_parents(self);
 
-    if( BmCode_dimention(self->parentRanges) >= 1 )
+    if( BmCode_dimention( parentRanges ) >= 1 )
     {
-        BmCode* config= BmCode_newBmCodeFirst( self->parentRanges );
+        BmCode* config= BmCode_newBmCodeFirst( parentRanges );
         BmCode_print( config, output );
         strcat(output, ": ");
         BmBench_print( BmCondition_from(self, config), output );
-        BmCode_nextCode( self->parentRanges, config );
+        BmCode_nextCode( parentRanges, config );
 
-        while( BmCode_isIncluding( self->parentRanges, config ) )
+        while( BmCode_isIncluding( parentRanges, config ) )
         {
             strcat(output, separator);
             BmCode_print( config, output );
             strcat(output, ": ");
             BmBench_print( BmCondition_from(self, config), output );
-            BmCode_nextCode( self->parentRanges, config );
+            BmCode_nextCode( parentRanges, config );
         }
 
         deleteBmCode(config);
@@ -359,7 +357,7 @@ char* BmCondition_printExtendSep(BmCondition* self, char* output, char* separato
 char* BmCondition_printIdentity(BmCondition* self, char* output)
 {
     char buffer[1024];
-    BmCode_print( self->parentRanges, output );
+    BmCode_print( BmCondition_parents(self), output );
     sprintf( buffer, "->[%d]", self->range );
     strcat( output, buffer );
     return output;

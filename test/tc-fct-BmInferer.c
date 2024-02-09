@@ -79,7 +79,7 @@ START_TEST(test_BmInferer_construction)
 
     strcpy(buffer, "");
     ck_assert_str_eq(
-        BmCode_print( ((BmCondition*)array_on( trans->nodes, 7))->parentRanges, buffer ),
+        BmCode_print( BmCondition_parents( (BmCondition*)array_on( trans->nodes, 7) ), buffer ),
         "[2, 4, 2]"
     );
 

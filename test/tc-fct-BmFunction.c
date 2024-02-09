@@ -16,7 +16,6 @@ START_TEST(test_BmFunction_init)
     BmBench_print(outputs, buffer);
 
     //printf( "<--\n%s\n-->\n", buffer );
-
     ck_assert_str_eq(
         buffer,
         "input: [2, 2], size: 1\n\
@@ -163,7 +162,8 @@ START_TEST(test_BmFunction_switch)
     BmFunction_switch( instance, doble );
 
     char buffer[1024];
-    strcpy( buffer, "" );\\
+    strcpy( buffer, "" );
+    BmFunction_print( instance, buffer );
 
     //printf( "<--\n%s\n-->\n", buffer );
     ck_assert_str_eq(

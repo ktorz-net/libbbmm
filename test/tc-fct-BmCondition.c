@@ -16,9 +16,9 @@ START_TEST(test_BmCondition_init)
     ck_assert_uint_eq( BmCode_dimention( BmCondition_parents(instance1) ), 1 );
 
     strcpy(buffer, "");
-    ck_assert_str_eq( BmCode_print(instance1->parentRanges, buffer), "[1]" );
+    ck_assert_str_eq( BmCode_print( BmCondition_parents(instance1), buffer), "[1]" );
     {
-        BmCode* config= BmCode_newBmCodeOnKey( instance1->parentRanges, 1 );
+        BmCode* config= BmCode_newBmCodeOnKey( BmCondition_parents(instance1), 1 );
         
         strcpy(buffer, "");
         ck_assert_str_eq( BmCode_print(config, buffer), "[1]" );
@@ -74,8 +74,8 @@ START_TEST(test_BmCondition_init2)
     );
 
     ck_assert_uint_eq( BmCondition_range(instance), 4 );
-    ck_assert_uint_eq( BmCode_dimention( instance->parentRanges ), 2 );
-    ck_assert_uint_eq( BmCode_product( instance->parentRanges ), 3*5 );
+    ck_assert_uint_eq( BmCode_dimention( BmCondition_parents(instance) ), 2 );
+    ck_assert_uint_eq( BmCode_product( BmCondition_parents(instance) ), 3*5 );
     
     strcpy(buffer, "");
     ck_assert_str_eq( BmCondition_printIdentity( instance, buffer ), "[3, 5]->[4]" ); 
@@ -149,7 +149,7 @@ START_TEST(test_BmCondition_defaultDistrib)
     );
 
     ck_assert_uint_eq( BmCode_dimention( instance->selector->inputRanges ), 2 );
-    ck_assert_uint_eq( BmCode_dimention( instance->parentRanges ), 2 );
+    ck_assert_uint_eq( BmCode_dimention( BmCondition_parents(instance) ), 2 );
     
     strcpy(buffer, "");
     BmCondition_print( instance, buffer );
@@ -270,7 +270,7 @@ START_TEST(test_BmCondition_manipulate)
     BmCode* config= newBmCode_list(3, 1, 2, 2);
     
     ck_assert_uint_eq(
-        BmCode_dimention(instance->parentRanges),
+        BmCode_dimention( BmCondition_parents(instance)),
         BmCode_dimention(config)
     );
     
@@ -290,7 +290,7 @@ START_TEST(test_BmCondition_manipulate)
         "{[2]:0.60, [1]:0.40}"
     );
 
-    ck_assert_uint_eq( BmCode_keyOf( instance->parentRanges, config), 25 );
+    ck_assert_uint_eq( BmCode_keyOf( BmCondition_parents(instance), config), 25 );
     strcpy( buffer, "" );
     ck_assert_str_eq(
         BmBench_print( BmCondition_fromKey(instance, 25), buffer ),
@@ -384,7 +384,7 @@ START_TEST(test_BmCondition_manipulate2)
     BmCondition_from_attach( instance, config, distrib );
 
 
-    uint configId= BmCode_keyOf( instance->parentRanges, config );
+    uint configId= BmCode_keyOf( BmCondition_parents(instance), config );
     uint parentSize=  BmCode_product( BmCondition_parents(instance) );
 
     for( uint i= 1; i <= parentSize ; ++i )

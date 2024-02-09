@@ -412,7 +412,6 @@ char* BmFunction_printSep(BmFunction* self, char* output, char* separator);
 
 typedef struct {
   uint range;
-  BmCode* parentRanges;
   BmTree* selector;
   uint distribSize, distribCapacity;
   BmBench **distributions;
@@ -420,17 +419,17 @@ typedef struct {
 
 /* Constructor */
 BmCondition* newBmConditionBasic(uint domain);
-BmCondition* newBmConditionWith(uint domain, BmCode* newParentRanges, BmBench* newDefaultDistrib);
+BmCondition* newBmConditionWith(uint domain, BmCode* newInputRanges, BmBench* newDefaultDistrib);
 
 BmCondition* BmCondition_createBasic(BmCondition* self, uint domain);
-BmCondition* BmCondition_createWith(BmCondition* self, uint domain, BmCode* newParentRanges, BmBench* newDefaultDistrib);
+BmCondition* BmCondition_createWith(BmCondition* self, uint domain, BmCode* newInputRanges, BmBench* newDefaultDistrib);
 
 /* Destructor */
 BmCondition* BmCondition_destroy(BmCondition* self);
 void deleteBmCondition(BmCondition* instance);
 
 /* re-initializer */
-uint BmCondition_reinitWith( BmCondition* self, uint domain, BmCode* newParents, BmBench* newDistrib );
+uint BmCondition_reinitWith( BmCondition* self, uint domain, BmCode* newInputRanges, BmBench* newDistrib );
 uint BmCondition_reinitDistributionsWith( BmCondition* self, BmBench* newDistrib );
 
 /* Accessor */
