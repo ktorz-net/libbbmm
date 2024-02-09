@@ -46,7 +46,6 @@ BmCondition* BmCondition_createWith( BmCondition* self, uint range, BmCode* newP
 /* Destructor */
 BmCondition* BmCondition_destroy(BmCondition* self)
 {
-    //free(self->name);
     for(uint i = 1 ; i <= self->distribSize ; ++i )
         deleteBmBench( array_at(self->distributions, i) );
     deleteEmptyArray( self->distributions );

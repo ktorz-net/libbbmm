@@ -369,6 +369,35 @@ typedef struct {
   BmBench* outputs;
 } BmFunction;
 
+/* Constructor */
+BmFunction* newBmFunctionBasic( uint inputSize );
+BmFunction* newBmFunctionWith( BmCode* newInputRanges, BmBench* newOutputs );
+
+BmFunction* BmFunction_createWith( BmFunction* self, BmCode* newInputRanges, BmBench* newOutputs );
+
+/* Destructor */
+BmFunction* BmFunction_destroy( BmFunction* self );
+void deleteBmFunction( BmFunction* instance );
+
+/* re-initializer */
+uint BmFunction_reinitWith( BmFunction* self, BmCode* newInputRanges, BmBench* newOutputs );
+
+/* Accessor */
+BmTree*   BmFunction_selector( BmFunction* self );
+BmBench*  BmFunction_outputs( BmFunction* self );
+
+uint    BmFunction_from( BmFunction* self, BmCode* input );
+BmCode* BmFunction_from_code( BmFunction* self, BmCode* input );
+double  BmFunction_from_value( BmFunction* self, BmCode* input );
+
+/* Construction */
+
+/* Instance tools */
+void BmFunction_switch(BmFunction* self, BmFunction* doppelganger);
+
+/* Printing */
+char* BmFunction_print(BmFunction* self, char* output);
+char* BmFunction_printSep(BmFunction* self, char* output, char* separator);
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
