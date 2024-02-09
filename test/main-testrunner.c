@@ -19,6 +19,7 @@ Suite * bbmm_fct_test_suite(void)
 {
     Suite *s= suite_create("BbMm-functions");
 
+    suite_add_tcase( s, test_case_BmFunction() );
     suite_add_tcase( s, test_case_BmCondition() );
     suite_add_tcase( s, test_case_BmInferer() );
     suite_add_tcase( s, test_case_BmEvaluator() );

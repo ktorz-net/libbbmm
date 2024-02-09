@@ -4,7 +4,6 @@
 
 #include <stdio.h>
 
-
 START_TEST(test_BmCondition_init)
 {
     BmCondition* instance1= newBmConditionBasic(2);
@@ -502,7 +501,7 @@ END_TEST
 
 TCase * test_case_BmCondition(void)
 {
-    /* WdDomain test case */
+    /* BmCondition test case */
     TCase *tc= tcase_create("BmCondition");
 
     tcase_add_test(tc, test_BmCondition_init);

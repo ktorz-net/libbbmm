@@ -5,19 +5,22 @@
  *   STRUCTURE MODULE:
  *       - BmCode         : a fixed size array of digit (unsigned integers)
  *       - BmBench        : a dynamic-size collection of BmCode with and value (i -> code and value )
- *       - BmTree         : a tree based BmCode (code -> output and value )
+ *       - BmTree         : a tree based BmCode (input code -> output digit )
  *       - BmVector       : a fixed size array of values (doubles)
  * 
  *   FUNCTION MODULE:
+ *       - BmFunction     : Define a transition from a code to another one (input code -> output code + value)
  *       - BmCondition    : Define a Bayesian Node (conditional probabilities over variable affectations)
  *       - BmInferer      : Define a Bayesian Network as P(output | input) - potentially Dynamic P(state' | state, action)
  *       - BmEvaluator    : A value function over multiple criteria
  * 
  *   SOLVER MODULE:
  * 
+ *   VERSION: 0.0.X
+ * 
  *   LICENSE: MIT License
  *
- *   Copyright © 2022-2023 Guillaume Lozenguez.
+ *   Copyright © 2022-2024 Guillaume Lozenguez.
  * 
  *   Permission is hereby granted, free of charge, to any person obtaining a
  *   copy of this software and associated documentation files (the "Software"),
@@ -357,6 +360,21 @@ char* BmTree_printInside( BmTree* self, char* output); // print `self` at the en
  *   B b M m   F U N C T I O N  :  C O N D I T I O N                       *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *
+ * Define a transition from a code to another one (input code -> output code + value)
+ * 
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+typedef struct {
+  BmTree* selector;
+  BmBench* outputs;
+} BmFunction;
+
+
+
+/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *   B b M m   F U N C T I O N  :  C O N D I T I O N                       *
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *
  * Define a Bayesian Node (conditional probabilities over variable affectations)
  * 
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
@@ -394,6 +412,7 @@ uint BmCondition_distributionSize( BmCondition* self );
 BmBench* BmCondition_distributionAt( BmCondition* self, uint iDistrib );
 
 /* Construction */
+uint BmCondition_attach( BmCondition* self, BmBench* distribution );
 uint BmCondition_from_attach( BmCondition* self, BmCode* configuration, BmBench* distribution );
 
 /* Instance tools */
@@ -499,6 +518,7 @@ BmEvaluator* BmEvaluator_destroy( BmEvaluator* self);
 BmCode* BmEvaluator_space( BmEvaluator* self );
 uint BmEvaluator_numberOfCriteria( BmEvaluator* self );
 BmTree* BmEvaluator_crit( BmEvaluator* self, uint iCritirion );
+BmVector* BmEvaluator_crit_values( BmEvaluator* self, uint iCritirion );
 BmVector* BmEvaluator_weights( BmEvaluator* self );
 double BmEvaluator_crit_weight( BmEvaluator* self, uint iCritirion );
 
@@ -511,8 +531,8 @@ double BmEvaluator_crit_process( BmEvaluator* self, uint iCriterion, BmCode* inp
 
 /* Construction */
 BmEvaluator* BmEvaluator_reinitCriterion( BmEvaluator* self, uint numberOfCriterion );
-BmTree* BmEvaluator_crit_reinitWith( BmEvaluator* self, uint index, BmCode* newDependenceMask, uint numberOfOptions, double defaultValue );
-void BmEvaluator_crit_at_set( BmEvaluator* self, uint index, BmCode* option, uint output, double value );
+BmTree* BmEvaluator_crit_reinitWith( BmEvaluator* self, uint iCrit, BmCode* newDependenceMask, BmVector* newValues  );
+void BmEvaluator_crit_at_set( BmEvaluator* self, uint index, BmCode* option, uint output );
 void BmEvaluator_crit_setWeight( BmEvaluator* self, uint iCritirion, double weight );
 
 /* Infering */

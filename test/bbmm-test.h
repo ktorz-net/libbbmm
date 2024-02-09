@@ -12,6 +12,7 @@ TCase * test_case_BmTree(void);
 TCase * test_case_BmVector(void);
 
 // BbMm Functions
+TCase * test_case_BmFunction(void);
 TCase * test_case_BmCondition(void);
 TCase * test_case_BmInferer(void);
 TCase * test_case_BmEvaluator(void);

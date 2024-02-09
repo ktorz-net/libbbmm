@@ -93,6 +93,11 @@ BmTree* BmEvaluator_crit( BmEvaluator* self, uint iCritirion )
     return array_at(self->criteria, iCritirion);
 }
 
+BmVector* BmEvaluator_crit_values( BmEvaluator* self, uint iCritirion )
+{
+    return array_at(self->critValues, iCritirion);
+}
+
 BmVector* BmEvaluator_weights( BmEvaluator* self )
 {
     return self->weights;
@@ -145,22 +150,19 @@ double BmEvaluator_crit_process( BmEvaluator* self, uint iCriterion, BmCode* inp
 
 
 /* Construction */
-BmTree* BmEvaluator_crit_reinitWith( BmEvaluator* self, uint iCrit, BmCode* newDependenceMask, uint numberOfOptions, double defaultValue )
+BmTree* BmEvaluator_crit_reinitWith( BmEvaluator* self, uint iCrit, BmCode* newDependenceMask, BmVector* newValues  )
 {
     // initialize criterion:
     BmTree* criterion= array_at( self->criteria, iCrit );
-    BmVector* critValues= array_at( self->critValues, iCrit );
     
     // make blanc page:
     BmTree_destroy( criterion );
-    BmVector_destroy( critValues );
+    deleteBmVector( array_at( self->critValues, iCrit ) );
     
     // Initialize the structure:
     BmCode* critSpace= BmCode_newBmCodeMask( self->space, newDependenceMask );
-
-    // Initialize the structure:
     BmTree_createWhith( criterion, critSpace );
-    BmVector_create_all( critValues, numberOfOptions, defaultValue );
+    array_at_set( self->critValues, iCrit, newValues );
     
     // record the mask:
     BmCode_destroy( array_at( self->masks, iCrit ) );
@@ -170,14 +172,11 @@ BmTree* BmEvaluator_crit_reinitWith( BmEvaluator* self, uint iCrit, BmCode* newD
     return criterion;   
 }
 
-void BmEvaluator_crit_at_set( BmEvaluator* self, uint iCrit, BmCode* option, uint output, double value )
+void BmEvaluator_crit_at_set( BmEvaluator* self, uint iCrit, BmCode* option, uint output )
 {
     // index criteria:
     BmTree* criterion= array_at( self->criteria, iCrit );
-    BmVector* critValues= array_at( self->critValues, iCrit );
-
     BmTree_at_set( criterion, option, output );
-    BmVector_at_set( critValues, output, value );
 }
 
 void BmEvaluator_crit_setWeight( BmEvaluator* self, uint iCritirion, double weight )

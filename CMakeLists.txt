@@ -30,6 +30,7 @@ set(SRC_FILES
     src/stt-BmBench.c
     src/stt-BmTree.c
     src/stt-BmVector.c
+    src/fct-BmFunction.c
     src/fct-BmCondition.c
     src/fct-BmInferer.c
     src/fct-BmEvaluator.c
@@ -57,6 +58,7 @@ set(TEST_SRC_FILES
     test/tc-stt-BmBench.c
     test/tc-stt-BmTree.c
     test/tc-stt-BmVector.c
+    test/tc-fct-BmFunction.c
     test/tc-fct-BmCondition.c
     test/tc-fct-BmInferer.c
     test/tc-fct-BmEvaluator.c

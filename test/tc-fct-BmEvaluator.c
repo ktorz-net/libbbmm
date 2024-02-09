@@ -129,7 +129,7 @@ START_TEST(test_BmEvaluator_construction01)
     BmEvaluator_crit_reinitWith(
         eval, 1, 
         newBmCode_list(2, 1, 2),
-        2, 0.0
+        newBmVector_list(2, 0.0, 0.0)
     );
     
     strcpy( buffer, "" );
@@ -143,13 +143,13 @@ START_TEST(test_BmEvaluator_construction01)
     BmEvaluator_crit_reinitWith(
         eval, 2, 
         newBmCode_list(1, 3),
-        2, 0.0
+        newBmVector_list(2, 0.0, 0.0)
     );
 
     BmEvaluator_crit_reinitWith(
         eval, 3, 
         newBmCode_list(2, 2, 4),
-        2, 0.0
+        newBmVector_list(2, 0.0, 0.0)
     );
 
     strcpy( buffer, "" );
@@ -191,18 +191,18 @@ START_TEST(test_BmEvaluator_construction02)
     BmEvaluator_crit_reinitWith(
         eval, 1,
         newBmCode_list(2, 1, 2),
-        2, 0.0
+        newBmVector_list(2, 0.0, 1.1)
     );
     
-    BmEvaluator_crit_at_set( eval, 1, code, 2, 1.1 );
+    BmEvaluator_crit_at_set( eval, 1, code, 2 );
 
     // Initialize Criterion 2:
     BmEvaluator_crit_reinitWith(
         eval, 2,
         newBmCode_list(1, 3),
-        2, 0.0
+        newBmVector_list(2, 0.0, 1.0)
     );
-    BmEvaluator_crit_at_set( eval, 2, BmCode_reinit_list(code, 1, 3), 2, 1.0 );
+    BmEvaluator_crit_at_set( eval, 2, BmCode_reinit_list(code, 1, 3), 2 );
 
     BmEvaluator_crit_setWeight( eval, 2, 2.0 );
 
@@ -210,10 +210,10 @@ START_TEST(test_BmEvaluator_construction02)
     BmEvaluator_crit_reinitWith(
         eval, 3,
         newBmCode_list(2, 2, 4),
-        2, 0.0
+        newBmVector_list(2, 0.0, 1.0)
     );
 
-    BmEvaluator_crit_at_set( eval, 3, BmCode_reinit_list(code, 2, 2, 4), 2, 1.0 );
+    BmEvaluator_crit_at_set( eval, 3, BmCode_reinit_list(code, 2, 2, 4), 2 );
     BmEvaluator_crit_setWeight( eval, 3, 3.0 );
     
     // Tests:

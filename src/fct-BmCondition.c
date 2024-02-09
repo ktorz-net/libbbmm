@@ -144,9 +144,8 @@ uint _BmCondition_resizeDistributionCapacity( BmCondition* self, uint newCapacit
     return boundedSize;
 }
 
-uint BmCondition_from_attach( BmCondition* self, BmCode* configuration, BmBench* distribution )
+uint BmCondition_attach( BmCondition* self, BmBench* distribution )
 {
-    assert( BmCode_dimention(self->parentRanges) == BmCode_dimention(configuration) );
     assert( BmBench_dimention(distribution) == (uint)1 );
 
     if( self->distribSize+1 > self->distribCapacity )
@@ -154,9 +153,17 @@ uint BmCondition_from_attach( BmCondition* self, BmCode* configuration, BmBench*
     
     self->distribSize+= 1;
     array_at_set(self->distributions, self->distribSize, distribution );
-    BmTree_at_set(self->selector, configuration, self->distribSize);
-
     return self->distribSize;
+}
+
+uint BmCondition_from_attach( BmCondition* self, BmCode* configuration, BmBench* distribution )
+{
+    assert( BmCode_dimention(self->parentRanges) == BmCode_dimention(configuration) );
+    uint iDistrib= BmCondition_attach(self, distribution);
+    
+    BmTree_at_set(self->selector, configuration, iDistrib);
+
+    return iDistrib;
 }
 
 BmBench* BmCondition_infer( BmCondition* self, BmBench* distribOverConfigurations )
