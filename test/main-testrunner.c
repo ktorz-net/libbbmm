@@ -19,10 +19,20 @@ Suite * bbmm_fct_test_suite(void)
 {
     Suite *s= suite_create("BbMm-functions");
 
-    suite_add_tcase( s, test_case_BmFunction() );
     suite_add_tcase( s, test_case_BmCondition() );
     suite_add_tcase( s, test_case_BmInferer() );
+    suite_add_tcase( s, test_case_BmCriterion() );
     suite_add_tcase( s, test_case_BmEvaluator() );
+
+    return s;
+}
+
+Suite * bbmm_slv_test_suite(void)
+{
+    Suite *s= suite_create("BbMm-solver");
+
+    suite_add_tcase( s, test_case_BmFunction() );
+    suite_add_tcase( s, test_case_BmBasicPolicy() );
 
     return s;
 }
@@ -33,15 +43,6 @@ Suite * bbmm_mdl_test_suite(void)
 
     suite_add_tcase( s, test_case_BmChain() );
     suite_add_tcase( s, test_case_BmProcess() );
-
-    return s;
-}
-
-Suite * bbmm_slv_test_suite(void)
-{
-    Suite *s= suite_create("BbMm-solver");
-
-    suite_add_tcase( s, test_case_BmBasicPolicy() );
 
     return s;
 }

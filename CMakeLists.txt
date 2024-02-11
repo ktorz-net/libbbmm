@@ -30,12 +30,13 @@ set(SRC_FILES
     src/stt-BmBench.c
     src/stt-BmTree.c
     src/stt-BmVector.c
-    src/fct-BmFunction.c
     src/fct-BmCondition.c
     src/fct-BmInferer.c
+    src/fct-BmCriterion.c
     src/fct-BmEvaluator.c
     src/mdl-BmChain.c
     src/mdl-BmProcess.c
+    src/slv-BmFunction.c
     src/slv-BmBasicPolicy.c
 )
 
@@ -58,12 +59,13 @@ set(TEST_SRC_FILES
     test/tc-stt-BmBench.c
     test/tc-stt-BmTree.c
     test/tc-stt-BmVector.c
-    test/tc-fct-BmFunction.c
     test/tc-fct-BmCondition.c
     test/tc-fct-BmInferer.c
+    test/tc-fct-BmCriterion.c
     test/tc-fct-BmEvaluator.c
     test/tc-mdl-BmChain.c
     test/tc-mdl-BmProcess.c
+    test/tc-slv-BmFunction.c
     test/tc-slv-BmBasicPolicy.c
 #    test/tc-cofeeRobot.c
     test/main-testrunner.c

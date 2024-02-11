@@ -32,7 +32,7 @@ START_TEST(test_BmBench_init)
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[42], [69, 103], [3]}" );
     ck_assert_uint_eq( BmBench_size(collec), 3);
-    ck_assert_uint_eq( collec->capacity, 6 );
+    ck_assert_uint_eq( collec->capacity, 4 );
 
     BmBench_attach(collec,  newBmCode_list(2, 69, 56) );
     ck_assert_uint_eq( collec->size, 4 );

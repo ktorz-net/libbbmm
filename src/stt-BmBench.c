@@ -1,4 +1,3 @@
-
 #include "bbmm.h"
 
 #include <stdlib.h>
@@ -25,6 +24,7 @@ BmBench* newBmBenchWith( uint capacity, BmCode* newFirstItems, double value )
         newFirstItems,
         value );
 }
+
 BmBench* newBmBenchAs( BmBench* model )
 {
     return BmBench_createAs( newEmpty(BmBench), model );
@@ -152,7 +152,7 @@ uint BmBench_attach( BmBench* self, BmCode* newItem )
 uint BmBench_attachLast( BmBench* self, BmCode* newItem, double value )
 {
     uint id= self->start+self->size+1;
-    if( id >= self->capacity )
+    if( id > self->capacity )
     {
         BmBench_resizeCapacity( self, (self->size*2)+2);
         id= self->start+self->size+1;
@@ -262,6 +262,7 @@ uint BmBench_sort( BmBench* self, fctptr_BmBench_compare compare )
     }
     return counter;
 }
+
 uint BmBench_switchCodes( BmBench* self, uint i1, uint i2 )
 {
     uint id2= self->start+i1;

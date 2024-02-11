@@ -313,6 +313,7 @@ BmCode* BmTree_inputRanges( BmTree* self )
 
 uint BmTree_at( BmTree* self, BmCode* code)
 {
+    assert( BmCode_dimention( self->inputRanges ) == BmCode_dimention( code )  );
     uint branch= 0;
     uint deep= 1;
 

@@ -6,28 +6,35 @@
 
 START_TEST(test_BmEvaluator_init)
 {
-    BmEvaluator* eval= newBmEvaluatorBasic( 3, 1 );
+    BmEvaluator* instance= newBmEvaluatorBasic( 3, 1 );
 
     char buffer[1024]= "";
 
-    BmCode_print( BmEvaluator_space(eval), buffer );
+    BmCode_print( BmEvaluator_space(instance), buffer );
     ck_assert_str_eq( buffer, "[2, 2, 2]" );
 
-    ck_assert_uint_eq( BmEvaluator_numberOfCriteria(eval), 1 );
+    ck_assert_uint_eq( BmEvaluator_numberOfCriteria(instance), 1 );
 
     strcpy( buffer, "" );
-    BmTree_print( array_at(eval->criteria, 1), buffer );
-    ck_assert_str_eq( buffer, "{}" );
+    BmCriterion_print( BmEvaluator_criterion(instance, 1), buffer );
+    
+    //printf( "<--%s-->", buffer );
+    ck_assert_str_eq(
+        buffer, "Selector:\n\
+{[1]:1,\n\
+  [2]:1}\n\
+Outputs:\n\
+[0.00]" );
 
     strcpy( buffer, "" );
-    BmCode_print( array_at( eval->masks, 1), buffer );
+    BmCode_print( array_at( instance->masks, 1), buffer );
     ck_assert_str_eq( buffer, "[]" );
 
     strcpy( buffer, "" );
-    BmVector_print( BmEvaluator_weights(eval), buffer );
+    BmVector_print( BmEvaluator_weights(instance), buffer );
     ck_assert_str_eq( buffer, "[1.00]" );
 
-    deleteBmEvaluator(eval);
+    deleteBmEvaluator(instance);
 }
 
 START_TEST(test_BmEvaluator_initSpace)
@@ -62,8 +69,14 @@ START_TEST(test_BmEvaluator_initStateAction)
     ck_assert_str_eq( buffer, "[2, 4, 6, 3, 5]" );
 
     strcpy( buffer, "" );
-    BmTree_print( array_at(eval1->criteria, 1), buffer );
-    ck_assert_str_eq( buffer, "{}" );
+    BmCriterion_print( BmEvaluator_criterion( eval1, 1), buffer );
+    
+    //printf( "<--\n%s\n-->\n", buffer );
+    ck_assert_str_eq( buffer, "Selector:\n\
+{[1]:1,\n\
+  [2]:1}\n\
+Outputs:\n\
+[0.00]" );
 
     strcpy( buffer, "" );
     BmCode_print( array_at( eval1->masks, 1), buffer );
@@ -126,7 +139,7 @@ START_TEST(test_BmEvaluator_construction01)
     BmCode_print( array_at( eval->masks, 3), buffer );
     ck_assert_str_eq( buffer, "[]" );
 
-    BmEvaluator_crit_reinitWith(
+    BmEvaluator_criterion_reinitWith(
         eval, 1, 
         newBmCode_list(2, 1, 2),
         newBmVector_list(2, 0.0, 0.0)
@@ -137,16 +150,16 @@ START_TEST(test_BmEvaluator_construction01)
     ck_assert_str_eq( buffer, "[1, 2]" );
 
     strcpy( buffer, "" );
-    BmCode_print( BmTree_inputRanges( BmEvaluator_crit(eval, 1) ), buffer );
+    BmCode_print( BmCriterion_inputRanges( BmEvaluator_criterion(eval, 1) ), buffer );
     ck_assert_str_eq( buffer, "[10, 2]" );
 
-    BmEvaluator_crit_reinitWith(
+    BmEvaluator_criterion_reinitWith(
         eval, 2, 
         newBmCode_list(1, 3),
         newBmVector_list(2, 0.0, 0.0)
     );
 
-    BmEvaluator_crit_reinitWith(
+    BmEvaluator_criterion_reinitWith(
         eval, 3, 
         newBmCode_list(2, 2, 4),
         newBmVector_list(2, 0.0, 0.0)
@@ -164,17 +177,17 @@ START_TEST(test_BmEvaluator_construction01)
 
     // 3 weights: 
 
-    ck_assert_double_eq_tol( BmEvaluator_crit_weight( eval, 1 ), 1.0, 0.00001 );
-    ck_assert_double_eq_tol( BmEvaluator_crit_weight( eval, 2 ), 1.0, 0.00001 );
-    ck_assert_double_eq_tol( BmEvaluator_crit_weight( eval, 3 ), 1.0, 0.00001 );
+    ck_assert_double_eq_tol( BmEvaluator_criterion_weight( eval, 1 ), 1.0, 0.00001 );
+    ck_assert_double_eq_tol( BmEvaluator_criterion_weight( eval, 2 ), 1.0, 0.00001 );
+    ck_assert_double_eq_tol( BmEvaluator_criterion_weight( eval, 3 ), 1.0, 0.00001 );
 
-    BmEvaluator_crit_setWeight( eval, 1 , 1.0 );
-    BmEvaluator_crit_setWeight( eval, 2 , 2.0 );
-    BmEvaluator_crit_setWeight( eval, 3 , 3.0 );
+    BmEvaluator_criterion_setWeight( eval, 1 , 1.0 );
+    BmEvaluator_criterion_setWeight( eval, 2 , 2.0 );
+    BmEvaluator_criterion_setWeight( eval, 3 , 3.0 );
 
-    ck_assert_double_eq_tol( BmEvaluator_crit_weight( eval, 1 ), 1.0, 0.00001 );
-    ck_assert_double_eq_tol( BmEvaluator_crit_weight( eval, 2 ), 2.0, 0.00001 );
-    ck_assert_double_eq_tol( BmEvaluator_crit_weight( eval, 3 ), 3.0, 0.00001 );
+    ck_assert_double_eq_tol( BmEvaluator_criterion_weight( eval, 1 ), 1.0, 0.00001 );
+    ck_assert_double_eq_tol( BmEvaluator_criterion_weight( eval, 2 ), 2.0, 0.00001 );
+    ck_assert_double_eq_tol( BmEvaluator_criterion_weight( eval, 3 ), 3.0, 0.00001 );
 
     deleteBmEvaluator( eval );
 }
@@ -188,33 +201,33 @@ START_TEST(test_BmEvaluator_construction02)
     BmCode * code= newBmCode_list( 2, 1, 2 );
     
     // Initialize Criterion 1:
-    BmEvaluator_crit_reinitWith(
+    BmEvaluator_criterion_reinitWith(
         eval, 1,
         newBmCode_list(2, 1, 2),
         newBmVector_list(2, 0.0, 1.1)
     );
     
-    BmEvaluator_crit_at_set( eval, 1, code, 2 );
+    BmEvaluator_criterion_from_set( eval, 1, code, 2 );
 
     // Initialize Criterion 2:
-    BmEvaluator_crit_reinitWith(
+    BmEvaluator_criterion_reinitWith(
         eval, 2,
         newBmCode_list(1, 3),
         newBmVector_list(2, 0.0, 1.0)
     );
-    BmEvaluator_crit_at_set( eval, 2, BmCode_reinit_list(code, 1, 3), 2 );
+    BmEvaluator_criterion_from_set( eval, 2, BmCode_reinit_list(code, 1, 3), 2 );
 
-    BmEvaluator_crit_setWeight( eval, 2, 2.0 );
+    BmEvaluator_criterion_setWeight( eval, 2, 2.0 );
 
     // Initialize Criterion 3:
-    BmEvaluator_crit_reinitWith(
+    BmEvaluator_criterion_reinitWith(
         eval, 3,
         newBmCode_list(2, 2, 4),
         newBmVector_list(2, 0.0, 1.0)
     );
 
-    BmEvaluator_crit_at_set( eval, 3, BmCode_reinit_list(code, 2, 2, 4), 2 );
-    BmEvaluator_crit_setWeight( eval, 3, 3.0 );
+    BmEvaluator_criterion_from_set( eval, 3, BmCode_reinit_list(code, 2, 2, 4), 2 );
+    BmEvaluator_criterion_setWeight( eval, 3, 3.0 );
     
     // Tests:
     code= BmCode_reinit_list( code, 4, 11, 12, 13, 14 );
