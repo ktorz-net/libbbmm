@@ -18,7 +18,7 @@ TCase * test_case_BmCriterion(void);
 TCase * test_case_BmEvaluator(void);
 
 // BbMm Solver
-TCase * test_case_BmFunction(void);
+TCase * test_case_BmDecision(void);
 TCase * test_case_BmBasicPolicy(void);
 
 // BbMm Models

@@ -31,7 +31,7 @@ Suite * bbmm_slv_test_suite(void)
 {
     Suite *s= suite_create("BbMm-solver");
 
-    suite_add_tcase( s, test_case_BmFunction() );
+    suite_add_tcase( s, test_case_BmDecision() );
     suite_add_tcase( s, test_case_BmBasicPolicy() );
 
     return s;

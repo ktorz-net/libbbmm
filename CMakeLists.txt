@@ -36,7 +36,7 @@ set(SRC_FILES
     src/fct-BmEvaluator.c
     src/mdl-BmChain.c
     src/mdl-BmProcess.c
-    src/slv-BmFunction.c
+    src/slv-BmDecision.c
     src/slv-BmBasicPolicy.c
 )
 
@@ -65,7 +65,7 @@ set(TEST_SRC_FILES
     test/tc-fct-BmEvaluator.c
     test/tc-mdl-BmChain.c
     test/tc-mdl-BmProcess.c
-    test/tc-slv-BmFunction.c
+    test/tc-slv-BmDecision.c
     test/tc-slv-BmBasicPolicy.c
 #    test/tc-cofeeRobot.c
     test/main-testrunner.c

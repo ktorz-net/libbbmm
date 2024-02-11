@@ -6,17 +6,17 @@
 #include <assert.h>
 
 /* Constructor */
-BmFunction* newBmFunctionBasic( uint inputSize )
+BmDecision* newBmDecisionBasic( uint inputSize )
 {
-    return BmFunction_createWith( newEmpty(BmFunction), newBmCode_all(inputSize, 2), newBmBench(1) );
+    return BmDecision_createWith( newEmpty(BmDecision), newBmCode_all(inputSize, 2), newBmBench(1) );
 }
 
-BmFunction* newBmFunctionWith( BmCode* newInputRanges, BmBench* newOutputs )
+BmDecision* newBmDecisionWith( BmCode* newInputRanges, BmBench* newOutputs )
 {
-    return BmFunction_createWith( newEmpty(BmFunction), newInputRanges, newOutputs );
+    return BmDecision_createWith( newEmpty(BmDecision), newInputRanges, newOutputs );
 }
 
-BmFunction* BmFunction_createWith( BmFunction* self, BmCode* newInputRanges, BmBench* newOutputs )
+BmDecision* BmDecision_createWith( BmDecision* self, BmCode* newInputRanges, BmBench* newOutputs )
 {
     assert( BmCode_dimention(newInputRanges) > (uint)0 );
     self->selector= newBmTreeWith( newInputRanges );
@@ -26,67 +26,67 @@ BmFunction* BmFunction_createWith( BmFunction* self, BmCode* newInputRanges, BmB
 }
 
 /* Destructor */
-BmFunction* BmFunction_destroy( BmFunction* self )
+BmDecision* BmDecision_destroy( BmDecision* self )
 {
     deleteBmTree( self->selector );
     deleteBmBench( self->outputs );
     return self;
 }
 
-void deleteBmFunction( BmFunction* instance )
+void deleteBmDecision( BmDecision* instance )
 {
-    BmFunction_destroy( instance );
+    BmDecision_destroy( instance );
     free( instance );
 }
 
 /* re-initializer */
-uint BmFunction_reinitWith( BmFunction* self, BmCode* newInputRanges, BmBench* newOutputs )
+uint BmDecision_reinitWith( BmDecision* self, BmCode* newInputRanges, BmBench* newOutputs )
 {
-    BmFunction_destroy( self );
-    BmFunction_createWith( self, newInputRanges, newOutputs );
+    BmDecision_destroy( self );
+    BmDecision_createWith( self, newInputRanges, newOutputs );
     return 1;
 }
 
 /* Accessor */
-BmTree*   BmFunction_selector( BmFunction* self )
+BmTree*   BmDecision_selector( BmDecision* self )
 {
     return self->selector;
 }
 
-BmBench* BmFunction_outputs( BmFunction* self )
+BmBench* BmDecision_outputs( BmDecision* self )
 {
     return self->outputs;
 }
 
-uint BmFunction_from( BmFunction* self, BmCode* input )
+uint BmDecision_from( BmDecision* self, BmCode* input )
 {
     return BmTree_at( self->selector, input);
 }
 
-BmCode* BmFunction_codeFrom( BmFunction* self, BmCode* input )
+BmCode* BmDecision_codeFrom( BmDecision* self, BmCode* input )
 {
     return BmBench_at( self->outputs, BmTree_at( self->selector, input) );
 }
 
-double BmFunction_valueFrom( BmFunction* self, BmCode* input )
+double BmDecision_valueFrom( BmDecision* self, BmCode* input )
 {
     return BmBench_valueAt( self->outputs, BmTree_at( self->selector, input) );
 }
 
 /* Construction */
-uint BmFunction_attachOuput( BmFunction* self, BmCode* newOuputCode, double ouputValue )
+uint BmDecision_attachOuput( BmDecision* self, BmCode* newOuputCode, double ouputValue )
 {
     return BmBench_attachLast( self->outputs, newOuputCode, ouputValue );
 }
 
-uint BmFunction_from_set( BmFunction* self, BmCode* input, uint ouputId )
+uint BmDecision_from_set( BmDecision* self, BmCode* input, uint ouputId )
 {
     return BmTree_at_set( self->selector, input, ouputId );
 }
 
 
 /* Instance tools */
-void BmFunction_switch(BmFunction* self, BmFunction* doppelganger)
+void BmDecision_switch(BmDecision* self, BmDecision* doppelganger)
 {
     // local copy:
     BmTree* selector= self->selector;
@@ -102,12 +102,12 @@ void BmFunction_switch(BmFunction* self, BmFunction* doppelganger)
 }
 
 /* Printing */
-char* BmFunction_print( BmFunction* self, char* buffer )
+char* BmDecision_print( BmDecision* self, char* buffer )
 {
-    return BmFunction_printSep( self, buffer, ",\n  ");
+    return BmDecision_printSep( self, buffer, ",\n  ");
 }
 
-char* BmFunction_printSep( BmFunction* self, char* buffer, char* separator )
+char* BmDecision_printSep( BmDecision* self, char* buffer, char* separator )
 {
     strcat( buffer, "Selector:\n" );
     BmTree_print_sep( self->selector, buffer, separator );

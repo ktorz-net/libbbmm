@@ -15,7 +15,7 @@
  *       - BmEvaluator    : A value function over multiple criteria
  * 
  *   SOLVER MODULE:
- *       - BmFunction     : Define a transition from a code to another one (input code -> output code + value)
+ *       - BmDecision     : Define a transition from a code to another one (input code -> output code + value)
  * 
  *   VERSION: 0.0.X
  * 
@@ -358,52 +358,6 @@ char* BmTree_printInside( BmTree* self, char* output); // print `self` at the en
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   F U N C T I O N  :  F U N C T I O N                         *
- * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *
- * Define a transition from a code to another one (input code -> output code + value)
- * 
- * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
-
-typedef struct {
-  BmTree* selector;
-  BmBench* outputs;
-} BmFunction;
-
-/* Constructor */
-BmFunction* newBmFunctionBasic( uint inputSize );
-BmFunction* newBmFunctionWith( BmCode* newInputRanges, BmBench* newOutputs );
-
-BmFunction* BmFunction_createWith( BmFunction* self, BmCode* newInputRanges, BmBench* newOutputs );
-
-/* Destructor */
-BmFunction* BmFunction_destroy( BmFunction* self );
-void deleteBmFunction( BmFunction* instance );
-
-/* re-initializer */
-uint BmFunction_reinitWith( BmFunction* self, BmCode* newInputRanges, BmBench* newOutputs );
-
-/* Accessor */
-BmTree*   BmFunction_selector( BmFunction* self );
-BmBench*  BmFunction_outputs( BmFunction* self );
-
-uint    BmFunction_from( BmFunction* self, BmCode* input );
-BmCode* BmFunction_codeFrom( BmFunction* self, BmCode* input );
-double  BmFunction_valueFrom( BmFunction* self, BmCode* input );
-
-/* Construction */
-uint BmFunction_attachOuput( BmFunction* self, BmCode* newOuputCode, double ouputValue );
-uint BmFunction_from_set( BmFunction* self, BmCode* input, uint ouputId );
-
-/* Instance tools */
-void BmFunction_switch(BmFunction* self, BmFunction* doppelganger);
-
-/* Printing */
-char* BmFunction_print(BmFunction* self, char* output);
-char* BmFunction_printSep(BmFunction* self, char* output, char* separator);
-
-
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   F U N C T I O N  :  C O N D I T I O N                       *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *
@@ -621,6 +575,52 @@ void BmEvaluator_criterion_setWeight( BmEvaluator* self, uint iCritirion, double
  *
  * 
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+
+/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *   B b M m   F U N C T I O N  :  F U N C T I O N                         *
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *
+ * Define a transition from a code to another one (input code -> output code + value)
+ * 
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+typedef struct {
+  BmTree* selector;
+  BmBench* outputs;
+} BmDecision;
+
+/* Constructor */
+BmDecision* newBmDecisionBasic( uint inputSize );
+BmDecision* newBmDecisionWith( BmCode* newInputRanges, BmBench* newOutputs );
+
+BmDecision* BmDecision_createWith( BmDecision* self, BmCode* newInputRanges, BmBench* newOutputs );
+
+/* Destructor */
+BmDecision* BmDecision_destroy( BmDecision* self );
+void deleteBmDecision( BmDecision* instance );
+
+/* re-initializer */
+uint BmDecision_reinitWith( BmDecision* self, BmCode* newInputRanges, BmBench* newOutputs );
+
+/* Accessor */
+BmTree*   BmDecision_selector( BmDecision* self );
+BmBench*  BmDecision_outputs( BmDecision* self );
+
+uint    BmDecision_from( BmDecision* self, BmCode* input );
+BmCode* BmDecision_codeFrom( BmDecision* self, BmCode* input );
+double  BmDecision_valueFrom( BmDecision* self, BmCode* input );
+
+/* Construction */
+uint BmDecision_attachOuput( BmDecision* self, BmCode* newOuputCode, double ouputValue );
+uint BmDecision_from_set( BmDecision* self, BmCode* input, uint ouputId );
+
+/* Instance tools */
+void BmDecision_switch(BmDecision* self, BmDecision* doppelganger);
+
+/* Printing */
+char* BmDecision_print(BmDecision* self, char* output);
+char* BmDecision_printSep(BmDecision* self, char* output, char* separator);
 
 
 #endif // BBMM_H
