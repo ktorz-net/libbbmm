@@ -119,10 +119,11 @@ void BmCriterion_switch(BmCriterion* self, BmCriterion* doppelganger)
 BmBench* BmCriterion_asNewBench( BmCriterion* self )
 {
     BmBench* bench= BmTree_asNewBench( self->selector );
-    uint size= BmBench_size( bench );
-    for( uint i= 1 ; i <= size ; ++i )
+    uint iOutput= BmCode_dimention( self->selector->inputRanges ) + 1;
+    uint benchSize= BmBench_size( bench );
+    for( uint i= 1 ; i <= benchSize ; ++i )
     {
-        uint outputId= BmCode_at( BmBench_at( bench, i), size ); 
+        uint outputId= BmCode_at( BmBench_at( bench, i), iOutput ); 
         BmBench_at_setValue(
             bench,
             i,

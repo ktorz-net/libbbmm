@@ -48,7 +48,7 @@ START_TEST(test_BmCriterion_switch)
 START_TEST(test_BmCriterion_asBench)
 {
     BmCriterion* instance= newBmCriterionWith(
-        newBmCode_list(2, 3, 4), 
+        newBmCode_list(2, 4, 3), 
         newBmVector_list(3, 0.01, 1.0, -3.2)
     );
     char buffer[1024];
@@ -58,7 +58,7 @@ START_TEST(test_BmCriterion_asBench)
     strcpy(buffer, "");
     ck_assert_str_eq(
         BmBench_print( bench, buffer ),
-        "{[1, 0, 1]:0.01, [2, 0, 1]:0.01, [3, 0, 1]:0.01}"
+        "{[1, 0, 1]:0.01, [2, 0, 1]:0.01, [3, 0, 1]:0.01, [4, 0, 1]:0.01}"
     );
 
     deleteBmBench( bench );
