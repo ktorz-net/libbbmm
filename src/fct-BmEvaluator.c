@@ -99,6 +99,11 @@ double BmEvaluator_criterion_weight( BmEvaluator* self, uint iCritirion )
     return BmVector_at( self->weights, iCritirion );
 }
 
+BmCode* BmEvaluator_criterion_mask( BmEvaluator* self, uint iCritirion )
+{
+    return array_at( self->masks, iCritirion );
+}
+
 
 /* Process */
 double BmEvaluator_process( BmEvaluator* self, BmCode* input )

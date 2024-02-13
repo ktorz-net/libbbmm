@@ -115,6 +115,23 @@ void BmCriterion_switch(BmCriterion* self, BmCriterion* doppelganger)
     doppelganger->outputs= outputs;
 }
 
+/* Generating */
+BmBench* BmCriterion_asNewBench( BmCriterion* self )
+{
+    BmBench* bench= BmTree_asNewBench( self->selector );
+    uint size= BmBench_size( bench );
+    for( uint i= 1 ; i <= size ; ++i )
+    {
+        uint outputId= BmCode_at( BmBench_at( bench, i), size ); 
+        BmBench_at_setValue(
+            bench,
+            i,
+            BmVector_at( self->outputs, outputId )
+        );
+    }
+    return bench;
+}
+
 /* Printing */
 char* BmCriterion_print(BmCriterion* self, char* buffer)
 {

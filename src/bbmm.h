@@ -497,7 +497,7 @@ void deleteBmCriterion( BmCriterion* instance );
 uint BmCriterion_reinitWith( BmCriterion* self, BmCode* newInputRanges, BmVector* newOutputs );
 
 /* Accessor */
-BmTree*   BmCriterion_selector( BmCriterion* self );
+BmTree* BmCriterion_selector( BmCriterion* self );
 BmCode*   BmCriterion_inputRanges( BmCriterion* self );
 BmVector* BmCriterion_outputs( BmCriterion* self );
 
@@ -509,6 +509,9 @@ uint BmCriterion_from_set( BmCriterion* self, BmCode* input, uint ouputId );
 
 /* Instance tools */
 void BmCriterion_switch(BmCriterion* self, BmCriterion* doppelganger);
+
+/* Generating */
+BmBench* BmCriterion_asNewBench( BmCriterion* self );
 
 /* Printing */
 char* BmCriterion_print(BmCriterion* self, char* buffer);
@@ -548,6 +551,7 @@ uint BmEvaluator_numberOfCriteria( BmEvaluator* self );
 BmCriterion* BmEvaluator_criterion( BmEvaluator* self, uint iCritirion );
 BmVector* BmEvaluator_weights( BmEvaluator* self );
 double BmEvaluator_criterion_weight( BmEvaluator* self, uint iCritirion );
+BmCode* BmEvaluator_criterion_mask( BmEvaluator* self, uint iCritirion );
 
 /* Process */
 double BmEvaluator_process( BmEvaluator* self, BmCode* input );
@@ -604,12 +608,12 @@ void deleteBmDecision( BmDecision* instance );
 uint BmDecision_reinitWith( BmDecision* self, BmCode* newInputRanges, BmBench* newOutputs );
 
 /* Accessor */
-BmTree*   BmDecision_selector( BmDecision* self );
-BmBench*  BmDecision_outputs( BmDecision* self );
+BmTree* BmDecision_selector( BmDecision* self );
+BmBench* BmDecision_outputs( BmDecision* self );
 
-uint    BmDecision_from( BmDecision* self, BmCode* input );
+uint BmDecision_from( BmDecision* self, BmCode* input );
 BmCode* BmDecision_codeFrom( BmDecision* self, BmCode* input );
-double  BmDecision_valueFrom( BmDecision* self, BmCode* input );
+double BmDecision_valueFrom( BmDecision* self, BmCode* input );
 
 /* Construction */
 uint BmDecision_attachOuput( BmDecision* self, BmCode* newOuputCode, double ouputValue );
@@ -621,6 +625,5 @@ void BmDecision_switch(BmDecision* self, BmDecision* doppelganger);
 /* Printing */
 char* BmDecision_print(BmDecision* self, char* output);
 char* BmDecision_printSep(BmDecision* self, char* output, char* separator);
-
 
 #endif // BBMM_H
