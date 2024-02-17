@@ -150,7 +150,7 @@ BmBench* _BmInferer_setFomOverallDistribution(BmInferer * self, BmBench* overall
 {
     // Generate the mask of state' varaibles (i.e the last ones):
     BmCode* outputMask= newBmCode( self->outputDimention );
-    uint LastNotOutput= self->overallDimention - self->outputDimention - 1;
+    uint LastNotOutput= self->overallDimention - self->outputDimention;
     for( uint i= 1 ; i <= self->outputDimention ; ++i )
     {
         BmCode_at_set( outputMask, i, LastNotOutput+i );
@@ -214,7 +214,8 @@ BmBench* BmInferer_process_newOverallDistribution( BmInferer* self, BmBench* inp
 BmBench* BmInferer_process( BmInferer* self, BmBench* inputDistribution )
 {
     // infer :
-    deleteBmBench( BmInferer_process_newOverallDistribution(self, inputDistribution) );
+    BmBench* overall= BmInferer_process_newOverallDistribution(self, inputDistribution);
+    deleteBmBench( overall );
     return self->distribution;
 }
 

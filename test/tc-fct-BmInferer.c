@@ -258,7 +258,7 @@ START_TEST(test_BmInferer_infering)
     strcpy( buffer, "" );
     ck_assert_str_eq(
         BmBench_print( BmInferer_distribution(trans), buffer ),
-        "{[1, 1]:0.20, [1, 2]:0.30, [2, 1]:0.20, [2, 2]:0.30}"
+        "{[1, 1]:0.28, [1, 2]:0.12, [2, 1]:0.42, [2, 2]:0.18}"
     );
 
     strcpy( buffer, "" );
@@ -269,7 +269,7 @@ START_TEST(test_BmInferer_infering)
     strcpy( buffer, "" );
     ck_assert_str_eq(
         BmBench_print( BmInferer_processState_Action(trans, state, action), buffer ),
-        "{[1, 1]:0.20, [1, 2]:0.30, [2, 1]:0.20, [2, 2]:0.30}"
+        "{[1, 1]:0.28, [1, 2]:0.12, [2, 1]:0.42, [2, 2]:0.18}"
     );
     
     // Clean Up :
