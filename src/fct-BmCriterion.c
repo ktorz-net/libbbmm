@@ -84,13 +84,17 @@ double BmCriterion_from( BmCriterion* self, BmCode* input )
 }
 
 /* Construction */
+uint BmCriterion_addValue( BmCriterion* self, double ouputValue )
+{
+    uint newDimention= BmVector_dimention( self->outputs ) + 1;
+    BmVector_redimention( self->outputs, newDimention);
+    BmVector_at_set( self->outputs, newDimention, ouputValue );
+    return newDimention;
+}
+
 uint BmCriterion_ouputId_setValue( BmCriterion* self, uint ouputId, double ouputValue )
 {
-    return BmVector_at_set(
-        self->outputs,
-        ouputId,
-        ouputValue
-    );
+    BmVector_at_set( self->outputs, ouputId, ouputValue );
     return ouputId;
 }
 

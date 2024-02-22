@@ -504,6 +504,7 @@ BmVector* BmCriterion_outputs( BmCriterion* self );
 double BmCriterion_from( BmCriterion* self, BmCode* input );
 
 /* Construction */
+uint BmCriterion_addValue( BmCriterion* self, double ouputValue );
 uint BmCriterion_ouputId_setValue( BmCriterion* self, uint ouputId, double ouputValue );
 uint BmCriterion_from_set( BmCriterion* self, BmCode* input, uint ouputId );
 
