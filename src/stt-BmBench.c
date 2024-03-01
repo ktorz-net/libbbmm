@@ -16,13 +16,11 @@ BmBench* newBmBench(uint capacity)
     return BmBench_create( newEmpty(BmBench), capacity );
 }
 
-BmBench* newBmBenchWith( uint capacity, BmCode* newFirstItems, double value )
+BmBench* DEPRECIATED_newBmBenchWith( uint capacity, BmCode* newFirstItems, double value )
 {
-    return BmBench_createWith(
-        newEmpty(BmBench),
-        capacity,
-        newFirstItems,
-        value );
+    BmBench* self= BmBench_create( newEmpty(BmBench), capacity);
+    DEPRECIATED_BmBench_attachLast( self, newFirstItems, value );
+    return self;
 }
 
 BmBench* newBmBenchAs( BmBench* model )
@@ -46,21 +44,14 @@ BmBench* BmBench_create(BmBench* self, uint capacity)
     return self;
 }
 
-BmBench* BmBench_createWith( BmBench* self, uint capacity, BmCode* newFirstItems, double value )
-{
-    BmBench_create(self, capacity);
-    BmBench_attachLast( self, newFirstItems, value );
-    return self;
-}
-
 BmBench* BmBench_createAs( BmBench* self, BmBench* model )
 {
     BmBench_create(self, BmBench_size(model) );
     for( uint i= 1 ; i <= BmBench_size(model) ; ++i )
     {
-        BmBench_attachLast( self,
-            newBmCodeAs( BmBench_at( model, i ) ),
-            BmBench_valueAt( model, i ) );
+        DEPRECIATED_BmBench_attachLast( self,
+            newBmCodeAs( BmBench_codeAt( model, i ) ),
+            DEPRECIATED_BmBench_valueAt( model, i ) );
     }
     return self;
 }
@@ -124,32 +115,32 @@ uint BmBench_capacity(BmBench* self)
     return self->capacity;
 }
 
-BmCode* BmBench_at( BmBench* self, uint i )
+BmCode* BmBench_codeAt( BmBench* self, uint i )
 {
     return array_at( self->items, self->start+i );
 }
 
-double BmBench_valueAt( BmBench* self, uint i )
+double DEPRECIATED_BmBench_valueAt( BmBench* self, uint i )
 {
     return array_at( self->values, self->start+i );
 }
 
-uint BmBenchDimention( BmBench* self)
+uint BmBenchCodeDimention( BmBench* self)
 {
     if( self->size == 0 )
         return 0;
-    return BmCodeDimention( BmBench_at( self, 1 ) );
+    return BmCodeDimention( BmBench_codeAt( self, 1 ) );
 }
 
 /* Test */
 
 /* Construction Item */
-uint BmBench_attach( BmBench* self, BmCode* newItem )
+uint BmBench_attachCode( BmBench* self, BmCode* newItem )
 {
-    return BmBench_attachLast( self, newItem, 0.0 );
+    return DEPRECIATED_BmBench_attachLast( self, newItem, 0.0 );
 }
 
-uint BmBench_attachLast( BmBench* self, BmCode* newItem, double value )
+uint DEPRECIATED_BmBench_attachLast( BmBench* self, BmCode* newItem, double value )
 {
     uint id= self->start+self->size+1;
     if( id > self->capacity )
@@ -173,7 +164,7 @@ BmCode* BmBench_detachLast( BmBench* self )
     return array_at( self->items, id );
 }
 
-uint BmBench_attachFirst( BmBench* self, BmCode* newItem, double value )
+uint DEPRECIATED_BmBench_attachFirst( BmBench* self, BmCode* newItem, double value )
 {
     if( self->start == 0 )
     {
@@ -196,7 +187,7 @@ BmCode* BmBench_detachFirst( BmBench* self )
     return array_at( self->items, id );
 }
 
-BmCode* BmBench_at_setValue( BmBench* self, uint i, double value )
+BmCode* DEPRECIATED_BmBench_at_setValue( BmBench* self, uint i, double value )
 {
     array_at_set( self->values, self->start+i, value );
     return array_at( self->items, self->start+i );
@@ -232,12 +223,12 @@ void BmBench_add_reducted( BmBench *self, BmBench *another, BmCode* mask )
     BmCode* state= newBmCode_all( dim, 0 );
     for( uint iCode = 1 ; iCode <= BmBench_size(another) ; ++iCode  )
     {
-        BmCode* model= BmBench_at( another, iCode );
+        BmCode* model= BmBench_codeAt( another, iCode );
         for( uint i= 1 ; i <= dim ; ++i )
         {
             BmCode_at_set( state, i, BmCode_digit(model, BmCode_digit( mask, i) ) );
         }
-        BmBench_attachLast( self, newBmCodeAs(state), BmBench_valueAt( another, iCode)
+        DEPRECIATED_BmBench_attachLast( self, newBmCodeAs(state), DEPRECIATED_BmBench_valueAt( another, iCode)
         );
     }
     deleteBmCode( state );
@@ -284,24 +275,24 @@ uint BmBench_switchCodes( BmBench* self, uint i1, uint i2 )
 }
 
 /* Comparison */
-bool BmBench_isGreater(BmBench* self, uint i1, uint i2)
+bool BmBench_isCodeGreater(BmBench* self, uint i1, uint i2)
 {
-    return BmCode_isGreaterThan( BmBench_at(self, i1), BmBench_at(self, i2) );
+    return BmCode_isGreaterThan( BmBench_codeAt(self, i1), BmBench_codeAt(self, i2) );
 }
 
-bool BmBench_isSmaller(BmBench* self, uint i1, uint i2)
+bool BmBench_isCodeSmaller(BmBench* self, uint i1, uint i2)
 {
-    return BmCode_isSmallerThan( BmBench_at(self, i1), BmBench_at(self, i2) );
+    return BmCode_isSmallerThan( BmBench_codeAt(self, i1), BmBench_codeAt(self, i2) );
 }
 
-bool BmBench_isGreaterValue(BmBench* self, uint i1, uint i2)
+bool BmBench_isVectorGreater(BmBench* self, uint i1, uint i2)
 {
-    return BmBench_valueAt(self, i1) > BmBench_valueAt(self, i2);
+    return DEPRECIATED_BmBench_valueAt(self, i1) > DEPRECIATED_BmBench_valueAt(self, i2);
 }
 
-bool BmBench_isSmallerValue(BmBench* self, uint i1, uint i2)
+bool BmBench_isVectorSmaller(BmBench* self, uint i1, uint i2)
 {
-    return BmBench_valueAt(self, i1) < BmBench_valueAt(self, i2);
+    return DEPRECIATED_BmBench_valueAt(self, i1) < DEPRECIATED_BmBench_valueAt(self, i2);
 }
 
 
@@ -309,9 +300,9 @@ bool BmBench_isSmallerValue(BmBench* self, uint i1, uint i2)
 char* _BmBench_printItem(BmBench* self, uint iItem, char* output)
 {
     char buffer[16]= "";
-    BmCode_print( BmBench_at(self, iItem), output);
+    BmCode_print( BmBench_codeAt(self, iItem), output);
     strcat(output, ":");
-    sprintf( buffer, "%.2f", BmBench_valueAt(self, iItem) );
+    sprintf( buffer, "%.2f", DEPRECIATED_BmBench_valueAt(self, iItem) );
     strcat( output, buffer );
     return output;
 }
@@ -321,7 +312,7 @@ char* _BmBench_printNode(BmBench* self, uint iItem, char* output)
     char buffer[16]= "";
     sprintf( buffer, "%u", iItem );
     strcat( output, buffer );
-    BmCode_print( BmBench_at(self, iItem), output);
+    BmCode_print( BmBench_codeAt(self, iItem), output);
     return output;
 }
 
@@ -366,13 +357,13 @@ char* BmBench_printCodes(BmBench* self, char* output)
 
     if( self->size > 0 )
     {
-        BmCode_print( BmBench_at(self, 1), output);
+        BmCode_print( BmBench_codeAt(self, 1), output);
     }
 
     for( uint i= 2 ; i <= self->size ; ++i)
     {
         strcat(output, ", ");
-        BmCode_print( BmBench_at(self, i), output);
+        BmCode_print( BmBench_codeAt(self, i), output);
     }
 
     strcat(output, "}");

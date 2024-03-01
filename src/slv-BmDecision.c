@@ -52,7 +52,7 @@ BmDecision* BmDecision_reinitWithDefault( BmDecision* self, BmCode* newInputRang
     return BmDecision_reinitWith(
         self,
         newInputRanges,
-        newBmBenchWith( 16, newDefaultOutput, defaultValue )
+        DEPRECIATED_newBmBenchWith( 16, newDefaultOutput, defaultValue )
     );
 }
 
@@ -74,18 +74,18 @@ uint BmDecision_from( BmDecision* self, BmCode* input )
 
 BmCode* BmDecision_codeFrom( BmDecision* self, BmCode* input )
 {
-    return BmBench_at( self->outputs, BmTree_at( self->selector, input) );
+    return BmBench_codeAt( self->outputs, BmTree_at( self->selector, input) );
 }
 
 double BmDecision_valueFrom( BmDecision* self, BmCode* input )
 {
-    return BmBench_valueAt( self->outputs, BmTree_at( self->selector, input) );
+    return DEPRECIATED_BmBench_valueAt( self->outputs, BmTree_at( self->selector, input) );
 }
 
 /* Construction */
 uint BmDecision_attachOuput( BmDecision* self, BmCode* newOuputCode, double ouputValue )
 {
-    return BmBench_attachLast( self->outputs, newOuputCode, ouputValue );
+    return DEPRECIATED_BmBench_attachLast( self->outputs, newOuputCode, ouputValue );
 }
 
 uint BmDecision_from_set( BmDecision* self, BmCode* input, uint ouputId )

@@ -305,7 +305,7 @@ START_TEST(test_BmTree_BmBenchInterface)
 
     strcpy(buffer, "");
     BmBench_print(collection, buffer);
-    BmBench_sort( collection, (fctptr_BmBench_compare)BmBench_isGreater );
+    BmBench_sort( collection, (fctptr_BmBench_compare)BmBench_isCodeGreater );
 
     strcpy(buffer, "");
     BmBench_print(collection, buffer);
@@ -379,7 +379,7 @@ START_TEST(test_BmTree_print)
     strcpy(buffer, "");
     BmBench* collection= BmTree_asNewBench( tree );
 
-    BmBench_sort( collection, (fctptr_BmBench_compare)BmBench_isGreater );
+    BmBench_sort( collection, (fctptr_BmBench_compare)BmBench_isCodeGreater );
 
     strcpy(buffer, "");
     BmBench_print(collection, buffer);

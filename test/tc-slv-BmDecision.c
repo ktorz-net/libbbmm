@@ -31,7 +31,7 @@ START_TEST(test_BmDecision_construction)
 {
     BmDecision* instance= newBmDecisionWith(
         newBmCode_list( 3, 2, 2, 3 ),
-        newBmBenchWith(2, newBmCode_list( 2, 1, 1 ), 1.1 )
+        DEPRECIATED_newBmBenchWith(2, newBmCode_list( 2, 1, 1 ), 1.1 )
     );
     BmTree* selector= BmDecision_selector(instance);
     BmBench* outputs= BmDecision_outputs(instance);
@@ -113,7 +113,7 @@ START_TEST(test_BmDecision_print)
 {
     BmDecision* instance= newBmDecisionWith(
         newBmCode_list( 3, 2, 2, 3 ),
-        newBmBenchWith(2, newBmCode_list( 2, 1, 1 ), 1.1 )
+        DEPRECIATED_newBmBenchWith(2, newBmCode_list( 2, 1, 1 ), 1.1 )
     );
     BmCode* input= newBmCode_list( 3, 1, 1, 1 );
     BmDecision_from_set(
@@ -148,7 +148,7 @@ START_TEST(test_BmDecision_switch)
 {
     BmDecision* instance= newBmDecisionWith(
         newBmCode_list( 3, 2, 2, 3 ),
-        newBmBenchWith(2, newBmCode_list( 2, 1, 1 ), 1.1 )
+        DEPRECIATED_newBmBenchWith(2, newBmCode_list( 2, 1, 1 ), 1.1 )
     );
     BmCode* input= newBmCode_list( 3, 1, 1, 1 );
     BmDecision_from_set(

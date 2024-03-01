@@ -232,7 +232,7 @@ BmCode* BmSystem_variable_dependOnArray( BmSystem* self, char * varName, uint pa
 
     BmInferer_node_dependArray( self->transition, iNode, parentSize, parentNodes );
     
-    return BmBench_at(self->transition->network, iNode);
+    return BmBench_codeAt(self->transition->network, iNode);
 }
 
 BmCode* BmSystem_variable_dependOn( BmSystem* self, char * varName, uint parentSize, ... )
@@ -417,7 +417,7 @@ uint BmSystem_variable_nodeId(BmSystem* self, char * varName)
 uint BmSystem_nodeId_parentId(BmSystem* self, uint id, char* parent)
 {
     return BmCode_search(
-        BmBench_at( self->transition->network, id),
+        BmBench_codeAt( self->transition->network, id),
         BmSystem_variable_nodeId(self, parent)
     );
 }
@@ -499,7 +499,7 @@ uint BmSystem_feedWithDomains( BmSystem* self, BmDomain** domainsBuffer, uint nb
 /* Printing */
 char* BmSystem_nodeId_printIdentity( BmSystem* self, uint nodeId, char* output )
 {
-    BmCode* parents= BmBench_at(self->transition->network, nodeId);
+    BmCode* parents= BmBench_codeAt(self->transition->network, nodeId);
     char buffer[1024];
 
     sprintf( buffer, "%s.%u(",
@@ -583,16 +583,16 @@ char* BmSystem_printVariable( BmSystem* self, char* varName, char* output )
 
     if( BmBench_size(collec) == 0 )
     {
-        uint iItem= BmBench_attachLast(collec, newBmCode_all( BmConditionDimention(cdt), 0));
+        uint iItem= DEPRECIATED_BmBench_attachLast(collec, newBmCode_all( BmConditionDimention(cdt), 0));
         BmBench_at_tag( collec, iItem, 1 );
     }
     
-    _BmCondition_printCode_inDomain(cdt, BmBench_at( collec, 1 ), pDom, output );
+    _BmCondition_printCode_inDomain(cdt, BmBench_codeAt( collec, 1 ), pDom, output );
     BmDistribution_print( array_at(cdt->distributions, BmBench_tagAt(collec, 1) ), output );
     for( uint i = 2 ; i <= BmBench_size(collec) ; ++i )
     {
         strcat( output, ",\n  " );
-        _BmCondition_printCode_inDomain(cdt, BmBench_at( collec, i ), pDom, output );
+        _BmCondition_printCode_inDomain(cdt, BmBench_codeAt( collec, i ), pDom, output );
         BmDistribution_print( array_at(cdt->distributions, BmBench_tagAt(collec, i) ), output );
     }
 

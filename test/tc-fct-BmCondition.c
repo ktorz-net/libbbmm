@@ -40,7 +40,7 @@ START_TEST(test_BmCondition_init)
     BmCondition* instance2= newBmConditionWith(
         2,
         newBmCode_list(3, 4, 5, 6),
-        newBmBenchWith( 1, newBmCode_list( 1, 1 ), 1.0 )
+        DEPRECIATED_newBmBenchWith( 1, newBmCode_list( 1, 1 ), 1.0 )
     );
 
     ck_assert_uint_eq( BmCodeProduct( BmCondition_parents(instance2) ), 4*5*6 );
@@ -70,7 +70,7 @@ START_TEST(test_BmCondition_init2)
     BmCondition* instance= newBmConditionWith(
         4,
         newBmCode_list(2, 3, 5),
-        newBmBenchWith( 1, newBmCode_list( 1, 1 ), 1.0 )
+        DEPRECIATED_newBmBenchWith( 1, newBmCode_list( 1, 1 ), 1.0 )
     );
 
     ck_assert_uint_eq( BmCondition_range(instance), 4 );
@@ -112,10 +112,10 @@ START_TEST(test_BmCondition_defaultDistrib)
 
     // Initialize BmDistribution
     BmBench* distrib= newBmBench(4);
-    BmBench_attachLast( distrib, newBmCode_list(1, 1), 0.3 );
-    BmBench_attachLast( distrib, newBmCode_list(1, 2), 0.1 );
-    BmBench_attachLast( distrib, newBmCode_list(1, 3), 0.3 );
-    BmBench_attachLast( distrib, newBmCode_list(1, 5), 0.3 );
+    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 1), 0.3 );
+    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 2), 0.1 );
+    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 3), 0.3 );
+    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 5), 0.3 );
 
     strcpy(buffer, "");
     BmBench_print( distrib, buffer );
@@ -168,7 +168,7 @@ START_TEST(test_BmCondition_switch)
     BmCondition* instance= newBmConditionWith(
         4,
         newBmCode_list(2, 3, 5),
-        newBmBenchWith( 1, newBmCode_list( 1, 1 ), 1.0 )
+        DEPRECIATED_newBmBenchWith( 1, newBmCode_list( 1, 1 ), 1.0 )
     );
 
     ck_assert_uint_eq( BmCondition_range(instance), 4 );
@@ -200,7 +200,7 @@ START_TEST(test_BmCondition_switch)
 
     BmCondition* doobleganger= newBmConditionWith(
         3, newBmCode_list( 2, 3, 2 ),
-        newBmBenchWith( 1, newBmCode_list(1, 1), 1.0 )
+        DEPRECIATED_newBmBenchWith( 1, newBmCode_list(1, 1), 1.0 )
     );
 
     strcpy(buffer, "");
@@ -254,7 +254,7 @@ START_TEST(test_BmCondition_manipulate)
     BmCondition* instance= newBmConditionWith(
         2,
         newBmCode_list(3, 4, 5, 6),
-        newBmBenchWith( 1, newBmCode_list( 1, 1 ), 1.0 )
+        DEPRECIATED_newBmBenchWith( 1, newBmCode_list( 1, 1 ), 1.0 )
     );
 
     uint size= BmCodeProduct( BmCondition_parents(instance) );
@@ -276,10 +276,10 @@ START_TEST(test_BmCondition_manipulate)
     
     uint iDistrib= BmCondition_from_attach(
         instance, config,
-        newBmBenchWith( 2, newBmCode_list(1, 2), 0.6 )
+        DEPRECIATED_newBmBenchWith( 2, newBmCode_list(1, 2), 0.6 )
     );
 
-    BmBench_attachLast( 
+    DEPRECIATED_BmBench_attachLast( 
         BmCondition_distributionAt( instance, iDistrib ),
         newBmCode_list(1, 1), 0.4
     );
@@ -319,8 +319,8 @@ START_TEST(test_BmCondition_manipulate)
     BmCode_reinit_list( config, 3, 1, 4, 3);
     
     BmBench* distrib= newBmBench(2);
-    BmBench_attachLast( distrib, newBmCode_list(1, 1), 0.8 );
-    BmBench_attachLast( distrib, newBmCode_list(1, 2), 0.2 );
+    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 1), 0.8 );
+    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 2), 0.2 );
 
     iDistrib= BmCondition_from_attach( instance, config, distrib );
 
@@ -351,8 +351,8 @@ START_TEST(test_BmCondition_manipulate)
 
     // And reinit:
     distrib= newBmBench(2);
-    BmBench_attachLast( distrib, newBmCode_list(1, 1), 0.8 );
-    BmBench_attachLast( distrib, newBmCode_list(1, 2), 0.2 );
+    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 1), 0.8 );
+    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 2), 0.2 );
 
     BmCondition_reinitDistributionsWith( instance, distrib );
 
@@ -373,14 +373,14 @@ START_TEST(test_BmCondition_manipulate2)
 {
     char buffer[1024];
     BmBench* distrib= newBmBench(2);
-    BmBench_attachLast( distrib, newBmCode_list(1, 1), 0.8 );
-    BmBench_attachLast( distrib, newBmCode_list(1, 3), 0.2 );
+    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 1), 0.8 );
+    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 3), 0.2 );
 
     BmCondition* instance= newBmConditionWith(
         4, newBmCode_list(2, 3, 5), distrib );
 
     BmCode* config= newBmCode_list(2, 2, 5 );
-    distrib= newBmBenchWith( 1, newBmCode_list(1, 2), 1.0 );
+    distrib= DEPRECIATED_newBmBenchWith( 1, newBmCode_list(1, 2), 1.0 );
     BmCondition_from_attach( instance, config, distrib );
 
 
@@ -410,7 +410,7 @@ START_TEST(test_BmCondition_manipulate2)
     // Inferances 01:
     BmBench* parentDistribution= newBmBench(2);
 
-    BmBench_attachLast( parentDistribution, newBmCodeAs(config), 1.0 );
+    DEPRECIATED_BmBench_attachLast( parentDistribution, newBmCodeAs(config), 1.0 );
 
     ck_assert_uint_eq( BmBench_size( parentDistribution ), 1 );
 
@@ -436,7 +436,7 @@ START_TEST(test_BmCondition_manipulate2)
 
     // Inferances 02:
     BmBench_reinit( parentDistribution, 2 );
-    BmBench_attachLast( parentDistribution, newBmCode_list(2, 2, 3), 1.0 );
+    DEPRECIATED_BmBench_attachLast( parentDistribution, newBmCode_list(2, 2, 3), 1.0 );
 
     BmCondition_infer( instance, parentDistribution );
 
@@ -448,11 +448,11 @@ START_TEST(test_BmCondition_manipulate2)
 
     // Inferances 03:
     BmBench_reinit( parentDistribution, 2 );
-    BmBench_attachLast( parentDistribution, newBmCode_list(2, 2, 3), 0.5 );
-    BmBench_attachLast( parentDistribution, newBmCode_list(2, 2, 5), 0.5 );
+    DEPRECIATED_BmBench_attachLast( parentDistribution, newBmCode_list(2, 2, 3), 0.5 );
+    DEPRECIATED_BmBench_attachLast( parentDistribution, newBmCode_list(2, 2, 5), 0.5 );
 
     BmCondition_infer( instance, parentDistribution );
-    BmBench_sort( parentDistribution, (fctptr_BmBench_compare)BmBench_isSmallerValue );
+    BmBench_sort( parentDistribution, (fctptr_BmBench_compare)BmBench_isVectorSmaller );
     
     strcpy( buffer, "" );
     BmBench_print( parentDistribution, buffer );
@@ -468,7 +468,7 @@ START_TEST(test_BmCondition_print)
 {
     char buffer[1024];
     BmBench* distrib= newBmBench(1);
-    BmBench_attachLast( distrib, newBmCode_list(1, 1), 1.0 );
+    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 1), 1.0 );
 
     BmCondition* instance= newBmConditionWith(
         4, newBmCode_list(3, 2, 3, 2), distrib );

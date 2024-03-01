@@ -19,7 +19,7 @@ BmCondition* newBmConditionWith(uint range, BmCode* newInputRanges, BmBench* new
 BmCondition* BmCondition_createBasic( BmCondition* self, uint range )
 {
     BmBench* distrib = newBmBench( 1 );
-    BmBench_attachLast( distrib, newBmCode_list(1, 1), 1.0 );
+    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 1), 1.0 );
     return BmCondition_createWith( self, range,
         newBmCode_all(1, 1), distrib );
 }
@@ -28,7 +28,7 @@ BmCondition* BmCondition_createWith( BmCondition* self, uint range, BmCode* newI
 {
     assert( range > (uint)0 );
     assert( BmCodeDimention(newInputRanges) > (uint)0 );
-    assert( BmBenchDimention(newDefaultDistrib) == (uint)1 );
+    assert( BmBenchCodeDimention(newDefaultDistrib) == (uint)1 );
 
     self->range= range;
 
@@ -145,7 +145,7 @@ uint _BmCondition_resizeDistributionCapacity( BmCondition* self, uint newCapacit
 
 uint BmCondition_attach( BmCondition* self, BmBench* distribution )
 {
-    assert( BmBenchDimention(distribution) == (uint)1 );
+    assert( BmBenchCodeDimention(distribution) == (uint)1 );
 
     if( self->distribSize+1 > self->distribCapacity )
         _BmCondition_resizeDistributionCapacity( self, self->distribSize+1 );
@@ -191,7 +191,7 @@ BmBench* BmCondition_newDistributionByInfering_mask( BmCondition* self, BmBench*
 {
     // Create new structure:
     uint selfDim= BmCodeDimention( BmCondition_parents(self) );
-    uint longDim= BmCodeDimention( BmBench_at(longDistrib, 1) );
+    uint longDim= BmCodeDimention( BmBench_codeAt(longDistrib, 1) );
     BmBench* newDistrib= newBmBench( self->range * BmBench_size(longDistrib) );
 
     // foreach configuration in the distribution:
@@ -200,9 +200,9 @@ BmBench* BmCondition_newDistributionByInfering_mask( BmCondition* self, BmBench*
     for( uint iCondition= 1 ; iCondition <= numberOfCondition ; ++iCondition )
     {
         BmCode* newConfig= newBmCode_all( longDim+1, 0 );
-        BmCode* cond= BmBench_at( longDistrib, iCondition);
+        BmCode* cond= BmBench_codeAt( longDistrib, iCondition);
         BmCode_copyNumbers( newConfig, cond );
-        double probability= BmBench_valueAt( longDistrib, iCondition);
+        double probability= DEPRECIATED_BmBench_valueAt( longDistrib, iCondition);
 
         // get the parents' configuration:
         for( uint j= 1 ; j <= selfDim ; ++j )
@@ -217,11 +217,11 @@ BmBench* BmCondition_newDistributionByInfering_mask( BmCondition* self, BmBench*
         {
             BmCode_at_set(
                 newConfig, BmCodeDimention(newConfig),
-                BmCode_digit( BmBench_at( outputDistrib, iOutput), 1 )
+                BmCode_digit( BmBench_codeAt( outputDistrib, iOutput), 1 )
             );
-            BmBench_attachLast(
+            DEPRECIATED_BmBench_attachLast(
                 newDistrib, newBmCodeAs(newConfig),
-                probability * BmBench_valueAt( outputDistrib, iOutput)
+                probability * DEPRECIATED_BmBench_valueAt( outputDistrib, iOutput)
             );
         }
         deleteBmCode( newConfig );
@@ -306,14 +306,14 @@ char* BmCondition_printSep(BmCondition* self, char* output, char* separator)
 
     // First or unique one: 
     _BmCondition_printCode_withDistribution(
-        self, BmBench_at( collec, 1 ), output );
+        self, BmBench_codeAt( collec, 1 ), output );
 
     // All the others: 
     for( uint i = 2 ; i <= BmBench_size(collec) ; ++i )
     {
         strcat( output, separator );
         _BmCondition_printCode_withDistribution(
-            self, BmBench_at( collec, i ), output );
+            self, BmBench_codeAt( collec, i ), output );
     }
     strcat(output, "}");
     return output;

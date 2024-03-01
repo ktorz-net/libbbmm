@@ -220,12 +220,13 @@ typedef struct {
 
 /* Constructor */
 BmBench* newBmBench( uint capacity );
-BmBench* newBmBenchWith( uint capacity, BmCode* newFirstItem, double value );
+//BmBench* newBmBench_codeDim_vectorDim( uint capacity, uint codeDim, uint vectorDim );
 BmBench* newBmBenchAs( BmBench* model );
 
 BmBench* BmBench_create( BmBench* self, uint capacity );
-BmBench* BmBench_createWith( BmBench* self, uint capacity, BmCode* newFirstItems, double value );
 BmBench* BmBench_createAs( BmBench* self, BmBench* model );
+
+BmBench* DEPRECIATED_newBmBenchWith( uint capacity, BmCode* newFirstItem, double value );
 
 /* Destructor */
 BmBench* BmBenchdestroy( BmBench* self);
@@ -237,22 +238,35 @@ BmBench* BmBench_reinit( BmBench* self, uint capacity );
 /* Accessor */
 uint BmBench_size( BmBench* self);
 uint BmBench_capacity( BmBench* self);
-BmCode* BmBench_at( BmBench* self, uint i );
-double BmBench_valueAt( BmBench* self, uint i );
-uint BmBenchDimention( BmBench* self);
+
+uint BmBenchCodeDimention( BmBench* self);
+//uint BmBenchVectorDimention( BmBench* self);
+
+BmCode* BmBench_codeAt( BmBench* self, uint i );
+//BmVector* BmBench_vectorAt( BmBench* self, uint i );
+
+//uint BmBench_at_digit( BmBench* self, uint i, uint j );
+//double BmBench_at_value( BmBench* self, uint i, uint j );
+
+double DEPRECIATED_BmBench_valueAt( BmBench* self, uint i ); // -> BmBench_at_value
 
 /* Construction */
 void BmBench_resizeCapacity( BmBench* self, uint newCapacity );
-uint BmBench_attach( BmBench* self, BmCode* newItem );
+//uint BmBench_increase( BmBench* self, uint number );
+uint BmBench_attachCode( BmBench* self, BmCode* newItem );
+//uint BmBench_attachVector( BmBench* self, BmVector* newItem );
+
 //BmCode* BmBench_detach( BmBench* self, uint i );
 
-uint BmBench_attachLast( BmBench* self, BmCode* newItem, double value );
+//uint BmBench_attachLast( BmBench* self, BmCode* newCode, BmVector* newVector );
+uint DEPRECIATED_BmBench_attachLast( BmBench* self, BmCode* newItem, double value ); // -> BmBench_attachLast(  newVector_list(1, ...) )
 BmCode* BmBench_detachLast( BmBench* self );
 
-uint BmBench_attachFirst( BmBench* self, BmCode* newItem, double value );
+//uint BmBench_attachFirst( BmBench* self, BmCode* newCode, BmVector* newVector );
+uint DEPRECIATED_BmBench_attachFirst( BmBench* self, BmCode* newItem, double value ); // -> BmBench_attachFirst(  newVector_list(1, ...) )
 BmCode* BmBench_detachFirst( BmBench* self );
 
-BmCode* BmBench_at_setValue( BmBench* self, uint i, double value );
+BmCode* DEPRECIATED_BmBench_at_setValue( BmBench* self, uint i, double value );
 
 void BmBench_switch( BmBench* self, BmBench* doppleganger);
 
@@ -265,16 +279,17 @@ uint BmBench_sort( BmBench* self, fctptr_BmBench_compare compare );
 uint BmBench_switchCodes( BmBench* self, uint id1, uint id2 );
 
 /* Comparison */
-bool BmBench_isGreater(BmBench* self, uint i1, uint i2);
-bool BmBench_isSmaller(BmBench* self, uint i1, uint i2);
-bool BmBench_isGreaterValue(BmBench* self, uint i1, uint i2);
-bool BmBench_isSmallerValue(BmBench* self, uint i1, uint i2);
+bool BmBench_isCodeGreater(BmBench* self, uint i1, uint i2);
+bool BmBench_isCodeSmaller(BmBench* self, uint i1, uint i2);
+bool BmBench_isVectorGreater(BmBench* self, uint i1, uint i2);
+bool BmBench_isVectorSmaller(BmBench* self, uint i1, uint i2);
 
 /* Test */
 
 /* Printing */
 char* BmBench_print( BmBench* self, char* output); // print `self` at the end of `output`
 char* BmBench_printCodes(BmBench* self, char* output);
+//char* BmBench_printVector(BmBench* self, char* output);
 char* BmBench_printNetwork(BmBench* self, char* output);
 
 
