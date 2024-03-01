@@ -18,7 +18,7 @@ BmDecision* newBmDecisionWith( BmCode* newInputRanges, BmBench* newOutputs )
 
 BmDecision* BmDecision_createWith( BmDecision* self, BmCode* newInputRanges, BmBench* newOutputs )
 {
-    assert( BmCode_dimention(newInputRanges) > (uint)0 );
+    assert( BmCodeDimention(newInputRanges) > (uint)0 );
     self->selector= newBmTreeWith( newInputRanges );
     BmTree_newBranch( self->selector, 1, 1 );
     self->outputs= newOutputs;
@@ -26,7 +26,7 @@ BmDecision* BmDecision_createWith( BmDecision* self, BmCode* newInputRanges, BmB
 }
 
 /* Destructor */
-BmDecision* BmDecision_destroy( BmDecision* self )
+BmDecision* BmDecisiondestroy( BmDecision* self )
 {
     deleteBmTree( self->selector );
     deleteBmBench( self->outputs );
@@ -35,16 +35,25 @@ BmDecision* BmDecision_destroy( BmDecision* self )
 
 void deleteBmDecision( BmDecision* instance )
 {
-    BmDecision_destroy( instance );
+    BmDecisiondestroy( instance );
     free( instance );
 }
 
 /* re-initializer */
-uint BmDecision_reinitWith( BmDecision* self, BmCode* newInputRanges, BmBench* newOutputs )
+BmDecision* BmDecision_reinitWith( BmDecision* self, BmCode* newInputRanges, BmBench* newOutputs )
 {
-    BmDecision_destroy( self );
+    BmDecisiondestroy( self );
     BmDecision_createWith( self, newInputRanges, newOutputs );
-    return 1;
+    return self;
+}
+
+BmDecision* BmDecision_reinitWithDefault( BmDecision* self, BmCode* newInputRanges, BmCode* newDefaultOutput, double defaultValue )
+{
+    return BmDecision_reinitWith(
+        self,
+        newInputRanges,
+        newBmBenchWith( 16, newDefaultOutput, defaultValue )
+    );
 }
 
 /* Accessor */

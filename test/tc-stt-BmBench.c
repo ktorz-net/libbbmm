@@ -65,7 +65,7 @@ START_TEST(test_BmBench_sorting)
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[3], [42], [69, 56], [69, 103]}" );
 
-    BmBench_destroy(collec);
+    BmBenchdestroy(collec);
     BmBench_create(collec, 8);
 
     BmBench_attach(collec, newBmCode_list(3, 5, 8, 12) );

@@ -8,10 +8,10 @@ START_TEST(test_BmCode_init)
 {
     BmCode* code= newBmCode_all(3, 0);
     
-    ck_assert_uint_eq( BmCode_dimention(code), 3);
-    ck_assert_uint_eq( BmCode_at(code, 1), 0 );
-    ck_assert_uint_eq( BmCode_at(code, 2), 0 );
-    ck_assert_uint_eq( BmCode_at(code, 3), 0 );
+    ck_assert_uint_eq( BmCodeDimention(code), 3);
+    ck_assert_uint_eq( BmCode_digit(code, 1), 0 );
+    ck_assert_uint_eq( BmCode_digit(code, 2), 0 );
+    ck_assert_uint_eq( BmCode_digit(code, 3), 0 );
 
     deleteBmCode(code);
 }
@@ -22,18 +22,18 @@ START_TEST(test_BmCode_init2)
     uint numbers[11]= {2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2};
     BmCode* code= newBmCode_numbers(11, numbers);
 
-    ck_assert_uint_eq( BmCode_dimention(code), 11);
-    ck_assert_uint_eq( BmCode_at(code, 1),  2 );
-    ck_assert_uint_eq( BmCode_at(code, 2),  3 );
-    ck_assert_uint_eq( BmCode_at(code, 3),  4 );
-    ck_assert_uint_eq( BmCode_at(code, 4),  5 );
-    ck_assert_uint_eq( BmCode_at(code, 5),  6 );
-    ck_assert_uint_eq( BmCode_at(code, 6),  7 );
-    ck_assert_uint_eq( BmCode_at(code, 7),  8 );
-    ck_assert_uint_eq( BmCode_at(code, 8),  9 );
-    ck_assert_uint_eq( BmCode_at(code, 9),  0 );
-    ck_assert_uint_eq( BmCode_at(code, 10),  1 );
-    ck_assert_uint_eq( BmCode_at(code, 11),  2 );
+    ck_assert_uint_eq( BmCodeDimention(code), 11);
+    ck_assert_uint_eq( BmCode_digit(code, 1),  2 );
+    ck_assert_uint_eq( BmCode_digit(code, 2),  3 );
+    ck_assert_uint_eq( BmCode_digit(code, 3),  4 );
+    ck_assert_uint_eq( BmCode_digit(code, 4),  5 );
+    ck_assert_uint_eq( BmCode_digit(code, 5),  6 );
+    ck_assert_uint_eq( BmCode_digit(code, 6),  7 );
+    ck_assert_uint_eq( BmCode_digit(code, 7),  8 );
+    ck_assert_uint_eq( BmCode_digit(code, 8),  9 );
+    ck_assert_uint_eq( BmCode_digit(code, 9),  0 );
+    ck_assert_uint_eq( BmCode_digit(code, 10),  1 );
+    ck_assert_uint_eq( BmCode_digit(code, 11),  2 );
 
     char buffer[1024]= "";
     strcpy( buffer, "" );
@@ -45,7 +45,7 @@ START_TEST(test_BmCode_init2)
     uint numbersYes[11]= {2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2};
     BmCode* codeYes= newBmCode_numbers(11, numbersYes);
 
-    ck_assert( BmCode_dimention(code) == BmCode_dimention(codeYes) );
+    ck_assert( BmCodeDimention(code) == BmCodeDimention(codeYes) );
     ck_assert( BmCode_isEqualTo(code, codeYes) );
 
     uint numbers1[11]= {2, 3, 4, 5, 3, 7, 8, 9, 0, 1, 2};
@@ -73,7 +73,7 @@ START_TEST(test_BmCode_keys)
         "[0, 0, 0, 0, 0, 0, 0, 0]"
     );
 
-    ck_assert_uint_eq( (uint)BmCode_product(domain), 4*4*4*4*6*6*6*6 );
+    ck_assert_uint_eq( (uint)BmCodeProduct(domain), 4*4*4*4*6*6*6*6 );
     ck_assert_uint_eq( (uint)BmCode_keyOf(domain, code), 0 );
 
     BmCode_copy( code, domain );

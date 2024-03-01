@@ -9,7 +9,7 @@ START_TEST(test_BmTree_init)
 {
     BmTree* tree= newBmTreeWith( newBmCode_list(3, 2, 3, 2));
 
-    ck_assert_uint_eq( BmCode_dimention( BmTree_inputRanges(tree) ), (uint)3 );
+    ck_assert_uint_eq( BmCodeDimention( BmTree_inputRanges(tree) ), (uint)3 );
     ck_assert_uint_eq( tree->capacity, (uint)1 );
     ck_assert_uint_eq( tree->size, (uint)0 );
     

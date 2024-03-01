@@ -17,11 +17,11 @@ BmInferer* newBmInferer( BmCode* variableSpace, uint inputDimention, uint output
 
 BmInferer* newBmInfererStateAction( BmCode* stateSpace, BmCode* actionSpace )
 {
-    BmCode* overallSpace= newBmCodeMergeList( 3, stateSpace, actionSpace, stateSpace );
+    BmCode* overallSpace= newBmCodeMerge_list( 3, stateSpace, actionSpace, stateSpace );
     BmInferer* trans= BmInferer_create(
         newEmpty(BmInferer), overallSpace,
-        BmCode_dimention( stateSpace ) + BmCode_dimention( actionSpace ),
-        BmCode_dimention( stateSpace )
+        BmCodeDimention( stateSpace ) + BmCodeDimention( actionSpace ),
+        BmCodeDimention( stateSpace )
     );
     deleteBmCode( overallSpace );
     return trans;
@@ -29,11 +29,11 @@ BmInferer* newBmInfererStateAction( BmCode* stateSpace, BmCode* actionSpace )
 
 BmInferer* newBmInfererStateActionShift( BmCode* stateSpace, BmCode* actionSpace, BmCode* shiftSpace )
 {
-    BmCode* overallSpace= newBmCodeMergeList( 4, stateSpace, actionSpace, shiftSpace, stateSpace );
+    BmCode* overallSpace= newBmCodeMerge_list( 4, stateSpace, actionSpace, shiftSpace, stateSpace );
     BmInferer* trans= BmInferer_create(
         newEmpty(BmInferer), overallSpace,
-        BmCode_dimention( stateSpace ) + BmCode_dimention( actionSpace ),
-        BmCode_dimention( stateSpace )
+        BmCodeDimention( stateSpace ) + BmCodeDimention( actionSpace ),
+        BmCodeDimention( stateSpace )
     );
     deleteBmCode( overallSpace );
     return trans;
@@ -43,14 +43,14 @@ BmInferer* BmInferer_create( BmInferer* self, BmCode* variableSpace, uint inputD
 {
     self->inputDimention= inputDimention;
     self->outputDimention= outputDimention;
-    self->overallDimention= BmCode_dimention(variableSpace);
+    self->overallDimention= BmCodeDimention(variableSpace);
 
     self->network= newBmBench( self->overallDimention );
     self->nodes= newEmptyArray( BmCondition, self->overallDimention );
 
     for( uint i = 1 ; i <= self->overallDimention ; ++i )
     {
-        BmCondition_createBasic( array_on(self->nodes, i), BmCode_at(variableSpace, i) );
+        BmCondition_createBasic( array_on(self->nodes, i), BmCode_digit(variableSpace, i) );
         BmBench_attach( self->network, newBmCode( 0 ) );
     }
 
@@ -59,10 +59,10 @@ BmInferer* BmInferer_create( BmInferer* self, BmCode* variableSpace, uint inputD
 }
 
 /* Destructor */
-BmInferer* BmInferer_destroy(BmInferer* self)
+BmInferer* BmInfererdestroy(BmInferer* self)
 {
     for(uint i = 1 ; i <= self->overallDimention ; ++i )
-        BmCondition_destroy( array_on(self->nodes, i) );
+        BmConditiondestroy( array_on(self->nodes, i) );
     free( self->nodes );
     deleteBmBench(self->network);
     deleteBmBench( self->distribution );
@@ -71,7 +71,7 @@ BmInferer* BmInferer_destroy(BmInferer* self)
 
 void deleteBmInferer(BmInferer* self)
 {
-    BmInferer_destroy(self);
+    BmInfererdestroy(self);
     free(self);
 }
 
@@ -132,11 +132,11 @@ BmCondition* BmInferer_node_reinitWith( BmInferer* self, uint index, BmCode* new
     BmCode* dependency= BmBench_at( self->network, index );
     
     // Build dependance space:
-    BmCode* depSpace= newBmCode( BmCode_dimention(dependency) );
-    for( uint i= 1 ; i <= BmCode_dimention(dependency) ; ++i )
+    BmCode* depSpace= newBmCode( BmCodeDimention(dependency) );
+    for( uint i= 1 ; i <= BmCodeDimention(dependency) ; ++i )
     {
         BmCode_at_set( depSpace, i,
-            BmInferer_node_size(self, BmCode_at(dependency, i)) );
+            BmInferer_node_size(self, BmCode_digit(dependency, i)) );
     }
 
     // Re-initialize the condition
@@ -194,7 +194,7 @@ BmBench* BmInferer_process_newOverallDistribution( BmInferer* self, BmBench* inp
 {
     BmBench* constructionDistrib= newBmBenchAs( inputDistribution );
 
-    uint configDimention = BmCode_dimention( BmBench_at( inputDistribution, 1 ) );
+    uint configDimention = BmCodeDimention( BmBench_at( inputDistribution, 1 ) );
     for( uint i= configDimention + 1 ; i <= self->overallDimention ; ++i )
     {
         // Infers dependency possibilities:
@@ -224,7 +224,7 @@ BmBench* BmInferer_processState_Action( BmInferer* self, BmCode* state, BmCode* 
     // Set the initial determinist distribution :
     BmBench * inputDistribution= newBmBench( 1 );
     BmBench_attachLast( inputDistribution,
-        newBmCodeMergeList( 2, state, action ),
+        newBmCodeMerge_list( 2, state, action ),
         1.0
     );
     // infer :

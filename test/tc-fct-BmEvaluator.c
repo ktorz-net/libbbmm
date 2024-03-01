@@ -60,7 +60,7 @@ START_TEST(test_BmEvaluator_initStateAction)
     BmCode * stateSpace= newBmCode_list(3, 2, 4, 6);
     BmCode * actionSpace= newBmCode_list(2, 3, 5);
     BmEvaluator* eval1= newBmEvaluatorWith( 
-        newBmCodeMergeList( 2, stateSpace, actionSpace ), 1
+        newBmCodeMerge_list( 2, stateSpace, actionSpace ), 1
     );
 
     char buffer[1024]= "";
@@ -87,7 +87,7 @@ Outputs:\n\
     ck_assert_double_eq_tol( BmEvaluator_processState_action( eval1, stateSpace, actionSpace ), 0.0, 0.00001 );
 
     BmEvaluator* eval2= newBmEvaluatorWith( 
-        newBmCodeMergeList( 3, stateSpace, actionSpace, stateSpace ), 1 );
+        newBmCodeMerge_list( 3, stateSpace, actionSpace, stateSpace ), 1 );
 
     strcpy( buffer, "" );
     BmCode_print( eval2->space, buffer );
@@ -113,7 +113,7 @@ START_TEST(test_BmEvaluator_construction01)
     BmCode_at_set( eval->space, 3, 3 );
     BmCode_at_set( eval->space, 4, 4 );
 
-    ck_assert_uint_eq( BmCode_dimention( eval->space ), 4 );
+    ck_assert_uint_eq( BmCodeDimention( eval->space ), 4 );
 
     char buffer[1024];
     strcpy( buffer, "" );

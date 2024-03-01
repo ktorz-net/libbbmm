@@ -233,16 +233,16 @@ START_TEST(test_BmInferer_infering)
     ck_assert(1);
 
     // Set initial configuration :
-    BmCode* startConf= newBmCode( BmCode_dimention(state) +  BmCode_dimention(action) );
+    BmCode* startConf= newBmCode( BmCodeDimention(state) +  BmCodeDimention(action) );
 
-    for( uint i=1 ; i <= BmCode_dimention(state) ; ++i )
-        BmCode_at_set( startConf, i, BmCode_at(state, i) );
-    for( uint i=1 ; i <= BmCode_dimention(action) ; ++i )
-        BmCode_at_set( startConf,  BmCode_dimention(state)+i, BmCode_at(action, i) );
+    for( uint i=1 ; i <= BmCodeDimention(state) ; ++i )
+        BmCode_at_set( startConf, i, BmCode_digit(state, i) );
+    for( uint i=1 ; i <= BmCodeDimention(action) ; ++i )
+        BmCode_at_set( startConf,  BmCodeDimention(state)+i, BmCode_digit(action, i) );
 
     ck_assert(1);
     // Set a initial determinist distribution :
-    BmBench * distrib= newBmBench( BmCode_dimention(startConf) );
+    BmBench * distrib= newBmBench( BmCodeDimention(startConf) );
     BmBench_attachLast(distrib, newBmCodeAs( startConf ), 1.0);
 
     ck_assert(1);

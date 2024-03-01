@@ -10,10 +10,10 @@ START_TEST(test_BmCondition_init)
     char buffer[1024];
 
     strcpy(buffer, "");
-    ck_assert_uint_eq( BmCode_dimention( BmCondition_parents( instance1 ) ), 1 );
+    ck_assert_uint_eq( BmCodeDimention( BmCondition_parents( instance1 ) ), 1 );
     ck_assert_uint_eq( instance1->range, 2 );
     ck_assert_str_eq( BmCode_print( BmCondition_parents(instance1), buffer ), "[1]");
-    ck_assert_uint_eq( BmCode_dimention( BmCondition_parents(instance1) ), 1 );
+    ck_assert_uint_eq( BmCodeDimention( BmCondition_parents(instance1) ), 1 );
 
     strcpy(buffer, "");
     ck_assert_str_eq( BmCode_print( BmCondition_parents(instance1), buffer), "[1]" );
@@ -43,13 +43,13 @@ START_TEST(test_BmCondition_init)
         newBmBenchWith( 1, newBmCode_list( 1, 1 ), 1.0 )
     );
 
-    ck_assert_uint_eq( BmCode_product( BmCondition_parents(instance2) ), 4*5*6 );
+    ck_assert_uint_eq( BmCodeProduct( BmCondition_parents(instance2) ), 4*5*6 );
     ck_assert_uint_eq( instance2->range, 2 );
 
     strcpy(buffer, "");
     ck_assert_str_eq( BmCode_print( BmCondition_parents(instance2), buffer ), "[4, 5, 6]");
 
-    uint dim= BmCode_dimention( BmCondition_parents( instance2 ) );
+    uint dim= BmCodeDimention( BmCondition_parents( instance2 ) );
     for( uint i= 1; i <= dim ; ++i )
     {
         strcpy( buffer, "" );
@@ -74,8 +74,8 @@ START_TEST(test_BmCondition_init2)
     );
 
     ck_assert_uint_eq( BmCondition_range(instance), 4 );
-    ck_assert_uint_eq( BmCode_dimention( BmCondition_parents(instance) ), 2 );
-    ck_assert_uint_eq( BmCode_product( BmCondition_parents(instance) ), 3*5 );
+    ck_assert_uint_eq( BmCodeDimention( BmCondition_parents(instance) ), 2 );
+    ck_assert_uint_eq( BmCodeProduct( BmCondition_parents(instance) ), 3*5 );
     
     strcpy(buffer, "");
     ck_assert_str_eq( BmCondition_printIdentity( instance, buffer ), "[3, 5]->[4]" ); 
@@ -148,8 +148,8 @@ START_TEST(test_BmCondition_defaultDistrib)
     "{[1]:0.30, [2]:0.10, [3]:0.30, [5]:0.30}"
     );
 
-    ck_assert_uint_eq( BmCode_dimention( instance->selector->inputRanges ), 2 );
-    ck_assert_uint_eq( BmCode_dimention( BmCondition_parents(instance) ), 2 );
+    ck_assert_uint_eq( BmCodeDimention( instance->selector->inputRanges ), 2 );
+    ck_assert_uint_eq( BmCodeDimention( BmCondition_parents(instance) ), 2 );
     
     strcpy(buffer, "");
     BmCondition_print( instance, buffer );
@@ -257,7 +257,7 @@ START_TEST(test_BmCondition_manipulate)
         newBmBenchWith( 1, newBmCode_list( 1, 1 ), 1.0 )
     );
 
-    uint size= BmCode_product( BmCondition_parents(instance) );
+    uint size= BmCodeProduct( BmCondition_parents(instance) );
     for( uint i= 1; i <= size ; ++i )
     {
         strcpy( buffer, "" );
@@ -270,8 +270,8 @@ START_TEST(test_BmCondition_manipulate)
     BmCode* config= newBmCode_list(3, 1, 2, 2);
     
     ck_assert_uint_eq(
-        BmCode_dimention( BmCondition_parents(instance)),
-        BmCode_dimention(config)
+        BmCodeDimention( BmCondition_parents(instance)),
+        BmCodeDimention(config)
     );
     
     uint iDistrib= BmCondition_from_attach(
@@ -356,7 +356,7 @@ START_TEST(test_BmCondition_manipulate)
 
     BmCondition_reinitDistributionsWith( instance, distrib );
 
-    size= BmCode_product( BmCondition_parents( instance ) );
+    size= BmCodeProduct( BmCondition_parents( instance ) );
     for( uint i= 1; i <= size ; ++i )
     {
         strcpy( buffer, "" );
@@ -385,7 +385,7 @@ START_TEST(test_BmCondition_manipulate2)
 
 
     uint configId= BmCode_keyOf( BmCondition_parents(instance), config );
-    uint parentSize=  BmCode_product( BmCondition_parents(instance) );
+    uint parentSize=  BmCodeProduct( BmCondition_parents(instance) );
 
     for( uint i= 1; i <= parentSize ; ++i )
     {

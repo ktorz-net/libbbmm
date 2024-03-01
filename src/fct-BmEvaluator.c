@@ -39,7 +39,7 @@ BmEvaluator* BmEvaluator_createWith( BmEvaluator* self, BmCode* newSpace, uint n
 }
 
 /* Destructor */
-BmEvaluator* BmEvaluator_destroy( BmEvaluator* self)
+BmEvaluator* BmEvaluatordestroy( BmEvaluator* self)
 {
     for( uint i = 1 ; i < self->size ; ++i )
     {
@@ -56,7 +56,7 @@ BmEvaluator* BmEvaluator_destroy( BmEvaluator* self)
 
 void deleteBmEvaluator( BmEvaluator* self )
 {
-    BmEvaluator_destroy( self );
+    BmEvaluatordestroy( self );
     free( self );
 }
 
@@ -65,7 +65,7 @@ BmEvaluator* BmEvaluator_reinitCriterion( BmEvaluator* self, uint numberOfCriter
 {
     BmCode* savedSpace= newBmCode(1);
     BmCode_switch( self->space, savedSpace );
-    BmEvaluator_destroy(self);
+    BmEvaluatordestroy(self);
     return BmEvaluator_createWith(
         self,
         savedSpace,
@@ -108,7 +108,7 @@ BmCode* BmEvaluator_criterion_mask( BmEvaluator* self, uint iCritirion )
 /* Process */
 double BmEvaluator_process( BmEvaluator* self, BmCode* input )
 {
-    assert( BmCode_dimention(input) == BmCode_dimention(self->space) );
+    assert( BmCodeDimention(input) == BmCodeDimention(self->space) );
     double eval= 0.0;
     for( uint i= 1 ; i <= self->size ; ++i )
     {
@@ -121,7 +121,7 @@ double BmEvaluator_process( BmEvaluator* self, BmCode* input )
 double BmEvaluator_criterion_process( BmEvaluator* self, uint iCriterion, BmCode* input )
 {
     BmCode* critCode= BmCode_newBmCodeMask( input, array_at( self->masks, iCriterion ) );
-    if( BmCode_dimention( critCode ) == 0 )
+    if( BmCodeDimention( critCode ) == 0 )
     {
         BmCode_reinit_list( critCode, 1, 1 );
     }
@@ -131,7 +131,7 @@ double BmEvaluator_criterion_process( BmEvaluator* self, uint iCriterion, BmCode
 
 double BmEvaluator_processState_action(BmEvaluator* self, BmCode* state, BmCode* action)
 {
-    BmCode* merge= newBmCodeMergeList( 2, state, action );
+    BmCode* merge= newBmCodeMerge_list( 2, state, action );
     assert( BmCode_isIncluding( self->space,  merge ) );
     double eval= BmEvaluator_process( self, merge );
     deleteBmCode( merge );
@@ -140,7 +140,7 @@ double BmEvaluator_processState_action(BmEvaluator* self, BmCode* state, BmCode*
 
 double BmEvaluator_processState_action_state(BmEvaluator* self, BmCode* state, BmCode* action, BmCode* statePrime)
 {
-    BmCode* merge= newBmCodeMergeList( 3, state, action, statePrime );
+    BmCode* merge= newBmCodeMerge_list( 3, state, action, statePrime );
     assert( BmCode_isIncluding( self->space,  merge ) );
     double eval= BmEvaluator_process( self, merge );
     deleteBmCode( merge );
@@ -161,7 +161,7 @@ BmCriterion* BmEvaluator_criterion_reinitWith( BmEvaluator* self, uint iCrit, Bm
     );
     
     // record the mask:
-    BmCode_destroy( array_at( self->masks, iCrit ) );
+    BmCodedestroy( array_at( self->masks, iCrit ) );
     array_at_set( self->masks, iCrit, newDependenceMask );
 
     // and go:

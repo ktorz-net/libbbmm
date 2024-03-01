@@ -32,7 +32,7 @@ BmBench* newBmBenchAs( BmBench* model )
 
 void deleteBmBench(BmBench* self)
 {
-    BmBench_destroy(self);
+    BmBenchdestroy(self);
     free(self);
 }
 
@@ -65,7 +65,7 @@ BmBench* BmBench_createAs( BmBench* self, BmBench* model )
     return self;
 }
 
-BmBench* BmBench_destroy(BmBench* self)
+BmBench* BmBenchdestroy(BmBench* self)
 {
     while( self->size > 0 )
     {
@@ -81,7 +81,7 @@ BmBench* BmBench_destroy(BmBench* self)
 /* Re-Initializer */
 BmBench* BmBench_reinit( BmBench* self, uint capacity )
 {
-    BmBench_destroy( self );
+    BmBenchdestroy( self );
     BmBench_create( self, capacity );
     return self;
 }
@@ -134,11 +134,11 @@ double BmBench_valueAt( BmBench* self, uint i )
     return array_at( self->values, self->start+i );
 }
 
-uint BmBench_dimention( BmBench* self)
+uint BmBenchDimention( BmBench* self)
 {
     if( self->size == 0 )
         return 0;
-    return BmCode_dimention( BmBench_at( self, 1 ) );
+    return BmCodeDimention( BmBench_at( self, 1 ) );
 }
 
 /* Test */
@@ -228,14 +228,14 @@ void BmBench_switch( BmBench* self, BmBench* doppleganger)
 
 void BmBench_add_reducted( BmBench *self, BmBench *another, BmCode* mask )
 {
-    uint dim= BmCode_dimention( mask );
+    uint dim= BmCodeDimention( mask );
     BmCode* state= newBmCode_all( dim, 0 );
     for( uint iCode = 1 ; iCode <= BmBench_size(another) ; ++iCode  )
     {
         BmCode* model= BmBench_at( another, iCode );
         for( uint i= 1 ; i <= dim ; ++i )
         {
-            BmCode_at_set( state, i, BmCode_at(model, BmCode_at( mask, i) ) );
+            BmCode_at_set( state, i, BmCode_digit(model, BmCode_digit( mask, i) ) );
         }
         BmBench_attachLast( self, newBmCodeAs(state), BmBench_valueAt( another, iCode)
         );

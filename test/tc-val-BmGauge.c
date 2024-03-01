@@ -9,7 +9,7 @@ START_TEST(test_BmGauge_init)
     BmCode* input= newBmCode_list(2, 3, 4 );
     BmGauge* crit= newBmGaugeBasic(input, 3);
 
-    ck_assert_uint_eq( BmGauge_dimention(crit), 2 );
+    ck_assert_uint_eq( BmGaugeDimention(crit), 2 );
     ck_assert_uint_eq( BmGauge_optionSize(crit), 3 );
 
     BmGauge_optionId_set( crit, 1, 11.0 );
@@ -20,7 +20,7 @@ START_TEST(test_BmGauge_init)
     ck_assert_double_eq( BmGauge_optionId( crit, 2 ), 22.0 );
     ck_assert_double_eq( BmGauge_optionId( crit, 3 ), 33.0 );
 
-    BmCode* iCode= BmCode_newBmCodeFirst( input );
+    BmCode* iCode= BmCodeNewBmCodeFirst( input );
     while( BmCode_isIncluding( input, iCode ) )
     {
         ck_assert_double_eq( BmGauge_at( crit, iCode ), 11.0 );
