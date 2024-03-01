@@ -96,7 +96,7 @@ BmVector* BmEvaluator_weights( BmEvaluator* self )
 
 double BmEvaluator_criterion_weight( BmEvaluator* self, uint iCritirion )
 {
-    return BmVector_at( self->weights, iCritirion );
+    return BmVector_value( self->weights, iCritirion );
 }
 
 BmCode* BmEvaluator_criterion_mask( BmEvaluator* self, uint iCritirion )
@@ -112,7 +112,7 @@ double BmEvaluator_process( BmEvaluator* self, BmCode* input )
     double eval= 0.0;
     for( uint i= 1 ; i <= self->size ; ++i )
     {
-        eval+= BmVector_at( self->weights, i )
+        eval+= BmVector_value( self->weights, i )
             *  BmEvaluator_criterion_process( self, i, input );
     }
     return eval;

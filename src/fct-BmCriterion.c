@@ -77,7 +77,7 @@ BmVector* BmCriterion_outputs( BmCriterion* self )
 
 double BmCriterion_from( BmCriterion* self, BmCode* input )
 {
-    return BmVector_at(
+    return BmVector_value(
         self->outputs,
         BmTree_at( self->selector, input )
     );
@@ -131,7 +131,7 @@ BmBench* BmCriterion_asNewBench( BmCriterion* self )
         BmBench_at_setValue(
             bench,
             i,
-            BmVector_at( self->outputs, outputId )
+            BmVector_value( self->outputs, outputId )
         );
     }
     return bench;

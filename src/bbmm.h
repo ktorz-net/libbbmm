@@ -184,8 +184,7 @@ BmVector* BmVector_copy( BmVector* self, BmVector* model );
 
 /* Accessor */
 uint BmVectorDimention( BmVector* self );
-double BmVector_at( BmVector* self, uint i );
-double* BmVector_values( BmVector* self );
+double BmVector_value( BmVector* self, uint i );
 
 /* Construction */
 BmVector* BmVector_redimention(BmVector* self, uint size);
@@ -193,8 +192,8 @@ double BmVector_at_set( BmVector* self, uint i, double value );
 BmVector* BmVector_setValues( BmVector* self, double* values );
 
 /* Operation */
-double BmVector_sum( BmVector* self );
-double BmVector_product( BmVector* self );
+double BmVectorSum( BmVector* self );
+double BmVectorProduct( BmVector* self );
 
 /* Test */
 bool BmVector_isEqualTo( BmVector* self, BmVector* another );

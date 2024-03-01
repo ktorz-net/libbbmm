@@ -82,7 +82,7 @@ Outputs:\n\
     BmCode_print( array_at( eval1->masks, 1), buffer );
     ck_assert_str_eq( buffer, "[]" );
 
-    ck_assert_double_eq( BmVector_at( BmEvaluator_weights(eval1), 1), 1.0 );
+    ck_assert_double_eq( BmVector_value( BmEvaluator_weights(eval1), 1), 1.0 );
 
     ck_assert_double_eq_tol( BmEvaluator_processState_action( eval1, stateSpace, actionSpace ), 0.0, 0.00001 );
 
