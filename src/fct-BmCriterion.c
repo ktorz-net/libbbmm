@@ -128,7 +128,7 @@ BmBench* BmCriterion_asNewBench( BmCriterion* self )
     for( uint i= 1 ; i <= benchSize ; ++i )
     {
         uint outputId= BmCode_digit( BmBench_codeAt( bench, i), iOutput ); 
-        DEPRECIATED_BmBench_at_setValue(
+        BmBench_at_setValue(
             bench,
             i,
             BmVector_value( self->outputs, outputId )

@@ -52,7 +52,7 @@ BmDecision* BmDecision_reinitWith( BmDecision* self, BmCode* newInputRanges, BmB
 BmDecision* BmDecision_reinitWithDefault( BmDecision* self, BmCode* newInputRanges, BmCode* newDefaultOutput, double defaultValue )
 {
     BmBench* ben= newBmBench_codeDim_vectorDim( 16, BmCodeDimention( newDefaultOutput ), 1 );
-    BmBench_attachLast( ben, newDefaultOutput, newBmVector_list(1, defaultValue) );
+    BmBench_attachCode_vector( ben, newDefaultOutput, newBmVector_list(1, defaultValue) );
     return BmDecision_reinitWith( self, newInputRanges, ben );
 }
 
@@ -79,13 +79,13 @@ BmCode* BmDecision_codeFrom( BmDecision* self, BmCode* input )
 
 double BmDecision_valueFrom( BmDecision* self, BmCode* input )
 {
-    return DEPRECIATED_BmBench_valueAt( self->outputs, BmTree_at( self->selector, input) );
+    return BmBench_valueAt( self->outputs, BmTree_at( self->selector, input) );
 }
 
 /* Construction */
 uint BmDecision_attachOuput( BmDecision* self, BmCode* newOuputCode, double ouputValue )
 {
-    return DEPRECIATED_BmBench_attachLast( self->outputs, newOuputCode, ouputValue );
+    return BmBench_attachCode_vector( self->outputs, newOuputCode, newBmVector_list(1, ouputValue) );
 }
 
 uint BmDecision_from_set( BmDecision* self, BmCode* input, uint ouputId )

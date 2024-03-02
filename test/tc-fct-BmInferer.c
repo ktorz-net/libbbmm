@@ -62,20 +62,30 @@ START_TEST(test_BmInferer_construction)
     char buffer[1024]= "";
     ck_assert_str_eq( BmBench_printNetwork( trans->network, buffer ), "1[], 2[], 3[], 4[], 5[], 6[], 7[], 8[]" );
 
-    DEPRECIATED_BmInferer_node_reinitWith(trans, 6,
-        newBmCode_list(2, 1, 3),
-        DEPRECIATED_newBmBenchWith( 1, newBmCode_list(1, 1), 1.0 )
-    );
-
-    DEPRECIATED_BmInferer_node_reinitWith(trans, 7,
-        newBmCode_list(3, 1, 4, 5),
-        DEPRECIATED_newBmBenchWith( 1, newBmCode_list(1, 1), 1.0 )
-    );
-
-    DEPRECIATED_BmInferer_node_reinitWith(trans, 8,
-        newBmCode_list(2, 2, 6),
-        DEPRECIATED_newBmBenchWith( 1, newBmCode_list(1, 1), 1.0 )
-    );
+    {
+        BmBench* distrib= newBmBench_codeDim_vectorDim( 1, 1, 1 );
+        BmBench_attachCode_vector( distrib, newBmCode_list(1, 1), newBmVector_list( 1, 1.0 ) );
+        DEPRECIATED_BmInferer_node_reinitWith(trans, 6,
+            newBmCode_list(2, 1, 3),
+            distrib
+        );
+    }
+    {
+        BmBench* distrib= newBmBench_codeDim_vectorDim( 1, 1, 1 );
+        BmBench_attachCode_vector( distrib, newBmCode_list(1, 1), newBmVector_list( 1, 1.0 ) );
+        DEPRECIATED_BmInferer_node_reinitWith(trans, 7,
+            newBmCode_list(3, 1, 4, 5),
+            distrib
+        );
+    }
+    {
+        BmBench* distrib= newBmBench_codeDim_vectorDim( 1, 1, 1 );
+        BmBench_attachCode_vector( distrib, newBmCode_list(1, 1), newBmVector_list( 1, 1.0 ) );
+        DEPRECIATED_BmInferer_node_reinitWith(trans, 8,
+            newBmCode_list(2, 2, 6),
+            distrib
+        );
+    }
     
     strcpy(buffer, "");
     ck_assert_str_eq( BmBench_printNetwork( trans->network, buffer ), "1[], 2[], 3[], 4[], 5[], 6[1, 3], 7[1, 4, 5], 8[2, 6]" );
@@ -99,8 +109,8 @@ void test_initializeNode6(BmInferer * trans)
 */
 
     BmBench* distrib= newBmBench(2);
-    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 1), 0.5 );
-    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 2), 0.5 );
+    BmBench_attachCode_vector( distrib, newBmCode_list(1, 1), newBmVector_list(1, 0.5) );
+    BmBench_attachCode_vector( distrib, newBmCode_list(1, 2), newBmVector_list(1, 0.5) );
 
     BmCondition * dep= DEPRECIATED_BmInferer_node_reinitWith(
         trans, 6,
@@ -109,8 +119,8 @@ void test_initializeNode6(BmInferer * trans)
     );
 
     distrib= newBmBench(2);
-    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 1), 0.9 );
-    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 2), 0.1 );
+    BmBench_attachCode_vector( distrib, newBmCode_list(1, 1), newBmVector_list(1, 0.9) );
+    BmBench_attachCode_vector( distrib, newBmCode_list(1, 2), newBmVector_list(1, 0.1) );
 
     BmCode* inputCondition= newBmCode_list(2, 1, 1);
     BmCondition_from_attach(dep, inputCondition, distrib);
@@ -149,8 +159,8 @@ void test_initializeNode7(BmInferer * trans)
     */
 
     BmBench* distrib= newBmBench(2);
-    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 2), 0.6 );
-    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 1), 0.4 );
+    BmBench_attachCode_vector( distrib, newBmCode_list(1, 2), newBmVector_list(1, 0.6) );
+    BmBench_attachCode_vector( distrib, newBmCode_list(1, 1), newBmVector_list(1, 0.4) );
 
     BmCondition * dep= DEPRECIATED_BmInferer_node_reinitWith(
         trans, 7,
@@ -159,8 +169,8 @@ void test_initializeNode7(BmInferer * trans)
     );
 
     distrib= newBmBench(2);
-    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 1), 0.8 );
-    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 2), 0.2 );
+    BmBench_attachCode_vector( distrib, newBmCode_list(1, 1), newBmVector_list(1, 0.8) );
+    BmBench_attachCode_vector( distrib, newBmCode_list(1, 2), newBmVector_list(1, 0.2) );
 
     BmCode* inputCondition= newBmCode_list(3, 1, 2, 2);
     BmCondition_from_attach(dep, inputCondition, distrib);
@@ -197,8 +207,8 @@ void test_initializeNode8(BmInferer * trans)
       (6)      |
 */
     BmBench* distrib= newBmBench(2);
-    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 1), 0.7 );
-    DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 2), 0.3 );
+    BmBench_attachCode_vector( distrib, newBmCode_list(1, 1), newBmVector_list(1, 0.7) );
+    BmBench_attachCode_vector( distrib, newBmCode_list(1, 2), newBmVector_list(1, 0.3) );
 
     DEPRECIATED_BmInferer_node_reinitWith(
         trans, 8,
@@ -246,7 +256,7 @@ START_TEST(test_BmInferer_infering)
     ck_assert(1);
     // Set a initial determinist distribution :
     BmBench * distrib= newBmBench( BmCodeDimention(startConf) );
-    DEPRECIATED_BmBench_attachLast(distrib, newBmCodeAs( startConf ), 1.0);
+    DEPRECIATED_BmBench_attachCode_vector(distrib, newBmCodeAs( startConf ), 1.0);
 
     ck_assert(1);
     // infer :
@@ -258,12 +268,17 @@ START_TEST(test_BmInferer_infering)
         "{[1, 2, 2, 1, 2, 1, 2, 1]:0.21, [1, 2, 2, 1, 2, 1, 2, 2]:0.09, [1, 2, 2, 1, 2, 1, 1, 1]:0.14, [1, 2, 2, 1, 2, 1, 1, 2]:0.06, [1, 2, 2, 1, 2, 2, 2, 1]:0.21, [1, 2, 2, 1, 2, 2, 2, 2]:0.09, [1, 2, 2, 1, 2, 2, 1, 1]:0.14, [1, 2, 2, 1, 2, 2, 1, 2]:0.06}"
     );
     
+    printf( "WHAT-1 ???\n" );
+    BmBench* transDistrib= BmInferer_distribution(trans);
+    printf( "WHAT-2 ???\n" );
+
     strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmBench_print( BmInferer_distribution(trans), buffer ),
+        BmBench_print( transDistrib, buffer ),
         "{[1, 1]:0.28, [1, 2]:0.12, [2, 1]:0.42, [2, 2]:0.18}"
     );
-
+    printf( "WHAT-3 ???\n" );
+    
     strcpy( buffer, "" );
     ck_assert_str_eq( BmCode_print( state, buffer ), "[1, 2]" );
     strcpy( buffer, "" );

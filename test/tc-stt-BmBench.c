@@ -12,13 +12,13 @@ START_TEST(test_BmBench_init)
     ck_assert_uint_eq( collec->size, 0 );
 
     char buffer[1024];
-    DEPRECIATED_BmBench_attachLast(collec, newBmCode_list(1, 42), 0.0 );
+    DEPRECIATED_BmBench_attachCode_vector(collec, newBmCode_list(1, 42), 0.0 );
 
     ck_assert_uint_eq( collec->size, 1 );
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[42]}" );
 
-    DEPRECIATED_BmBench_attachLast(collec, newBmCode_list(2, 69, 103), 0.0 );
+    DEPRECIATED_BmBench_attachCode_vector(collec, newBmCode_list(2, 69, 103), 0.0 );
     
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[42], [69, 103]}" );
@@ -60,7 +60,7 @@ START_TEST(test_BmBench_sorting)
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[42], [69, 103], [3], [69, 56]}" );
 
-    BmBench_sort(collec, (fctptr_BmBench_compare)BmBench_isCodeGreater);
+    BmBench_sort(collec, (fctptr_BmBench_compare)BmBench_is_codeGreater);
 
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[3], [42], [69, 56], [69, 103]}" );
@@ -81,7 +81,7 @@ START_TEST(test_BmBench_sorting)
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[5, 8, 12], [1, 2, 3], [1, 2, 1], [1, 1, 8], [4, 2, 1], [5, 2, 3], [2, 2, 2], [2, 3, 2]}" );
 
-    BmBench_sort(collec, (fctptr_BmBench_compare)BmBench_isCodeGreater);
+    BmBench_sort(collec, (fctptr_BmBench_compare)BmBench_is_codeGreater);
 
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[1, 1, 8], [1, 2, 1], [1, 2, 3], [2, 2, 2], [2, 3, 2], [4, 2, 1], [5, 2, 3], [5, 8, 12]}" );
@@ -110,16 +110,16 @@ START_TEST(test_BmBench_values)
     BmBench_print(collec, buffer);
     ck_assert_str_eq( buffer, "{[42]:0.00, [69, 103]:0.00, [3]:0.00, [69, 56]:0.00}" );
 
-    DEPRECIATED_BmBench_at_setValue( collec, 2, 1.1 );
-    ck_assert_double_eq_tol( DEPRECIATED_BmBench_valueAt( collec, 2 ), 1.1, 0.00001 );
+    BmBench_at_setValue( collec, 2, 1.1 );
+    ck_assert_double_eq_tol( BmBench_valueAt( collec, 2 ), 1.1, 0.00001 );
 
     strcpy( buffer, "" );
     BmBench_print(collec, buffer);
     ck_assert_str_eq( buffer, "{[42]:0.00, [69, 103]:1.10, [3]:0.00, [69, 56]:0.00}" );
 
-    DEPRECIATED_BmBench_at_setValue( collec, 1, 3.3 );
-    DEPRECIATED_BmBench_at_setValue( collec, 3, 4.4 );
-    DEPRECIATED_BmBench_at_setValue( collec, 4, 1.1 );
+    BmBench_at_setValue( collec, 1, 3.3 );
+    BmBench_at_setValue( collec, 3, 4.4 );
+    BmBench_at_setValue( collec, 4, 1.1 );
 
     strcpy( buffer, "" );
     BmBench_print(collec, buffer);
@@ -149,7 +149,7 @@ START_TEST(test_BmBench_sorting02)
         BmBench_print(collec, buffer),
         "{[5, 8, 12]:0.00, [1, 2, 3]:0.00, [1, 2, 1]:0.00, [1, 1, 8]:0.00, [4, 2, 1]:0.00, [5, 2, 3]:0.00, [2, 2, 2]:0.00, [2, 3, 2]:0.00}" );
 
-    BmBench_sort(collec, (fctptr_BmBench_compare)BmBench_isCodeGreater);
+    BmBench_sort(collec, (fctptr_BmBench_compare)BmBench_is_codeGreater);
 
     strcpy( buffer, "" );
     BmBench_print(collec, buffer);
@@ -163,36 +163,36 @@ START_TEST(test_BmBench_attach_detach)
 {
     BmBench* collec= newBmBench(10);
 
-    DEPRECIATED_BmBench_attachLast(collec, newBmCode_list(3, 5, 8, 12), 0.0 );
-    DEPRECIATED_BmBench_attachLast(collec, newBmCode_list(3, 1, 2, 3), 0.0 );
+    DEPRECIATED_BmBench_attachCode_vector(collec, newBmCode_list(3, 5, 8, 12), 0.0 );
+    DEPRECIATED_BmBench_attachCode_vector(collec, newBmCode_list(3, 1, 2, 3), 0.0 );
 
     char buffer[1024];
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[5, 8, 12], [1, 2, 3]}" );
 
-    DEPRECIATED_BmBench_attachLast(collec, newBmCode_list(3, 1, 2, 1), 0.0 );
+    DEPRECIATED_BmBench_attachCode_vector(collec, newBmCode_list(3, 1, 2, 1), 0.0 );
 
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[5, 8, 12], [1, 2, 3], [1, 2, 1]}" );
 
-    BmCode* bob= BmBench_detachLast(collec);
+    BmCode* bob= BmBenchDetach(collec);
     deleteBmCode(bob);
 
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[5, 8, 12], [1, 2, 3]}" );
 
-    bob= BmBench_detachLast(collec);
+    bob= BmBenchDetach(collec);
     deleteBmCode(bob);
-    bob= BmBench_detachLast(collec);
+    bob= BmBenchDetach(collec);
     deleteBmCode(bob);
 
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{}" );
 
-    DEPRECIATED_BmBench_attachLast(collec, newBmCode_list(3, 4, 2, 1), 0.0 );
-    DEPRECIATED_BmBench_attachLast(collec, newBmCode_list(3, 5, 2, 3), 0.0 );
-    DEPRECIATED_BmBench_attachLast(collec, newBmCode_list(3, 2, 2, 2), 0.0 );
-    DEPRECIATED_BmBench_attachLast(collec, newBmCode_list(3, 2, 3, 2), 0.0 );
+    DEPRECIATED_BmBench_attachCode_vector(collec, newBmCode_list(3, 4, 2, 1), 0.0 );
+    DEPRECIATED_BmBench_attachCode_vector(collec, newBmCode_list(3, 5, 2, 3), 0.0 );
+    DEPRECIATED_BmBench_attachCode_vector(collec, newBmCode_list(3, 2, 2, 2), 0.0 );
+    DEPRECIATED_BmBench_attachCode_vector(collec, newBmCode_list(3, 2, 3, 2), 0.0 );
 
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[4, 2, 1], [5, 2, 3], [2, 2, 2], [2, 3, 2]}" );
@@ -213,29 +213,29 @@ START_TEST(test_BmBench_attach_front)
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[5, 8, 12], [1, 2, 3]}" );
 
-    DEPRECIATED_BmBench_attachLast(collec, newBmCode_list(3, 1, 2, 1), 0.0 );
+    DEPRECIATED_BmBench_attachCode_vector(collec, newBmCode_list(3, 1, 2, 1), 0.0 );
 
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[5, 8, 12], [1, 2, 3], [1, 2, 1]}" );
 
-    BmCode* bob= BmBench_detachFirst(collec);
+    BmCode* bob= BmBenchDetachFront(collec);
     deleteBmCode(bob);
 
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[1, 2, 3], [1, 2, 1]}" );
 
-    bob= BmBench_detachFirst(collec);
+    bob= BmBenchDetachFront(collec);
     deleteBmCode(bob);
-    bob= BmBench_detachFirst(collec);
+    bob= BmBenchDetachFront(collec);
     deleteBmCode(bob);
 
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{}" );
 
-    BmBench_attachLast(collec, newBmCode_list(3, 4, 2, 1), newBmVector_list(1, 0.0) );
-    BmBench_attachLast(collec, newBmCode_list(3, 5, 2, 3), newBmVector_list(1, 0.0) );
-    BmBench_attachLast(collec, newBmCode_list(3, 2, 2, 2), newBmVector_list(1, 0.0) );
-    BmBench_attachFirst(collec, newBmCode_list(3, 2, 3, 2), newBmVector_list(1, 0.0) );
+    BmBench_attachCode_vector(collec, newBmCode_list(3, 4, 2, 1), newBmVector_list(1, 0.0) );
+    BmBench_attachCode_vector(collec, newBmCode_list(3, 5, 2, 3), newBmVector_list(1, 0.0) );
+    BmBench_attachCode_vector(collec, newBmCode_list(3, 2, 2, 2), newBmVector_list(1, 0.0) );
+    BmBench_attachFrontCode_vector(collec, newBmCode_list(3, 2, 3, 2), newBmVector_list(1, 0.0) );
 
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[2, 3, 2], [4, 2, 1], [5, 2, 3], [2, 2, 2]}" );

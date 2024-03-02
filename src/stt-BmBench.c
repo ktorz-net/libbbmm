@@ -24,7 +24,7 @@ BmBench* newBmBench_codeDim_vectorDim( uint capacity, uint codeDim, uint vectorD
 BmBench* DEPRECIATED_newBmBenchWith( uint capacity, BmCode* newFirstItems, double value )
 {
     BmBench* self= BmBench_create( newEmpty(BmBench), capacity);
-    DEPRECIATED_BmBench_attachLast( self, newFirstItems, value );
+    DEPRECIATED_BmBench_attachCode_vector( self, newFirstItems, value );
     return self;
 }
 
@@ -61,7 +61,7 @@ BmBench* BmBench_createAs( BmBench* self, BmBench* model )
     BmBench_create(self, BmBench_size(model) );
     for( uint i= 1 ; i <= BmBench_size(model) ; ++i )
     {
-        BmBench_attachLast( self,
+        BmBench_attachCode_vector( self,
             newBmCodeAs( BmBench_codeAt( model, i ) ),
             newBmVectorAs( BmBench_vectorAt( model, i ) )
         );
@@ -91,7 +91,59 @@ BmBench* BmBench_reinit( BmBench* self, uint capacity )
     return self;
 }
 
-/* Modification */
+
+/* Accessor */
+uint BmBench_size(BmBench* self)
+{
+    return self->size;
+}
+
+uint BmBench_capacity(BmBench* self)
+{
+    return self->capacity;
+}
+
+BmCode* BmBench_codeAt( BmBench* self, uint i )
+{
+    return array_at( self->codes, self->start+i );
+}
+
+BmVector* BmBench_vectorAt( BmBench* self, uint i )
+{
+    return array_at( self->vects, self->start+i );
+}
+
+uint BmBench_digitAt( BmBench* self, uint i)
+{
+    return BmCode_digit( BmBench_codeAt( self, i ), 1 );
+}
+
+double BmBench_valueAt( BmBench* self, uint i)
+{
+    return BmVector_value( BmBench_vectorAt( self, i ), 1 );
+}
+
+uint BmBench_at_digit( BmBench* self, uint i, uint j )
+{
+    return BmCode_digit( BmBench_codeAt( self, i ), j );
+}
+
+double BmBench_at_value( BmBench* self, uint i, uint j )
+{
+    return BmVector_value( BmBench_vectorAt( self, i ), j );
+}
+
+uint BmBenchCodeDimention( BmBench* self)
+{
+    return self->codeDim;
+}
+
+uint BmBenchVectorDimention( BmBench* self)
+{
+    return self->vectDim;
+}
+
+/* Construction */
 void BmBench_resizeCapacity( BmBench* self, uint newCapacity )
 {
     // Security:
@@ -118,61 +170,7 @@ void BmBench_resizeCapacity( BmBench* self, uint newCapacity )
     self->start= start;
 }
 
-/* Accessor */
-uint BmBench_size(BmBench* self)
-{
-    return self->size;
-}
-
-uint BmBench_capacity(BmBench* self)
-{
-    return self->capacity;
-}
-
-BmCode* BmBench_codeAt( BmBench* self, uint i )
-{
-    return array_at( self->codes, self->start+i );
-}
-
-BmVector* BmBench_vectorAt( BmBench* self, uint i )
-{
-    return array_at( self->vects, self->start+i );
-}
-
-uint BmBench_at_digit( BmBench* self, uint i, uint j )
-{
-    return BmCode_digit( BmBench_codeAt( self, i ), j );
-}
-
-double BmBench_at_value( BmBench* self, uint i, uint j )
-{
-    return BmVector_value( BmBench_vectorAt( self, i ), j );
-}
-
-double DEPRECIATED_BmBench_valueAt( BmBench* self, uint i )
-{
-    return BmVector_value( array_at( self->vects, self->start+i ), 1 );
-}
-
-uint BmBenchCodeDimention( BmBench* self)
-{
-    return self->codeDim;
-}
-
-uint BmBenchVectorDimention( BmBench* self)
-{
-    return self->vectDim;
-}
-
-/* Test */
-
-/* Construction Item */
-uint BmBench_attachCode( BmBench* self, BmCode* newItem )
-{
-    return DEPRECIATED_BmBench_attachLast( self, newItem, 0.0 );
-}
-
-uint BmBench_attachLast( BmBench* self, BmCode* newCode, BmVector* newVector )
+uint BmBench_attachCode_vector( BmBench* self, BmCode* newCode, BmVector* newVector )
 {
     uint id= self->start+self->size+1;
     if( id > self->capacity )
@@ -188,20 +186,7 @@ uint BmBench_attachLast( BmBench* self, BmCode* newCode, BmVector* newVector )
     return (id-self->start);    
 }
 
-uint DEPRECIATED_BmBench_attachLast( BmBench* self, BmCode* newItem, double value )
-{
-    return BmBench_attachLast( self, newItem, newBmVector_list(1, value) );
-}
-
-BmCode* BmBench_detachLast( BmBench* self )
-{
-    assert( self->size > 0 );
-    uint id= self->start+self->size;
-    self->size-= 1;
-    return array_at( self->codes, id );
-}
-
-uint BmBench_attachFirst( BmBench* self, BmCode* newCode, BmVector* newVector )
+uint BmBench_attachFrontCode_vector( BmBench* self, BmCode* newCode, BmVector* newVector )
 {
     if( self->start == 0 )
     {
@@ -215,7 +200,15 @@ uint BmBench_attachFirst( BmBench* self, BmCode* newCode, BmVector* newVector )
     return self->start+1;
 }
 
-BmCode* BmBench_detachFirst( BmBench* self )
+BmCode* BmBenchDetach( BmBench* self )
+{
+    assert( self->size > 0 );
+    uint id= self->start+self->size;
+    self->size-= 1;
+    return array_at( self->codes, id );
+}
+
+BmCode* BmBenchDetachFront( BmBench* self )
 {
     assert( self->size > 0 );
     uint id= self->start+1;
@@ -224,13 +217,53 @@ BmCode* BmBench_detachFirst( BmBench* self )
     return array_at( self->codes, id );
 }
 
-BmCode* DEPRECIATED_BmBench_at_setValue( BmBench* self, uint i, double value )
+BmBench* BmBench_increase( BmBench* self, uint number )
 {
-    BmVector_at_set( 
-        array_at( self->vects, self->start+i ),
-        1, value
+    for( uint counter= 0 ; counter < number ; ++counter ) //TODO: optimize the resize
+    {
+        BmBench_attachCode_vector(
+            self,
+            newBmCode_all( self->codeDim, 0 ),
+            newBmVector_all( self->vectDim, 0.0 )
+        );
+    }
+    return self;
+}
+
+BmBench* BmBench_increaseFront( BmBench* self, uint number )
+{
+    for( uint counter= 0 ; counter < number ; ++counter ) //TODO: optimize the resize
+    {
+        BmBench_attachFrontCode_vector(
+            self,
+            newBmCode_all( self->codeDim, 0 ),
+            newBmVector_all( self->vectDim, 0.0 )
+        );
+    }
+    return self;
+}
+
+uint BmBench_attachCode( BmBench* self, BmCode* newCode )
+{
+    return BmBench_attachCode_vector(
+        self,
+        newCode,
+        newBmVector_all( self->vectDim, 0.0 )
     );
-    return array_at( self->codes, self->start+i );
+}
+
+uint BmBench_attachVector( BmBench* self, BmVector* newItem )
+{
+    return BmBench_attachCode_vector(
+        self,
+        newBmCode_all( self->codeDim, 0 ),
+        newItem
+    );
+}
+
+uint DEPRECIATED_BmBench_attachCode_vector( BmBench* self, BmCode* newItem, double value )
+{
+    return BmBench_attachCode_vector( self, newItem, newBmVector_list(1, value) );
 }
 
 void BmBench_switch( BmBench* self, BmBench* doppleganger)
@@ -263,6 +296,36 @@ void BmBench_switch( BmBench* self, BmBench* doppleganger)
     doppleganger->vects    = vects;
 }
 
+/* Construction Basic */
+
+uint BmBench_addDigit_value( BmBench* self, uint d, double v )
+{
+    return BmBench_attachCode_vector(
+        self,
+        newBmCode_list( 1, d ),
+        newBmVector_list( 1, v )
+    );
+}
+
+BmBench* BmBench_at_setDigit( BmBench* self, uint i, uint digit )
+{
+    BmCode_at_set( 
+        array_at( self->codes, self->start+i ),
+        1, digit
+    );
+    return self;
+}
+
+BmBench* BmBench_at_setValue( BmBench* self, uint i, double value )
+{
+    BmVector_at_set( 
+        array_at( self->vects, self->start+i ),
+        1, value
+    );
+    return self;
+}
+
+
 void BmBench_add_reducted( BmBench *self, BmBench *another, BmCode* mask )
 {
     uint dim= BmCodeDimention( mask );
@@ -274,7 +337,7 @@ void BmBench_add_reducted( BmBench *self, BmBench *another, BmCode* mask )
         {
             BmCode_at_set( state, i, BmCode_digit(model, BmCode_digit( mask, i) ) );
         }
-        DEPRECIATED_BmBench_attachLast( self, newBmCodeAs(state), DEPRECIATED_BmBench_valueAt( another, iCode)
+        BmBench_attachCode_vector( self, newBmCodeAs(state),  newBmVectorAs( BmBench_vectorAt(another, iCode) )
         );
     }
     deleteBmCode( state );
@@ -321,24 +384,24 @@ uint BmBench_switchAt_at( BmBench* self, uint i1, uint i2 )
 }
 
 /* Comparison */
-bool BmBench_isCodeGreater(BmBench* self, uint i1, uint i2)
+bool BmBench_is_codeGreater(BmBench* self, uint i1, uint i2)
 {
     return BmCode_isGreaterThan( BmBench_codeAt(self, i1), BmBench_codeAt(self, i2) );
 }
 
-bool BmBench_isCodeSmaller(BmBench* self, uint i1, uint i2)
+bool BmBench_is_codeSmaller(BmBench* self, uint i1, uint i2)
 {
     return BmCode_isSmallerThan( BmBench_codeAt(self, i1), BmBench_codeAt(self, i2) );
 }
 
-bool BmBench_isVectorGreater(BmBench* self, uint i1, uint i2)
+bool BmBench_is_vectorGreater(BmBench* self, uint i1, uint i2)
 {
-    return DEPRECIATED_BmBench_valueAt(self, i1) > DEPRECIATED_BmBench_valueAt(self, i2);
+    return BmBench_valueAt(self, i1) > BmBench_valueAt(self, i2);
 }
 
-bool BmBench_isVectorSmaller(BmBench* self, uint i1, uint i2)
+bool BmBench_is_vectorSmaller(BmBench* self, uint i1, uint i2)
 {
-    return DEPRECIATED_BmBench_valueAt(self, i1) < DEPRECIATED_BmBench_valueAt(self, i2);
+    return BmBench_valueAt(self, i1) < BmBench_valueAt(self, i2);
 }
 
 
@@ -348,7 +411,7 @@ char* _BmBench_printItem(BmBench* self, uint iItem, char* output)
     char buffer[16]= "";
     BmCode_print( BmBench_codeAt(self, iItem), output);
     strcat(output, ":");
-    sprintf( buffer, "%.2f", DEPRECIATED_BmBench_valueAt(self, iItem) );
+    sprintf( buffer, "%.2f", BmBench_valueAt(self, iItem) );
     strcat( output, buffer );
     return output;
 }
@@ -364,6 +427,7 @@ char* _BmBench_printNode(BmBench* self, uint iItem, char* output)
 
 char* BmBench_print(BmBench* self, char* output)
 {
+    printf("DB: < BmBench_print\n");
     strcat(output, "{");
 
     if( self->size > 0 )
@@ -379,6 +443,7 @@ char* BmBench_print(BmBench* self, char* output)
 
     strcat(output, "}");
 
+    printf("DB: BmBench_print >\n");
     return output;
 }
 

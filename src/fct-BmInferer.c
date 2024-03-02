@@ -180,14 +180,14 @@ BmBench* _BmInferer_setFomOverallDistribution(BmInferer * self, BmBench* overall
     // generate transition by reducing the overall distribution:
     BmBench* buildTransition = newBmBench( self->distribution->capacity );
     BmBench_add_reducted( buildTransition, overallDistrib, outputMask );
-    BmBench_sort( buildTransition, (fctptr_BmBench_compare)BmBench_isCodeGreater );
+    BmBench_sort( buildTransition, (fctptr_BmBench_compare)BmBench_is_codeGreater );
 
 
     // merge consecutive doubles:
     uint size= BmBench_size( buildTransition );
     BmBench_reinit( self->distribution, size );
-    DEPRECIATED_BmBench_attachLast( self->distribution,
-        newBmCodeAs( BmBench_codeAt( buildTransition, 1 ) ), DEPRECIATED_BmBench_valueAt( buildTransition, 1 )
+    BmBench_attachCode_vector( self->distribution,
+        newBmCodeAs( BmBench_codeAt( buildTransition, 1 ) ), BmBench_vectorAt( buildTransition, 1 )
     );
     uint counter= 1;
 
@@ -195,14 +195,14 @@ BmBench* _BmInferer_setFomOverallDistribution(BmInferer * self, BmBench* overall
     {
         if ( BmCode_isEqualTo( BmBench_codeAt( self->distribution, counter ), BmBench_codeAt( buildTransition, i ) ) )
         {
-            DEPRECIATED_BmBench_at_setValue( self->distribution, counter,
-                DEPRECIATED_BmBench_valueAt( self->distribution, counter ) + DEPRECIATED_BmBench_valueAt( buildTransition, i )
+            BmBench_at_setValue( self->distribution, counter,
+                BmBench_valueAt( self->distribution, counter ) + BmBench_valueAt( buildTransition, i )
             );
         }
         else 
         {
-            counter= DEPRECIATED_BmBench_attachLast( self->distribution,
-                newBmCodeAs( BmBench_codeAt( buildTransition, i ) ), DEPRECIATED_BmBench_valueAt( buildTransition, i ) );            
+            counter= BmBench_attachCode_vector( self->distribution,
+                newBmCodeAs( BmBench_codeAt( buildTransition, i ) ), BmBench_vectorAt( buildTransition, i ) );            
         }
     }
     
@@ -244,9 +244,9 @@ BmBench* BmInferer_processState_Action( BmInferer* self, BmCode* state, BmCode* 
 {
     // Set the initial determinist distribution :
     BmBench * inputDistribution= newBmBench( 1 );
-    DEPRECIATED_BmBench_attachLast( inputDistribution,
+    BmBench_attachCode_vector( inputDistribution,
         newBmCodeMerge_list( 2, state, action ),
-        1.0
+        newBmVector_list(1, 1.0)
     );
     // infer :
     deleteBmBench( BmInferer_process_newOverallDistribution(self, inputDistribution) );

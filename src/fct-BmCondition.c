@@ -19,7 +19,7 @@ BmCondition* newBmConditionWith(uint range, BmCode* newInputRanges, BmBench* new
 BmCondition* BmCondition_createBasic( BmCondition* self, uint range )
 {
     BmBench* distrib = newBmBench( 1 );
-    BmBench_attachLast( distrib, newBmCode_list(1, 1), newBmVector_list(1, 1.0) );
+    BmBench_attachCode_vector( distrib, newBmCode_list(1, 1), newBmVector_list(1, 1.0) );
     return BmCondition_createWith( self, range,
         newBmCode_all(1, 1), distrib );
 }
@@ -202,7 +202,7 @@ BmBench* BmCondition_newDistributionByInfering_mask( BmCondition* self, BmBench*
         BmCode* newConfig= newBmCode_all( longDim+1, 0 );
         BmCode* cond= BmBench_codeAt( longDistrib, iCondition);
         BmCode_copyNumbers( newConfig, cond );
-        double probability= DEPRECIATED_BmBench_valueAt( longDistrib, iCondition);
+        double probability= BmBench_valueAt( longDistrib, iCondition);
 
         // get the parents' configuration:
         for( uint j= 1 ; j <= selfDim ; ++j )
@@ -219,10 +219,10 @@ BmBench* BmCondition_newDistributionByInfering_mask( BmCondition* self, BmBench*
                 newConfig, BmCodeDimention(newConfig),
                 BmCode_digit( BmBench_codeAt( outputDistrib, iOutput), 1 )
             );
-            BmBench_attachLast(
+            BmBench_attachCode_vector(
                 newDistrib,
                 newBmCodeAs(newConfig),
-                newBmVector_list(1, probability * DEPRECIATED_BmBench_valueAt( outputDistrib, iOutput) )
+                newBmVector_list(1, probability * BmBench_valueAt( outputDistrib, iOutput) )
             );
         }
         deleteBmCode( newConfig );

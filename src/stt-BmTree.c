@@ -425,7 +425,7 @@ BmBench* BmTree_asNewBench( BmTree* self )
         BmBench_attachCode( bench, zeroConf );
     }
 
-    BmBench_sort( bench, (fctptr_BmBench_compare)BmBench_isCodeGreater );
+    BmBench_sort( bench, (fctptr_BmBench_compare)BmBench_is_codeGreater );
     return bench;
 }
 

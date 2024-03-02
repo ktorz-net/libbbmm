@@ -583,7 +583,7 @@ char* BmSystem_printVariable( BmSystem* self, char* varName, char* output )
 
     if( BmBench_size(collec) == 0 )
     {
-        uint iItem= DEPRECIATED_BmBench_attachLast(collec, newBmCode_all( BmConditionDimention(cdt), 0));
+        uint iItem= BmBench_attachCode( collec, newBmCode_all( BmConditionDimention(cdt), 0) );
         BmBench_at_tag( collec, iItem, 1 );
     }
     
