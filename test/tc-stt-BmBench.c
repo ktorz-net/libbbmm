@@ -232,10 +232,10 @@ START_TEST(test_BmBench_attach_front)
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{}" );
 
-    DEPRECIATED_BmBench_attachLast(collec, newBmCode_list(3, 4, 2, 1), 0.0 );
-    DEPRECIATED_BmBench_attachLast(collec, newBmCode_list(3, 5, 2, 3), 0.0 );
-    DEPRECIATED_BmBench_attachLast(collec, newBmCode_list(3, 2, 2, 2), 0.0 );
-    DEPRECIATED_BmBench_attachFirst(collec, newBmCode_list(3, 2, 3, 2), 0.0 );
+    BmBench_attachLast(collec, newBmCode_list(3, 4, 2, 1), newBmVector_list(1, 0.0) );
+    BmBench_attachLast(collec, newBmCode_list(3, 5, 2, 3), newBmVector_list(1, 0.0) );
+    BmBench_attachLast(collec, newBmCode_list(3, 2, 2, 2), newBmVector_list(1, 0.0) );
+    BmBench_attachFirst(collec, newBmCode_list(3, 2, 3, 2), newBmVector_list(1, 0.0) );
 
     strcpy( buffer, "" );
     ck_assert_str_eq( BmBench_printCodes(collec, buffer), "{[2, 3, 2], [4, 2, 1], [5, 2, 3], [2, 2, 2]}" );

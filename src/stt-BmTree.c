@@ -402,8 +402,7 @@ BmBench* BmTree_asNewBench( BmTree* self )
             {
                 BmCode_at_set( conditions[iBranch], branVar, i );
                 BmCode_at_set( conditions[iBranch], codeSize, output );
-                DEPRECIATED_BmBench_attachLast(
-                    bench, newBmCodeAs( conditions[iBranch] ), 0.0 );
+                BmBench_attachCode( bench, newBmCodeAs( conditions[iBranch] ) );
             }
             // if state matches a child branch:
             else
@@ -423,7 +422,7 @@ BmBench* BmTree_asNewBench( BmTree* self )
     {
         BmCode* zeroConf= newBmCode_all( codeSize, 0 );
         BmCode_at_set( zeroConf, codeSize, 1 );
-        DEPRECIATED_BmBench_attachLast( bench, zeroConf, 0.0 );
+        BmBench_attachCode( bench, zeroConf );
     }
 
     BmBench_sort( bench, (fctptr_BmBench_compare)BmBench_isCodeGreater );

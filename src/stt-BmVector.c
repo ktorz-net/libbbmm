@@ -42,6 +42,11 @@ BmVector* newBmVector_all( uint size, double value )
     return BmVector_create_all( newEmpty(BmVector), size, value );
 }
 
+BmVector* newBmVectorAs( BmVector* model )
+{
+    return BmVector_createAs( newEmpty(BmVector), model );
+}
+
 BmVector* BmVector_create( BmVector* self, uint size )
 {
     self->values= newEmptyArray(double, size);
@@ -62,6 +67,15 @@ BmVector* BmVector_create_all( BmVector* self, uint size, double value )
     BmVector_create(self, size);
     for( uint i=0 ; i < size ; ++i )
         array_at_set( self->values, i+1, value );
+    return self;
+}
+
+BmVector* BmVector_createAs( BmVector* self, BmVector* model )
+{
+    uint size= BmVectorDimention(model);
+    BmVector_create(self, size);
+    for( uint i=1 ; i <= size ; ++i )
+        array_at_set( self->values, i, BmVector_value(model, i) );
     return self;
 }
 

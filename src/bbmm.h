@@ -169,10 +169,12 @@ BmVector* newBmVector( uint size );
 BmVector* newBmVector_values( uint size, double* values );
 BmVector* newBmVector_list( uint size, double val1, ... );
 BmVector* newBmVector_all( uint size, double value );
+BmVector* newBmVectorAs( BmVector* model );
 
 BmVector* BmVector_create( BmVector* self, uint size );
 BmVector* BmVector_create_values( BmVector* self, uint size, double* values );
 BmVector* BmVector_create_all( BmVector* self, uint size, double value );
+BmVector* BmVector_createAs( BmVector* self, BmVector* model );
 
 /* Destructor */
 BmVector* BmVectordestroy( BmVector* self );
@@ -214,16 +216,18 @@ char* BmVector_format_print( BmVector* self, char* format, char* buffer);
 
 typedef struct {
   uint capacity, start, size;
-  BmCode ** items;
-  double * values;
+  uint codeDim, vectDim;
+  BmCode   ** codes;
+  BmVector ** vects;
 } BmBench;
 
 /* Constructor */
 BmBench* newBmBench( uint capacity );
-//BmBench* newBmBench_codeDim_vectorDim( uint capacity, uint codeDim, uint vectorDim );
+BmBench* newBmBench_codeDim_vectorDim( uint capacity, uint codeDim, uint vectorDim );
 BmBench* newBmBenchAs( BmBench* model );
 
 BmBench* BmBench_create( BmBench* self, uint capacity );
+BmBench* BmBench_create_codeDim_vectorDim( BmBench* self, uint capacity, uint codeDim, uint vectorDim );
 BmBench* BmBench_createAs( BmBench* self, BmBench* model );
 
 BmBench* DEPRECIATED_newBmBenchWith( uint capacity, BmCode* newFirstItem, double value );
@@ -240,13 +244,13 @@ uint BmBench_size( BmBench* self);
 uint BmBench_capacity( BmBench* self);
 
 uint BmBenchCodeDimention( BmBench* self);
-//uint BmBenchVectorDimention( BmBench* self);
+uint BmBenchVectorDimention( BmBench* self);
 
 BmCode* BmBench_codeAt( BmBench* self, uint i );
-//BmVector* BmBench_vectorAt( BmBench* self, uint i );
+BmVector* BmBench_vectorAt( BmBench* self, uint i );
 
-//uint BmBench_at_digit( BmBench* self, uint i, uint j );
-//double BmBench_at_value( BmBench* self, uint i, uint j );
+uint BmBench_at_digit( BmBench* self, uint i, uint j );
+double BmBench_at_value( BmBench* self, uint i, uint j );
 
 double DEPRECIATED_BmBench_valueAt( BmBench* self, uint i ); // -> BmBench_at_value
 
@@ -257,13 +261,11 @@ uint BmBench_attachCode( BmBench* self, BmCode* newItem );
 //uint BmBench_attachVector( BmBench* self, BmVector* newItem );
 
 //BmCode* BmBench_detach( BmBench* self, uint i );
-
-//uint BmBench_attachLast( BmBench* self, BmCode* newCode, BmVector* newVector );
+uint BmBench_attachLast( BmBench* self, BmCode* newCode, BmVector* newVector );
 uint DEPRECIATED_BmBench_attachLast( BmBench* self, BmCode* newItem, double value ); // -> BmBench_attachLast(  newVector_list(1, ...) )
 BmCode* BmBench_detachLast( BmBench* self );
 
-//uint BmBench_attachFirst( BmBench* self, BmCode* newCode, BmVector* newVector );
-uint DEPRECIATED_BmBench_attachFirst( BmBench* self, BmCode* newItem, double value ); // -> BmBench_attachFirst(  newVector_list(1, ...) )
+uint BmBench_attachFirst( BmBench* self, BmCode* newCode, BmVector* newVector );
 BmCode* BmBench_detachFirst( BmBench* self );
 
 BmCode* DEPRECIATED_BmBench_at_setValue( BmBench* self, uint i, double value );
@@ -276,7 +278,7 @@ void BmBench_add_reducted( BmBench* self, BmBench* another, BmCode* mask );
 /* Operators */
 typedef bool (*fctptr_BmBench_compare)(BmBench*,uint,uint);
 uint BmBench_sort( BmBench* self, fctptr_BmBench_compare compare );
-uint BmBench_switchCodes( BmBench* self, uint id1, uint id2 );
+uint BmBench_switchAt_at( BmBench* self, uint id1, uint id2 );
 
 /* Comparison */
 bool BmBench_isCodeGreater(BmBench* self, uint i1, uint i2);
@@ -470,8 +472,9 @@ uint BmInferer_node_size( BmInferer* self, uint iVar );
 BmCode* BmInferer_node_parents( BmInferer* self, uint iVar );
 
 /* Construction */
-BmCondition* BmInferer_node_reinitIndependant( BmInferer* self, uint index );
-BmCondition* BmInferer_node_reinitWith( BmInferer* self, uint index, BmCode* newDependenceList, BmBench* newDefaultDistrib );
+BmCondition* BmInferer_node_reinitWith( BmInferer* self, uint index, BmCode* newParents );
+BmCondition* BmInferer_reinitIndependantNode( BmInferer* self, uint index );
+BmCondition* DEPRECIATED_BmInferer_node_reinitWith( BmInferer* self, uint index, BmCode* newDependenceList, BmBench* newDefaultDistrib );
 
 /* Process */
 BmBench* BmInferer_process( BmInferer* self, BmBench* inputDistribution );        // Return distribution over output varibales

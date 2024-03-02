@@ -42,6 +42,8 @@ void deleteBmDecision( BmDecision* instance )
 /* re-initializer */
 BmDecision* BmDecision_reinitWith( BmDecision* self, BmCode* newInputRanges, BmBench* newOutputs )
 {
+    assert( BmBenchVectorDimention( newOutputs ) == 1 );
+    //TODO: assert( BmBench_isHomogene() );
     BmDecisiondestroy( self );
     BmDecision_createWith( self, newInputRanges, newOutputs );
     return self;
@@ -49,11 +51,9 @@ BmDecision* BmDecision_reinitWith( BmDecision* self, BmCode* newInputRanges, BmB
 
 BmDecision* BmDecision_reinitWithDefault( BmDecision* self, BmCode* newInputRanges, BmCode* newDefaultOutput, double defaultValue )
 {
-    return BmDecision_reinitWith(
-        self,
-        newInputRanges,
-        DEPRECIATED_newBmBenchWith( 16, newDefaultOutput, defaultValue )
-    );
+    BmBench* ben= newBmBench_codeDim_vectorDim( 16, BmCodeDimention( newDefaultOutput ), 1 );
+    BmBench_attachLast( ben, newDefaultOutput, newBmVector_list(1, defaultValue) );
+    return BmDecision_reinitWith( self, newInputRanges, ben );
 }
 
 /* Accessor */

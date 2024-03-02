@@ -119,12 +119,33 @@ BmCode* BmInferer_node_parents( BmInferer * self, uint iNode )
 
 
 /* Construction */
-BmCondition* BmInferer_node_reinitIndependant( BmInferer* self, uint index )
+BmCondition* BmInferer_node_reinitWith( BmInferer* self, uint index, BmCode* newParents )
 {
-    return BmInferer_node_reinitWith( self, index, newBmCode(0), newBmBench(1) );
+    // Reccord parent mask: dependency
+    BmCode_switch( BmBench_codeAt( self->network, index ), newParents );
+    deleteBmCode( newParents );
+    BmCode* dependency= BmBench_codeAt( self->network, index );
+    
+    // Build dependance space:
+    BmCode* depSpace= newBmCode( BmCodeDimention(dependency) );
+    for( uint i= 1 ; i <= BmCodeDimention(dependency) ; ++i )
+    {
+        BmCode_at_set( depSpace, i,
+            BmInferer_node_size(self, BmCode_digit(dependency, i)) );
+    }
+
+    // Re-initialize the condition
+    BmCondition* condition= array_on(self->nodes, index);
+    BmCondition_reinitWith( condition, condition->range, depSpace, newBmBench(1) );
+    return condition;
 }
 
-BmCondition* BmInferer_node_reinitWith( BmInferer* self, uint index, BmCode* newDependenceList, BmBench* newDefaultDistrib )
+BmCondition* BmInferer_reinitIndependantNode( BmInferer* self, uint index )
+{
+    return BmInferer_node_reinitWith( self, index, newBmCode(0) );
+}
+
+BmCondition* DEPRECIATED_BmInferer_node_reinitWith( BmInferer* self, uint index, BmCode* newDependenceList, BmBench* newDefaultDistrib )
 {
     // Reccord parent mask: dependency
     BmCode_switch( BmBench_codeAt( self->network, index ), newDependenceList );

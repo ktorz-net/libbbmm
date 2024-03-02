@@ -62,17 +62,20 @@ START_TEST(test_BmInferer_construction)
     char buffer[1024]= "";
     ck_assert_str_eq( BmBench_printNetwork( trans->network, buffer ), "1[], 2[], 3[], 4[], 5[], 6[], 7[], 8[]" );
 
-    BmInferer_node_reinitWith(trans, 6,
+    DEPRECIATED_BmInferer_node_reinitWith(trans, 6,
         newBmCode_list(2, 1, 3),
-        DEPRECIATED_newBmBenchWith( 1, newBmCode_list(1, 1), 1.0 ) );
+        DEPRECIATED_newBmBenchWith( 1, newBmCode_list(1, 1), 1.0 )
+    );
 
-    BmInferer_node_reinitWith(trans, 7,
+    DEPRECIATED_BmInferer_node_reinitWith(trans, 7,
         newBmCode_list(3, 1, 4, 5),
-        DEPRECIATED_newBmBenchWith( 1, newBmCode_list(1, 1), 1.0 ) );
+        DEPRECIATED_newBmBenchWith( 1, newBmCode_list(1, 1), 1.0 )
+    );
 
-    BmInferer_node_reinitWith(trans, 8,
+    DEPRECIATED_BmInferer_node_reinitWith(trans, 8,
         newBmCode_list(2, 2, 6),
-        DEPRECIATED_newBmBenchWith( 1, newBmCode_list(1, 1), 1.0 ) );
+        DEPRECIATED_newBmBenchWith( 1, newBmCode_list(1, 1), 1.0 )
+    );
     
     strcpy(buffer, "");
     ck_assert_str_eq( BmBench_printNetwork( trans->network, buffer ), "1[], 2[], 3[], 4[], 5[], 6[1, 3], 7[1, 4, 5], 8[2, 6]" );
@@ -99,7 +102,7 @@ void test_initializeNode6(BmInferer * trans)
     DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 1), 0.5 );
     DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 2), 0.5 );
 
-    BmCondition * dep= BmInferer_node_reinitWith(
+    BmCondition * dep= DEPRECIATED_BmInferer_node_reinitWith(
         trans, 6,
         newBmCode_list(2, 1, 3),
         distrib
@@ -149,7 +152,7 @@ void test_initializeNode7(BmInferer * trans)
     DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 2), 0.6 );
     DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 1), 0.4 );
 
-    BmCondition * dep= BmInferer_node_reinitWith(
+    BmCondition * dep= DEPRECIATED_BmInferer_node_reinitWith(
         trans, 7,
         newBmCode_list(3, 1, 4, 5),
         distrib
@@ -197,7 +200,7 @@ void test_initializeNode8(BmInferer * trans)
     DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 1), 0.7 );
     DEPRECIATED_BmBench_attachLast( distrib, newBmCode_list(1, 2), 0.3 );
 
-    BmInferer_node_reinitWith(
+    DEPRECIATED_BmInferer_node_reinitWith(
         trans, 8,
         newBmCode_list(2, 2, 6),
         distrib
