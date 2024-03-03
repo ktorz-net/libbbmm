@@ -113,7 +113,7 @@ START_TEST(test_BmEvaluator_construction01)
     BmCode_at_set( eval->space, 3, 3 );
     BmCode_at_set( eval->space, 4, 4 );
 
-    ck_assert_uint_eq( BmCodeDimention( eval->space ), 4 );
+    ck_assert_uint_eq( BmCode_dimention( eval->space ), 4 );
 
     char buffer[1024];
     strcpy( buffer, "" );

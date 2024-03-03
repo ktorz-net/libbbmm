@@ -8,7 +8,7 @@ START_TEST(test_BmVector_init01)
 {
     BmVector* vector= newBmVector(3);
     
-    ck_assert_uint_eq( BmVectorDimention(vector), 3);
+    ck_assert_uint_eq( BmVector_dimention(vector), 3);
 
     BmVector_at_set(vector, 1, 1.1);
     BmVector_at_set(vector, 2, 2.1);
@@ -26,7 +26,7 @@ START_TEST(test_BmVector_init02)
 {
     BmVector* vector= newBmVector_list(3, 1.1,  2.1,  3.1 );
     
-    ck_assert_uint_eq( BmVectorDimention(vector), 3);
+    ck_assert_uint_eq( BmVector_dimention(vector), 3);
     ck_assert_double_eq_tol( BmVector_value(vector, 1), 1.1, 0.00001 );
     ck_assert_double_eq_tol( BmVector_value(vector, 2), 2.1, 0.00001 );
     ck_assert_double_eq_tol( BmVector_value(vector, 3), 3.1, 0.00001 );
@@ -39,8 +39,8 @@ START_TEST(test_BmVector_operation)
 {
     BmVector* vector= newBmVector_list(3, 1.1,  2.1,  3.1 );
     
-    ck_assert_double_eq_tol( BmVectorSum(vector), 1.1+2.1+3.1, 0.00001 );
-    ck_assert_double_eq_tol( BmVectorProduct(vector), 1.1*2.1*3.1, 0.00001 );
+    ck_assert_double_eq_tol( BmVector_sum(vector), 1.1+2.1+3.1, 0.00001 );
+    ck_assert_double_eq_tol( BmVector_product(vector), 1.1*2.1*3.1, 0.00001 );
 
     deleteBmVector(vector);
 }

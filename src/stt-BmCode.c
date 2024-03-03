@@ -69,7 +69,7 @@ BmCode* newBmCodeMerge_list( uint numberOfCodes, BmCode* code1, ... )
 
 void deleteBmCode(BmCode* instance)
 {
-    BmCodedestroy(instance);
+    BmCode_destroy(instance);
     delEmpty(instance);
 }
 
@@ -98,7 +98,7 @@ BmCode* BmCode_create_all( BmCode* self, uint size, uint defaultValue )
 
 BmCode* BmCode_createAs(BmCode* self, BmCode* model)
 {
-    uint size= BmCodeDimention(model);
+    uint size= BmCode_dimention(model);
     self->dsc = malloc( sizeof(uint)*(size+1) );
     self->dsc[0]= size;
     for( uint i= 1 ; i <= size ; ++i )
@@ -112,7 +112,7 @@ BmCode* BmCode_createMerge( BmCode* self, uint numberOfCodes, BmCode ** codes )
     // Final size:
     uint size= 0;
     for( uint iCode= 1 ; iCode <= numberOfCodes ; ++iCode )
-        size+= BmCodeDimention( array_at(codes, iCode) );
+        size+= BmCode_dimention( array_at(codes, iCode) );
     
     // Build the strucutre:
     self->dsc = malloc( sizeof(uint)*(size+1) );
@@ -123,7 +123,7 @@ BmCode* BmCode_createMerge( BmCode* self, uint numberOfCodes, BmCode ** codes )
     for( uint iCode= 1 ; iCode <= numberOfCodes ; ++iCode )
     {
         BmCode* code= array_at( codes, iCode );
-        size= BmCodeDimention( array_at(codes, iCode) );
+        size= BmCode_dimention( array_at(codes, iCode) );
         for( uint iVal= 1 ; iVal <= size ; ++iVal )
         {
             BmCode_at_set( self, i, BmCode_digit(code, iVal ) );
@@ -133,7 +133,7 @@ BmCode* BmCode_createMerge( BmCode* self, uint numberOfCodes, BmCode ** codes )
     return self;
 }
 
-BmCode* BmCodedestroy(BmCode* self)
+BmCode* BmCode_destroy(BmCode* self)
 {
     free(self->dsc);
     return self;
@@ -142,7 +142,7 @@ BmCode* BmCodedestroy(BmCode* self)
 /* Initializer */
 BmCode* BmCode_reinit( BmCode* self, uint newSize )
 {
-    BmCodedestroy(self);
+    BmCode_destroy(self);
     return BmCode_create( self, newSize );
 }
 
@@ -167,20 +167,20 @@ BmCode* BmCode_reinit_list( BmCode* self, uint newSize, uint number1, ... )
 
 BmCode* BmCode_copy(BmCode* self, BmCode* model)
 {
-    BmCodedestroy(self);
+    BmCode_destroy(self);
     return BmCode_createAs(self, model);
 }
 
 BmCode* BmCode_copyNumbers(BmCode* self, BmCode* model)
 {
-    uint minSize= (BmCodeDimention(self) < BmCodeDimention(model))?BmCodeDimention(self):BmCodeDimention(model); 
+    uint minSize= (BmCode_dimention(self) < BmCode_dimention(model))?BmCode_dimention(self):BmCode_dimention(model); 
     for( uint i= 1 ; i <= minSize ; ++i )
         BmCode_at_set( self, i, BmCode_digit(model, i) );
     return self;
 }
 
 /* Getter */
-uint BmCodeDimention(BmCode* self)
+uint BmCode_dimention(BmCode* self)
 {
     return self->dsc[0];
 }
@@ -188,31 +188,31 @@ uint BmCodeDimention(BmCode* self)
 uint BmCode_digit(BmCode* self, uint index)
 {
     assert( index > 0 );
-    assert( index <= BmCodeDimention(self) );
+    assert( index <= BmCode_dimention(self) );
     return self->dsc[index];
 }
 
 uint BmCode_count(BmCode* self, uint value)
 {
     uint count= 0;
-    for( uint i=1 ; i <= BmCodeDimention(self) ; ++i )
+    for( uint i=1 ; i <= BmCode_dimention(self) ; ++i )
         if( BmCode_digit(self, i) == value )
             count+= 1;
     return count;
 }
 
-ulong BmCodeSum(BmCode* self)
+ulong BmCode_sum(BmCode* self)
 {
     ulong r= 0;
-    for( uint i=1 ; i <= BmCodeDimention(self) ; ++i )
+    for( uint i=1 ; i <= BmCode_dimention(self) ; ++i )
         r+= (ulong)(BmCode_digit(self, i));
     return r;
 }
 
-ulong BmCodeProduct(BmCode* self)
+ulong BmCode_product(BmCode* self)
 {
     ulong r= 1;
-    for( uint i=1 ; i <= BmCodeDimention(self) ; ++i )
+    for( uint i=1 ; i <= BmCode_dimention(self) ; ++i )
         r= r * (ulong)(BmCode_digit(self, i));
     return r;
 }
@@ -220,8 +220,8 @@ ulong BmCodeProduct(BmCode* self)
 /* Test */
 bool BmCode_isEqualTo(BmCode* self, BmCode* another)
 {
-    bool eq= (BmCodeDimention(self) == BmCodeDimention(another));
-    for( uint i= 1 ; eq && i <= BmCodeDimention(self) ; ++i )
+    bool eq= (BmCode_dimention(self) == BmCode_dimention(another));
+    for( uint i= 1 ; eq && i <= BmCode_dimention(self) ; ++i )
     {
         eq= (BmCode_digit(self, i) == BmCode_digit(another, i));
     }
@@ -230,7 +230,7 @@ bool BmCode_isEqualTo(BmCode* self, BmCode* another)
 
 bool BmCode_isGreaterThan(BmCode* self, BmCode* another)
 {
-    uint minSize= (BmCodeDimention(self) < BmCodeDimention(another) ? BmCodeDimention(self) : BmCodeDimention(another));
+    uint minSize= (BmCode_dimention(self) < BmCode_dimention(another) ? BmCode_dimention(self) : BmCode_dimention(another));
     for( uint i= 1 ; i <= minSize ; ++i )
     {
         if( BmCode_digit(self, i) > BmCode_digit(another, i) )
@@ -238,14 +238,14 @@ bool BmCode_isGreaterThan(BmCode* self, BmCode* another)
         if( BmCode_digit(self, i) < BmCode_digit(another, i) )
             return false;
     }
-    if ( BmCodeDimention(self) > BmCodeDimention(another) )
+    if ( BmCode_dimention(self) > BmCode_dimention(another) )
         return true;
     return false;
 }
 
 bool BmCode_isSmallerThan(BmCode* self, BmCode* another)
 {
-    uint minSize= (BmCodeDimention(self) < BmCodeDimention(another) ? BmCodeDimention(self) : BmCodeDimention(another));
+    uint minSize= (BmCode_dimention(self) < BmCode_dimention(another) ? BmCode_dimention(self) : BmCode_dimention(another));
     for( uint i= 1 ; i <= minSize ; ++i )
     {
         if( BmCode_digit(self, i) < BmCode_digit(another, i) )
@@ -253,7 +253,7 @@ bool BmCode_isSmallerThan(BmCode* self, BmCode* another)
         if( BmCode_digit(self, i) > BmCode_digit(another, i) )
             return false;
     }
-    if ( BmCodeDimention(self) < BmCodeDimention(another) )
+    if ( BmCode_dimention(self) < BmCode_dimention(another) )
         return true;
     return false;
 }
@@ -265,7 +265,7 @@ BmCode* BmCode_redimention(BmCode* self, uint newSize)
     uint *newDsc= malloc( sizeof(uint)*(newSize+1) );
 
     // Copy
-    uint boundedSize= BmCodeDimention(self);
+    uint boundedSize= BmCode_dimention(self);
     if ( newSize < boundedSize )
         boundedSize= newSize;
     
@@ -276,7 +276,7 @@ BmCode* BmCode_redimention(BmCode* self, uint newSize)
     }
 
     // and initialize to 0
-    for( uint i = BmCodeDimention(self)+1 ; i <= newSize ; ++i )
+    for( uint i = BmCode_dimention(self)+1 ; i <= newSize ; ++i )
     {
         newDsc[i]= 0;
     }
@@ -290,7 +290,7 @@ BmCode* BmCode_redimention(BmCode* self, uint newSize)
 
 BmCode* BmCode_setAll(BmCode* self, uint value )
 {
-    for( uint i= 1 ; i <= BmCodeDimention(self) ; ++i )
+    for( uint i= 1 ; i <= BmCode_dimention(self) ; ++i )
     {
         BmCode_at_set(self, i, value);
     }
@@ -318,18 +318,18 @@ BmCode* BmCode_at_decrement(BmCode* self, uint index, uint value )
 
 BmCode* BmCode_setNumbers(BmCode* self, uint* numbers )
 {
-    for( uint i= 1 ; i <= BmCodeDimention(self) ; ++i )
+    for( uint i= 1 ; i <= BmCode_dimention(self) ; ++i )
         BmCode_at_set( self, i, numbers[i-1] );
     return self;
 }
 
-void BmCodeSort(BmCode* self)
+void BmCode_sort(BmCode* self)
 {
     bool searching= true;
     while( searching )
     {
         searching= false;
-        for( uint i= BmCodeDimention(self) ; i > 1 ; --i )
+        for( uint i= BmCode_dimention(self) ; i > 1 ; --i )
             if( self->dsc[i] < self->dsc[i-1] )
         {
             uint buf= self->dsc[i];
@@ -349,7 +349,7 @@ void BmCode_switch( BmCode* self, BmCode* anotherCode )
 
 uint BmCode_search( BmCode* self, uint value )
 {
-    for( uint i= 1 ; i <= BmCodeDimention(self) ; ++i )
+    for( uint i= 1 ; i <= BmCode_dimention(self) ; ++i )
         if( self->dsc[i] == value )
             return i;
     return 0;
@@ -358,12 +358,12 @@ uint BmCode_search( BmCode* self, uint value )
 /* code and key managment in set (ranges) */
 ulong BmCode_keyOf(BmCode* ranges, BmCode* code)
 {
-    assert( BmCodeDimention(ranges) == BmCodeDimention(code) );
+    assert( BmCode_dimention(ranges) == BmCode_dimention(code) );
     
 	ulong key= 0;
     ulong size= 1;
     
-    for( uint i = 1 ; i <= BmCodeDimention(ranges) ; ++i )
+    for( uint i = 1 ; i <= BmCode_dimention(ranges) ; ++i )
     {
         if( BmCode_digit(code, i) == 0 )
             return (ulong)0;
@@ -375,7 +375,7 @@ ulong BmCode_keyOf(BmCode* ranges, BmCode* code)
 
 BmCode* BmCode_setCode_onKey(BmCode* ranges, BmCode* code, ulong key)
 {
-    assert( BmCodeDimention(ranges) == BmCodeDimention(code) );
+    assert( BmCode_dimention(ranges) == BmCode_dimention(code) );
 
     if( key == 0 )
     {
@@ -385,7 +385,7 @@ BmCode* BmCode_setCode_onKey(BmCode* ranges, BmCode* code, ulong key)
 
 	ulong iKey= key-1;
 
-    for( uint i = 1 ; i <= BmCodeDimention(ranges) ; ++i )
+    for( uint i = 1 ; i <= BmCode_dimention(ranges) ; ++i )
     {
         uint s= BmCode_digit(ranges, i);
         BmCode_at_set(code, i, (iKey%s)+1);
@@ -397,7 +397,7 @@ BmCode* BmCode_setCode_onKey(BmCode* ranges, BmCode* code, ulong key)
 
 BmCode* BmCode_setCodeFirst(BmCode* ranges, BmCode* code)
 {
-    assert( BmCodeDimention(ranges) == BmCodeDimention(code) );
+    assert( BmCode_dimention(ranges) == BmCode_dimention(code) );
     BmCode_setAll( code, 1 );
     return code;
 }
@@ -410,17 +410,17 @@ BmCode* BmCode_setCodeLast(BmCode* ranges, BmCode* code)
 
 BmCode* BmCode_newBmCodeOnKey(BmCode* ranges, ulong key)
 {
-    BmCode * code= newBmCode( BmCodeDimention(ranges) );
+    BmCode * code= newBmCode( BmCode_dimention(ranges) );
     BmCode_setCode_onKey( ranges, code, key );
     return code;
 }
 
-BmCode* BmCodeNewBmCodeFirst(BmCode* ranges)
+BmCode* BmCode_newBmCodeFirst(BmCode* ranges)
 {
-    return newBmCode_all( BmCodeDimention(ranges), 1 );
+    return newBmCode_all( BmCode_dimention(ranges), 1 );
 }
 
-BmCode* BmCodeNewBmCodeLast(BmCode* ranges)
+BmCode* BmCode_newBmCodeLast(BmCode* ranges)
 {
     return newBmCodeAs( ranges );
 }
@@ -428,7 +428,7 @@ BmCode* BmCodeNewBmCodeLast(BmCode* ranges)
 BmCode* BmCode_nextCode(BmCode* ranges, BmCode* code)
 {
     uint i = 1;
-    uint size= BmCodeDimention(ranges);
+    uint size= BmCode_dimention(ranges);
     while( i <= size )
     {
         BmCode_at_increment(code, i, 1);
@@ -449,7 +449,7 @@ BmCode* BmCode_nextCode(BmCode* ranges, BmCode* code)
 BmCode* BmCode_previousCode(BmCode* ranges, BmCode* code)
 {
     uint i = 1;
-    uint size= BmCodeDimention(ranges);
+    uint size= BmCode_dimention(ranges);
     while( i <= size && BmCode_digit(code, i) == 1 )
     {
         BmCode_at_set( code, i, BmCode_digit(ranges, i) );
@@ -469,7 +469,7 @@ BmCode* BmCode_previousCode(BmCode* ranges, BmCode* code)
 bool BmCode_isIncluding(BmCode* ranges, BmCode* code)
 {
     bool ok= true;
-    uint size= BmCodeDimention(ranges);
+    uint size= BmCode_dimention(ranges);
     for( uint i= 1 ; i <= size ; ++i )
     {
         ok= ok && BmCode_digit(code, i) > 0 && (BmCode_digit(code, i) <= BmCode_digit(ranges, i));
@@ -480,9 +480,9 @@ bool BmCode_isIncluding(BmCode* ranges, BmCode* code)
 /* mask */
 BmCode* BmCode_newBmCodeMask(BmCode* self, BmCode* mask)
 {   
-    uint maskSize= BmCodeDimention(mask);
-    assert( maskSize <= BmCodeDimention(self) );
-    BmCode* code = newBmCode( BmCodeDimention(mask) );
+    uint maskSize= BmCode_dimention(mask);
+    assert( maskSize <= BmCode_dimention(self) );
+    BmCode* code = newBmCode( BmCode_dimention(mask) );
 
     for( uint i= 1 ; i <= maskSize ; ++i )
             BmCode_at_set( code, i,
@@ -497,12 +497,12 @@ char* BmCode_print(BmCode* self, char* buffer)
     char tmp[64];
     strcat(buffer, "[");
 
-    if( BmCodeDimention(self) > 0 )
+    if( BmCode_dimention(self) > 0 )
     {
         sprintf( tmp, "%u", BmCode_digit(self, 1) );
         strcat(buffer, tmp );
         
-        for( uint i= 2 ; i <= BmCodeDimention(self) ; ++i)
+        for( uint i= 2 ; i <= BmCode_dimention(self) ; ++i)
         {
             sprintf( tmp, "%u", BmCode_digit(self, i) );
             strcat(buffer, ", ");

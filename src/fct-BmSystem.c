@@ -29,13 +29,13 @@ BmSystem* newBmSystem( uint dimState, BmDomain ** stateDoms, uint dimAction, BmD
 
 void deleteBmSystem(BmSystem* self)
 {
-    BmSystemdestroy(self);
+    BmSystem_destroy(self);
     free(self);
 }
 
 void deleteDeepBmSystem(BmSystem* self)
 {
-    BmSystem_deepDestroy(self);
+    BmSystem_deep_destroy(self);
     free(self);
 }
 
@@ -129,7 +129,7 @@ BmSystem* BmSystem_create( BmSystem* self, uint dimState, BmDomain ** stateDoms,
     return self;
 }
 
-BmSystem* BmSystem_deepDestroy( BmSystem* self )
+BmSystem* BmSystem_deep_destroy( BmSystem* self )
 {
     /* Get the Different domains in spaces */
     BmDomain* differentDomains[ BmSpaceDimention(self->state)+BmSpaceDimention(self->action)+BmSpaceDimention(self->shift) ];
@@ -140,11 +140,11 @@ BmSystem* BmSystem_deepDestroy( BmSystem* self )
         deleteBmDomain( differentDomains[i] );
 
     /* Terminate */
-    BmSystemdestroy(self);
+    BmSystem_destroy(self);
     return self;
 }
 
-BmSystem* BmSystemdestroy( BmSystem* self )
+BmSystem* BmSystem_destroy( BmSystem* self )
 {
     uint dimState= BmSpaceDimention(self->state);
     for( uint i= 1 ; i < dimState ; ++i )
@@ -453,7 +453,7 @@ char* BmSystem_nodeId_variableName(BmSystem* self, uint id)
 
 uint BmSystem_nodeId_parentSize(BmSystem* self, uint id)
 {
-    return BmCodeDimention( BmInferer_dependanciesAt( self->transition, id) );
+    return BmCode_dimention( BmInferer_dependanciesAt( self->transition, id) );
 }
 
 BmDomain* BmSystem_nodeId_domain(BmSystem* self, uint id)
@@ -507,14 +507,14 @@ char* BmSystem_nodeId_printIdentity( BmSystem* self, uint nodeId, char* output )
         BmInferer_sizeAt( self->transition, nodeId ) );
     strcat(output, buffer );
 
-    if( BmCodeDimention(parents) > 0 )
+    if( BmCode_dimention(parents) > 0 )
     {
         sprintf( buffer, "%s.%u",
         BmSystem_nodeId_variableName(self, BmCode_digit(parents, 1)), 
         BmInferer_sizeAt( self->transition, BmCode_digit(parents, 1) ) );
         strcat(output, buffer );
                 
-        for( uint i= 2 ; i <= BmCodeDimention(parents) ; ++i)
+        for( uint i= 2 ; i <= BmCode_dimention(parents) ; ++i)
         {
         sprintf( buffer, ", %s.%u",
         BmSystem_nodeId_variableName(self, BmCode_digit(parents, i)), 
@@ -547,7 +547,7 @@ char* _BmCondition_printCode_inDomain(BmCondition* cdt, BmCode* code, BmDomain**
 {
     uint inputSize= BmConditionDimention(cdt);
     // Security:
-    assert( BmCodeDimention(code) == inputSize );
+    assert( BmCode_dimention(code) == inputSize );
 
     strcat(output, "[");
     for( uint i= 1 ; i <= inputSize ; ++i)
@@ -569,8 +569,8 @@ char* BmSystem_printVariable( BmSystem* self, char* varName, char* output )
     
     // get parents' spaces
     BmCode* parents= BmInferer_dependanciesAt( self->transition, nodeId);
-    BmDomain* pDom[ BmCodeDimention(parents) ];
-    for( uint i= 1; i <= BmCodeDimention(parents); ++i )
+    BmDomain* pDom[ BmCode_dimention(parents) ];
+    for( uint i= 1; i <= BmCode_dimention(parents); ++i )
     {
         array_at_set( pDom, i, BmSystem_nodeId_domain(self, i) );
     }

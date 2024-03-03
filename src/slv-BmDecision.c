@@ -18,15 +18,15 @@ BmDecision* newBmDecisionWith( BmCode* newInputRanges, BmBench* newOutputs )
 
 BmDecision* BmDecision_createWith( BmDecision* self, BmCode* newInputRanges, BmBench* newOutputs )
 {
-    assert( BmCodeDimention(newInputRanges) > (uint)0 );
+    assert( BmCode_dimention(newInputRanges) > (uint)0 );
     self->selector= newBmTreeWith( newInputRanges );
-    BmTree_newBranch( self->selector, 1, 1 );
+    BmTree_newBranch_on( self->selector, 1, 1 );
     self->outputs= newOutputs;
     return self;
 }
 
 /* Destructor */
-BmDecision* BmDecisiondestroy( BmDecision* self )
+BmDecision* BmDecision_destroy( BmDecision* self )
 {
     deleteBmTree( self->selector );
     deleteBmBench( self->outputs );
@@ -35,23 +35,23 @@ BmDecision* BmDecisiondestroy( BmDecision* self )
 
 void deleteBmDecision( BmDecision* instance )
 {
-    BmDecisiondestroy( instance );
+    BmDecision_destroy( instance );
     free( instance );
 }
 
 /* re-initializer */
 BmDecision* BmDecision_reinitWith( BmDecision* self, BmCode* newInputRanges, BmBench* newOutputs )
 {
-    assert( BmBenchVectorDimention( newOutputs ) == 1 );
+    assert( BmBench_vectorDimention( newOutputs ) == 1 );
     //TODO: assert( BmBench_isHomogene() );
-    BmDecisiondestroy( self );
+    BmDecision_destroy( self );
     BmDecision_createWith( self, newInputRanges, newOutputs );
     return self;
 }
 
 BmDecision* BmDecision_reinitWithDefault( BmDecision* self, BmCode* newInputRanges, BmCode* newDefaultOutput, double defaultValue )
 {
-    BmBench* ben= newBmBench_codeDim_vectorDim( 16, BmCodeDimention( newDefaultOutput ), 1 );
+    BmBench* ben= newBmBench_codeDim_vectorDim( 16, BmCode_dimention( newDefaultOutput ), 1 );
     BmBench_attachCode_vector( ben, newDefaultOutput, newBmVector_list(1, defaultValue) );
     return BmDecision_reinitWith( self, newInputRanges, ben );
 }

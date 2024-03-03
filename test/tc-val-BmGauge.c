@@ -20,7 +20,7 @@ START_TEST(test_BmGauge_init)
     ck_assert_double_eq( BmGauge_optionId( crit, 2 ), 22.0 );
     ck_assert_double_eq( BmGauge_optionId( crit, 3 ), 33.0 );
 
-    BmCode* iCode= BmCodeNewBmCodeFirst( input );
+    BmCode* iCode= BmCode_newBmCodeFirst( input );
     while( BmCode_isIncluding( input, iCode ) )
     {
         ck_assert_double_eq( BmGauge_at( crit, iCode ), 11.0 );

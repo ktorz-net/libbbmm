@@ -4,9 +4,9 @@
  * 
  *   STRUCTURE MODULE:
  *       - BmCode         : a fixed size array of digit (unsigned integers)
- *       - BmBench        : a dynamic-size collection of BmCode with and value (i -> code and value )
- *       - BmTree         : a tree based BmCode (input code -> output digit )
  *       - BmVector       : a fixed size array of values (doubles)
+ *       - BmBench        : a dynamic-size collection of BmCode coupled to BmVector (i -> code and vector OR i -> digit and value)
+ *       - BmTree         : a tree based BmCode (input code -> output digit )
  * 
  *   FUNCTION MODULE:
  *       - BmCondition    : Define a Bayesian Node (conditional probabilities over variable affectations)
@@ -95,14 +95,14 @@ BmCode* BmCode_createMerge( BmCode* self, uint numberOfCodes, BmCode ** codes );
 
 /* Destructor */
 void deleteBmCode( BmCode* instance );
-BmCode* BmCodedestroy( BmCode* self );
+BmCode* BmCode_destroy( BmCode* self );
 
 /* Accessor */
-uint BmCodeDimention( BmCode* self );
+uint BmCode_dimention( BmCode* self );
 uint BmCode_digit( BmCode* self, uint index );
 uint BmCode_count( BmCode* self, uint value );
-ulong BmCodeSum( BmCode* self );
-ulong BmCodeProduct( BmCode* self );
+ulong BmCode_sum( BmCode* self );
+ulong BmCode_product( BmCode* self );
 
 /* Re-Initializer */
 BmCode* BmCode_reinit( BmCode* self, uint newSize );
@@ -121,7 +121,7 @@ BmCode* BmCode_at_decrement( BmCode* self, uint index, uint value );
 BmCode* BmCode_setNumbers( BmCode* self, uint* numbers );
 
 /* Operator */
-void BmCodeSort( BmCode* self );
+void BmCode_sort( BmCode* self );
 void BmCode_switch( BmCode* self, BmCode* anotherCode );
 uint BmCode_search( BmCode* self, uint value );
 
@@ -138,8 +138,8 @@ BmCode* BmCode_setCodeFirst( BmCode* self, BmCode* configuration ); // set the c
 BmCode* BmCode_setCodeLast( BmCode* self, BmCode* configuration ); // set the code as a key value in given ranges
 
 BmCode* BmCode_newBmCodeOnKey( BmCode* self, ulong key ); // set the code as a key value in given ranges
-BmCode* BmCodeNewBmCodeFirst( BmCode* self ); // set the code as a key value in given ranges
-BmCode* BmCodeNewBmCodeLast( BmCode* self ); // set the code as a key value in given ranges
+BmCode* BmCode_newBmCodeFirst( BmCode* self ); // set the code as a key value in given ranges
+BmCode* BmCode_newBmCodeLast( BmCode* self ); // set the code as a key value in given ranges
 
 BmCode* BmCode_nextCode( BmCode* self, BmCode* configuration ); // set the code as a key value in given ranges
 BmCode* BmCode_previousCode( BmCode* self, BmCode* configuration ); // set the code as a key value in given ranges
@@ -177,7 +177,7 @@ BmVector* BmVector_create_all( BmVector* self, uint size, double value );
 BmVector* BmVector_createAs( BmVector* self, BmVector* model );
 
 /* Destructor */
-BmVector* BmVectordestroy( BmVector* self );
+BmVector* BmVector_destroy( BmVector* self );
 void deleteBmVector( BmVector* self );
 
 /* Re-Initialize */
@@ -185,7 +185,7 @@ BmVector* BmVector_reinit( BmVector* self, uint newSize );
 BmVector* BmVector_copy( BmVector* self, BmVector* model );
 
 /* Accessor */
-uint BmVectorDimention( BmVector* self );
+uint BmVector_dimention( BmVector* self );
 double BmVector_value( BmVector* self, uint i );
 
 /* Construction */
@@ -194,8 +194,8 @@ double BmVector_at_set( BmVector* self, uint i, double value );
 BmVector* BmVector_setValues( BmVector* self, double* values );
 
 /* Operation */
-double BmVectorSum( BmVector* self );
-double BmVectorProduct( BmVector* self );
+double BmVector_sum( BmVector* self );
+double BmVector_product( BmVector* self );
 
 /* Test */
 bool BmVector_isEqualTo( BmVector* self, BmVector* another );
@@ -224,16 +224,16 @@ typedef struct {
 /* Constructor */
 BmBench* newBmBench( uint capacity );
 BmBench* newBmBench_codeDim_vectorDim( uint capacity, uint codeDim, uint vectorDim );
+BmBench* newBmBench_startDigit_value( uint capacity, uint digit, double value );
+BmBench* newBmBench_startWithCode_vector( uint capacity, BmCode* newCode, BmVector* newVector );
 BmBench* newBmBenchAs( BmBench* model );
 
 BmBench* BmBench_create( BmBench* self, uint capacity );
 BmBench* BmBench_create_codeDim_vectorDim( BmBench* self, uint capacity, uint codeDim, uint vectorDim );
 BmBench* BmBench_createAs( BmBench* self, BmBench* model );
 
-BmBench* DEPRECIATED_newBmBenchWith( uint capacity, BmCode* newFirstItem, double value );
-
 /* Destructor */
-BmBench* BmBenchdestroy( BmBench* self);
+BmBench* BmBench_destroy( BmBench* self);
 void deleteBmBench( BmBench* self);
 
 /* Re-Initializer */
@@ -241,10 +241,9 @@ BmBench* BmBench_reinit( BmBench* self, uint capacity );
 
 /* Accessor */
 uint BmBench_size( BmBench* self);
-uint BmBench_capacity( BmBench* self);
 
-uint BmBenchCodeDimention( BmBench* self);
-uint BmBenchVectorDimention( BmBench* self);
+uint BmBench_codeDimention( BmBench* self);
+uint BmBench_vectorDimention( BmBench* self);
 
 BmCode* BmBench_codeAt( BmBench* self, uint i );
 BmVector* BmBench_vectorAt( BmBench* self, uint i );
@@ -262,17 +261,15 @@ void BmBench_resizeCapacity( BmBench* self, uint newCapacity);
 uint BmBench_attachCode_vector( BmBench* self, BmCode* newCode, BmVector* newVector );
 uint BmBench_attachFrontCode_vector( BmBench* self, BmCode* newCode, BmVector* newVector );
 
-BmCode* BmBenchDetach( BmBench* self );
-BmCode* BmBenchDetachFront( BmBench* self );
-//BmCode* BmBenchDetach( BmBench* self, uint i );
+BmCode* BmBench_detach( BmBench* self );
+BmCode* BmBench_detachFront( BmBench* self );
+//BmCode* BmBench_detach( BmBench* self, uint i );
 
 BmBench* BmBench_increase( BmBench* self, uint number );
 BmBench* BmBench_increaseFront( BmBench* self, uint number );
 
 uint BmBench_attachCode( BmBench* self, BmCode* newItem );
 uint BmBench_attachVector( BmBench* self, BmVector* newItem );
-
-uint DEPRECIATED_BmBench_attachCode_vector( BmBench* self, BmCode* newItem, double value ); // -> BmBench_attachCode_vector(  newBmVector_list(1, ...) )
 
 void BmBench_switch( BmBench* self, BmBench* doppleganger);
 
@@ -290,6 +287,7 @@ uint BmBench_sort( BmBench* self, fctptr_BmBench_compare compare );
 uint BmBench_switchAt_at( BmBench* self, uint id1, uint id2 );
 
 /* Comparison */
+
 bool BmBench_is_codeGreater(BmBench* self, uint i1, uint i2);
 bool BmBench_is_codeSmaller(BmBench* self, uint i1, uint i2);
 bool BmBench_is_vectorGreater(BmBench* self, uint i1, uint i2);
@@ -326,7 +324,7 @@ BmTree* newBmTreeWith( BmCode* newSpace );
 BmTree* BmTree_createWhith( BmTree* self, BmCode* input );
 
 /* Destructor */
-BmTree* BmTreedestroy( BmTree* self);
+BmTree* BmTree_destroy( BmTree* self);
 void deleteBmTree( BmTree* self );
 
 /* Re-Initializer */
@@ -359,7 +357,7 @@ uint BmTree_branchNumberOfOutputs( BmTree* self, uint branch ); // Return the nu
 uint BmTree_deepOf( BmTree* self, BmCode* code); // Return the number of branch to cross before reaching the output.
 
 /* Branch Construction */
-uint BmTree_newBranch( BmTree* self, uint iVariable, uint defaultOption);
+uint BmTree_newBranch_on( BmTree* self, uint iVariable, uint defaultOption);
 void BmTree_branch_state_connect( BmTree* self, uint branchA, uint stateA, uint branchB );
 void BmTree_branch_state_set( BmTree* self, uint branchA, uint iState, uint outbut );
 
@@ -372,7 +370,7 @@ BmBench* BmTree_asNewBench( BmTree* self );
 void BmTree_fromBench( BmTree* self, BmBench* model );
 
 /* Printing */
-char* BmTree_printBranch( BmTree* self, uint iBranch, char* output );
+char* BmTree_branch_print( BmTree* self, uint iBranch, char* output );
 
 char* BmTree_print( BmTree* self, char* output);
 char* BmTree_print_sep( BmTree* self, char* output, char* separator );
@@ -404,7 +402,7 @@ BmCondition* BmCondition_createBasic(BmCondition* self, uint domain);
 BmCondition* BmCondition_createWith(BmCondition* self, uint domain, BmCode* newInputRanges, BmBench* newDefaultDistrib);
 
 /* Destructor */
-BmCondition* BmConditiondestroy(BmCondition* self);
+BmCondition* BmCondition_destroy(BmCondition* self);
 void deleteBmCondition(BmCondition* instance);
 
 /* re-initializer */
@@ -465,7 +463,7 @@ BmInferer* newBmInfererStateActionShift( BmCode* stateSpace, BmCode* actionSpace
 BmInferer* BmInferer_create( BmInferer* self, BmCode* varDomains, uint inputDimention, uint outputDimention );
 
 /* Destructor */
-BmInferer* BmInfererdestroy(BmInferer* self);
+BmInferer* BmInferer_destroy(BmInferer* self);
 void deleteBmInferer(BmInferer* self);
 
 /* Accessor */
@@ -515,7 +513,7 @@ BmCriterion* newBmCriterionWith( BmCode* newInputRanges, BmVector* newOutputs );
 BmCriterion* BmCriterion_createWith( BmCriterion* self, BmCode* newInputRanges, BmVector* newOutputs );
 
 /* Destructor */
-BmCriterion* BmCriteriondestroy( BmCriterion* self );
+BmCriterion* BmCriterion_destroy( BmCriterion* self );
 void deleteBmCriterion( BmCriterion* instance );
 
 /* re-initializer */
@@ -569,7 +567,7 @@ BmEvaluator* BmEvaluator_createWith( BmEvaluator* self, BmCode* newSpace, uint n
 
 /* Destructor */
 void deleteBmEvaluator( BmEvaluator* self );
-BmEvaluator* BmEvaluatordestroy( BmEvaluator* self);
+BmEvaluator* BmEvaluator_destroy( BmEvaluator* self);
 
 /* Accessor */
 BmCode* BmEvaluator_space( BmEvaluator* self );
@@ -620,7 +618,7 @@ BmDecision* newBmDecisionWith( BmCode* newInputRanges, BmBench* newOutputs );
 BmDecision* BmDecision_createWith( BmDecision* self, BmCode* newInputRanges, BmBench* newOutputs );
 
 /* Destructor */
-BmDecision* BmDecisiondestroy( BmDecision* self );
+BmDecision* BmDecision_destroy( BmDecision* self );
 void deleteBmDecision( BmDecision* instance );
 
 /* re-initializer */

@@ -21,10 +21,17 @@ BmBench* newBmBench_codeDim_vectorDim( uint capacity, uint codeDim, uint vectorD
     return BmBench_create_codeDim_vectorDim( newEmpty(BmBench), capacity, codeDim, vectorDim );
 }
 
-BmBench* DEPRECIATED_newBmBenchWith( uint capacity, BmCode* newFirstItems, double value )
+BmBench* newBmBench_startDigit_value( uint capacity, uint digit, double value )
 {
-    BmBench* self= BmBench_create( newEmpty(BmBench), capacity);
-    DEPRECIATED_BmBench_attachCode_vector( self, newFirstItems, value );
+    BmBench* self= newBmBench_codeDim_vectorDim( capacity, 1, 1 );
+    BmBench_addDigit_value( self, digit, value );
+    return self;
+}
+
+BmBench* newBmBench_startWithCode_vector( uint capacity, BmCode* newCode, BmVector* newVector )
+{
+    BmBench* self= newBmBench_codeDim_vectorDim( capacity, 1, 1 );
+    BmBench_attachCode_vector( self, newCode, newVector );
     return self;
 }
 
@@ -35,7 +42,7 @@ BmBench* newBmBenchAs( BmBench* model )
 
 void deleteBmBench(BmBench* self)
 {
-    BmBenchdestroy(self);
+    BmBench_destroy(self);
     free(self);
 }
 
@@ -69,7 +76,7 @@ BmBench* BmBench_createAs( BmBench* self, BmBench* model )
     return self;
 }
 
-BmBench* BmBenchdestroy(BmBench* self)
+BmBench* BmBench_destroy(BmBench* self)
 {
     while( self->size > 0 )
     {
@@ -86,7 +93,7 @@ BmBench* BmBenchdestroy(BmBench* self)
 /* Re-Initializer */
 BmBench* BmBench_reinit( BmBench* self, uint capacity )
 {
-    BmBenchdestroy( self );
+    BmBench_destroy( self );
     BmBench_create( self, capacity );
     return self;
 }
@@ -96,11 +103,6 @@ BmBench* BmBench_reinit( BmBench* self, uint capacity )
 uint BmBench_size(BmBench* self)
 {
     return self->size;
-}
-
-uint BmBench_capacity(BmBench* self)
-{
-    return self->capacity;
 }
 
 BmCode* BmBench_codeAt( BmBench* self, uint i )
@@ -133,12 +135,12 @@ double BmBench_at_value( BmBench* self, uint i, uint j )
     return BmVector_value( BmBench_vectorAt( self, i ), j );
 }
 
-uint BmBenchCodeDimention( BmBench* self)
+uint BmBench_codeDimention( BmBench* self)
 {
     return self->codeDim;
 }
 
-uint BmBenchVectorDimention( BmBench* self)
+uint BmBench_vectorDimention( BmBench* self)
 {
     return self->vectDim;
 }
@@ -200,7 +202,7 @@ uint BmBench_attachFrontCode_vector( BmBench* self, BmCode* newCode, BmVector* n
     return self->start+1;
 }
 
-BmCode* BmBenchDetach( BmBench* self )
+BmCode* BmBench_detach( BmBench* self )
 {
     assert( self->size > 0 );
     uint id= self->start+self->size;
@@ -208,7 +210,7 @@ BmCode* BmBenchDetach( BmBench* self )
     return array_at( self->codes, id );
 }
 
-BmCode* BmBenchDetachFront( BmBench* self )
+BmCode* BmBench_detachFront( BmBench* self )
 {
     assert( self->size > 0 );
     uint id= self->start+1;
@@ -259,11 +261,6 @@ uint BmBench_attachVector( BmBench* self, BmVector* newItem )
         newBmCode_all( self->codeDim, 0 ),
         newItem
     );
-}
-
-uint DEPRECIATED_BmBench_attachCode_vector( BmBench* self, BmCode* newItem, double value )
-{
-    return BmBench_attachCode_vector( self, newItem, newBmVector_list(1, value) );
 }
 
 void BmBench_switch( BmBench* self, BmBench* doppleganger)
@@ -328,7 +325,7 @@ BmBench* BmBench_at_setValue( BmBench* self, uint i, double value )
 
 void BmBench_add_reducted( BmBench *self, BmBench *another, BmCode* mask )
 {
-    uint dim= BmCodeDimention( mask );
+    uint dim= BmCode_dimention( mask );
     BmCode* state= newBmCode_all( dim, 0 );
     for( uint iCode = 1 ; iCode <= BmBench_size(another) ; ++iCode  )
     {
@@ -427,7 +424,6 @@ char* _BmBench_printNode(BmBench* self, uint iItem, char* output)
 
 char* BmBench_print(BmBench* self, char* output)
 {
-    printf("DB: < BmBench_print\n");
     strcat(output, "{");
 
     if( self->size > 0 )
@@ -443,7 +439,6 @@ char* BmBench_print(BmBench* self, char* output)
 
     strcat(output, "}");
 
-    printf("DB: BmBench_print >\n");
     return output;
 }
 

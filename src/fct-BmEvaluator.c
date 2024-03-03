@@ -39,7 +39,7 @@ BmEvaluator* BmEvaluator_createWith( BmEvaluator* self, BmCode* newSpace, uint n
 }
 
 /* Destructor */
-BmEvaluator* BmEvaluatordestroy( BmEvaluator* self)
+BmEvaluator* BmEvaluator_destroy( BmEvaluator* self)
 {
     for( uint i = 1 ; i < self->size ; ++i )
     {
@@ -56,7 +56,7 @@ BmEvaluator* BmEvaluatordestroy( BmEvaluator* self)
 
 void deleteBmEvaluator( BmEvaluator* self )
 {
-    BmEvaluatordestroy( self );
+    BmEvaluator_destroy( self );
     free( self );
 }
 
@@ -65,7 +65,7 @@ BmEvaluator* BmEvaluator_reinitCriterion( BmEvaluator* self, uint numberOfCriter
 {
     BmCode* savedSpace= newBmCode(1);
     BmCode_switch( self->space, savedSpace );
-    BmEvaluatordestroy(self);
+    BmEvaluator_destroy(self);
     return BmEvaluator_createWith(
         self,
         savedSpace,
@@ -108,7 +108,7 @@ BmCode* BmEvaluator_criterion_mask( BmEvaluator* self, uint iCritirion )
 /* Process */
 double BmEvaluator_process( BmEvaluator* self, BmCode* input )
 {
-    assert( BmCodeDimention(input) == BmCodeDimention(self->space) );
+    assert( BmCode_dimention(input) == BmCode_dimention(self->space) );
     double eval= 0.0;
     for( uint i= 1 ; i <= self->size ; ++i )
     {
@@ -121,7 +121,7 @@ double BmEvaluator_process( BmEvaluator* self, BmCode* input )
 double BmEvaluator_criterion_process( BmEvaluator* self, uint iCriterion, BmCode* input )
 {
     BmCode* critCode= BmCode_newBmCodeMask( input, array_at( self->masks, iCriterion ) );
-    if( BmCodeDimention( critCode ) == 0 )
+    if( BmCode_dimention( critCode ) == 0 )
     {
         BmCode_reinit_list( critCode, 1, 1 );
     }
@@ -161,7 +161,7 @@ BmCriterion* BmEvaluator_criterion_reinitWith( BmEvaluator* self, uint iCrit, Bm
     );
     
     // record the mask:
-    BmCodedestroy( array_at( self->masks, iCrit ) );
+    BmCode_destroy( array_at( self->masks, iCrit ) );
     array_at_set( self->masks, iCrit, newDependenceMask );
 
     // and go:

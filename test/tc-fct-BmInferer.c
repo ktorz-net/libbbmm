@@ -246,17 +246,17 @@ START_TEST(test_BmInferer_infering)
     ck_assert(1);
 
     // Set initial configuration :
-    BmCode* startConf= newBmCode( BmCodeDimention(state) +  BmCodeDimention(action) );
+    BmCode* startConf= newBmCode( BmCode_dimention(state) +  BmCode_dimention(action) );
 
-    for( uint i=1 ; i <= BmCodeDimention(state) ; ++i )
+    for( uint i=1 ; i <= BmCode_dimention(state) ; ++i )
         BmCode_at_set( startConf, i, BmCode_digit(state, i) );
-    for( uint i=1 ; i <= BmCodeDimention(action) ; ++i )
-        BmCode_at_set( startConf,  BmCodeDimention(state)+i, BmCode_digit(action, i) );
+    for( uint i=1 ; i <= BmCode_dimention(action) ; ++i )
+        BmCode_at_set( startConf,  BmCode_dimention(state)+i, BmCode_digit(action, i) );
 
     ck_assert(1);
     // Set a initial determinist distribution :
-    BmBench * distrib= newBmBench( BmCodeDimention(startConf) );
-    DEPRECIATED_BmBench_attachCode_vector(distrib, newBmCodeAs( startConf ), 1.0);
+    BmBench * distrib= newBmBench( BmCode_dimention(startConf) );
+    BmBench_attachCode_vector(distrib, newBmCodeAs( startConf ), newBmVector_list(1, 1.0) );
 
     ck_assert(1);
     // infer :
@@ -268,16 +268,14 @@ START_TEST(test_BmInferer_infering)
         "{[1, 2, 2, 1, 2, 1, 2, 1]:0.21, [1, 2, 2, 1, 2, 1, 2, 2]:0.09, [1, 2, 2, 1, 2, 1, 1, 1]:0.14, [1, 2, 2, 1, 2, 1, 1, 2]:0.06, [1, 2, 2, 1, 2, 2, 2, 1]:0.21, [1, 2, 2, 1, 2, 2, 2, 2]:0.09, [1, 2, 2, 1, 2, 2, 1, 1]:0.14, [1, 2, 2, 1, 2, 2, 1, 2]:0.06}"
     );
     
-    printf( "WHAT-1 ???\n" );
     BmBench* transDistrib= BmInferer_distribution(trans);
-    printf( "WHAT-2 ???\n" );
+    ck_assert_uint_eq( BmBench_size(transDistrib), 4 );
 
     strcpy( buffer, "" );
     ck_assert_str_eq(
         BmBench_print( transDistrib, buffer ),
         "{[1, 1]:0.28, [1, 2]:0.12, [2, 1]:0.42, [2, 2]:0.18}"
     );
-    printf( "WHAT-3 ???\n" );
     
     strcpy( buffer, "" );
     ck_assert_str_eq( BmCode_print( state, buffer ), "[1, 2]" );

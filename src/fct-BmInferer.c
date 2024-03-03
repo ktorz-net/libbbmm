@@ -20,8 +20,8 @@ BmInferer* newBmInfererStateAction( BmCode* stateSpace, BmCode* actionSpace )
     BmCode* overallSpace= newBmCodeMerge_list( 3, stateSpace, actionSpace, stateSpace );
     BmInferer* trans= BmInferer_create(
         newEmpty(BmInferer), overallSpace,
-        BmCodeDimention( stateSpace ) + BmCodeDimention( actionSpace ),
-        BmCodeDimention( stateSpace )
+        BmCode_dimention( stateSpace ) + BmCode_dimention( actionSpace ),
+        BmCode_dimention( stateSpace )
     );
     deleteBmCode( overallSpace );
     return trans;
@@ -32,8 +32,8 @@ BmInferer* newBmInfererStateActionShift( BmCode* stateSpace, BmCode* actionSpace
     BmCode* overallSpace= newBmCodeMerge_list( 4, stateSpace, actionSpace, shiftSpace, stateSpace );
     BmInferer* trans= BmInferer_create(
         newEmpty(BmInferer), overallSpace,
-        BmCodeDimention( stateSpace ) + BmCodeDimention( actionSpace ),
-        BmCodeDimention( stateSpace )
+        BmCode_dimention( stateSpace ) + BmCode_dimention( actionSpace ),
+        BmCode_dimention( stateSpace )
     );
     deleteBmCode( overallSpace );
     return trans;
@@ -43,7 +43,7 @@ BmInferer* BmInferer_create( BmInferer* self, BmCode* variableSpace, uint inputD
 {
     self->inputDimention= inputDimention;
     self->outputDimention= outputDimention;
-    self->overallDimention= BmCodeDimention(variableSpace);
+    self->overallDimention= BmCode_dimention(variableSpace);
 
     self->network= newBmBench( self->overallDimention );
     self->nodes= newEmptyArray( BmCondition, self->overallDimention );
@@ -59,10 +59,10 @@ BmInferer* BmInferer_create( BmInferer* self, BmCode* variableSpace, uint inputD
 }
 
 /* Destructor */
-BmInferer* BmInfererdestroy(BmInferer* self)
+BmInferer* BmInferer_destroy(BmInferer* self)
 {
     for(uint i = 1 ; i <= self->overallDimention ; ++i )
-        BmConditiondestroy( array_on(self->nodes, i) );
+        BmCondition_destroy( array_on(self->nodes, i) );
     free( self->nodes );
     deleteBmBench(self->network);
     deleteBmBench( self->distribution );
@@ -71,7 +71,7 @@ BmInferer* BmInfererdestroy(BmInferer* self)
 
 void deleteBmInferer(BmInferer* self)
 {
-    BmInfererdestroy(self);
+    BmInferer_destroy(self);
     free(self);
 }
 
@@ -127,8 +127,8 @@ BmCondition* BmInferer_node_reinitWith( BmInferer* self, uint index, BmCode* new
     BmCode* dependency= BmBench_codeAt( self->network, index );
     
     // Build dependance space:
-    BmCode* depSpace= newBmCode( BmCodeDimention(dependency) );
-    for( uint i= 1 ; i <= BmCodeDimention(dependency) ; ++i )
+    BmCode* depSpace= newBmCode( BmCode_dimention(dependency) );
+    for( uint i= 1 ; i <= BmCode_dimention(dependency) ; ++i )
     {
         BmCode_at_set( depSpace, i,
             BmInferer_node_size(self, BmCode_digit(dependency, i)) );
@@ -153,8 +153,8 @@ BmCondition* DEPRECIATED_BmInferer_node_reinitWith( BmInferer* self, uint index,
     BmCode* dependency= BmBench_codeAt( self->network, index );
     
     // Build dependance space:
-    BmCode* depSpace= newBmCode( BmCodeDimention(dependency) );
-    for( uint i= 1 ; i <= BmCodeDimention(dependency) ; ++i )
+    BmCode* depSpace= newBmCode( BmCode_dimention(dependency) );
+    for( uint i= 1 ; i <= BmCode_dimention(dependency) ; ++i )
     {
         BmCode_at_set( depSpace, i,
             BmInferer_node_size(self, BmCode_digit(dependency, i)) );
@@ -186,8 +186,10 @@ BmBench* _BmInferer_setFomOverallDistribution(BmInferer * self, BmBench* overall
     // merge consecutive doubles:
     uint size= BmBench_size( buildTransition );
     BmBench_reinit( self->distribution, size );
-    BmBench_attachCode_vector( self->distribution,
-        newBmCodeAs( BmBench_codeAt( buildTransition, 1 ) ), BmBench_vectorAt( buildTransition, 1 )
+    BmBench_attachCode_vector(
+        self->distribution,
+        newBmCodeAs( BmBench_codeAt(buildTransition, 1) ),
+        newBmVectorAs( BmBench_vectorAt(buildTransition, 1) )
     );
     uint counter= 1;
 
@@ -201,8 +203,11 @@ BmBench* _BmInferer_setFomOverallDistribution(BmInferer * self, BmBench* overall
         }
         else 
         {
-            counter= BmBench_attachCode_vector( self->distribution,
-                newBmCodeAs( BmBench_codeAt( buildTransition, i ) ), BmBench_vectorAt( buildTransition, i ) );            
+            counter= BmBench_attachCode_vector(
+                self->distribution,
+                newBmCodeAs( BmBench_codeAt(buildTransition, i) ),
+                newBmVectorAs( BmBench_vectorAt(buildTransition, i) )
+            );            
         }
     }
     
@@ -215,7 +220,7 @@ BmBench* BmInferer_process_newOverallDistribution( BmInferer* self, BmBench* inp
 {
     BmBench* constructionDistrib= newBmBenchAs( inputDistribution );
 
-    uint configDimention = BmCodeDimention( BmBench_codeAt( inputDistribution, 1 ) );
+    uint configDimention = BmCode_dimention( BmBench_codeAt( inputDistribution, 1 ) );
     for( uint i= configDimention + 1 ; i <= self->overallDimention ; ++i )
     {
         // Infers dependency possibilities:

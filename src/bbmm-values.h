@@ -60,7 +60,7 @@ BmGauge* BmGauge_createBasic( BmGauge* self, BmCode* input, uint optionSize );
 BmGauge* BmGauge_createWith( BmGauge* self, BmTree* newSelector, BmVector* newOptions );
 
 BmGauge* BmGauge_create_options( BmGauge* self, BmCode* input, uint optionSize, double* options );
-BmGauge* BmGaugedestroy( BmGauge* self );
+BmGauge* BmGauge_destroy( BmGauge* self );
 
 /* initialize */
 //BmGauge* BmGauge_initializeBasic( BmGauge* self, BmCode* input, uint optionSize );
@@ -108,7 +108,7 @@ BmEval* newBmEvalWith( BmCode* newVariables, uint numberOfGauges );
 BmEval* BmEval_createWith( BmEval* self, BmCode* newVariables, uint numberOfGauges );
 
 void deleteBmEval( BmEval* self );
-BmEval* BmEvaldestroy( BmEval* self);
+BmEval* BmEval_destroy( BmEval* self);
 
 /* Construction */
 BmEval* BmEval_initializeGauges( BmEval* self, uint gaugeSize );

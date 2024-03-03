@@ -30,15 +30,15 @@ BmCriterion* newBmCriterionWith( BmCode* newInputRanges, BmVector* newOutputs )
 
 BmCriterion* BmCriterion_createWith( BmCriterion* self, BmCode* newInputRanges, BmVector* newOutputs )
 {
-    assert( BmCodeDimention(newInputRanges) > (uint)0 );
+    assert( BmCode_dimention(newInputRanges) > (uint)0 );
     self->selector= newBmTreeWith( newInputRanges );
-    BmTree_newBranch( self->selector, 1, 1 );
+    BmTree_newBranch_on( self->selector, 1, 1 );
     self->outputs= newOutputs;
     return self;
 }
 
 /* Destructor */
-BmCriterion* BmCriteriondestroy( BmCriterion* self )
+BmCriterion* BmCriterion_destroy( BmCriterion* self )
 {
     deleteBmTree( self->selector );
     deleteBmVector( self->outputs );
@@ -47,14 +47,14 @@ BmCriterion* BmCriteriondestroy( BmCriterion* self )
 
 void deleteBmCriterion( BmCriterion* instance )
 {
-    BmCriteriondestroy( instance );
+    BmCriterion_destroy( instance );
     free( instance );
 }
 
 /* re-initializer */
 uint BmCriterion_reinitWith( BmCriterion* self, BmCode* newInputRanges, BmVector* newOutputs )
 {
-    BmCriteriondestroy( self );
+    BmCriterion_destroy( self );
     BmCriterion_createWith( self, newInputRanges, newOutputs );
     return 1;
 }
@@ -86,7 +86,7 @@ double BmCriterion_from( BmCriterion* self, BmCode* input )
 /* Construction */
 uint BmCriterion_addValue( BmCriterion* self, double ouputValue )
 {
-    uint newDimention= BmVectorDimention( self->outputs ) + 1;
+    uint newDimention= BmVector_dimention( self->outputs ) + 1;
     BmVector_redimention( self->outputs, newDimention);
     BmVector_at_set( self->outputs, newDimention, ouputValue );
     return newDimention;
@@ -123,7 +123,7 @@ void BmCriterion_switch(BmCriterion* self, BmCriterion* doppelganger)
 BmBench* BmCriterion_asNewBench( BmCriterion* self )
 {
     BmBench* bench= BmTree_asNewBench( self->selector );
-    uint iOutput= BmCodeDimention( self->selector->inputRanges ) + 1;
+    uint iOutput= BmCode_dimention( self->selector->inputRanges ) + 1;
     uint benchSize= BmBench_size( bench );
     for( uint i= 1 ; i <= benchSize ; ++i )
     {
