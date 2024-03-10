@@ -10,25 +10,25 @@
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 /* Constructor */
-BmCriterion* newBmCriterionBasic( uint inputSize, uint ouputSize )
+BmValueFct* newBmValueFctBasic( uint inputSize, uint ouputSize )
 {
-    return BmCriterion_createWith(
-        newEmpty( BmCriterion ),
+    return BmValueFct_createWith(
+        newEmpty( BmValueFct ),
         newBmCode_all( inputSize, 2 ),
         newBmVector_all( ouputSize, 0.0 )
     );
 }
 
-BmCriterion* newBmCriterionWith( BmCode* newInputRanges, BmVector* newOutputs )
+BmValueFct* newBmValueFctWith( BmCode* newInputRanges, BmVector* newOutputs )
 {
-    return BmCriterion_createWith(
-        newEmpty( BmCriterion ),
+    return BmValueFct_createWith(
+        newEmpty( BmValueFct ),
         newInputRanges,
         newOutputs
     );
 }
 
-BmCriterion* BmCriterion_createWith( BmCriterion* self, BmCode* newInputRanges, BmVector* newOutputs )
+BmValueFct* BmValueFct_createWith( BmValueFct* self, BmCode* newInputRanges, BmVector* newOutputs )
 {
     assert( BmCode_dimention(newInputRanges) > (uint)0 );
     self->selector= newBmTreeWith( newInputRanges );
@@ -38,44 +38,54 @@ BmCriterion* BmCriterion_createWith( BmCriterion* self, BmCode* newInputRanges, 
 }
 
 /* Destructor */
-BmCriterion* BmCriterion_destroy( BmCriterion* self )
+BmValueFct* BmValueFct_destroy( BmValueFct* self )
 {
     deleteBmTree( self->selector );
     deleteBmVector( self->outputs );
     return self;
 }
 
-void deleteBmCriterion( BmCriterion* instance )
+void deleteBmValueFct( BmValueFct* instance )
 {
-    BmCriterion_destroy( instance );
+    BmValueFct_destroy( instance );
     free( instance );
 }
 
 /* re-initializer */
-uint BmCriterion_reinitWith( BmCriterion* self, BmCode* newInputRanges, BmVector* newOutputs )
+uint BmValueFct_reinitWith( BmValueFct* self, BmCode* newInputRanges, BmVector* newOutputs )
 {
-    BmCriterion_destroy( self );
-    BmCriterion_createWith( self, newInputRanges, newOutputs );
+    BmValueFct_destroy( self );
+    BmValueFct_createWith( self, newInputRanges, newOutputs );
     return 1;
 }
 
 /* Accessor */
-BmTree*   BmCriterion_selector( BmCriterion* self )
+BmTree*   BmValueFct_selector( BmValueFct* self )
 {
     return self->selector;
 }
 
-BmCode*   BmCriterion_inputRanges( BmCriterion* self )
+uint BmValueFct_inputDimention( BmValueFct* self )
+{
+    return BmTree_dimention( self->selector );
+}
+
+uint BmValueFct_outputSize( BmValueFct* self )
+{
+    return BmVector_dimention( self->outputs );
+}
+
+BmCode*   BmValueFct_inputRanges( BmValueFct* self )
 {
     return BmTree_inputRanges( self->selector );
 }
 
-BmVector* BmCriterion_outputs( BmCriterion* self )
+BmVector* BmValueFct_outputs( BmValueFct* self )
 {
     return self->outputs;
 }
 
-double BmCriterion_from( BmCriterion* self, BmCode* input )
+double BmValueFct_from( BmValueFct* self, BmCode* input )
 {
     return BmVector_value(
         self->outputs,
@@ -84,7 +94,7 @@ double BmCriterion_from( BmCriterion* self, BmCode* input )
 }
 
 /* Construction */
-uint BmCriterion_addValue( BmCriterion* self, double ouputValue )
+uint BmValueFct_addValue( BmValueFct* self, double ouputValue )
 {
     uint newDimention= BmVector_dimention( self->outputs ) + 1;
     BmVector_redimention( self->outputs, newDimention);
@@ -92,19 +102,19 @@ uint BmCriterion_addValue( BmCriterion* self, double ouputValue )
     return newDimention;
 }
 
-uint BmCriterion_ouputId_setValue( BmCriterion* self, uint ouputId, double ouputValue )
+uint BmValueFct_ouputId_setValue( BmValueFct* self, uint ouputId, double ouputValue )
 {
     BmVector_at_set( self->outputs, ouputId, ouputValue );
     return ouputId;
 }
 
-uint BmCriterion_from_set( BmCriterion* self, BmCode* input, uint ouputId )
+uint BmValueFct_from_set( BmValueFct* self, BmCode* input, uint ouputId )
 {
     return BmTree_at_set( self->selector, input, ouputId );   
 }
 
 /* Instance tools */
-void BmCriterion_switch(BmCriterion* self, BmCriterion* doppelganger)
+void BmValueFct_switch(BmValueFct* self, BmValueFct* doppelganger)
 {
     // local copy:
     BmTree* selector= self->selector;
@@ -120,7 +130,7 @@ void BmCriterion_switch(BmCriterion* self, BmCriterion* doppelganger)
 }
 
 /* Generating */
-BmBench* BmCriterion_asNewBench( BmCriterion* self )
+BmBench* BmValueFct_asNewBench( BmValueFct* self )
 {
     BmBench* bench= BmTree_asNewBench( self->selector );
     uint iOutput= BmCode_dimention( self->selector->inputRanges ) + 1;
@@ -138,12 +148,12 @@ BmBench* BmCriterion_asNewBench( BmCriterion* self )
 }
 
 /* Printing */
-char* BmCriterion_print(BmCriterion* self, char* buffer)
+char* BmValueFct_print(BmValueFct* self, char* buffer)
 {
-    return BmCriterion_printSep( self, buffer, ",\n  ");
+    return BmValueFct_printSep( self, buffer, ",\n  ");
 }
 
-char* BmCriterion_printSep(BmCriterion* self, char* buffer, char* separator)
+char* BmValueFct_printSep(BmValueFct* self, char* buffer, char* separator)
 {
     strcat( buffer, "Selector:\n" );
     BmTree_print_sep( self->selector, buffer, separator );

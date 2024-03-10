@@ -4,11 +4,11 @@
 
 #include <stdio.h>
 
-START_TEST(test_BmDecision_init)
+START_TEST(test_BmFunction_init)
 {
-    BmDecision* instance= newBmDecisionBasic(2);
-    BmTree* selector= BmDecision_selector(instance);
-    BmBench* outputs= BmDecision_outputs(instance);
+    BmFunction* instance= newBmFunctionBasic(2);
+    BmTree* selector= BmFunction_selector(instance);
+    BmBench* outputs= BmFunction_outputs(instance);
     char buffer[2048]= "";
 
     BmTree_printInside(selector, buffer);
@@ -24,20 +24,20 @@ START_TEST(test_BmDecision_init)
 {}"
     );
 
-    deleteBmDecision( instance );
+    deleteBmFunction( instance );
 }
 
-START_TEST(test_BmDecision_construction)
+START_TEST(test_BmFunction_construction)
 {
-    BmDecision* instance= newBmDecisionWith(
+    BmFunction* instance= newBmFunctionWith(
         newBmCode_list( 3, 2, 2, 3 ),
         newBmBench_startWithCode_vector(2, newBmCode_list( 2, 1, 1 ), newBmVector_list(1, 1.1) )
     );
-    BmTree* selector= BmDecision_selector(instance);
-    BmBench* outputs= BmDecision_outputs(instance);
+    BmTree* selector= BmFunction_selector(instance);
+    BmBench* outputs= BmFunction_outputs(instance);
 
     ck_assert_uint_eq(
-        BmDecision_attachOuput( instance, newBmCode_list( 2, 1, 2 ), 2.1 ),
+        BmFunction_attachOuput( instance, newBmCode_list( 2, 1, 2 ), 2.1 ),
         2 );
 
     char buffer[2048]= "";
@@ -57,7 +57,7 @@ START_TEST(test_BmDecision_construction)
     );
 
     BmCode* input= newBmCode_list( 3, 1, 1, 1 );
-    BmDecision_from_set( instance, input, 2 );
+    BmFunction_from_set( instance, input, 2 );
 
     strcpy( buffer, "" );
     BmTree_printInside(selector, buffer);
@@ -77,18 +77,18 @@ START_TEST(test_BmDecision_construction)
     );
 
     ck_assert_double_eq(
-        BmDecision_from( instance, input),
+        BmFunction_from( instance, input),
         2
     );
 
     strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmCode_print( BmDecision_codeFrom( instance, input ), buffer ),
+        BmCode_print( BmFunction_codeFrom( instance, input ), buffer ),
         "[1, 2]"
     );
 
     ck_assert_double_eq(
-        BmDecision_valueFrom( instance, input ),
+        BmFunction_valueFrom( instance, input ),
         2.1
     );
 
@@ -96,35 +96,35 @@ START_TEST(test_BmDecision_construction)
 
     strcpy( buffer, "" );
     ck_assert_str_eq(
-        BmCode_print( BmDecision_codeFrom( instance, input ), buffer ),
+        BmCode_print( BmFunction_codeFrom( instance, input ), buffer ),
         "[1, 1]"
     );
 
     ck_assert_double_eq(
-        BmDecision_valueFrom( instance, input ),
+        BmFunction_valueFrom( instance, input ),
         1.1
     );
 
     deleteBmCode(input);
-    deleteBmDecision( instance );
+    deleteBmFunction( instance );
 }
 
-START_TEST(test_BmDecision_print)
+START_TEST(test_BmFunction_print)
 {
-    BmDecision* instance= newBmDecisionWith(
+    BmFunction* instance= newBmFunctionWith(
         newBmCode_list( 3, 2, 2, 3 ),
         newBmBench_startWithCode_vector(2, newBmCode_list( 2, 1, 1 ), newBmVector_list(1, 1.1) )
     );
     BmCode* input= newBmCode_list( 3, 1, 1, 1 );
-    BmDecision_from_set(
+    BmFunction_from_set(
         instance, input, 
-        BmDecision_attachOuput(
+        BmFunction_attachOuput(
             instance, newBmCode_list( 2, 1, 2 ), 2.1 )
     );
 
     char buffer[1024];
     strcpy( buffer, "" );
-    BmDecision_print( instance, buffer );
+    BmFunction_print( instance, buffer );
 
     //printf( "<--\n%s\n-->\n", buffer );
 
@@ -141,29 +141,29 @@ Outputs:\n\
     );
 
     deleteBmCode(input);
-    deleteBmDecision( instance );
+    deleteBmFunction( instance );
 }
 
-START_TEST(test_BmDecision_switch)
+START_TEST(test_BmFunction_switch)
 {
-    BmDecision* instance= newBmDecisionWith(
+    BmFunction* instance= newBmFunctionWith(
         newBmCode_list( 3, 2, 2, 3 ),
         newBmBench_startWithCode_vector(2, newBmCode_list( 2, 1, 1 ), newBmVector_list(1, 1.1) )
     );
     BmCode* input= newBmCode_list( 3, 1, 1, 1 );
-    BmDecision_from_set(
+    BmFunction_from_set(
         instance, input, 
-        BmDecision_attachOuput(
+        BmFunction_attachOuput(
             instance, newBmCode_list( 2, 1, 2 ), 2.1 )
     );
 
-    BmDecision* doble= newBmDecisionBasic(2);
+    BmFunction* doble= newBmFunctionBasic(2);
 
-    BmDecision_switch( instance, doble );
+    BmFunction_switch( instance, doble );
 
     char buffer[1024];
     strcpy( buffer, "" );
-    BmDecision_print( instance, buffer );
+    BmFunction_print( instance, buffer );
 
     //printf( "<--\n%s\n-->\n", buffer );
     ck_assert_str_eq(
@@ -176,7 +176,7 @@ Outputs:\n\
     );
 
     strcpy( buffer, "" );
-    BmDecision_print( doble, buffer );
+    BmFunction_print( doble, buffer );
     
     //printf( "<--\n%s\n-->\n", buffer );
     ck_assert_str_eq(
@@ -192,11 +192,11 @@ Outputs:\n\
     );
 
     deleteBmCode(input);
-    deleteBmDecision( instance );
-    deleteBmDecision( doble );
+    deleteBmFunction( instance );
+    deleteBmFunction( doble );
 }
 
-START_TEST(test_BmDecision_asBench)
+START_TEST(test_BmFunction_asBench)
 {
     // TO DO...
 }
@@ -206,16 +206,16 @@ START_TEST(test_BmDecision_asBench)
  *       Test case scenario
  ***********************************************************************************/
 
-TCase * test_case_BmDecision(void)
+TCase * test_case_BmFunction(void)
 {
-    /* BmDecision test case */
-    TCase *tc= tcase_create("BmDecision");
+    /* BmFunction test case */
+    TCase *tc= tcase_create("BmFunction");
 
-    tcase_add_test(tc, test_BmDecision_init);
-    tcase_add_test(tc, test_BmDecision_construction);
-    tcase_add_test(tc, test_BmDecision_print);
-    tcase_add_test(tc, test_BmDecision_switch);
-    tcase_add_test(tc, test_BmDecision_asBench);
+    tcase_add_test(tc, test_BmFunction_init);
+    tcase_add_test(tc, test_BmFunction_construction);
+    tcase_add_test(tc, test_BmFunction_print);
+    tcase_add_test(tc, test_BmFunction_switch);
+    tcase_add_test(tc, test_BmFunction_asBench);
 
     return tc;
 }

@@ -9,13 +9,16 @@
  *       - BmTree         : a tree based BmCode (input code -> output digit )
  * 
  *   FUNCTION MODULE:
- *       - BmCondition    : Define a Bayesian Node (conditional probabilities over variable affectations)
+ *       - BmValueFct     : Determine a value from a code (in a given inputRanges)
+ *       - BmFunction     : Determine a code+vector from a code
+ *       <- BmDistbutor   : Determine a [code+vector distribution] from a code (used as bayesian node) >
+ * 
+ *   COMPONENT MODULE:
+ *       - BmCondition    :
  *       - BmInferer      : Define a Bayesian Network as P(output | input) - potentially Dynamic P(state' | state, action)
- *       - BmCriterion    : Define a transition from a code to a value
  *       - BmEvaluator    : A value function over multiple criteria
  * 
  *   SOLVER MODULE:
- *       - BmDecision     : Define a transition from a code to another one (input code -> output code + value)
  * 
  *   VERSION: 0.0.X
  * 
@@ -334,6 +337,7 @@ BmTree* BmTree_clearWhith_on( BmTree* self, uint index, uint defaultOption );
 BmTree* BmTree_clearOn( BmTree* self, uint defaultOption );
 
 /* Accessor */
+uint BmTree_dimention( BmTree* self );
 uint BmTree_size( BmTree* self );
 BmCode* BmTree_inputRanges( BmTree* self );
 uint BmTree_at( BmTree* self, BmCode* code ); // Return the option number of a code/state.
@@ -380,16 +384,130 @@ char* BmTree_printInside( BmTree* self, char* output); // print `self` at the en
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   F U N C T I O N  :  C O N D I T I O N                       *
+ *   B b M m   F U N C T I O N  :  V A L U E F C T                         *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *
- * Define a Bayesian Node (conditional probabilities over variable affectations)
+ * code -> value
  * 
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 typedef struct {
-  uint range;
   BmTree* selector;
+  BmVector* outputs;
+} BmValueFct;
+
+/* Constructor */
+BmValueFct* newBmValueFctBasic( uint inputSize, uint outputSize );
+BmValueFct* newBmValueFctWith( BmCode* newInputRanges, BmVector* newOutputs );
+
+BmValueFct* BmValueFct_createWith( BmValueFct* self, BmCode* newInputRanges, BmVector* newOutputs );
+
+/* Destructor */
+BmValueFct* BmValueFct_destroy( BmValueFct* self );
+void deleteBmValueFct( BmValueFct* instance );
+
+/* re-initializer */
+uint BmValueFct_reinitWith( BmValueFct* self, BmCode* newInputRanges, BmVector* newOutputs );
+
+/* Accessor */
+BmTree* BmValueFct_selector( BmValueFct* self );
+uint BmValueFct_inputDimention( BmValueFct* self );
+uint BmValueFct_outputSize( BmValueFct* self );
+BmCode* BmValueFct_inputRanges( BmValueFct* self );
+BmVector* BmValueFct_outputs( BmValueFct* self );
+
+double BmValueFct_from( BmValueFct* self, BmCode* input );
+
+/* Construction */
+uint BmValueFct_addValue( BmValueFct* self, double ouputValue );
+uint BmValueFct_ouputId_setValue( BmValueFct* self, uint ouputId, double ouputValue );
+uint BmValueFct_from_set( BmValueFct* self, BmCode* input, uint ouputId );
+
+/* Instance tools */
+void BmValueFct_switch(BmValueFct* self, BmValueFct* doppelganger);
+
+/* Generating */
+BmBench* BmValueFct_asNewBench( BmValueFct* self );
+
+/* Printing */
+char* BmValueFct_print(BmValueFct* self, char* buffer);
+char* BmValueFct_printSep(BmValueFct* self, char* buffer, char* separator);
+
+
+
+/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *   B b M m   F U N C T I O N  :  F U N C T I O N                         *
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *
+ * code -> code + vector
+ * 
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+typedef struct {
+  BmTree* selector;
+  BmBench* outputs;
+} BmFunction;
+
+/* Constructor */
+BmFunction* newBmFunctionBasic( uint inputSize );
+BmFunction* newBmFunctionWith( BmCode* newInputRanges, BmBench* newOutputs );
+
+BmFunction* BmFunction_createWith( BmFunction* self, BmCode* newInputRanges, BmBench* newOutputs );
+
+/* Destructor */
+BmFunction* BmFunction_destroy( BmFunction* self );
+void deleteBmFunction( BmFunction* instance );
+
+/* re-initializer */
+BmFunction* BmFunction_reinitWith( BmFunction* self, BmCode* newInputRanges, BmBench* newOutputs );
+BmFunction* BmFunction_reinitWithDefault( BmFunction* self, BmCode* newInputRanges, BmCode* newDefaultOutput, double defaultValue );
+
+/* Accessor */
+BmTree* BmFunction_selector( BmFunction* self );
+uint BmFunction_inputDimention( BmFunction* self );
+BmCode* BmFunction_inputRanges( BmFunction* self );
+uint BmFunction_outputSize( BmFunction* self );
+BmBench* BmFunction_outputs( BmFunction* self );
+
+uint BmFunction_from( BmFunction* self, BmCode* input );
+BmCode* BmFunction_codeFrom( BmFunction* self, BmCode* input );
+double BmFunction_valueFrom( BmFunction* self, BmCode* input );
+
+/* Construction */
+uint BmFunction_attachOuput( BmFunction* self, BmCode* newOuputCode, double ouputValue );
+uint BmFunction_from_set( BmFunction* self, BmCode* input, uint ouputId );
+// uint BmFunction_from_attach( BmFunction* self, BmCode* input, BmCode* newOutput, double value );
+
+/* Instance tools */
+void BmFunction_switch(BmFunction* self, BmFunction* doppelganger);
+
+/* Printing */
+char* BmFunction_print(BmFunction* self, char* output);
+char* BmFunction_printSep(BmFunction* self, char* output, char* separator);
+
+#endif // BBMM_H
+
+
+/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *   B b M m   F U N C T I O N  :  D I S T B U T O R                       *
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *
+ * code -> bench
+ * 
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+
+/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *   B b M m   F U N C T I O N  :  C O N D I T I O N                       *
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *
+ * code -> bench
+ * 
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+typedef struct {
+  BmTree* selector;
+  uint range;
   uint distribSize, distribCapacity;
   BmBench **distributions;
 } BmCondition;
@@ -494,52 +612,7 @@ char* BmInferer_printStateActionSignature(BmInferer* self, char* output); // pri
 char* BmInferer_printDependency(BmInferer* self, char* output); // print `self` at the end of `output`
 
 
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   F U N C T I O N  :  C R I T E R I O N                       *
- * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *
- * 
- * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
-typedef struct {
-  BmTree* selector;
-  BmVector* outputs;
-} BmCriterion;
-
-/* Constructor */
-BmCriterion* newBmCriterionBasic( uint inputSize, uint outputSize );
-BmCriterion* newBmCriterionWith( BmCode* newInputRanges, BmVector* newOutputs );
-
-BmCriterion* BmCriterion_createWith( BmCriterion* self, BmCode* newInputRanges, BmVector* newOutputs );
-
-/* Destructor */
-BmCriterion* BmCriterion_destroy( BmCriterion* self );
-void deleteBmCriterion( BmCriterion* instance );
-
-/* re-initializer */
-uint BmCriterion_reinitWith( BmCriterion* self, BmCode* newInputRanges, BmVector* newOutputs );
-
-/* Accessor */
-BmTree* BmCriterion_selector( BmCriterion* self );
-BmCode*   BmCriterion_inputRanges( BmCriterion* self );
-BmVector* BmCriterion_outputs( BmCriterion* self );
-
-double BmCriterion_from( BmCriterion* self, BmCode* input );
-
-/* Construction */
-uint BmCriterion_addValue( BmCriterion* self, double ouputValue );
-uint BmCriterion_ouputId_setValue( BmCriterion* self, uint ouputId, double ouputValue );
-uint BmCriterion_from_set( BmCriterion* self, BmCode* input, uint ouputId );
-
-/* Instance tools */
-void BmCriterion_switch(BmCriterion* self, BmCriterion* doppelganger);
-
-/* Generating */
-BmBench* BmCriterion_asNewBench( BmCriterion* self );
-
-/* Printing */
-char* BmCriterion_print(BmCriterion* self, char* buffer);
-char* BmCriterion_printSep(BmCriterion* self, char* buffer, char* separator);
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
@@ -554,7 +627,7 @@ char* BmCriterion_printSep(BmCriterion* self, char* buffer, char* separator);
 typedef struct {
   BmCode* space;
   uint size;
-  BmCriterion ** ccriteria;
+  BmValueFct ** ccriteria;
   BmCode ** masks;
   BmVector* weights;
 } BmEvaluator;
@@ -572,7 +645,7 @@ BmEvaluator* BmEvaluator_destroy( BmEvaluator* self);
 /* Accessor */
 BmCode* BmEvaluator_space( BmEvaluator* self );
 uint BmEvaluator_numberOfCriteria( BmEvaluator* self );
-BmCriterion* BmEvaluator_criterion( BmEvaluator* self, uint iCritirion );
+BmValueFct* BmEvaluator_criterion( BmEvaluator* self, uint iCritirion );
 BmVector* BmEvaluator_weights( BmEvaluator* self );
 double BmEvaluator_criterion_weight( BmEvaluator* self, uint iCritirion );
 BmCode* BmEvaluator_criterion_mask( BmEvaluator* self, uint iCritirion );
@@ -587,7 +660,7 @@ double BmEvaluator_processState_action_state(BmEvaluator* self, BmCode* state, B
 
 /* Construction */
 BmEvaluator* BmEvaluator_reinitCriterion( BmEvaluator* self, uint numberOfCriterion );
-BmCriterion* BmEvaluator_criterion_reinitWith( BmEvaluator* self, uint iCrit, BmCode* newDependenceMask, BmVector* newValues  );
+BmValueFct* BmEvaluator_criterion_reinitWith( BmEvaluator* self, uint iCrit, BmCode* newDependenceMask, BmVector* newValues  );
 void BmEvaluator_criterion_from_set( BmEvaluator* self, uint index, BmCode* option, uint output );
 void BmEvaluator_criterion_setWeight( BmEvaluator* self, uint iCritirion, double weight );
 
@@ -596,53 +669,3 @@ void BmEvaluator_criterion_setWeight( BmEvaluator* self, uint iCritirion, double
 
 /* Printing */
 
-
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   S O L V E R :  D E C I S I O N                              *
- * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *
- * Define a function defining a transformation from a code to another one (input code -> output code + value)
- * 
- * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
-
-typedef struct {
-  BmTree* selector;
-  uint outputDim;
-  BmBench* outputs;
-} BmDecision;
-
-/* Constructor */
-BmDecision* newBmDecisionBasic( uint inputSize );
-BmDecision* newBmDecisionWith( BmCode* newInputRanges, BmBench* newOutputs );
-
-BmDecision* BmDecision_createWith( BmDecision* self, BmCode* newInputRanges, BmBench* newOutputs );
-
-/* Destructor */
-BmDecision* BmDecision_destroy( BmDecision* self );
-void deleteBmDecision( BmDecision* instance );
-
-/* re-initializer */
-BmDecision* BmDecision_reinitWith( BmDecision* self, BmCode* newInputRanges, BmBench* newOutputs );
-BmDecision* BmDecision_reinitWithDefault( BmDecision* self, BmCode* newInputRanges, BmCode* newDefaultOutput, double defaultValue );
-
-/* Accessor */
-BmTree* BmDecision_selector( BmDecision* self );
-BmBench* BmDecision_outputs( BmDecision* self );
-
-uint BmDecision_from( BmDecision* self, BmCode* input );
-BmCode* BmDecision_codeFrom( BmDecision* self, BmCode* input );
-double BmDecision_valueFrom( BmDecision* self, BmCode* input );
-
-/* Construction */
-uint BmDecision_attachOuput( BmDecision* self, BmCode* newOuputCode, double ouputValue );
-uint BmDecision_from_set( BmDecision* self, BmCode* input, uint ouputId );
-// uint BmDecision_from_attach( BmDecision* self, BmCode* input, BmCode* newOutput, double value );
-
-/* Instance tools */
-void BmDecision_switch(BmDecision* self, BmDecision* doppelganger);
-
-/* Printing */
-char* BmDecision_print(BmDecision* self, char* output);
-char* BmDecision_printSep(BmDecision* self, char* output, char* separator);
-
-#endif // BBMM_H

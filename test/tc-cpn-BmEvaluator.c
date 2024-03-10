@@ -16,7 +16,7 @@ START_TEST(test_BmEvaluator_init)
     ck_assert_uint_eq( BmEvaluator_numberOfCriteria(instance), 1 );
 
     strcpy( buffer, "" );
-    BmCriterion_print( BmEvaluator_criterion(instance, 1), buffer );
+    BmValueFct_print( BmEvaluator_criterion(instance, 1), buffer );
     
     //printf( "<--%s-->", buffer );
     ck_assert_str_eq(
@@ -69,7 +69,7 @@ START_TEST(test_BmEvaluator_initStateAction)
     ck_assert_str_eq( buffer, "[2, 4, 6, 3, 5]" );
 
     strcpy( buffer, "" );
-    BmCriterion_print( BmEvaluator_criterion( eval1, 1), buffer );
+    BmValueFct_print( BmEvaluator_criterion( eval1, 1), buffer );
     
     //printf( "<--\n%s\n-->\n", buffer );
     ck_assert_str_eq( buffer, "Selector:\n\
@@ -150,7 +150,7 @@ START_TEST(test_BmEvaluator_construction01)
     ck_assert_str_eq( buffer, "[1, 2]" );
 
     strcpy( buffer, "" );
-    BmCode_print( BmCriterion_inputRanges( BmEvaluator_criterion(eval, 1) ), buffer );
+    BmCode_print( BmValueFct_inputRanges( BmEvaluator_criterion(eval, 1) ), buffer );
     ck_assert_str_eq( buffer, "[10, 2]" );
 
     BmEvaluator_criterion_reinitWith(

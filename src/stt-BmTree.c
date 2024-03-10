@@ -301,6 +301,11 @@ uint BmTree_branchNumberOfOutputs( BmTree* self, uint iBranch )
     return count; //So, return the number of possible output on the branch...
 }
 
+uint BmTree_dimention( BmTree* self )
+{
+    return BmCode_dimention( self->inputRanges );
+}
+
 uint BmTree_size( BmTree* self )
 {
     return self->size;

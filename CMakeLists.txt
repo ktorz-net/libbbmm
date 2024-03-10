@@ -26,18 +26,20 @@ include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/src)
 ## C O R E  ##
 #------------#
 set(SRC_FILES
-    src/stt-BmCode.c
-    src/stt-BmBench.c
-    src/stt-BmTree.c
-    src/stt-BmVector.c
-    src/fct-BmCondition.c
-    src/fct-BmInferer.c
-    src/fct-BmCriterion.c
-    src/fct-BmEvaluator.c
-    src/mdl-BmChain.c
-    src/mdl-BmProcess.c
-    src/slv-BmDecision.c
-    src/slv-BmBasicPolicy.c
+#STRUCTURE MODULE:
+  src/stt-BmCode.c
+  src/stt-BmVector.c
+  src/stt-BmBench.c
+  src/stt-BmTree.c
+# FUNCTION MODULE:
+  src/fct-BmValueFct.c
+  src/fct-BmFunction.c
+# COMPONENT MODULE:
+  src/cpn-BmCondition.c
+  src/cpn-BmInferer.c
+  src/cpn-BmEvaluator.c
+# SOLVER MODULE:
+  src/slv-BmBasicPolicy.c
 )
 
 # Build
@@ -55,20 +57,24 @@ if(TEST)
 
 set(CHECK_LIBS check subunit m rt pthread)
 set(TEST_SRC_FILES 
-    test/tc-stt-BmCode.c
-    test/tc-stt-BmBench.c
-    test/tc-stt-BmTree.c
-    test/tc-stt-BmVector.c
-    test/tc-fct-BmCondition.c
-    test/tc-fct-BmInferer.c
-    test/tc-fct-BmCriterion.c
-    test/tc-fct-BmEvaluator.c
-    test/tc-mdl-BmChain.c
-    test/tc-mdl-BmProcess.c
-    test/tc-slv-BmDecision.c
-    test/tc-slv-BmBasicPolicy.c
+#STRUCTURE MODULE:
+  test/tc-stt-BmCode.c
+  test/tc-stt-BmVector.c
+  test/tc-stt-BmBench.c
+  test/tc-stt-BmTree.c
+# FUNCTION MODULE:
+  test/tc-fct-BmValueFct.c
+  test/tc-fct-BmFunction.c
+# COMPONENT MODULE:
+  test/tc-cpn-BmCondition.c
+  test/tc-cpn-BmInferer.c
+  test/tc-cpn-BmEvaluator.c
+# SOLVER MODULE:
+  test/tc-slv-BmBasicPolicy.c
+# TEST-CASES:
 #    test/tc-cofeeRobot.c
-    test/main-testrunner.c
+# MAIN:
+  test/main-testrunner.c
 )
 
 add_executable(run-test-BbMm ${TEST_SRC_FILES})

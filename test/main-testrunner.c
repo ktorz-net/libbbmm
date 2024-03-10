@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+//   STRUCTURE MODULE:
+
 Suite * bbmm_stt_test_suite(void)
 {
     Suite *s= suite_create("BbMm-structures");
@@ -15,39 +17,46 @@ Suite * bbmm_stt_test_suite(void)
     return s;
 }
 
+//   FUNCTION MODULE:
+
 Suite * bbmm_fct_test_suite(void)
 {
     Suite *s= suite_create("BbMm-functions");
 
+    suite_add_tcase( s, test_case_BmValueFct() );
+    suite_add_tcase( s, test_case_BmFunction() );
+
+    return s;
+}
+
+//   COMPONENT MODULE:
+
+Suite * bbmm_cpn_test_suite(void)
+{
+    Suite *s= suite_create("BbMm-component");
+
     suite_add_tcase( s, test_case_BmCondition() );
     suite_add_tcase( s, test_case_BmInferer() );
-    suite_add_tcase( s, test_case_BmCriterion() );
     suite_add_tcase( s, test_case_BmEvaluator() );
 
     return s;
 }
 
+//   SOLVER MODULE:
+
 Suite * bbmm_slv_test_suite(void)
 {
     Suite *s= suite_create("BbMm-solver");
 
-    suite_add_tcase( s, test_case_BmDecision() );
+    suite_add_tcase( s, test_case_BmFunction() );
     suite_add_tcase( s, test_case_BmBasicPolicy() );
 
     return s;
 }
 
-Suite * bbmm_mdl_test_suite(void)
-{
-    Suite *s= suite_create("BbMm-models");
+//   TEST-CASES:
 
-    suite_add_tcase( s, test_case_BmChain() );
-    suite_add_tcase( s, test_case_BmProcess() );
-
-    return s;
-}
-
-Suite * cofeeRobot_test_suite(void)
+Suite * testcases_test_suite(void)
 {
     Suite *s= suite_create("CofeeRobot");
 
@@ -61,7 +70,6 @@ int main(void)
     Suite* suites[4]={
         bbmm_stt_test_suite(),
         bbmm_fct_test_suite(),
-        bbmm_mdl_test_suite(),
         bbmm_slv_test_suite()
     };
 
