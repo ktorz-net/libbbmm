@@ -145,7 +145,7 @@ BmCondition* BmInferer_reinitIndependantNode( BmInferer* self, uint index )
     return BmInferer_node_reinitWith( self, index, newBmCode(0) );
 }
 
-BmCondition* DEPRECIATED_BmInferer_node_reinitWith( BmInferer* self, uint index, BmCode* newDependenceList, BmBench* newDefaultDistrib )
+BmCondition* BmInferer_node_reinitWith_withDefault( BmInferer* self, uint index, BmCode* newDependenceList, BmBench* newDefaultDistrib )
 {
     // Reccord parent mask: dependency
     BmCode_switch( BmBench_codeAt( self->network, index ), newDependenceList );

@@ -597,9 +597,9 @@ uint BmInferer_node_size( BmInferer* self, uint iVar );
 BmCode* BmInferer_node_parents( BmInferer* self, uint iVar );
 
 /* Construction */
-BmCondition* BmInferer_node_reinitWith( BmInferer* self, uint index, BmCode* newParents );
 BmCondition* BmInferer_reinitIndependantNode( BmInferer* self, uint index );
-BmCondition* DEPRECIATED_BmInferer_node_reinitWith( BmInferer* self, uint index, BmCode* newDependenceList, BmBench* newDefaultDistrib );
+BmCondition* BmInferer_node_reinitWith( BmInferer* self, uint index, BmCode* newParents );
+BmCondition* BmInferer_node_reinitWith_withDefault( BmInferer* self, uint index, BmCode* newDependenceList, BmBench* newDefaultDistrib );
 
 /* Process */
 BmBench* BmInferer_process( BmInferer* self, BmBench* inputDistribution );        // Return distribution over output varibales

@@ -65,7 +65,7 @@ START_TEST(test_BmInferer_construction)
     {
         BmBench* distrib= newBmBench_codeDim_vectorDim( 1, 1, 1 );
         BmBench_attachCode_vector( distrib, newBmCode_list(1, 1), newBmVector_list( 1, 1.0 ) );
-        DEPRECIATED_BmInferer_node_reinitWith(trans, 6,
+        BmInferer_node_reinitWith_withDefault(trans, 6,
             newBmCode_list(2, 1, 3),
             distrib
         );
@@ -73,7 +73,7 @@ START_TEST(test_BmInferer_construction)
     {
         BmBench* distrib= newBmBench_codeDim_vectorDim( 1, 1, 1 );
         BmBench_attachCode_vector( distrib, newBmCode_list(1, 1), newBmVector_list( 1, 1.0 ) );
-        DEPRECIATED_BmInferer_node_reinitWith(trans, 7,
+        BmInferer_node_reinitWith_withDefault(trans, 7,
             newBmCode_list(3, 1, 4, 5),
             distrib
         );
@@ -81,7 +81,7 @@ START_TEST(test_BmInferer_construction)
     {
         BmBench* distrib= newBmBench_codeDim_vectorDim( 1, 1, 1 );
         BmBench_attachCode_vector( distrib, newBmCode_list(1, 1), newBmVector_list( 1, 1.0 ) );
-        DEPRECIATED_BmInferer_node_reinitWith(trans, 8,
+        BmInferer_node_reinitWith_withDefault(trans, 8,
             newBmCode_list(2, 2, 6),
             distrib
         );
@@ -112,7 +112,7 @@ void test_initializeNode6(BmInferer * trans)
     BmBench_attachCode_vector( distrib, newBmCode_list(1, 1), newBmVector_list(1, 0.5) );
     BmBench_attachCode_vector( distrib, newBmCode_list(1, 2), newBmVector_list(1, 0.5) );
 
-    BmCondition * dep= DEPRECIATED_BmInferer_node_reinitWith(
+    BmCondition * dep= BmInferer_node_reinitWith_withDefault(
         trans, 6,
         newBmCode_list(2, 1, 3),
         distrib
@@ -162,7 +162,7 @@ void test_initializeNode7(BmInferer * trans)
     BmBench_attachCode_vector( distrib, newBmCode_list(1, 2), newBmVector_list(1, 0.6) );
     BmBench_attachCode_vector( distrib, newBmCode_list(1, 1), newBmVector_list(1, 0.4) );
 
-    BmCondition * dep= DEPRECIATED_BmInferer_node_reinitWith(
+    BmCondition * dep= BmInferer_node_reinitWith_withDefault(
         trans, 7,
         newBmCode_list(3, 1, 4, 5),
         distrib
@@ -210,7 +210,7 @@ void test_initializeNode8(BmInferer * trans)
     BmBench_attachCode_vector( distrib, newBmCode_list(1, 1), newBmVector_list(1, 0.7) );
     BmBench_attachCode_vector( distrib, newBmCode_list(1, 2), newBmVector_list(1, 0.3) );
 
-    DEPRECIATED_BmInferer_node_reinitWith(
+    BmInferer_node_reinitWith_withDefault(
         trans, 8,
         newBmCode_list(2, 2, 6),
         distrib
