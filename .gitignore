@@ -1,12 +1,13 @@
-build/
-local/
-.vscode/
-c-src/.kdev4/
-c-src/c-src.kdev4
-*.changes
-*.sources
-crash.dmp
-__pycache__/
+# Project
+.vscode
+draft.c
+a.out
+
+#cmake/make
+cmake_install.cmake
+CMakeCache.txt
+CMakeFiles/
+Makefile
 
 # Core librairy
 libbbmm.so

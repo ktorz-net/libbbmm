@@ -3,6 +3,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+//   DEPENDANCIES:
+
+Suite * bbmm_dpd_test_suite(void)
+{
+    Suite *s= suite_create("BbMm-dependencies");
+
+    suite_add_tcase( s, test_case_system() );
+    suite_add_tcase( s, test_case_bench() );
+    
+    return s;
+}
+
 //   STRUCTURE MODULE:
 
 Suite * bbmm_stt_test_suite(void)
@@ -68,11 +80,12 @@ Suite * testcases_test_suite(void)
 int main(void)
 {
     Suite* suites[4]={
+        bbmm_dpd_test_suite(),
         bbmm_stt_test_suite(),
         bbmm_fct_test_suite(),
         bbmm_slv_test_suite()
     };
-
+    
     int number_failed= 0;
     for( int i = 0 ; i < 4 ; ++i )
     {

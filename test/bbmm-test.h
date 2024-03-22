@@ -5,6 +5,10 @@
 
 #define tc_print(str) printf("<--\n%s\n-->\n", str)
 
+// Dependancies
+TCase * test_case_system(void);
+TCase * test_case_bench(void);
+
 // BbMm structures 
 TCase * test_case_BmCode(void);
 TCase * test_case_BmBench(void);

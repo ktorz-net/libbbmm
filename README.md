@@ -37,8 +37,7 @@ From _libBbMm_ directory:
 
 ```sh
 mkdir build
-cd build
-cmake .. # for testing add: -DTEST=ON -DCMAKE_BUILD_TYPE=Debug, requires check
+cmake . # for testing: `cmake -DTEST=ON -DCMAKE_BUILD_TYPE=Debug . ` (requires check)
 make
 sudo make install
 ```

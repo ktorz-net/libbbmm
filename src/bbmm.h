@@ -51,12 +51,19 @@
 
 #include <stdarg.h>
 
+#ifndef uint
 #define uint unsigned int
-#define ulong unsigned long
+#endif
 
+#ifndef ulong
+#define ulong unsigned long
+#endif
+
+#ifndef bool
 typedef uint bool;
 #define true 1
 #define false 0
+#endif
 
 /* Clasical constructor/dextructor */
 #define newEmpty(Type) malloc(sizeof(Type))
@@ -485,9 +492,6 @@ void BmFunction_switch(BmFunction* self, BmFunction* doppelganger);
 char* BmFunction_print(BmFunction* self, char* output);
 char* BmFunction_printSep(BmFunction* self, char* output, char* separator);
 
-#endif // BBMM_H
-
-
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   F U N C T I O N  :  D I S T B U T O R                       *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
@@ -668,4 +672,7 @@ void BmEvaluator_criterion_setWeight( BmEvaluator* self, uint iCritirion, double
 
 
 /* Printing */
+
+
+#endif // BBMM_H
 
