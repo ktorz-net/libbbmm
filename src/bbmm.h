@@ -324,7 +324,7 @@ char* BmBench_printNetwork(BmBench* self, char* output);
 typedef struct {
   BmCode* inputRanges;
   uint capacity, size;
-  uint** branches;
+  uint** branches;    // -> uint* branchvariable AND Reductor** // Funnel** branchSelector AND uint** branches ?
 } BmTree;
 
 /* Constructor */
@@ -362,13 +362,23 @@ uint BmTree_at_readOrder_set( BmTree* self, BmCode* code, BmCode* codeOrder, uin
 
 /* Branch Accessor */
 uint BmTree_branchSize( BmTree* self, uint iBranch );
+uint BmTree_branch_stateIndex( BmTree* self, uint iBranch, uint state );
 uint BmTree_branch_state( BmTree* self, uint iBranch, uint state );
+uint BmTree_branch_stateIsLeaf( BmTree* self, uint iBranch, uint state );
+uint BmTree_branch_stateOption( BmTree* self, uint iBranch, uint state );
+uint BmTree_branch_stateLeaf( BmTree* self, uint iBranch, uint state );
 uint BmTree_branchVariable( BmTree* self, uint iBranch ); // Return the variable index represented by the branch.
+uint BmTree_branchStart( BmTree* self, uint iBranch );
+uint BmTree_branchBound( BmTree* self, uint iBranch );
+uint BmTree_branchStep( BmTree* self, uint iBranch );
 uint BmTree_branchNumberOfOutputs( BmTree* self, uint branch ); // Return the number of differents output
 uint BmTree_deepOf( BmTree* self, BmCode* code); // Return the number of branch to cross before reaching the output.
 
 /* Branch Construction */
-uint BmTree_newBranch_on( BmTree* self, uint iVariable, uint defaultOption);
+uint BmTree_newBranch( BmTree* self, uint iVariable, uint start, uint bound, uint step, uint defaultOption);
+uint BmTree_newBranch_full( BmTree* self, uint iVariable, uint defaultOption);
+//uint BmTree_newBranch_binar( BmTree* self, uint iVariable, uint  , uint option1, uint option2);
+//uint BmTree_newBranch_pivot( BmTree* self, uint iVariable, uint defaultOption);
 void BmTree_branch_state_connect( BmTree* self, uint branchA, uint stateA, uint branchB );
 void BmTree_branch_state_set( BmTree* self, uint branchA, uint iState, uint outbut );
 

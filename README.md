@@ -36,7 +36,6 @@ As said compilation relies on `cmake`:
 From _libBbMm_ directory:
 
 ```sh
-mkdir build
 cmake . # for testing: `cmake -DTEST=ON -DCMAKE_BUILD_TYPE=Debug . ` (requires check)
 make
 sudo make install

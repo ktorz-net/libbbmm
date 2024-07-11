@@ -19,7 +19,7 @@ START_TEST(test_BmFunction_init)
     ck_assert_str_eq(
         buffer,
         "input: [2, 2], size: 1\n\
-0. input(1): [leaf(1), leaf(1)]\n\
+0. input(1): r(2/1)-[leaf(1), leaf(1)]\n\
 ---\n\
 {}"
     );
@@ -51,7 +51,7 @@ START_TEST(test_BmFunction_construction)
     ck_assert_str_eq(
         buffer,
         "input: [2, 2, 3], size: 1\n\
-0. input(1): [leaf(1), leaf(1)]\n\
+0. input(1): r(2/1)-[leaf(1), leaf(1)]\n\
 ---\n\
 {[1, 1]:1.10, [1, 2]:2.10}"
     );
@@ -69,9 +69,9 @@ START_TEST(test_BmFunction_construction)
     ck_assert_str_eq(
         buffer,
         "input: [2, 2, 3], size: 3\n\
-0. input(1): [branch(1), leaf(1)]\n\
-1. input(2): [branch(2), leaf(1)]\n\
-2. input(3): [leaf(2), leaf(1), leaf(1)]\n\
+0. input(1): r(2/1)-[branch(1), leaf(1)]\n\
+1. input(2): r(2/1)-[branch(2), leaf(1)]\n\
+2. input(3): r(2/1)-[leaf(2), leaf(1), leaf(1)]\n\
 ---\n\
 {[1, 1]:1.10, [1, 2]:2.10}"
     );

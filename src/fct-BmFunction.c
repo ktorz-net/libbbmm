@@ -20,7 +20,7 @@ BmFunction* BmFunction_createWith( BmFunction* self, BmCode* newInputRanges, BmB
 {
     assert( BmCode_dimention(newInputRanges) > (uint)0 );
     self->selector= newBmTreeWith( newInputRanges );
-    BmTree_newBranch_on( self->selector, 1, 1 );
+    BmTree_newBranch_full( self->selector, 1, 1 );
     self->outputs= newOutputs;
     return self;
 }

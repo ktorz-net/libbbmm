@@ -32,7 +32,7 @@ BmValueFct* BmValueFct_createWith( BmValueFct* self, BmCode* newInputRanges, BmV
 {
     assert( BmCode_dimention(newInputRanges) > (uint)0 );
     self->selector= newBmTreeWith( newInputRanges );
-    BmTree_newBranch_on( self->selector, 1, 1 );
+    BmTree_newBranch_full( self->selector, 1, 1 );
     self->outputs= newOutputs;
     return self;
 }
