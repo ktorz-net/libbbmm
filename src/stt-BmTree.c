@@ -121,7 +121,7 @@ void BmTree_reziseCompleteCapacity( BmTree* self)
     BmTree_reziseCapacity( self, BmCode_product( self->inputRanges ) );
 }
 
-uint BmTree_newBranch( BmTree* self, uint iVariable, uint start, uint bound, uint step, uint defaultOption)
+uint BmTree_newBranch( BmTree* self, uint iVariable, uint start, uint bound, uint step )
 {
     uint iBranch= self->size;
     self->size+= 1;
@@ -138,20 +138,46 @@ uint BmTree_newBranch( BmTree* self, uint iVariable, uint start, uint bound, uin
     self->branches[iBranch][BM_BRANCH_START]= start;
     self->branches[iBranch][BM_BRANCH_BOUND]= bound;
     self->branches[iBranch][BM_BRANCH_STEP]= step;
-
-    for( uint i = 1 ; i <= bound ; ++i )
-        BmTree_branch_state_set( self, iBranch, i, defaultOption );
     
     return iBranch;
 }
 
 uint BmTree_newBranch_full(BmTree* self, uint iVariable, uint defaultOption)
 {
-    return BmTree_newBranch(
-        self, iVariable, 2,
-        BmCode_digit(self->inputRanges, iVariable),
-        1, defaultOption
-    );
+    uint bound= BmCode_digit(self->inputRanges, iVariable);
+    /* New Branch */
+    uint iBranch= BmTree_newBranch( self, iVariable, 1, bound, 1 );
+
+    /* All state on defaulf option */
+    for( uint i = 1 ; i <= bound ; ++i )
+        BmTree_branch_state_setOption( self, iBranch, i, defaultOption );
+    
+    return iBranch;
+}
+
+uint BmTree_newBranch_binary_options( BmTree* self, uint iVariable, uint pivot, uint option1, uint option2)
+{
+    /* New Branch */
+    uint iBranch= BmTree_newBranch( self, iVariable, /*start*/ 1, /*bound*/ 2, /*step*/ pivot-1 );
+
+    /* set the 2 states's options */
+    BmTree_branch_state_setOption( self, iBranch, 1, option1 );
+    BmTree_branch_state_setOption( self, iBranch, pivot, option2 );
+    
+    return iBranch;
+}
+
+uint BmTree_newBranch_pivot_options( BmTree* self, uint iVariable, uint pivot, uint option1, uint optionOn, uint option2)
+{
+    /* New Branch */
+    uint iBranch= BmTree_newBranch( self, iVariable, /*start*/ pivot-1, /*bound*/ 3, /*step*/ 1 );
+
+    /* set the 3 states's options */
+    BmTree_branch_state_setOption( self, iBranch, 1, option1 );
+    BmTree_branch_state_setOption( self, iBranch, pivot, optionOn );
+    BmTree_branch_state_setOption( self, iBranch, pivot+1, option2 );
+    
+    return iBranch;
 }
 
 void BmTree_branch_state_connect( BmTree* self, uint iBranch, uint state, uint iTarget )
@@ -160,7 +186,7 @@ void BmTree_branch_state_connect( BmTree* self, uint iBranch, uint state, uint i
     self->branches[iBranch][index]= (iTarget<<1)+1;
 }
 
-void BmTree_branch_state_set( BmTree* self, uint iBranch, uint state, uint output )
+void BmTree_branch_state_setOption( BmTree* self, uint iBranch, uint state, uint output )
 {
     uint index= BmTree_branch_stateIndex( self, iBranch, state );
     self->branches[iBranch][index]= (output<<1);
@@ -201,7 +227,7 @@ uint _BmTree_at_readOrder_set_fromBranch( BmTree* self, BmCode* code, BmCode* co
     uint branchKey= BmTree_branch_state( self, iBranch, BmCode_digit(code, iVar) );
     if( nextVariable == 0 )// Only one reminding variable define the output on the branch: iBranch
     {
-        BmTree_branch_state_set( self, iBranch, BmCode_digit(code, iVar), output );
+        BmTree_branch_state_setOption( self, iBranch, BmCode_digit(code, iVar), output );
         if( BmTreeChild( branchKey ) )
             return 1;
         return 0;
@@ -284,10 +310,10 @@ uint BmTree_branchSize( BmTree* self, uint iBranch )
 
 uint BmTree_branch_stateIndex( BmTree* self, uint iBranch, uint state )
 {
-    uint start= self->branches[iBranch][BM_BRANCH_START];
-    if( state < start )
-        return 4;
-    uint index= (state - start) / self->branches[iBranch][BM_BRANCH_STEP] + 2;
+    if( state <= self->branches[iBranch][BM_BRANCH_START] )
+        return 4; /* (index 1 + 3 branch parameters) */
+    
+    uint index= (state - self->branches[iBranch][BM_BRANCH_START]) / self->branches[iBranch][BM_BRANCH_STEP] + (uint)1;
     if( index > self->branches[iBranch][BM_BRANCH_BOUND] )
         return self->branches[iBranch][BM_BRANCH_BOUND]+3; 
     return index+3;

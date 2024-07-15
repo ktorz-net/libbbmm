@@ -375,12 +375,12 @@ uint BmTree_branchNumberOfOutputs( BmTree* self, uint branch ); // Return the nu
 uint BmTree_deepOf( BmTree* self, BmCode* code); // Return the number of branch to cross before reaching the output.
 
 /* Branch Construction */
-uint BmTree_newBranch( BmTree* self, uint iVariable, uint start, uint bound, uint step, uint defaultOption);
+uint BmTree_newBranch( BmTree* self, uint iVariable, uint start, uint bound, uint step );
 uint BmTree_newBranch_full( BmTree* self, uint iVariable, uint defaultOption);
-//uint BmTree_newBranch_binar( BmTree* self, uint iVariable, uint  , uint option1, uint option2);
-//uint BmTree_newBranch_pivot( BmTree* self, uint iVariable, uint defaultOption);
+uint BmTree_newBranch_binary_options( BmTree* self, uint iVariable, uint  afterValue, uint option1, uint option2);
+uint BmTree_newBranch_pivot_options( BmTree* self, uint iVariable, uint onValue, uint option1, uint optionOn, uint option2);
 void BmTree_branch_state_connect( BmTree* self, uint branchA, uint stateA, uint branchB );
-void BmTree_branch_state_set( BmTree* self, uint branchA, uint iState, uint outbut );
+void BmTree_branch_state_setOption( BmTree* self, uint branchA, uint iState, uint outbut );
 
 /* Cleanning */
 uint BmTree_cleanDeadBranches( BmTree* self); // Detect and remove detached branches (or BmTree_update, BmTree_regenerate : rebuild the tree without dead branches)
