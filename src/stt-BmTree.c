@@ -144,7 +144,7 @@ uint BmTree_newBranch( BmTree* self, uint iVariable, uint start, uint bound, uin
 
 uint BmTree_newBranch_full(BmTree* self, uint iVariable, uint defaultOption)
 {
-    uint bound= BmCode_digit(self->inputRanges, iVariable);
+    digit bound= BmCode_digit(self->inputRanges, iVariable);
     /* New Branch */
     uint iBranch= BmTree_newBranch( self, iVariable, 1, bound, 1 );
 
@@ -483,7 +483,7 @@ BmBench* BmTree_asNewBench( BmTree* self )
     for( uint iBranch= 0 ; iBranch < self->size ; ++iBranch )
     {
         uint branVar= BmTree_branchVariable(self, iBranch);
-        uint bound= BmCode_digit(self->inputRanges, branVar);
+        digit bound= BmCode_digit(self->inputRanges, branVar);
         // For each state of the branch variable:
         for( uint i= 1 ; i <= bound ; ++i )
         {
@@ -569,7 +569,7 @@ char* BmTree_print_sep( BmTree* self, char* output, char* separator )
     for( uint iBranch= 0 ; iBranch < self->size ; ++iBranch )
     {
         uint branVar= BmTree_branchVariable(self, iBranch);
-        uint bound= BmCode_digit(self->inputRanges, branVar);
+        digit bound= BmCode_digit(self->inputRanges, branVar);
         for( uint i= 1 ; i <= bound ; ++i )
         {
             uint key= BmTree_branch_state( self, iBranch, i);

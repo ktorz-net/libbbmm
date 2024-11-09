@@ -49,15 +49,15 @@
 #ifndef BBMM_H
 #define BBMM_H
 
+#ifndef uint
+#define uint unsigned int
+#endif
+
 #include <stdlib.h>
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   B A S I S                                                   *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
-
-#ifndef uint
-#define uint unsigned int
-#endif
 
 #ifndef digit
 #define digit unsigned short
@@ -93,52 +93,52 @@ typedef digit bool;
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 typedef struct {
-    uint *dsc;
+    digit *dsc;
 } BmCode;
 
 /* Constructor */
-BmCode* newBmCode(uint size);
-BmCode* newBmCode_numbers( uint size, uint* numbers );
-BmCode* newBmCode_all(uint size, uint defaultValue);
+BmCode* newBmCode(digit dimention);
+BmCode* newBmCode_numbers( digit dimention, digit* numbers );
+BmCode* newBmCode_all(digit dimention, digit defaultValue);
 BmCode* newBmCodeAs( BmCode* model );
 
-BmCode* BmCode_create( BmCode* self, uint size );
-BmCode* BmCode_create_numbers( BmCode* self, uint size, uint* numbers );
-BmCode* BmCode_create_all( BmCode* self, uint size, uint defaultValue );
+BmCode* BmCode_create( BmCode* self, digit dimention );
+BmCode* BmCode_create_numbers( BmCode* self, digit dimention, digit* numbers );
+BmCode* BmCode_create_all( BmCode* self, digit dimention, digit defaultValue );
 BmCode* BmCode_createAs( BmCode* self, BmCode* model );
 
-BmCode* BmCode_createMerge( BmCode* self, uint numberOfCodes, BmCode ** codes );
+BmCode* BmCode_createMerge( BmCode* self, digit numberOfCodes, BmCode ** codes );
 
 /* Destructor */
 void deleteBmCode( BmCode* instance );
 BmCode* BmCode_destroy( BmCode* self );
 
 /* Accessor */
-uint BmCode_dimention( BmCode* self );
-uint BmCode_digit( BmCode* self, uint index );
-uint BmCode_count( BmCode* self, uint value );
+digit BmCode_dimention( BmCode* self );
+digit BmCode_digit( BmCode* self, digit index );
+digit BmCode_count( BmCode* self, digit value );
 hash BmCode_sum( BmCode* self );
 hash BmCode_product( BmCode* self );
 
 /* Re-Initializer */
-BmCode* BmCode_reinit( BmCode* self, uint newSize );
+BmCode* BmCode_reinit( BmCode* self, digit newDimention );
 
 BmCode* BmCode_copy( BmCode* self, BmCode* model);
 BmCode* BmCode_copyNumbers( BmCode* self, BmCode* model);
 
 /* Construction */
-BmCode* BmCode_redimention( BmCode* self, uint newSize);
-BmCode* BmCode_setAll( BmCode* self, uint value );
-BmCode* BmCode_at_set( BmCode* self, uint index, uint value );
-BmCode* BmCode_at_increment( BmCode* self, uint index, uint value );
-BmCode* BmCode_at_decrement( BmCode* self, uint index, uint value );
+BmCode* BmCode_redimention( BmCode* self, digit newDimention);
+BmCode* BmCode_setAll( BmCode* self, digit value );
+BmCode* BmCode_at_set( BmCode* self, digit index, digit value );
+BmCode* BmCode_at_increment( BmCode* self, digit index, digit value );
+BmCode* BmCode_at_decrement( BmCode* self, digit index, digit value );
 
-BmCode* BmCode_setNumbers( BmCode* self, uint* numbers );
+BmCode* BmCode_setNumbers( BmCode* self, digit* numbers );
 
 /* Operator */
 void BmCode_sort( BmCode* self );
 void BmCode_switch( BmCode* self, BmCode* anotherCode );
-uint BmCode_search( BmCode* self, uint value );
+digit BmCode_search( BmCode* self, digit value );
 
 /* Test */
 bool BmCode_isEqualTo( BmCode* self, BmCode* another );
@@ -175,19 +175,19 @@ char* BmCode_print( BmCode* self, char* buffer);   // print `self` at the end of
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 typedef struct {
-  uint size;
+  digit dimention;
   double * values;
 } BmVector;
 
 /* Constructor */
-BmVector* newBmVector( uint size );
-BmVector* newBmVector_values( uint size, double* values );
-BmVector* newBmVector_all( uint size, double value );
+BmVector* newBmVector( digit dimention );
+BmVector* newBmVector_values( digit dimention, double* values );
+BmVector* newBmVector_all( digit dimention, double value );
 BmVector* newBmVectorAs( BmVector* model );
 
-BmVector* BmVector_create( BmVector* self, uint size );
-BmVector* BmVector_create_values( BmVector* self, uint size, double* values );
-BmVector* BmVector_create_all( BmVector* self, uint size, double value );
+BmVector* BmVector_create( BmVector* self, digit dimention );
+BmVector* BmVector_create_values( BmVector* self, digit dimention, double* values );
+BmVector* BmVector_create_all( BmVector* self, digit dimention, double value );
 BmVector* BmVector_createAs( BmVector* self, BmVector* model );
 
 /* Destructor */
@@ -195,16 +195,16 @@ BmVector* BmVector_destroy( BmVector* self );
 void deleteBmVector( BmVector* self );
 
 /* Re-Initialize */
-BmVector* BmVector_reinit( BmVector* self, uint newSize );
+BmVector* BmVector_reinit( BmVector* self, digit newDimention );
 BmVector* BmVector_copy( BmVector* self, BmVector* model );
 
 /* Accessor */
-uint BmVector_dimention( BmVector* self );
-double BmVector_value( BmVector* self, uint i );
+digit BmVector_dimention( BmVector* self );
+double BmVector_value( BmVector* self, digit i );
 
 /* Construction */
-BmVector* BmVector_redimention(BmVector* self, uint size);
-double BmVector_at_set( BmVector* self, uint i, double value );
+BmVector* BmVector_redimention(BmVector* self, digit newDimention);
+double BmVector_at_set( BmVector* self, digit i, double value );
 BmVector* BmVector_setValues( BmVector* self, double* values );
 
 /* Operation */

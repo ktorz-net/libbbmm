@@ -20,7 +20,7 @@ END_TEST
 
 START_TEST(test_BmCode_init2)
 {
-    uint numbers[11]= {2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2};
+    digit numbers[11]= {2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2};
     BmCode* code= newBmCode_numbers(11, numbers);
 
     ck_assert_uint_eq( BmCode_dimention(code), 11);
@@ -43,17 +43,17 @@ START_TEST(test_BmCode_init2)
         "[2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2]"
     );
     
-    uint numbersYes[11]= {2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2};
+    digit numbersYes[11]= {2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2};
     BmCode* codeYes= newBmCode_numbers(11, numbersYes);
 
     ck_assert( BmCode_dimention(code) == BmCode_dimention(codeYes) );
     ck_assert( BmCode_isEqualTo(code, codeYes) );
 
-    uint numbers1[11]= {2, 3, 4, 5, 3, 7, 8, 9, 0, 1, 2};
+    digit numbers1[11]= {2, 3, 4, 5, 3, 7, 8, 9, 0, 1, 2};
     BmCode* codeNo1= newBmCode_numbers(11, numbers1);;
     ck_assert( !BmCode_isEqualTo(code, codeNo1) );
 
-    uint numbers2[10]= {2, 3, 4, 5, 6, 7, 8, 9, 0, 1};
+    digit numbers2[10]= {2, 3, 4, 5, 6, 7, 8, 9, 0, 1};
     BmCode* codeNo2= newBmCode_numbers(10, numbers2);
     ck_assert( !BmCode_isEqualTo(code, codeNo2) );
 
@@ -63,7 +63,7 @@ END_TEST
 
 START_TEST(test_BmCode_keys)
 {
-    uint numbers[8]= {4, 4, 4, 4, 6, 6, 6, 6};
+    digit numbers[8]= {4, 4, 4, 4, 6, 6, 6, 6};
     BmCode* domain= newBmCode_numbers(8, numbers);
     BmCode* code= newBmCode_all(8, 0);
     
@@ -103,7 +103,7 @@ START_TEST(test_BmCode_keys)
         "[2, 4, 2, 3, 3, 6, 1, 3]"
     );
     
-    uint numbers1[8]= {2, 4, 2, 3, 3, 6, 1, 3};
+    digit numbers1[8]= {2, 4, 2, 3, 3, 6, 1, 3};
     BmCode_reinit(code, 8);
     BmCode_setNumbers(code, numbers1);
     ck_assert_uint_eq( (uint)BmCode_keyOf(domain, code), 118942 );

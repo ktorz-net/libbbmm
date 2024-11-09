@@ -259,7 +259,7 @@ void BmCondition_switch(BmCondition* self, BmCondition* doppelganger)
 /* Printing */
 char* _BmCondition_printCode_withDistribution(BmCondition* self, BmCode* code, char* output)
 {
-    uint iDistrib= BmCode_digit( code, BmCode_dimention(code) );
+    digit iDistrib= BmCode_digit( code, BmCode_dimention(code) );
     uint inputSize= BmCode_dimention( BmCondition_parents(self) );
     
     // Security:

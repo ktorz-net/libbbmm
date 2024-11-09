@@ -137,7 +137,7 @@ BmBench* BmValueFct_asNewBench( BmValueFct* self )
     uint benchSize= BmBench_size( bench );
     for( uint i= 1 ; i <= benchSize ; ++i )
     {
-        uint outputId= BmCode_digit( BmBench_codeAt( bench, i), iOutput ); 
+        digit outputId= BmCode_digit( BmBench_codeAt( bench, i), iOutput ); 
         BmBench_at_setValue(
             bench,
             i,
