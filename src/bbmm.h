@@ -46,11 +46,6 @@
  * 
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
-#ifndef BBMM_H
-#define BBMM_H
-
-#include <stdarg.h>
-
 #ifndef uint
 #define uint unsigned int
 #endif
@@ -59,8 +54,25 @@
 #define ulong unsigned long
 #endif
 
+#ifndef BBMM_H
+#define BBMM_H
+
+#include <stdarg.h>
+
+/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *   B b M m   B A S I S                                                   *
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+#ifndef digit
+#define digit unsigned short
+#endif
+
+#ifndef hash
+#define hash unsigned long long int
+#endif
+
 #ifndef bool
-typedef uint bool;
+typedef digit bool;
 #define true 1
 #define false 0
 #endif
@@ -75,6 +87,7 @@ typedef uint bool;
 #define array_on(instance, index) instance+(index-1)
 #define array_at(instance, index) instance[index-1]
 #define array_at_set(instance, index, value) instance[index-1]= value
+
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   S T R U C T U R E :  C O D E                                *
@@ -234,7 +247,7 @@ typedef struct {
 /* Constructor */
 BmBench* newBmBench( uint capacity );
 BmBench* newBmBench_codeDim_vectorDim( uint capacity, uint codeDim, uint vectorDim );
-BmBench* newBmBench_startDigit_value( uint capacity, uint digit, double value );
+BmBench* newBmBench_startDigit_value( uint capacity, uint aDigit, double value );
 BmBench* newBmBench_startWithCode_vector( uint capacity, BmCode* newCode, BmVector* newVector );
 BmBench* newBmBenchAs( BmBench* model );
 
@@ -285,7 +298,7 @@ void BmBench_switch( BmBench* self, BmBench* doppleganger);
 
 /* Construction Basic */
 uint BmBench_addDigit_value( BmBench* self, uint d, double v );
-BmBench* BmBench_at_setDigit( BmBench* self, uint i, uint digit );
+BmBench* BmBench_at_setDigit( BmBench* self, uint i, uint aDigit );
 BmBench* BmBench_at_setValue( BmBench* self, uint i, double value );
 
 //void BmBench_add( BmBench *self, BmBench *another );

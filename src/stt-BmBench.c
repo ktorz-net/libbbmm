@@ -21,10 +21,10 @@ BmBench* newBmBench_codeDim_vectorDim( uint capacity, uint codeDim, uint vectorD
     return BmBench_create_codeDim_vectorDim( newEmpty(BmBench), capacity, codeDim, vectorDim );
 }
 
-BmBench* newBmBench_startDigit_value( uint capacity, uint digit, double value )
+BmBench* newBmBench_startDigit_value( uint capacity, uint aDigit, double aValue )
 {
     BmBench* self= newBmBench_codeDim_vectorDim( capacity, 1, 1 );
-    BmBench_addDigit_value( self, digit, value );
+    BmBench_addDigit_value( self, aDigit, aValue );
     return self;
 }
 
@@ -304,11 +304,11 @@ uint BmBench_addDigit_value( BmBench* self, uint d, double v )
     );
 }
 
-BmBench* BmBench_at_setDigit( BmBench* self, uint i, uint digit )
+BmBench* BmBench_at_setDigit( BmBench* self, uint i, uint aDigit )
 {
     BmCode_at_set( 
         array_at( self->codes, self->start+i ),
-        1, digit
+        1, aDigit
     );
     return self;
 }

@@ -8,6 +8,7 @@
 // Dependancies
 TCase * test_case_system(void);
 TCase * test_case_bench(void);
+TCase * test_case_basis(void);
 
 // BbMm structures 
 TCase * test_case_BmCode(void);

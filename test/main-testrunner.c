@@ -11,6 +11,7 @@ Suite * bbmm_dpd_test_suite(void)
 
     suite_add_tcase( s, test_case_system() );
     suite_add_tcase( s, test_case_bench() );
+    suite_add_tcase( s, test_case_basis() );
     
     return s;
 }

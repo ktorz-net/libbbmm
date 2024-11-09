@@ -2,7 +2,6 @@
 #include "bbmm-test.h"
 
 #include <stdio.h>
-#include <stdio.h>
 
 #ifndef uint
 #define uint unsigned int

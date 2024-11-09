@@ -60,6 +60,7 @@ set(TEST_SRC_FILES
 #DEPENDANCIES: 
   test/tc-dpd-system.c
   test/tc-dpd-bench.c
+  test/tc-dpd-basis.c
 #STRUCTURE MODULE:
   test/tc-stt-BmCode.c
   test/tc-stt-BmVector.c
