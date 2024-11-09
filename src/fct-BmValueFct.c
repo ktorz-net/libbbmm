@@ -10,7 +10,7 @@
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 /* Constructor */
-BmValueFct* newBmValueFctBasic( uint inputSize, uint ouputSize )
+BmValueFct* newBmValueFctBasic( digit inputSize, digit ouputSize )
 {
     return BmValueFct_createWith(
         newEmpty( BmValueFct ),
@@ -30,7 +30,7 @@ BmValueFct* newBmValueFctWith( BmCode* newInputRanges, BmVector* newOutputs )
 
 BmValueFct* BmValueFct_createWith( BmValueFct* self, BmCode* newInputRanges, BmVector* newOutputs )
 {
-    assert( BmCode_dimention(newInputRanges) > (uint)0 );
+    assert( BmCode_dimention(newInputRanges) > (digit)0 );
     self->selector= newBmTreeWith( newInputRanges );
     BmTree_newBranch_full( self->selector, 1, 1 );
     self->outputs= newOutputs;
@@ -52,7 +52,7 @@ void deleteBmValueFct( BmValueFct* instance )
 }
 
 /* re-initializer */
-uint BmValueFct_reinitWith( BmValueFct* self, BmCode* newInputRanges, BmVector* newOutputs )
+digit BmValueFct_reinitWith( BmValueFct* self, BmCode* newInputRanges, BmVector* newOutputs )
 {
     BmValueFct_destroy( self );
     BmValueFct_createWith( self, newInputRanges, newOutputs );
@@ -65,12 +65,12 @@ BmTree*   BmValueFct_selector( BmValueFct* self )
     return self->selector;
 }
 
-uint BmValueFct_inputDimention( BmValueFct* self )
+digit BmValueFct_inputDimention( BmValueFct* self )
 {
     return BmTree_dimention( self->selector );
 }
 
-uint BmValueFct_outputSize( BmValueFct* self )
+digit BmValueFct_outputSize( BmValueFct* self )
 {
     return BmVector_dimention( self->outputs );
 }
@@ -94,21 +94,21 @@ double BmValueFct_from( BmValueFct* self, BmCode* input )
 }
 
 /* Construction */
-uint BmValueFct_addValue( BmValueFct* self, double ouputValue )
+digit BmValueFct_addValue( BmValueFct* self, double ouputValue )
 {
-    uint newDimention= BmVector_dimention( self->outputs ) + 1;
+    digit newDimention= BmVector_dimention( self->outputs ) + 1;
     BmVector_redimention( self->outputs, newDimention);
     BmVector_at_set( self->outputs, newDimention, ouputValue );
     return newDimention;
 }
 
-uint BmValueFct_ouputId_setValue( BmValueFct* self, uint ouputId, double ouputValue )
+digit BmValueFct_ouputId_setValue( BmValueFct* self, digit ouputId, double ouputValue )
 {
     BmVector_at_set( self->outputs, ouputId, ouputValue );
     return ouputId;
 }
 
-uint BmValueFct_from_set( BmValueFct* self, BmCode* input, uint ouputId )
+digit BmValueFct_from_set( BmValueFct* self, BmCode* input, digit ouputId )
 {
     return BmTree_at_set( self->selector, input, ouputId );   
 }
@@ -133,9 +133,9 @@ void BmValueFct_switch(BmValueFct* self, BmValueFct* doppelganger)
 BmBench* BmValueFct_asNewBench( BmValueFct* self )
 {
     BmBench* bench= BmTree_asNewBench( self->selector );
-    uint iOutput= BmCode_dimention( self->selector->inputRanges ) + 1;
-    uint benchSize= BmBench_size( bench );
-    for( uint i= 1 ; i <= benchSize ; ++i )
+    digit iOutput= BmCode_dimention( self->selector->inputRanges ) + 1;
+    digit benchSize= BmBench_size( bench );
+    for( digit i= 1 ; i <= benchSize ; ++i )
     {
         digit outputId= BmCode_digit( BmBench_codeAt( bench, i), iOutput ); 
         BmBench_at_setValue(

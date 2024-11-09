@@ -6,7 +6,7 @@
 #include <assert.h>
 
 /* Constructor */
-BmFunction* newBmFunctionBasic( uint inputSize )
+BmFunction* newBmFunctionBasic( digit inputSize )
 {
     return BmFunction_createWith( newEmpty(BmFunction), newBmCode_all(inputSize, 2), newBmBench(1) );
 }
@@ -18,7 +18,7 @@ BmFunction* newBmFunctionWith( BmCode* newInputRanges, BmBench* newOutputs )
 
 BmFunction* BmFunction_createWith( BmFunction* self, BmCode* newInputRanges, BmBench* newOutputs )
 {
-    assert( BmCode_dimention(newInputRanges) > (uint)0 );
+    assert( BmCode_dimention(newInputRanges) > (digit)0 );
     self->selector= newBmTreeWith( newInputRanges );
     BmTree_newBranch_full( self->selector, 1, 1 );
     self->outputs= newOutputs;
@@ -62,7 +62,7 @@ BmTree*   BmFunction_selector( BmFunction* self )
     return self->selector;
 }
 
-uint BmFunction_inputDimention( BmFunction* self )
+digit BmFunction_inputDimention( BmFunction* self )
 {
     return BmTree_dimention( self->selector );
 }
@@ -72,7 +72,7 @@ BmCode* BmFunction_inputRanges( BmFunction* self )
     return BmTree_inputRanges( self->selector );
 }
 
-uint BmFunction_outputSize( BmFunction* self )
+digit BmFunction_outputSize( BmFunction* self )
 {
     return BmBench_size( self->outputs );
 }
@@ -82,7 +82,7 @@ BmBench* BmFunction_outputs( BmFunction* self )
     return self->outputs;
 }
 
-uint BmFunction_from( BmFunction* self, BmCode* input )
+digit BmFunction_from( BmFunction* self, BmCode* input )
 {
     return BmTree_at( self->selector, input);
 }
@@ -98,12 +98,12 @@ double BmFunction_valueFrom( BmFunction* self, BmCode* input )
 }
 
 /* Construction */
-uint BmFunction_attachOuput( BmFunction* self, BmCode* newOuputCode, double ouputValue )
+digit BmFunction_attachOuput( BmFunction* self, BmCode* newOuputCode, double ouputValue )
 {
     return BmBench_attachCode_vector( self->outputs, newOuputCode, newBmVector_all(1, ouputValue) );
 }
 
-uint BmFunction_from_set( BmFunction* self, BmCode* input, uint ouputId )
+digit BmFunction_from_set( BmFunction* self, BmCode* input, digit ouputId )
 {
     return BmTree_at_set( self->selector, input, ouputId );
 }

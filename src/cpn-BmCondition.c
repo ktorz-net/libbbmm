@@ -6,17 +6,17 @@
 #include <assert.h>
 
 /* Constructor */
-BmCondition* newBmConditionBasic(uint range)
+BmCondition* newBmConditionBasic(digit range)
 {
     return BmCondition_createBasic( newEmpty(BmCondition), range );
 }
 
-BmCondition* newBmConditionWith(uint range, BmCode* newInputRanges, BmBench* newDefaultDistrib)
+BmCondition* newBmConditionWith(digit range, BmCode* newInputRanges, BmBench* newDefaultDistrib)
 {
     return BmCondition_createWith( newEmpty(BmCondition), range, newInputRanges, newDefaultDistrib );
 }
 
-BmCondition* BmCondition_createBasic( BmCondition* self, uint range )
+BmCondition* BmCondition_createBasic( BmCondition* self, digit range )
 {
     BmBench* distrib = newBmBench(1);
     BmBench_attachCode_vector( distrib, newBmCode_all(1, 1), newBmVector_all(1, 1.0) );
@@ -24,11 +24,11 @@ BmCondition* BmCondition_createBasic( BmCondition* self, uint range )
         newBmCode_all(1, 1), distrib );
 }
 
-BmCondition* BmCondition_createWith( BmCondition* self, uint range, BmCode* newInputRanges, BmBench* newDefaultDistrib )
+BmCondition* BmCondition_createWith( BmCondition* self, digit range, BmCode* newInputRanges, BmBench* newDefaultDistrib )
 {
-    assert( range > (uint)0 );
-    assert( BmCode_dimention(newInputRanges) > (uint)0 );
-    assert( BmBench_codeDimention(newDefaultDistrib) == (uint)1 );
+    assert( range > (digit)0 );
+    assert( BmCode_dimention(newInputRanges) > (digit)0 );
+    assert( BmBench_codeDimention(newDefaultDistrib) == (digit)1 );
 
     self->range= range;
 
@@ -45,7 +45,7 @@ BmCondition* BmCondition_createWith( BmCondition* self, uint range, BmCode* newI
 /* Destructor */
 BmCondition* BmCondition_destroy(BmCondition* self)
 {
-    for(uint i = 1 ; i <= self->distribSize ; ++i )
+    for(digit i = 1 ; i <= self->distribSize ; ++i )
         deleteBmBench( array_at(self->distributions, i) );
     deleteEmptyArray( self->distributions );
     deleteBmTree( self->selector );
@@ -59,22 +59,22 @@ void deleteBmCondition(BmCondition* instance)
 }
 
 /* re-initializer */
-uint BmCondition_reinitWith( BmCondition* self, uint range, BmCode* newParents, BmBench* newDistrib )
+digit BmCondition_reinitWith( BmCondition* self, digit range, BmCode* newParents, BmBench* newDistrib )
 {
     BmCondition_destroy( self );
     BmCondition_createWith( self, range, newParents, newDistrib );
     return 1;
 }
 
-uint BmCondition_reinitDistributionsWith( BmCondition* self, BmBench* newDistrib )
+digit BmCondition_reinitDistributionsWith( BmCondition* self, BmBench* newDistrib )
 {
-    uint range= BmCondition_range(self);
+    digit range= BmCondition_range(self);
     BmCode* newParents= newBmCodeAs( BmCondition_parents(self) );
     return BmCondition_reinitWith( self, range, newParents, newDistrib );
 }
 
 /* Accessor */
-uint BmCondition_range( BmCondition* self )
+digit BmCondition_range( BmCondition* self )
 {
     return self->range;
 }
@@ -91,12 +91,12 @@ BmCode* BmCondition_parents( BmCondition* self )
 
 BmBench* BmCondition_from( BmCondition* self, BmCode* configuration )
 {
-    uint iDistrib= BmTree_at( self->selector, configuration);
+    digit iDistrib= BmTree_at( self->selector, configuration);
     assert( 0 < iDistrib && iDistrib <= self->distribSize );
     return array_at(self->distributions, iDistrib );
 }
 
-BmBench* BmCondition_fromKey( BmCondition* self, uint configKey )
+BmBench* BmCondition_fromKey( BmCondition* self, digit configKey )
 {
     BmCode* config= BmCode_newBmCodeOnKey(
         BmCondition_parents(self),
@@ -106,32 +106,32 @@ BmBench* BmCondition_fromKey( BmCondition* self, uint configKey )
     return distrib;
 }
 
-uint BmCondition_distributionSize( BmCondition* self )
+digit BmCondition_distributionSize( BmCondition* self )
 {
     return self->distribSize;
 }
 
-BmBench* BmCondition_distributionAt( BmCondition* self, uint iDistrib )
+BmBench* BmCondition_distributionAt( BmCondition* self, digit iDistrib )
 {
     return array_at(self->distributions, iDistrib );
 }
 
 /* Construction */
-uint _BmCondition_resizeDistributionCapacity( BmCondition* self, uint newCapacity )
+digit _BmCondition_resizeDistributionCapacity( BmCondition* self, digit newCapacity )
 {
     // Allocate new memory
     BmBench ** newDistrib= newEmptyArray( BmBench*, newCapacity+1 );
     
-    uint boundedSize= self->distribSize;
+    digit boundedSize= self->distribSize;
     if ( newCapacity < boundedSize )
         boundedSize= self->distribCapacity;
     
     // Copy
-    for( uint i = 0 ; i < boundedSize ; ++i )
+    for( digit i = 0 ; i < boundedSize ; ++i )
         newDistrib[i]= self->distributions[i];
 
     // Clean the reminders element
-    for( uint i = boundedSize ; i < self->distribSize ; ++i )
+    for( digit i = boundedSize ; i < self->distribSize ; ++i )
         free( self->distributions[i] );
 
     // Update the structure:
@@ -143,9 +143,9 @@ uint _BmCondition_resizeDistributionCapacity( BmCondition* self, uint newCapacit
     return boundedSize;
 }
 
-uint BmCondition_attach( BmCondition* self, BmBench* distribution )
+digit BmCondition_attach( BmCondition* self, BmBench* distribution )
 {
-    assert( BmBench_codeDimention(distribution) == (uint)1 );
+    assert( BmBench_codeDimention(distribution) == (digit)1 );
 
     if( self->distribSize+1 > self->distribCapacity )
         _BmCondition_resizeDistributionCapacity( self, self->distribSize+1 );
@@ -155,10 +155,10 @@ uint BmCondition_attach( BmCondition* self, BmBench* distribution )
     return self->distribSize;
 }
 
-uint BmCondition_from_attach( BmCondition* self, BmCode* configuration, BmBench* distribution )
+digit BmCondition_from_attach( BmCondition* self, BmCode* configuration, BmBench* distribution )
 {
     assert( BmCode_dimention( BmCondition_parents(self) ) == BmCode_dimention(configuration) );
-    uint iDistrib= BmCondition_attach(self, distribution);
+    digit iDistrib= BmCondition_attach(self, distribution);
     
     BmTree_at_set(self->selector, configuration, iDistrib);
 
@@ -175,10 +175,10 @@ BmBench* BmCondition_infer( BmCondition* self, BmBench* distribOverConfiguration
 
 BmBench* BmCondition_newDistributionByInfering( BmCondition* self, BmBench* distribOverConfigurations )
 {
-    uint dim= BmCode_dimention( BmCondition_parents(self) );
+    digit dim= BmCode_dimention( BmCondition_parents(self) );
     BmCode* mask= newBmCode( dim );
 
-    for( uint i= 1 ; i <= dim ; ++i )
+    for( digit i= 1 ; i <= dim ; ++i )
         BmCode_at_set( mask, i, i );
     
     BmBench* resultingDistribution= BmCondition_newDistributionByInfering_mask(self, distribOverConfigurations, mask);
@@ -190,14 +190,14 @@ BmBench* BmCondition_newDistributionByInfering( BmCondition* self, BmBench* dist
 BmBench* BmCondition_newDistributionByInfering_mask( BmCondition* self, BmBench* longDistrib, BmCode* mask )
 {
     // Create new structure:
-    uint selfDim= BmCode_dimention( BmCondition_parents(self) );
-    uint longDim= BmCode_dimention( BmBench_codeAt(longDistrib, 1) );
+    digit selfDim= BmCode_dimention( BmCondition_parents(self) );
+    digit longDim= BmCode_dimention( BmBench_codeAt(longDistrib, 1) );
     BmBench* newDistrib= newBmBench( self->range * BmBench_size(longDistrib) );
 
     // foreach configuration in the distribution:
-    uint numberOfCondition= BmBench_size(longDistrib);
+    digit numberOfCondition= BmBench_size(longDistrib);
     BmCode* parentConf= newBmCode( selfDim );
-    for( uint iCondition= 1 ; iCondition <= numberOfCondition ; ++iCondition )
+    for( digit iCondition= 1 ; iCondition <= numberOfCondition ; ++iCondition )
     {
         BmCode* newConfig= newBmCode_all( longDim+1, 0 );
         BmCode* cond= BmBench_codeAt( longDistrib, iCondition);
@@ -205,7 +205,7 @@ BmBench* BmCondition_newDistributionByInfering_mask( BmCondition* self, BmBench*
         double probability= BmBench_valueAt( longDistrib, iCondition);
 
         // get the parents' configuration:
-        for( uint j= 1 ; j <= selfDim ; ++j )
+        for( digit j= 1 ; j <= selfDim ; ++j )
             BmCode_at_set(
                 parentConf, j,
                 BmCode_digit( newConfig, BmCode_digit( mask, j ) )
@@ -213,7 +213,7 @@ BmBench* BmCondition_newDistributionByInfering_mask( BmCondition* self, BmBench*
 
         // foreach ouput in the conditional distribution resulting from the parent'config:
         BmBench* outputDistrib= BmCondition_from( self, parentConf );
-        for( uint iOutput= 1 ; iOutput <= outputDistrib->size ; ++iOutput )
+        for( digit iOutput= 1 ; iOutput <= outputDistrib->size ; ++iOutput )
         {
             BmCode_at_set(
                 newConfig, BmCode_dimention(newConfig),
@@ -235,10 +235,10 @@ BmBench* BmCondition_newDistributionByInfering_mask( BmCondition* self, BmBench*
 void BmCondition_switch(BmCondition* self, BmCondition* doppelganger)
 {
     // local copy:
-    uint range= BmCondition_range(self);
+    digit range= BmCondition_range(self);
     BmTree* selector= self->selector;
-    uint distribSize= self->distribSize;
-    uint distribCapacity= self->distribCapacity;
+    digit distribSize= self->distribSize;
+    digit distribCapacity= self->distribCapacity;
     BmBench* * distributions= self->distributions;
 
     // self as doppelganger:
@@ -260,7 +260,7 @@ void BmCondition_switch(BmCondition* self, BmCondition* doppelganger)
 char* _BmCondition_printCode_withDistribution(BmCondition* self, BmCode* code, char* output)
 {
     digit iDistrib= BmCode_digit( code, BmCode_dimention(code) );
-    uint inputSize= BmCode_dimention( BmCondition_parents(self) );
+    digit inputSize= BmCode_dimention( BmCondition_parents(self) );
     
     // Security:
     assert( BmCode_dimention(code) == inputSize+1 );
@@ -273,7 +273,7 @@ char* _BmCondition_printCode_withDistribution(BmCondition* self, BmCode* code, c
         sprintf( tmp, "%u", BmCode_digit(code, 1) );
         strcat(output, tmp );
         
-        for( uint i= 2 ; i <= inputSize ; ++i)
+        for( digit i= 2 ; i <= inputSize ; ++i)
         {
             sprintf( tmp, "%u", BmCode_digit(code, i) );
             strcat(output, ", ");
@@ -310,7 +310,7 @@ char* BmCondition_printSep(BmCondition* self, char* output, char* separator)
         self, BmBench_codeAt( collec, 1 ), output );
 
     // All the others: 
-    for( uint i = 2 ; i <= BmBench_size(collec) ; ++i )
+    for( digit i = 2 ; i <= BmBench_size(collec) ; ++i )
     {
         strcat( output, separator );
         _BmCondition_printCode_withDistribution(

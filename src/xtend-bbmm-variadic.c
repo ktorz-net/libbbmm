@@ -1,10 +1,6 @@
 #include "bbmm.h"
+#include "xtend-bbmm-variadic.h"
 #include <stdarg.h>
-
-
-#ifndef BBMM_VARIADIC_H
-#define BBMM_VARIADIC_H
-
 
 BmCode* newBmCode_list(uint size, uint number1, ... )
 {
@@ -77,6 +73,3 @@ BmVector* newBmVector_list( uint size, double val1, ... )
     // Create the instance
     return BmVector_create_values( newEmpty(BmVector), size, values );
 }
-
-
-#endif // BBMM_VARIADIC_H

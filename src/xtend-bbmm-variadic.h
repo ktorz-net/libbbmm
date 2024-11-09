@@ -1,6 +1,10 @@
 #include "bbmm.h"
 #include <stdarg.h>
 
+#ifndef uint
+#define uint unsigned int
+#endif
+
 #ifndef BBMM_VARIADIC_H
 #define BBMM_VARIADIC_H
 

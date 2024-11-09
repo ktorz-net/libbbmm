@@ -10,24 +10,24 @@
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 /* Constructor*/
-BmEvaluator* newBmEvaluatorBasic( uint spaceDimention, uint numberOfCriteria )
+BmEvaluator* newBmEvaluatorBasic( digit spaceDimention, digit numberOfCriteria )
 {
     return newBmEvaluatorWith( newBmCode_all( spaceDimention, 2 ), numberOfCriteria );
 }
 
-BmEvaluator* newBmEvaluatorWith( BmCode* newSpace, uint numberOfCriteria )
+BmEvaluator* newBmEvaluatorWith( BmCode* newSpace, digit numberOfCriteria )
 {
     return BmEvaluator_createWith( newEmpty(BmEvaluator), newSpace, numberOfCriteria );
 }
 
-BmEvaluator* BmEvaluator_createWith( BmEvaluator* self, BmCode* newSpace, uint numberOfCriteria )
+BmEvaluator* BmEvaluator_createWith( BmEvaluator* self, BmCode* newSpace, digit numberOfCriteria )
 {
     self->space= newSpace;
     self->ccriteria= newEmptyArray( BmValueFct*, numberOfCriteria );
     self->masks= newEmptyArray( BmCode*, numberOfCriteria );
     self->weights= newBmVector( numberOfCriteria );
         
-    for( uint i= 1 ; i <= numberOfCriteria ; ++i )
+    for( digit i= 1 ; i <= numberOfCriteria ; ++i )
     {
         array_at_set( self->ccriteria, i, newBmValueFctBasic(1, 1) );
         array_at_set( self->masks, i, newBmCode( 0 ) );
@@ -41,7 +41,7 @@ BmEvaluator* BmEvaluator_createWith( BmEvaluator* self, BmCode* newSpace, uint n
 /* Destructor */
 BmEvaluator* BmEvaluator_destroy( BmEvaluator* self)
 {
-    for( uint i = 1 ; i < self->size ; ++i )
+    for( digit i = 1 ; i < self->size ; ++i )
     {
         deleteBmValueFct( array_at( self->ccriteria, i ) );
         deleteBmCode( array_at( self->masks, i ) );
@@ -61,7 +61,7 @@ void deleteBmEvaluator( BmEvaluator* self )
 }
 
 /* Initializer */
-BmEvaluator* BmEvaluator_reinitCriterion( BmEvaluator* self, uint numberOfCriterion )
+BmEvaluator* BmEvaluator_reinitCriterion( BmEvaluator* self, digit numberOfCriterion )
 {
     BmCode* savedSpace= newBmCode(1);
     BmCode_switch( self->space, savedSpace );
@@ -79,12 +79,12 @@ BmCode* BmEvaluator_space( BmEvaluator* self )
     return self->space;
 }
 
-uint BmEvaluator_numberOfCriteria( BmEvaluator* self )
+digit BmEvaluator_numberOfCriteria( BmEvaluator* self )
 {
     return self->size;
 }
 
-BmValueFct* BmEvaluator_criterion( BmEvaluator* self, uint iCritirion )
+BmValueFct* BmEvaluator_criterion( BmEvaluator* self, digit iCritirion )
 {
     return array_at(self->ccriteria, iCritirion);
 }
@@ -94,12 +94,12 @@ BmVector* BmEvaluator_weights( BmEvaluator* self )
     return self->weights;
 }
 
-double BmEvaluator_criterion_weight( BmEvaluator* self, uint iCritirion )
+double BmEvaluator_criterion_weight( BmEvaluator* self, digit iCritirion )
 {
     return BmVector_value( self->weights, iCritirion );
 }
 
-BmCode* BmEvaluator_criterion_mask( BmEvaluator* self, uint iCritirion )
+BmCode* BmEvaluator_criterion_mask( BmEvaluator* self, digit iCritirion )
 {
     return array_at( self->masks, iCritirion );
 }
@@ -110,7 +110,7 @@ double BmEvaluator_process( BmEvaluator* self, BmCode* input )
 {
     assert( BmCode_dimention(input) == BmCode_dimention(self->space) );
     double eval= 0.0;
-    for( uint i= 1 ; i <= self->size ; ++i )
+    for( digit i= 1 ; i <= self->size ; ++i )
     {
         eval+= BmVector_value( self->weights, i )
             *  BmEvaluator_criterion_process( self, i, input );
@@ -118,7 +118,7 @@ double BmEvaluator_process( BmEvaluator* self, BmCode* input )
     return eval;
 }
 
-double BmEvaluator_criterion_process( BmEvaluator* self, uint iCriterion, BmCode* input )
+double BmEvaluator_criterion_process( BmEvaluator* self, digit iCriterion, BmCode* input )
 {
     BmCode* critCode= BmCode_newBmCodeMask( input, array_at( self->masks, iCriterion ) );
     if( BmCode_dimention( critCode ) == 0 )
@@ -151,7 +151,7 @@ double BmEvaluator_processState_action_state(BmEvaluator* self, BmCode* state, B
 }
 
 /* Construction */
-BmValueFct* BmEvaluator_criterion_reinitWith( BmEvaluator* self, uint iCrit, BmCode* newDependenceMask, BmVector* newValues  )
+BmValueFct* BmEvaluator_criterion_reinitWith( BmEvaluator* self, digit iCrit, BmCode* newDependenceMask, BmVector* newValues  )
 {
     // Build critirion spapce:
     BmCode* critSpace= BmCode_newBmCodeMask( self->space, newDependenceMask );
@@ -171,13 +171,13 @@ BmValueFct* BmEvaluator_criterion_reinitWith( BmEvaluator* self, uint iCrit, BmC
     return array_at( self->ccriteria, iCrit );   
 }
 
-void BmEvaluator_criterion_from_set( BmEvaluator* self, uint iCrit, BmCode* input, uint output )
+void BmEvaluator_criterion_from_set( BmEvaluator* self, digit iCrit, BmCode* input, digit output )
 {
     // index criteria:
     BmValueFct_from_set( array_at( self->ccriteria, iCrit ), input, output  );
 }
 
-void BmEvaluator_criterion_setWeight( BmEvaluator* self, uint iCritirion, double weight )
+void BmEvaluator_criterion_setWeight( BmEvaluator* self, digit iCritirion, double weight )
 {
     BmVector_at_set( self->weights, iCritirion, weight );
 }
