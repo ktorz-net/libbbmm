@@ -14,26 +14,9 @@ BmVector* newBmVector( uint size )
 {
     return BmVector_create( newEmpty(BmVector), size );
 }
+
 BmVector* newBmVector_values( uint size, double* values )
 {
-    return BmVector_create_values( newEmpty(BmVector), size, values );
-}
-
-BmVector* newBmVector_list( uint size, double val1, ... )
-{
-    double values[size];
-
-    // Build words array from args
-    va_list ap;
-    values[0]= val1;
-    va_start(ap, val1); 
-    for ( uint i = 1 ; i < size ; ++i )
-    {
-        values[i]= va_arg(ap, double);
-    }
-    va_end(ap);
-
-    // Create the instance
     return BmVector_create_values( newEmpty(BmVector), size, values );
 }
 

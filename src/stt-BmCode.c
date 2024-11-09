@@ -30,43 +30,6 @@ BmCode* newBmCodeAs( BmCode* model )
     return BmCode_createAs( newEmpty(BmCode), model );
 }
 
-BmCode* newBmCode_list(uint size, uint number1, ... )
-{
-    uint numbers[size];
-    // Build words array from args
-    va_list ap;
-    numbers[0]= number1;
-    va_start(ap, number1); 
-    for ( uint i = 1 ; i < size ; ++i )
-    {
-        numbers[i]= va_arg(ap, uint);
-    }
-    va_end(ap);
-    // Create the instance
-    return BmCode_create_numbers( newEmpty(BmCode), size, numbers );
-}
-
-
-BmCode* newBmCodeMerge_list( uint numberOfCodes, BmCode* code1, ... )
-{
-    BmCode* codes[numberOfCodes];
-
-    // Build words array from args
-    va_list ap;
-    codes[0]= code1;
-    va_start(ap, code1); 
-    for ( uint i = 1 ; i < numberOfCodes ; ++i )
-    {
-        codes[i]= va_arg(ap, BmCode*);
-    }
-    va_end(ap);
-
-    // Create the instance
-    return BmCode_createMerge(
-        newEmpty(BmCode), numberOfCodes, codes );
-}
-
-
 void deleteBmCode(BmCode* instance)
 {
     BmCode_destroy(instance);
@@ -144,25 +107,6 @@ BmCode* BmCode_reinit( BmCode* self, uint newSize )
 {
     BmCode_destroy(self);
     return BmCode_create( self, newSize );
-}
-
-BmCode* BmCode_reinit_list( BmCode* self, uint newSize, uint number1, ... )
-{
-    uint numbers[newSize];
-    // Build words array from args
-    // Build words array from args
-    va_list ap;
-    numbers[0]= number1;
-    va_start(ap, number1); 
-    for ( uint i = 1 ; i < newSize ; ++i )
-    {
-        numbers[i]= va_arg(ap, uint);
-    }
-    va_end(ap);
-    // initialize the instance
-    BmCode_reinit(self, newSize );
-    
-    return BmCode_create_numbers(self, newSize, numbers);
 }
 
 BmCode* BmCode_copy(BmCode* self, BmCode* model)

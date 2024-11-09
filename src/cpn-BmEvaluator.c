@@ -123,7 +123,8 @@ double BmEvaluator_criterion_process( BmEvaluator* self, uint iCriterion, BmCode
     BmCode* critCode= BmCode_newBmCodeMask( input, array_at( self->masks, iCriterion ) );
     if( BmCode_dimention( critCode ) == 0 )
     {
-        BmCode_reinit_list( critCode, 1, 1 );
+        BmCode_reinit( critCode, 1 );
+        BmCode_at_set( critCode, 1, 1 );
     }
     double v= BmValueFct_from( array_at( self->ccriteria, iCriterion ), critCode );
     return v;
@@ -131,7 +132,8 @@ double BmEvaluator_criterion_process( BmEvaluator* self, uint iCriterion, BmCode
 
 double BmEvaluator_processState_action(BmEvaluator* self, BmCode* state, BmCode* action)
 {
-    BmCode* merge= newBmCodeMerge_list( 2, state, action );
+    BmCode* spaces[2]= {state, action};
+    BmCode* merge= BmCode_createMerge( newEmpty(BmCode), 2, spaces );
     assert( BmCode_isIncluding( self->space,  merge ) );
     double eval= BmEvaluator_process( self, merge );
     deleteBmCode( merge );
@@ -140,7 +142,8 @@ double BmEvaluator_processState_action(BmEvaluator* self, BmCode* state, BmCode*
 
 double BmEvaluator_processState_action_state(BmEvaluator* self, BmCode* state, BmCode* action, BmCode* statePrime)
 {
-    BmCode* merge= newBmCodeMerge_list( 3, state, action, statePrime );
+    BmCode* spaces[3]= {state, action, statePrime};
+    BmCode* merge= BmCode_createMerge( newEmpty(BmCode), 3, spaces );
     assert( BmCode_isIncluding( self->space,  merge ) );
     double eval= BmEvaluator_process( self, merge );
     deleteBmCode( merge );

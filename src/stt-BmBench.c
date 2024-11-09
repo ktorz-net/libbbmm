@@ -299,8 +299,8 @@ uint BmBench_addDigit_value( BmBench* self, uint d, double v )
 {
     return BmBench_attachCode_vector(
         self,
-        newBmCode_list( 1, d ),
-        newBmVector_list( 1, v )
+        newBmCode_all( 1, d ),
+        newBmVector_all( 1, v )
     );
 }
 

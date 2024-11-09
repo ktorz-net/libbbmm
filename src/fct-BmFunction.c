@@ -52,7 +52,7 @@ BmFunction* BmFunction_reinitWith( BmFunction* self, BmCode* newInputRanges, BmB
 BmFunction* BmFunction_reinitWithDefault( BmFunction* self, BmCode* newInputRanges, BmCode* newDefaultOutput, double defaultValue )
 {
     BmBench* ben= newBmBench_codeDim_vectorDim( 16, BmCode_dimention( newDefaultOutput ), 1 );
-    BmBench_attachCode_vector( ben, newDefaultOutput, newBmVector_list(1, defaultValue) );
+    BmBench_attachCode_vector( ben, newDefaultOutput, newBmVector_all(1, defaultValue) );
     return BmFunction_reinitWith( self, newInputRanges, ben );
 }
 
@@ -100,7 +100,7 @@ double BmFunction_valueFrom( BmFunction* self, BmCode* input )
 /* Construction */
 uint BmFunction_attachOuput( BmFunction* self, BmCode* newOuputCode, double ouputValue )
 {
-    return BmBench_attachCode_vector( self->outputs, newOuputCode, newBmVector_list(1, ouputValue) );
+    return BmBench_attachCode_vector( self->outputs, newOuputCode, newBmVector_all(1, ouputValue) );
 }
 
 uint BmFunction_from_set( BmFunction* self, BmCode* input, uint ouputId )

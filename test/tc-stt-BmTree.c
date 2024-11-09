@@ -1,5 +1,6 @@
 // BbMm
 #include "bbmm.h"
+#include "xtend-bbmm-variadic.h"
 #include "bbmm-test.h"
 
 #include <stdlib.h>

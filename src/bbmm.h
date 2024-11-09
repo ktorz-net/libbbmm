@@ -49,7 +49,7 @@
 #ifndef BBMM_H
 #define BBMM_H
 
-#include <stdarg.h>
+#include <stdlib.h>
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   B A S I S                                                   *
@@ -64,7 +64,7 @@
 #endif
 
 #ifndef hash
-#define hash unsigned long long int
+#define hash unsigned long long
 #endif
 
 #ifndef bool
@@ -102,9 +102,6 @@ BmCode* newBmCode_numbers( uint size, uint* numbers );
 BmCode* newBmCode_all(uint size, uint defaultValue);
 BmCode* newBmCodeAs( BmCode* model );
 
-BmCode* newBmCode_list( uint size, uint number1, ... );
-BmCode* newBmCodeMerge_list( uint numberOfCodes, BmCode* code1, ... );
-
 BmCode* BmCode_create( BmCode* self, uint size );
 BmCode* BmCode_create_numbers( BmCode* self, uint size, uint* numbers );
 BmCode* BmCode_create_all( BmCode* self, uint size, uint defaultValue );
@@ -125,7 +122,6 @@ hash BmCode_product( BmCode* self );
 
 /* Re-Initializer */
 BmCode* BmCode_reinit( BmCode* self, uint newSize );
-BmCode* BmCode_reinit_list( BmCode* self, uint newSize, uint number1, ... );
 
 BmCode* BmCode_copy( BmCode* self, BmCode* model);
 BmCode* BmCode_copyNumbers( BmCode* self, BmCode* model);
@@ -186,7 +182,6 @@ typedef struct {
 /* Constructor */
 BmVector* newBmVector( uint size );
 BmVector* newBmVector_values( uint size, double* values );
-BmVector* newBmVector_list( uint size, double val1, ... );
 BmVector* newBmVector_all( uint size, double value );
 BmVector* newBmVectorAs( BmVector* model );
 
@@ -224,7 +219,6 @@ bool BmVector_isSmallerThan( BmVector* self, BmVector* another );
 /* Printing */
 char* BmVector_print( BmVector* self, char* output );
 char* BmVector_format_print( BmVector* self, char* format, char* buffer);
-
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   S T R U C T U R E :  B E N C H                              *

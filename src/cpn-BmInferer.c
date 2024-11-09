@@ -17,7 +17,9 @@ BmInferer* newBmInferer( BmCode* variableSpace, uint inputDimention, uint output
 
 BmInferer* newBmInfererStateAction( BmCode* stateSpace, BmCode* actionSpace )
 {
-    BmCode* overallSpace= newBmCodeMerge_list( 3, stateSpace, actionSpace, stateSpace );
+    BmCode* spaces[3]= {stateSpace, actionSpace, stateSpace};
+    BmCode* overallSpace= BmCode_createMerge( newEmpty(BmCode), 3, spaces );
+    
     BmInferer* trans= BmInferer_create(
         newEmpty(BmInferer), overallSpace,
         BmCode_dimention( stateSpace ) + BmCode_dimention( actionSpace ),
@@ -29,7 +31,9 @@ BmInferer* newBmInfererStateAction( BmCode* stateSpace, BmCode* actionSpace )
 
 BmInferer* newBmInfererStateActionShift( BmCode* stateSpace, BmCode* actionSpace, BmCode* shiftSpace )
 {
-    BmCode* overallSpace= newBmCodeMerge_list( 4, stateSpace, actionSpace, shiftSpace, stateSpace );
+    BmCode* spaces[4]= {stateSpace, actionSpace, shiftSpace, stateSpace};
+    BmCode* overallSpace= BmCode_createMerge( newEmpty(BmCode), 4, spaces );
+
     BmInferer* trans= BmInferer_create(
         newEmpty(BmInferer), overallSpace,
         BmCode_dimention( stateSpace ) + BmCode_dimention( actionSpace ),
@@ -249,10 +253,10 @@ BmBench* BmInferer_processState_Action( BmInferer* self, BmCode* state, BmCode* 
 {
     // Set the initial determinist distribution :
     BmBench * inputDistribution= newBmBench( 1 );
-    BmBench_attachCode_vector( inputDistribution,
-        newBmCodeMerge_list( 2, state, action ),
-        newBmVector_list(1, 1.0)
-    );
+    BmCode* spaces[2]= {state, action};
+    BmCode* stataction= BmCode_createMerge( newEmpty(BmCode), 2, spaces );
+    BmBench_attachCode_vector( inputDistribution, stataction, newBmVector_all(1, 1.0) );
+
     // infer :
     deleteBmBench( BmInferer_process_newOverallDistribution(self, inputDistribution) );
 

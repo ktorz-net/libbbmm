@@ -57,6 +57,7 @@ if(TEST)
 
 set(CHECK_LIBS check subunit m rt pthread)
 set(TEST_SRC_FILES 
+  src/xtend-bbmm-variadic.c
 #DEPENDANCIES: 
   test/tc-dpd-system.c
   test/tc-dpd-bench.c

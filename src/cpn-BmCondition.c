@@ -18,8 +18,8 @@ BmCondition* newBmConditionWith(uint range, BmCode* newInputRanges, BmBench* new
 
 BmCondition* BmCondition_createBasic( BmCondition* self, uint range )
 {
-    BmBench* distrib = newBmBench( 1 );
-    BmBench_attachCode_vector( distrib, newBmCode_list(1, 1), newBmVector_list(1, 1.0) );
+    BmBench* distrib = newBmBench(1);
+    BmBench_attachCode_vector( distrib, newBmCode_all(1, 1), newBmVector_all(1, 1.0) );
     return BmCondition_createWith( self, range,
         newBmCode_all(1, 1), distrib );
 }
@@ -222,7 +222,7 @@ BmBench* BmCondition_newDistributionByInfering_mask( BmCondition* self, BmBench*
             BmBench_attachCode_vector(
                 newDistrib,
                 newBmCodeAs(newConfig),
-                newBmVector_list(1, probability * BmBench_valueAt( outputDistrib, iOutput) )
+                newBmVector_all(1, probability * BmBench_valueAt( outputDistrib, iOutput) )
             );
         }
         deleteBmCode( newConfig );
