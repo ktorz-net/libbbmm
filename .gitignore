@@ -1,7 +1,5 @@
 # Project
 .vscode
-draft.c
-a.out
 
 #cmake/make
 cmake_install.cmake
