@@ -12,7 +12,7 @@ START_TEST(test_bench4_init)
     ck_assert_uint_eq( sizeof(ben->_dsc), sizeof(void*)*16 );
 
     for(uint i=0 ; i < 16 ; ++i)
-        ck_assert_uint_eq( (ulong)(ben->_dsc[i]), 0 );
+        ck_assert_uint_eq( (hash)(ben->_dsc[i]), 0 );
 
     ck_assert_uint_eq( bench4_size(ben), 0 );
 

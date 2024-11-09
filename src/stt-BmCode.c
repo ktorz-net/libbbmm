@@ -201,19 +201,19 @@ uint BmCode_count(BmCode* self, uint value)
     return count;
 }
 
-ulong BmCode_sum(BmCode* self)
+hash BmCode_sum(BmCode* self)
 {
-    ulong r= 0;
+    hash r= 0;
     for( uint i=1 ; i <= BmCode_dimention(self) ; ++i )
-        r+= (ulong)(BmCode_digit(self, i));
+        r+= (hash)(BmCode_digit(self, i));
     return r;
 }
 
-ulong BmCode_product(BmCode* self)
+hash BmCode_product(BmCode* self)
 {
-    ulong r= 1;
+    hash r= 1;
     for( uint i=1 ; i <= BmCode_dimention(self) ; ++i )
-        r= r * (ulong)(BmCode_digit(self, i));
+        r= r * (hash)(BmCode_digit(self, i));
     return r;
 }
 
@@ -356,24 +356,24 @@ uint BmCode_search( BmCode* self, uint value )
 }
 
 /* code and key managment in set (ranges) */
-ulong BmCode_keyOf(BmCode* ranges, BmCode* code)
+hash BmCode_keyOf(BmCode* ranges, BmCode* code)
 {
     assert( BmCode_dimention(ranges) == BmCode_dimention(code) );
     
-	ulong key= 0;
-    ulong size= 1;
+	hash key= 0;
+    hash size= 1;
     
     for( uint i = 1 ; i <= BmCode_dimention(ranges) ; ++i )
     {
         if( BmCode_digit(code, i) == 0 )
-            return (ulong)0;
+            return (hash)0;
 		key += (BmCode_digit(code, i)-1) * size;
 		size = size * BmCode_digit(ranges, i);
 	}
 	return key+1;
 }
 
-BmCode* BmCode_setCode_onKey(BmCode* ranges, BmCode* code, ulong key)
+BmCode* BmCode_setCode_onKey(BmCode* ranges, BmCode* code, hash key)
 {
     assert( BmCode_dimention(ranges) == BmCode_dimention(code) );
 
@@ -383,7 +383,7 @@ BmCode* BmCode_setCode_onKey(BmCode* ranges, BmCode* code, ulong key)
         return code;
     }
 
-	ulong iKey= key-1;
+	hash iKey= key-1;
 
     for( uint i = 1 ; i <= BmCode_dimention(ranges) ; ++i )
     {
@@ -408,7 +408,7 @@ BmCode* BmCode_setCodeLast(BmCode* ranges, BmCode* code)
     return code;
 }
 
-BmCode* BmCode_newBmCodeOnKey(BmCode* ranges, ulong key)
+BmCode* BmCode_newBmCodeOnKey(BmCode* ranges, hash key)
 {
     BmCode * code= newBmCode( BmCode_dimention(ranges) );
     BmCode_setCode_onKey( ranges, code, key );

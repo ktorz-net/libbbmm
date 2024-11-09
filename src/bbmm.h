@@ -46,14 +46,6 @@
  * 
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
-#ifndef uint
-#define uint unsigned int
-#endif
-
-#ifndef ulong
-#define ulong unsigned long
-#endif
-
 #ifndef BBMM_H
 #define BBMM_H
 
@@ -62,6 +54,10 @@
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   B A S I S                                                   *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+#ifndef uint
+#define uint unsigned int
+#endif
 
 #ifndef digit
 #define digit unsigned short
@@ -124,8 +120,8 @@ BmCode* BmCode_destroy( BmCode* self );
 uint BmCode_dimention( BmCode* self );
 uint BmCode_digit( BmCode* self, uint index );
 uint BmCode_count( BmCode* self, uint value );
-ulong BmCode_sum( BmCode* self );
-ulong BmCode_product( BmCode* self );
+hash BmCode_sum( BmCode* self );
+hash BmCode_product( BmCode* self );
 
 /* Re-Initializer */
 BmCode* BmCode_reinit( BmCode* self, uint newSize );
@@ -154,13 +150,13 @@ bool BmCode_isGreaterThan( BmCode* self, BmCode* another );
 bool BmCode_isSmallerThan( BmCode* self, BmCode* another );
 
 /* As Configuration (a BmCode configuration varring in a space defined by a ranges BmCode 'self' ) */
-ulong BmCode_keyOf( BmCode* self, BmCode* code);       // get the key value of the code regarding given ranges ( i.e. 0 <= self.numbers[i] < ranges[i] )
+hash BmCode_keyOf( BmCode* self, BmCode* code);       // get the key value of the code regarding given ranges ( i.e. 0 <= self.numbers[i] < ranges[i] )
 
-BmCode* BmCode_setCode_onKey( BmCode* self, BmCode* configuration, ulong key ); // set the code as a key value in given ranges
+BmCode* BmCode_setCode_onKey( BmCode* self, BmCode* configuration, hash key ); // set the code as a key value in given ranges
 BmCode* BmCode_setCodeFirst( BmCode* self, BmCode* configuration ); // set the code as a key value in given ranges
 BmCode* BmCode_setCodeLast( BmCode* self, BmCode* configuration ); // set the code as a key value in given ranges
 
-BmCode* BmCode_newBmCodeOnKey( BmCode* self, ulong key ); // set the code as a key value in given ranges
+BmCode* BmCode_newBmCodeOnKey( BmCode* self, hash key ); // set the code as a key value in given ranges
 BmCode* BmCode_newBmCodeFirst( BmCode* self ); // set the code as a key value in given ranges
 BmCode* BmCode_newBmCodeLast( BmCode* self ); // set the code as a key value in given ranges
 
