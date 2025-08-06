@@ -1,9 +1,12 @@
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *
- *   libBbMm - a libraray dedicated to Bayesian-based Markov-models.
+ *   libBbMm - a library dedicated to Bayesian-based Markov-models.
+ * 
+ *   ENTRANCE POINT:
+ *       - BmModel        : 
  * 
  *   STRUCTURE MODULE:
- *       - BmCode         : a fixed size array of digit (unsigned integers)
+ *       - BmCode         : a fixed size array of digits (unsigned integers)
  *       - BmVector       : a fixed size array of values (doubles)
  *       - BmBench        : a dynamic-size collection of BmCode coupled to BmVector (i -> code and vector OR i -> digit and value)
  *       - BmTree         : a tree based BmCode (input code -> output digit )
@@ -11,11 +14,11 @@
  *   FUNCTION MODULE:
  *       - BmValueFct     : Determine a value from a code (in a given inputRanges)
  *       - BmFunction     : Determine a code+vector from a code
- *       <- BmDistbutor   : Determine a [code+vector distribution] from a code (used as bayesian node) >
+ *       <- BmDistbutor   : Determine a [code+vector distribution] from a code (used as Bayesian nodes) >
  * 
  *   COMPONENT MODULE:
- *       - BmCondition    :
- *       - BmInferer      : Define a Bayesian Network as P(output | input) - potentially Dynamic P(state' | state, action)
+ *       - BmCondition    : Represent conditional probabilities of a variable [input code -> digit distribution] (i.e. Bayesian Network's Node)
+ *       - BmInferer      : Define a Bayesian Network as P(output | input) - potentially Dynamic P(state' | state) or P(state' | state, action)
  *       - BmEvaluator    : A value function over multiple criteria
  * 
  *   SOLVER MODULE:
@@ -94,14 +97,14 @@ typedef struct {
 } BmCode;
 
 /* Constructor */
-BmCode* newBmCode(digit dimention);
-BmCode* newBmCode_numbers( digit dimention, digit* numbers );
-BmCode* newBmCode_all(digit dimention, digit defaultValue);
+BmCode* newBmCode(digit dimension);
+BmCode* newBmCode_numbers( digit dimension, digit* numbers );
+BmCode* newBmCode_all(digit dimension, digit defaultValue);
 BmCode* newBmCodeAs( BmCode* model );
 
-BmCode* BmCode_create( BmCode* self, digit dimention );
-BmCode* BmCode_create_numbers( BmCode* self, digit dimention, digit* numbers );
-BmCode* BmCode_create_all( BmCode* self, digit dimention, digit defaultValue );
+BmCode* BmCode_create( BmCode* self, digit dimension );
+BmCode* BmCode_create_numbers( BmCode* self, digit dimension, digit* numbers );
+BmCode* BmCode_create_all( BmCode* self, digit dimension, digit defaultValue );
 BmCode* BmCode_createAs( BmCode* self, BmCode* model );
 
 BmCode* BmCode_createMerge( BmCode* self, digit numberOfCodes, BmCode ** codes );
@@ -118,13 +121,13 @@ hash BmCode_sum( BmCode* self );
 hash BmCode_product( BmCode* self );
 
 /* Re-Initializer */
-BmCode* BmCode_reinit( BmCode* self, digit newDimention );
+BmCode* BmCode_reinit( BmCode* self, digit newDimension );
 
 BmCode* BmCode_copy( BmCode* self, BmCode* model);
 BmCode* BmCode_copyNumbers( BmCode* self, BmCode* model);
 
 /* Construction */
-BmCode* BmCode_redimention( BmCode* self, digit newDimention);
+BmCode* BmCode_redimention( BmCode* self, digit newDimension);
 BmCode* BmCode_setAll( BmCode* self, digit value );
 BmCode* BmCode_at_set( BmCode* self, digit index, digit value );
 BmCode* BmCode_at_increment( BmCode* self, digit index, digit value );
@@ -177,14 +180,14 @@ typedef struct {
 } BmVector;
 
 /* Constructor */
-BmVector* newBmVector( digit dimention );
-BmVector* newBmVector_values( digit dimention, double* values );
-BmVector* newBmVector_all( digit dimention, double value );
+BmVector* newBmVector( digit dimension );
+BmVector* newBmVector_values( digit dimension, double* values );
+BmVector* newBmVector_all( digit dimension, double value );
 BmVector* newBmVectorAs( BmVector* model );
 
-BmVector* BmVector_create( BmVector* self, digit dimention );
-BmVector* BmVector_create_values( BmVector* self, digit dimention, double* values );
-BmVector* BmVector_create_all( BmVector* self, digit dimention, double value );
+BmVector* BmVector_create( BmVector* self, digit dimension );
+BmVector* BmVector_create_values( BmVector* self, digit dimension, double* values );
+BmVector* BmVector_create_all( BmVector* self, digit dimension, double value );
 BmVector* BmVector_createAs( BmVector* self, BmVector* model );
 
 /* Destructor */
@@ -192,7 +195,7 @@ BmVector* BmVector_destroy( BmVector* self );
 void deleteBmVector( BmVector* self );
 
 /* Re-Initialize */
-BmVector* BmVector_reinit( BmVector* self, digit newDimention );
+BmVector* BmVector_reinit( BmVector* self, digit newDimension );
 BmVector* BmVector_copy( BmVector* self, BmVector* model );
 
 /* Accessor */
@@ -200,7 +203,7 @@ digit BmVector_dimention( BmVector* self );
 double BmVector_value( BmVector* self, digit i );
 
 /* Construction */
-BmVector* BmVector_redimention(BmVector* self, digit newDimention);
+BmVector* BmVector_redimention(BmVector* self, digit newDimension);
 double BmVector_at_set( BmVector* self, digit i, double value );
 BmVector* BmVector_setValues( BmVector* self, double* values );
 

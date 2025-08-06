@@ -13,6 +13,4 @@ libbbmm.so
 # Test program
 run-test-BbMm
 
-# Extra program
-#wanda-viewer
 
