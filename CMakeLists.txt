@@ -3,14 +3,14 @@ project(BbMm LANGUAGES C)
 
 # Options:
 cmake_policy(SET CMP0064 NEW)
-option(TEST "Generate tests" OFF)
-set(CMAKE_BUILD_TYPE RELEASE)
+option(DEV_MODE "Generate tests" OFF)
 
-if(TEST)
+if(DEV_MODE)
   set(CMAKE_BUILD_TYPE DEBUG)
-  message("Build_type: Debug with Test - ON ")
+  message(">> Build_type: Debug with Test: ON ")
 else()
-  message("Build_type: Release")
+  set(CMAKE_BUILD_TYPE RELEASE)
+  message(">> Build_type: Release")
 endif()
 
 # Activate C99 :
@@ -53,7 +53,7 @@ install(FILES src/bbmm.h DESTINATION include)
 #-----------#
 ## T E S T ##
 #-----------#
-if(TEST)
+if(DEV_MODE)
 
 set(CHECK_LIBS check subunit m rt pthread)
 set(TEST_SRC_FILES 

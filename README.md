@@ -37,7 +37,7 @@ As said compilation relies on `cmake`:
 From _libBbMm_ directory:
 
 ```sh
-cmake . # for testing: `cmake -DTEST=ON -DCMAKE_BUILD_TYPE=Debug . ` (requires check)
+cmake . # for testing: `cmake -DDEV_MODE=ON .` (requires check)
 make
 ```
 
