@@ -1,4 +1,4 @@
-libBbMm - a librayry for Bayesian-based Markov-models
+libBbMm - Bayesian-based Markov-models
 ======================================================================
 
 ![](./resources/logo-BbMm-128.png)
@@ -24,9 +24,10 @@ For conveignance, command is provided for debian like distribution.
 
 The construction of the librairy relies on `Cmake`.
 Also, `Check` is used for test-driven developments.
+You can compile the librairy without `Check` installed.
 
 ```sh
-sudo apt install build-essential cmake check # check is for testing, but not required.
+sudo apt install build-essential cmake check
 ```
 
 ### Compilation
@@ -38,13 +39,7 @@ From _libBbMm_ directory:
 ```sh
 cmake . # for testing: `cmake -DTEST=ON -DCMAKE_BUILD_TYPE=Debug . ` (requires check)
 make
-sudo make install
 ```
 
-The `libbbmm.so` librairy and the `run-test-BbMm` executable should be generated into the `build` directory.
-You can run the `run-test-BbMm`.
-
-
-## Hello World
-
+This should generate the `libbbmm.so` librairy (and the `run-test-BbMm` executable with the appropriate flags).
 
