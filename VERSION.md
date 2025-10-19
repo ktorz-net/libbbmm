@@ -1,6 +1,10 @@
 # version trace...
 
-## v0.21
+## Next
+
+* BmDynamic  : from BmInferencor
+
+## v0.2.1
 
 * Unique header `bbmm.h`.
 * BbMm Functions
@@ -8,16 +12,14 @@
        - BmInferencor    : Define a Bayesian Network (potentially Dynamic) composed of Input, Output and Shift node. 
        - BmEvaluator     : a composed value function over multiple Gauges
 * BbMm Models
-       - BmChain         : Markov Chain $<S, T>$
-       - BmProcess       : Define a classical Markov Decision Process $<S, A, t, r>$
+       - BmModel         : Define a classical Markov Decision Process $<S, A, t, r>$
 * BbMm Solvers
-       - BmBasicPolicy   : Basic algorythm to solve BmProcess, generate basicly defined policy.
-       - BmBasicQLearner : ...
-       - BmStockasticPolicy :
-       - ... 
-* Test cases: 421, CofeeRobot, Labyrinth test case...
+       - BmPolicy : Tree based Policy model and basic algorythm to solve a BmProcess (valueIteration, PolicyIteration).
+       - BmQValue : Tree based QValue dictionnary and basic QLearning algorythms.
+* Compilation Windows, MacOS, ...
+* Examples: 421, CofeeRobot, Labyrinth test case...
 
-## v0.20
+## v0.2.0
 
 Restructure: 
 

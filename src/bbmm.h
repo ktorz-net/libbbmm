@@ -2,8 +2,8 @@
  *
  *   libBbMm - a library dedicated to Bayesian-based Markov-models.
  * 
- *   ENTRANCE POINT:
- *       - BmModel        : 
+ *   VERSION: 0.2.1
+ *   
  * 
  *   STRUCTURE MODULE:
  *       - BmCode         : a fixed size array of digits (unsigned integers)
@@ -14,20 +14,24 @@
  *   FUNCTION MODULE:
  *       - BmValueFct     : Determine a value from a code (in a given inputRanges)
  *       - BmFunction     : Determine a code+vector from a code
- *       <- BmDistbutor   : Determine a [code+vector distribution] from a code (used as Bayesian nodes) >
+ *       <- BmDistbutor    : Determine a [code+vector distribution] from a code (used as Bayesian nodes) >
  * 
  *   COMPONENT MODULE:
  *       - BmCondition    : Represent conditional probabilities of a variable [input code -> digit distribution] (i.e. Bayesian Network's Node)
  *       - BmInferer      : Define a Bayesian Network as P(output | input) - potentially Dynamic P(state' | state) or P(state' | state, action)
  *       - BmEvaluator    : A value function over multiple criteria
+ *
+ *   MODEL MODUL:
+ *       <- BmModel        : Define a Factored Markov Decision Process $<S, A, t, r>$ >
  * 
  *   SOLVER MODULE:
+ *       <- BmPolicy       :                                                          >
+ *       <- BmQValue       :                                                          >
  * 
- *   VERSION: 0.0.X
  * 
  *   LICENSE: MIT License
  *
- *   Copyright © 2022-2024 Guillaume Lozenguez.
+ *   Copyright © 2022-2025 Guillaume Lozenguez.
  * 
  *   Permission is hereby granted, free of charge, to any person obtaining a
  *   copy of this software and associated documentation files (the "Software"),
@@ -54,6 +58,7 @@
 
 
 #include <stdlib.h>
+
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   B A S I S                                                   *
@@ -220,6 +225,7 @@ bool BmVector_isSmallerThan( BmVector* self, BmVector* another );
 char* BmVector_print( BmVector* self, char* output );
 char* BmVector_format_print( BmVector* self, char* format, char* buffer);
 
+
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   S T R U C T U R E :  B E N C H                              *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
@@ -381,7 +387,7 @@ digit BmTree_deepOf( BmTree* self, BmCode* code); // Return the number of branch
 digit BmTree_newBranch( BmTree* self, digit iVariable, digit start, digit bound, digit step );
 digit BmTree_newBranch_full( BmTree* self, digit iVariable, digit defaultOption);
 digit BmTree_newBranch_binary_options( BmTree* self, digit iVariable, digit  afterValue, digit option1, digit option2);
-digit BmTree_newBranch_pivot_options( BmTree* self, digit iVariable, digit onValue, digit option1, digit optionOn, digit option2);
+digit BmTree_newBranch_pivot_options( BmTree* self, digit iVariable, digit onValue, digit optionBefore, digit optionOn, digit optionAfter);
 void BmTree_branch_state_connect( BmTree* self, digit branchA, digit stateA, digit branchB );
 void BmTree_branch_state_setOption( BmTree* self, digit branchA, digit iState, digit outbut );
 
@@ -452,7 +458,6 @@ BmBench* BmValueFct_asNewBench( BmValueFct* self );
 /* Printing */
 char* BmValueFct_print(BmValueFct* self, char* buffer);
 char* BmValueFct_printSep(BmValueFct* self, char* buffer, char* separator);
-
 
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
@@ -629,9 +634,6 @@ char* BmInferer_printStateActionSignature(BmInferer* self, char* output); // pri
 char* BmInferer_printDependency(BmInferer* self, char* output); // print `self` at the end of `output`
 
 
-
-
-
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   F U N C T I O N  :  E V A L U A T O R                       *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
@@ -674,7 +676,6 @@ double BmEvaluator_criterion_process( BmEvaluator* self, digit iCriterion, BmCod
 double BmEvaluator_processState_action(BmEvaluator* self, BmCode* state, BmCode* action);
 double BmEvaluator_processState_action_state(BmEvaluator* self, BmCode* state, BmCode* action, BmCode* statePrime);
 
-
 /* Construction */
 BmEvaluator* BmEvaluator_reinitCriterion( BmEvaluator* self, digit numberOfCriterion );
 BmValueFct* BmEvaluator_criterion_reinitWith( BmEvaluator* self, digit iCrit, BmCode* newDependenceMask, BmVector* newValues  );
@@ -682,7 +683,6 @@ void BmEvaluator_criterion_from_set( BmEvaluator* self, digit index, BmCode* opt
 void BmEvaluator_criterion_setWeight( BmEvaluator* self, digit iCritirion, double weight );
 
 /* Infering */
-
 
 /* Printing */
 

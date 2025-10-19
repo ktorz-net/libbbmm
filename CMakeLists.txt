@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.00)
-project(BbMm LANGUAGES C)
+project(BbMm VERSION 0.2.1 LANGUAGES C)
 
 # Options:
 cmake_policy(SET CMP0064 NEW)
@@ -43,12 +43,42 @@ set(SRC_FILES
 )
 
 # Build
-add_library(bbmm SHARED ${SRC_FILES})
-target_link_libraries(bbmm)
+add_library(BbMm SHARED ${SRC_FILES})
+target_link_libraries(BbMm)
+
+# Generate explicit version lib
+set_target_properties(BbMm PROPERTIES
+    VERSION ${PROJECT_VERSION}
+    SOVERSION ${PROJECT_VERSION_MAJOR})
 
 # Install
-install(TARGETS bbmm LIBRARY DESTINATION lib)
+install(TARGETS BbMm LIBRARY DESTINATION lib)
 install(FILES src/bbmm.h DESTINATION include)
+
+#-----------------------------#
+## C M A K E   P A C K A G E ##
+#-----------------------------#
+include(CMakePackageConfigHelpers)
+
+install(TARGETS BbMm EXPORT BbMmTargets DESTINATION lib)
+
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/BbMmConfigVersion.cmake"
+    COMPATIBILITY SameMajorVersion
+)
+
+install(EXPORT BbMmTargets
+        FILE BbMmTargets.cmake
+        NAMESPACE BbMm::
+        DESTINATION lib/cmake/BbMm)
+
+configure_file(BbMmConfig.cmake.in
+               "${CMAKE_CURRENT_BINARY_DIR}/BbMmConfig.cmake" @ONLY)
+
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/BbMmConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/BbMmConfigVersion.cmake"
+    DESTINATION lib/cmake/BbMm)
 
 #-----------#
 ## T E S T ##
@@ -83,6 +113,6 @@ set(TEST_SRC_FILES
 )
 
 add_executable(run-test-BbMm ${TEST_SRC_FILES})
-target_link_libraries(run-test-BbMm bbmm ${CHECK_LIBS})
+target_link_libraries(run-test-BbMm BbMm ${CHECK_LIBS})
 
 endif()
