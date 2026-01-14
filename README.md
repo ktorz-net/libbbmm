@@ -30,6 +30,7 @@ You can compile the librairy without `Check` installed.
 sudo apt install build-essential cmake check
 ```
 
+
 ### Compilation and Install
 
 As said, compilation relies on `cmake`:

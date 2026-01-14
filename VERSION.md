@@ -2,14 +2,15 @@
 
 ## Next
 
-* BmDynamic  : from BmInferencor
+* BmDynamic  : From BmInferor
+* BmCausal   : Multi-Paraigm conditional dependency...
 
 ## v0.2.1
 
 * Unique header `bbmm.h`.
 * BbMm Functions
        - BmCondition     : Define a Bayesian Node (conditional probabilities over variable affectations)
-       - BmInferencor    : Define a Bayesian Network (potentially Dynamic) composed of Input, Output and Shift node. 
+       - BmInferor       : Define a Bayesian Network (potentially Dynamic) composed of Input, Output and Shift node. 
        - BmEvaluator     : a composed value function over multiple Gauges
 * BbMm Models
        - BmModel         : Define a classical Markov Decision Process $<S, A, t, r>$

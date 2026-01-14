@@ -23,10 +23,11 @@
  *
  *   MODEL MODUL:
  *       <- BmModel        : Define a Factored Markov Decision Process $<S, A, t, r>$ >
+ *       <- BmQTable       : Define a QValues structure.
  * 
  *   SOLVER MODULE:
- *       <- BmPolicy       :                                                          >
- *       <- BmQValue       :                                                          >
+ *       <- BmSolver_valueIt : BmInferer (transition), BmEvaluator (cost/reward), BmFunction (policy/value)
+ *       <-          : code (state) + code (action) -> value                    >
  * 
  * 
  *   LICENSE: MIT License
@@ -55,7 +56,6 @@
 
 #ifndef BBMM_H
 #define BBMM_H
-
 
 #include <stdlib.h>
 
@@ -511,15 +511,6 @@ char* BmFunction_print(BmFunction* self, char* output);
 char* BmFunction_printSep(BmFunction* self, char* output, char* separator);
 
 /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *   B b M m   F U N C T I O N  :  D I S T B U T O R                       *
- * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
- *
- * code -> bench
- * 
- * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
-
-
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *   B b M m   F U N C T I O N  :  C O N D I T I O N                       *
  * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
  *
@@ -685,6 +676,24 @@ void BmEvaluator_criterion_setWeight( BmEvaluator* self, digit iCritirion, doubl
 /* Infering */
 
 /* Printing */
+
+
+
+/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *   B b M m   S O L V E R :  P O L I C Y                                  *
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *
+ * Define Tree based Policy 
+ * (state -> action + value)
+ * 
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *   B b M m   S O L V E R :  Q  V A L U E                                 *
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- *
+ *
+ * 
+ * ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
 
 #endif // BBMM_H
